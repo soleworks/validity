@@ -8,8 +8,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.kotest.assertions.core)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
