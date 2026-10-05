@@ -1,4 +1,4 @@
-package io.github.soleworks.validity.fixtures
+package io.github.soleworks.validity.samples
 
 import io.github.soleworks.validity.Validatable
 import io.github.soleworks.validity.constraints.notNull

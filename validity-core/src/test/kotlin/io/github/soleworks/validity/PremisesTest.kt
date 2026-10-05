@@ -1,6 +1,6 @@
 package io.github.soleworks.validity
 
-import io.github.soleworks.validity.fixtures.Customer
+import io.github.soleworks.validity.samples.Customer
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

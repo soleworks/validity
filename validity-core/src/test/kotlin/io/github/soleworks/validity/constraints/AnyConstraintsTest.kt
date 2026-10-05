@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.Violation
-import io.github.soleworks.validity.fixtures.Survey
+import io.github.soleworks.validity.samples.Survey
 import io.github.soleworks.validity.validate
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
