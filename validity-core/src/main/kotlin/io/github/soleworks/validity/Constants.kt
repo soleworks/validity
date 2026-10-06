@@ -149,3 +149,185 @@ internal object FormatMessages {
     const val ISO_DURATION: String = "must be an ISO 8601 duration"
     const val DATE_FORMAT: String = "must match the date format {pattern}"
 }
+
+internal object PortugalMessages {
+    const val NIF: String = "must be a valid NIF"
+}
+
+internal object SpainMessages {
+    const val DNI: String = "must be a valid DNI"
+    const val NIE: String = "must be a valid NIE"
+    const val NIF: String = "must be a valid NIF"
+}
+
+internal object ItalyMessages {
+    const val CODICE_FISCALE: String = "must be a valid codice fiscale"
+    const val CIE: String = "must be a valid CIE number"
+}
+
+internal object FranceMessages {
+    const val SPI: String = "must be a valid SPI"
+}
+
+internal object BelgiumMessages {
+    const val RIJKSREGISTERNUMMER: String = "must be a valid rijksregisternummer"
+}
+
+internal object NetherlandsMessages {
+    const val BSN: String = "must be a valid BSN"
+}
+
+internal object IrelandMessages {
+    const val PPS: String = "must be a valid PPS number"
+}
+
+internal object UnitedKingdomMessages {
+    const val NINO: String = "must be a valid NINO"
+}
+
+internal object GermanyMessages {
+    const val STEUER_ID: String = "must be a valid Steuer-IdNr"
+}
+
+internal object AustriaMessages {
+    const val ABGABENKONTONUMMER: String = "must be a valid Abgabenkontonummer"
+}
+
+internal object DenmarkMessages {
+    const val CPR: String = "must be a valid CPR number"
+}
+
+internal object SwedenMessages {
+    const val PERSONNUMMER: String = "must be a valid personnummer"
+    const val SAMORDNINGSNUMMER: String = "must be a valid samordningsnummer"
+}
+
+internal object NorwayMessages {
+    const val FODSELSNUMMER: String = "must be a valid fødselsnummer"
+}
+
+internal object FinlandMessages {
+    const val HETU: String = "must be a valid HETU"
+}
+
+internal object MaltaMessages {
+    const val ID_CARD_NUMBER: String = "must be a valid ID card number"
+}
+
+internal object PolandMessages {
+    const val PESEL: String = "must be a valid PESEL"
+    const val NIP: String = "must be a valid NIP"
+    const val REGON: String = "must be a valid REGON"
+    const val DOWOD_OSOBISTY: String = "must be a valid dowód osobisty number"
+}
+
+internal object CzechRepublicMessages {
+    const val RODNE_CISLO: String = "must be a valid rodné číslo"
+}
+
+internal object SlovakiaMessages {
+    const val RODNE_CISLO: String = "must be a valid rodné číslo"
+}
+
+internal object RomaniaMessages {
+    const val CNP: String = "must be a valid CNP"
+}
+
+internal object BulgariaMessages {
+    const val EGN: String = "must be a valid EGN"
+}
+
+internal object SloveniaMessages {
+    const val DAVCNA_STEVILKA: String = "must be a valid davčna številka"
+}
+
+internal object EstoniaMessages {
+    const val ISIKUKOOD: String = "must be a valid isikukood"
+}
+
+internal object LatviaMessages {
+    const val PERSONAS_KODS: String = "must be a valid personas kods"
+}
+
+internal object LithuaniaMessages {
+    const val ASMENS_KODAS: String = "must be a valid asmens kodas"
+}
+
+internal object GreeceMessages {
+    const val AFM: String = "must be a valid AFM"
+}
+
+internal object CyprusMessages {
+    const val AFM: String = "must be a valid AFM"
+}
+
+internal object UkraineMessages {
+    const val RNOKPP: String = "must be a valid RNOKPP"
+}
+
+internal object RussiaMessages {
+    const val INN_INDIVIDUAL: String = "must be a valid individual INN"
+    const val INN_LEGAL_ENTITY: String = "must be a valid legal entity INN"
+}
+
+internal object UnitedStatesMessages {
+    const val EIN: String = "must be a valid EIN"
+}
+
+internal object CanadaMessages {
+    const val SIN: String = "must be a valid SIN"
+}
+
+internal object ArgentinaMessages {
+    const val CUIT: String = "must be a valid CUIT"
+    const val CUIL: String = "must be a valid CUIL"
+}
+
+internal object IndiaMessages {
+    const val AADHAAR: String = "must be a valid Aadhaar"
+    const val PAN: String = "must be a valid PAN"
+}
+
+internal object PakistanMessages {
+    const val CNIC: String = "must be a valid CNIC"
+}
+
+internal object SriLankaMessages {
+    const val NIC: String = "must be a valid NIC"
+}
+
+internal object ChinaMessages {
+    const val RESIDENT_ID: String = "must be a valid resident identity card number"
+}
+
+internal object TaiwanMessages {
+    const val NATIONAL_ID: String = "must be a valid national identification number"
+}
+
+internal object HongKongMessages {
+    const val HKID: String = "must be a valid HKID"
+}
+
+internal object ThailandMessages {
+    const val NATIONAL_ID: String = "must be a valid national identification number"
+}
+
+internal object SouthKoreaMessages {
+    const val RRN: String = "must be a valid RRN"
+}
+
+internal object IranMessages {
+    const val CODE_MELLI: String = "must be a valid national identity code"
+}
+
+internal object IsraelMessages {
+    const val TEUDAT_ZEHUT: String = "must be a valid teudat zehut"
+}
+
+internal object LibyaMessages {
+    const val NIN: String = "must be a valid NIN"
+}
+
+internal object TunisiaMessages {
+    const val CIN: String = "must be a valid national identity card number"
+}
