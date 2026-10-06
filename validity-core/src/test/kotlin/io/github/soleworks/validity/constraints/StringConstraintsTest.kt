@@ -568,4 +568,124 @@ class StringConstraintsTest {
             node.validate() shouldBe emptyList()
         }
     }
+
+    @Nested
+    @DisplayName("When numeric is called")
+    inner class Numeric {
+        @ParameterizedTest
+        @ValueSource(strings = ["10", "-10.50", "+3.14"])
+        fun `given a number written as text should accept it`(amount: String) {
+            val node = ValidationNode("amount", amount).apply { numeric() }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["1e5", "10.", ".5", "1,5", "abc"])
+        fun `given text without it should report it`(amount: String) {
+            val node = ValidationNode("amount", amount).apply { numeric() }
+
+            node.validate() shouldBe listOf(Violation("amount", "must be numeric"))
+        }
+    }
+
+    @Nested
+    @DisplayName("When integer is called")
+    inner class Integer {
+        @ParameterizedTest
+        @ValueSource(strings = ["10", "-7", "+3"])
+        fun `given an integer written as text should accept it`(quantity: String) {
+            val node = ValidationNode("quantity", quantity).apply { integer() }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["10.0", "1e3", ""])
+        fun `given text without it should report it`(quantity: String) {
+            val node = ValidationNode("quantity", quantity).apply { integer() }
+
+            node.validate() shouldBe listOf(Violation("quantity", "must be an integer"))
+        }
+    }
+
+    @Nested
+    @DisplayName("When containsUppercase is called")
+    inner class ContainsUppercase {
+        @ParameterizedTest
+        @ValueSource(strings = ["passWord"])
+        fun `given a password with an uppercase letter should accept it`(password: String) {
+            val node = ValidationNode("password", password).apply { containsUppercase() }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["password"])
+        fun `given text without it should report it`(password: String) {
+            val node = ValidationNode("password", password).apply { containsUppercase() }
+
+            node.validate() shouldBe listOf(Violation("password", "must contain an uppercase letter"))
+        }
+    }
+
+    @Nested
+    @DisplayName("When containsLowercase is called")
+    inner class ContainsLowercase {
+        @ParameterizedTest
+        @ValueSource(strings = ["PASSWORd"])
+        fun `given a password with a lowercase letter should accept it`(password: String) {
+            val node = ValidationNode("password", password).apply { containsLowercase() }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["PASSWORD"])
+        fun `given text without it should report it`(password: String) {
+            val node = ValidationNode("password", password).apply { containsLowercase() }
+
+            node.validate() shouldBe listOf(Violation("password", "must contain a lowercase letter"))
+        }
+    }
+
+    @Nested
+    @DisplayName("When containsDigit is called")
+    inner class ContainsDigit {
+        @ParameterizedTest
+        @ValueSource(strings = ["pass1"])
+        fun `given a password with a digit should accept it`(password: String) {
+            val node = ValidationNode("password", password).apply { containsDigit() }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["pass"])
+        fun `given text without it should report it`(password: String) {
+            val node = ValidationNode("password", password).apply { containsDigit() }
+
+            node.validate() shouldBe listOf(Violation("password", "must contain a digit"))
+        }
+    }
+
+    @Nested
+    @DisplayName("When containsSymbol is called")
+    inner class ContainsSymbol {
+        @ParameterizedTest
+        @ValueSource(strings = ["pass!", "pass word#"])
+        fun `given a password with a symbol should accept it`(password: String) {
+            val node = ValidationNode("password", password).apply { containsSymbol() }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["pass word", "pass1"])
+        fun `given text without it should report it`(password: String) {
+            val node = ValidationNode("password", password).apply { containsSymbol() }
+
+            node.validate() shouldBe listOf(Violation("password", "must contain a symbol"))
+        }
+    }
 }
