@@ -1,7 +1,11 @@
 package io.github.soleworks.validity.constraints
 
+import io.github.soleworks.validity.FormatMessages
 import io.github.soleworks.validity.Messages
 import io.github.soleworks.validity.ValidationNode
+
+private val NUMERIC_FORMAT = Regex("[+-]?\\d+(?:\\.\\d+)?")
+private val INTEGER_FORMAT = Regex("[+-]?\\d+")
 
 public fun ValidationNode<String>.minLength(
     min: Int,
@@ -252,4 +256,46 @@ public fun ValidationNode<String>.ascii(
 ): Unit = constraint(
     message = message,
     predicate = { Charsets.US_ASCII.newEncoder().canEncode(it) }
+)
+
+public fun ValidationNode<String>.numeric(
+    message: String = FormatMessages.NUMERIC
+): Unit = constraint(
+    message = message,
+    predicate = { NUMERIC_FORMAT.matches(it) }
+)
+
+public fun ValidationNode<String>.integer(
+    message: String = FormatMessages.INTEGER
+): Unit = constraint(
+    message = message,
+    predicate = { INTEGER_FORMAT.matches(it) }
+)
+
+public fun ValidationNode<String>.containsUppercase(
+    message: String = FormatMessages.CONTAINS_UPPERCASE
+): Unit = constraint(
+    message = message,
+    predicate = { it.any(Char::isUpperCase) }
+)
+
+public fun ValidationNode<String>.containsLowercase(
+    message: String = FormatMessages.CONTAINS_LOWERCASE
+): Unit = constraint(
+    message = message,
+    predicate = { it.any(Char::isLowerCase) }
+)
+
+public fun ValidationNode<String>.containsDigit(
+    message: String = FormatMessages.CONTAINS_DIGIT
+): Unit = constraint(
+    message = message,
+    predicate = { it.any(Char::isDigit) }
+)
+
+public fun ValidationNode<String>.containsSymbol(
+    message: String = FormatMessages.CONTAINS_SYMBOL
+): Unit = constraint(
+    message = message,
+    predicate = { it.any { char -> !char.isLetterOrDigit() && !char.isWhitespace() } }
 )
