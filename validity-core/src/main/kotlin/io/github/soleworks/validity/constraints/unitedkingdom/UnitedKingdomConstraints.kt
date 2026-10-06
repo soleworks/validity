@@ -1,0 +1,16 @@
+package io.github.soleworks.validity.constraints.unitedkingdom
+
+import io.github.soleworks.validity.UnitedKingdomMessages
+import io.github.soleworks.validity.ValidationNode
+
+private val NINO_FORMAT = Regex(
+    "(?!GB|NK|TN|ZZ)(?![DFIQUV])[A-Z](?![DFIQUVO])[A-Z]\\d{6}[ABCD ]",
+    RegexOption.IGNORE_CASE
+)
+
+public fun ValidationNode<String>.nino(
+    message: String = UnitedKingdomMessages.NINO
+): Unit = constraint(
+    message = message,
+    predicate = { NINO_FORMAT.matches(it) }
+)
