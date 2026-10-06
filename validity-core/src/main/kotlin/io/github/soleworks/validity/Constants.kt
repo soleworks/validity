@@ -70,6 +70,17 @@ internal object Messages {
     const val CONTAINS_KEYS: String = "must contain the keys {keys}"
 }
 
+internal object BrazilMessages {
+    const val CPF: String = "must be a valid CPF"
+    const val CNPJ: String = "must be a valid CNPJ"
+    const val CNH: String = "must be a valid CNH"
+    const val PIS: String = "must be a valid PIS"
+    const val TITULO_ELEITORAL: String = "must be a valid título eleitoral"
+    const val CHAVE_NFE: String = "must be a valid NF-e access key"
+    const val CEP: String = "must be a valid CEP"
+    const val PLACA: String = "must be a valid license plate"
+}
+
 internal object FormatMessages {
     const val EMAIL: String = "must be a valid email"
     const val URL: String = "must be a valid URL"
