@@ -4,3 +4,4 @@ plugins {
 
 rootProject.name = "validity"
 include("validity-core")
+include("validity-phone")
