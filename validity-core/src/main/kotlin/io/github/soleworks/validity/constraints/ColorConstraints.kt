@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.FormatMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MAX_CHANNEL = 255
 private const val MAX_HUE = 360.0
@@ -15,21 +15,21 @@ private val HSL_COLOR_FORMAT = Regex(
 )
 
 public fun ValidationNode<String>.hexColor(
-    message: String = FormatMessages.HEX_COLOR
+    message: String = messages.hexColor
 ): Unit = constraint(
     message = message,
     predicate = { HEX_COLOR_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.rgbColor(
-    message: String = FormatMessages.RGB_COLOR
+    message: String = messages.rgbColor
 ): Unit = constraint(
     message = message,
     predicate = { it.isRgbColor() }
 )
 
 public fun ValidationNode<String>.hslColor(
-    message: String = FormatMessages.HSL_COLOR
+    message: String = messages.hslColor
 ): Unit = constraint(
     message = message,
     predicate = { it.isHslColor() }

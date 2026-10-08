@@ -1,11 +1,11 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.Messages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 public fun ValidationNode<out Map<*, *>>.minSize(
     min: Int,
-    message: String = Messages.MIN_ENTRIES
+    message: String = messages.minEntries
 ): Unit = minSize(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -21,7 +21,7 @@ public fun ValidationNode<out Map<*, *>>.minSize(
 
 public fun ValidationNode<out Map<*, *>>.maxSize(
     max: Int,
-    message: String = Messages.MAX_ENTRIES
+    message: String = messages.maxEntries
 ): Unit = maxSize(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -37,7 +37,7 @@ public fun ValidationNode<out Map<*, *>>.maxSize(
 
 public fun ValidationNode<out Map<*, *>>.size(
     size: Int,
-    message: String = Messages.ENTRIES
+    message: String = messages.entries
 ): Unit = size(
     size = size,
     message = { message.replace("{size}", "$size") }
@@ -54,7 +54,7 @@ public fun ValidationNode<out Map<*, *>>.size(
 public fun ValidationNode<out Map<*, *>>.sizeBetween(
     min: Int,
     max: Int,
-    message: String = Messages.ENTRIES_BETWEEN
+    message: String = messages.entriesBetween
 ): Unit = sizeBetween(
     min = min,
     max = max,
@@ -71,7 +71,7 @@ public fun ValidationNode<out Map<*, *>>.sizeBetween(
 )
 
 public fun ValidationNode<out Map<*, *>>.notEmpty(
-    message: String = Messages.NOT_EMPTY
+    message: String = messages.notEmpty
 ): Unit = constraint(
     message = message,
     predicate = { it.isNotEmpty() }
@@ -79,7 +79,7 @@ public fun ValidationNode<out Map<*, *>>.notEmpty(
 
 public fun <K> ValidationNode<out Map<K, *>>.containsKey(
     key: K?,
-    message: String = Messages.CONTAINS_KEY
+    message: String = messages.containsKey
 ): Unit = containsKey(
     key = key,
     message = { message.replace("{key}", "$key") }
@@ -95,7 +95,7 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKey(
 
 public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
     keys: Iterable<K>?,
-    message: String = Messages.CONTAINS_KEYS
+    message: String = messages.containsKeys
 ): Unit = containsKeys(
     keys = keys,
     message = { message.replace("{keys}", keys?.joinToString().orEmpty()) }

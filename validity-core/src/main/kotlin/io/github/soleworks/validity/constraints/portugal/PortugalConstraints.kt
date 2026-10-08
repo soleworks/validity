@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.portugal
 
-import io.github.soleworks.validity.PortugalMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 11
 private const val MAX_DIGIT = 9
@@ -11,7 +11,7 @@ private val NIF_FORMAT = Regex("\\d{9}")
 private val NIF_WEIGHTS = (9 downTo 2).toList()
 
 public fun ValidationNode<String>.nif(
-    message: String = PortugalMessages.NIF
+    message: String = messages.portugal.nif
 ): Unit = constraint(
     message = message,
     predicate = { NIF_FORMAT.matches(it) && it.map(Char::digitToInt).isNif() }

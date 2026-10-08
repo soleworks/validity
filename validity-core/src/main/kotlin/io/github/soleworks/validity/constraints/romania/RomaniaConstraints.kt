@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.romania
 
-import io.github.soleworks.validity.RomaniaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val MODULUS = 11
@@ -17,7 +17,7 @@ private val TWENTIETH_CENTURY_DIGITS = setOf('1', '2')
 private val NINETEENTH_CENTURY_DIGITS = setOf('3', '4')
 
 public fun ValidationNode<String>.cnp(
-    message: String = RomaniaMessages.CNP
+    message: String = messages.romania.cnp
 ): Unit = constraint(
     message = message,
     predicate = { CNP_FORMAT.matches(it) && (it.startsWith(UNCHECKED_PREFIX) || it.isCnp()) }

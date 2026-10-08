@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.Messages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -15,7 +15,7 @@ import java.time.ZonedDateTime
 import java.util.Date
 
 public fun ValidationNode<LocalDate>.past(
-    message: String = Messages.PAST
+    message: String = messages.past
 ): Unit = constraint(
     message = message,
     predicate = { it.isBefore(LocalDate.now()) }
@@ -23,7 +23,7 @@ public fun ValidationNode<LocalDate>.past(
 
 @JvmName("pastLocalDateTime")
 public fun ValidationNode<LocalDateTime>.past(
-    message: String = Messages.PAST
+    message: String = messages.past
 ): Unit = constraint(
     message = message,
     predicate = { it.isBefore(LocalDateTime.now()) }
@@ -31,7 +31,7 @@ public fun ValidationNode<LocalDateTime>.past(
 
 @JvmName("pastZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.past(
-    message: String = Messages.PAST
+    message: String = messages.past
 ): Unit = constraint(
     message = message,
     predicate = { it.isBefore(ZonedDateTime.now()) }
@@ -39,7 +39,7 @@ public fun ValidationNode<ZonedDateTime>.past(
 
 @JvmName("pastOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.past(
-    message: String = Messages.PAST
+    message: String = messages.past
 ): Unit = constraint(
     message = message,
     predicate = { it.isBefore(OffsetDateTime.now()) }
@@ -47,7 +47,7 @@ public fun ValidationNode<OffsetDateTime>.past(
 
 @JvmName("pastInstant")
 public fun ValidationNode<Instant>.past(
-    message: String = Messages.PAST
+    message: String = messages.past
 ): Unit = constraint(
     message = message,
     predicate = { it.isBefore(Instant.now()) }
@@ -55,7 +55,7 @@ public fun ValidationNode<Instant>.past(
 
 @JvmName("pastYearMonth")
 public fun ValidationNode<YearMonth>.past(
-    message: String = Messages.PAST
+    message: String = messages.past
 ): Unit = constraint(
     message = message,
     predicate = { it.isBefore(YearMonth.now()) }
@@ -63,7 +63,7 @@ public fun ValidationNode<YearMonth>.past(
 
 @JvmName("pastYear")
 public fun ValidationNode<Year>.past(
-    message: String = Messages.PAST
+    message: String = messages.past
 ): Unit = constraint(
     message = message,
     predicate = { it.isBefore(Year.now()) }
@@ -71,14 +71,14 @@ public fun ValidationNode<Year>.past(
 
 @JvmName("pastDate")
 public fun ValidationNode<Date>.past(
-    message: String = Messages.PAST
+    message: String = messages.past
 ): Unit = constraint(
     message = message,
     predicate = { it.before(Date()) }
 )
 
 public fun ValidationNode<LocalDate>.future(
-    message: String = Messages.FUTURE
+    message: String = messages.future
 ): Unit = constraint(
     message = message,
     predicate = { it.isAfter(LocalDate.now()) }
@@ -86,7 +86,7 @@ public fun ValidationNode<LocalDate>.future(
 
 @JvmName("futureLocalDateTime")
 public fun ValidationNode<LocalDateTime>.future(
-    message: String = Messages.FUTURE
+    message: String = messages.future
 ): Unit = constraint(
     message = message,
     predicate = { it.isAfter(LocalDateTime.now()) }
@@ -94,7 +94,7 @@ public fun ValidationNode<LocalDateTime>.future(
 
 @JvmName("futureZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.future(
-    message: String = Messages.FUTURE
+    message: String = messages.future
 ): Unit = constraint(
     message = message,
     predicate = { it.isAfter(ZonedDateTime.now()) }
@@ -102,7 +102,7 @@ public fun ValidationNode<ZonedDateTime>.future(
 
 @JvmName("futureOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.future(
-    message: String = Messages.FUTURE
+    message: String = messages.future
 ): Unit = constraint(
     message = message,
     predicate = { it.isAfter(OffsetDateTime.now()) }
@@ -110,7 +110,7 @@ public fun ValidationNode<OffsetDateTime>.future(
 
 @JvmName("futureInstant")
 public fun ValidationNode<Instant>.future(
-    message: String = Messages.FUTURE
+    message: String = messages.future
 ): Unit = constraint(
     message = message,
     predicate = { it.isAfter(Instant.now()) }
@@ -118,7 +118,7 @@ public fun ValidationNode<Instant>.future(
 
 @JvmName("futureYearMonth")
 public fun ValidationNode<YearMonth>.future(
-    message: String = Messages.FUTURE
+    message: String = messages.future
 ): Unit = constraint(
     message = message,
     predicate = { it.isAfter(YearMonth.now()) }
@@ -126,7 +126,7 @@ public fun ValidationNode<YearMonth>.future(
 
 @JvmName("futureYear")
 public fun ValidationNode<Year>.future(
-    message: String = Messages.FUTURE
+    message: String = messages.future
 ): Unit = constraint(
     message = message,
     predicate = { it.isAfter(Year.now()) }
@@ -134,14 +134,14 @@ public fun ValidationNode<Year>.future(
 
 @JvmName("futureDate")
 public fun ValidationNode<Date>.future(
-    message: String = Messages.FUTURE
+    message: String = messages.future
 ): Unit = constraint(
     message = message,
     predicate = { it.after(Date()) }
 )
 
 public fun ValidationNode<LocalDate>.pastOrPresent(
-    message: String = Messages.PAST_OR_PRESENT
+    message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isAfter(LocalDate.now()) }
@@ -149,7 +149,7 @@ public fun ValidationNode<LocalDate>.pastOrPresent(
 
 @JvmName("pastOrPresentLocalDateTime")
 public fun ValidationNode<LocalDateTime>.pastOrPresent(
-    message: String = Messages.PAST_OR_PRESENT
+    message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isAfter(LocalDateTime.now()) }
@@ -157,7 +157,7 @@ public fun ValidationNode<LocalDateTime>.pastOrPresent(
 
 @JvmName("pastOrPresentZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.pastOrPresent(
-    message: String = Messages.PAST_OR_PRESENT
+    message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isAfter(ZonedDateTime.now()) }
@@ -165,7 +165,7 @@ public fun ValidationNode<ZonedDateTime>.pastOrPresent(
 
 @JvmName("pastOrPresentOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.pastOrPresent(
-    message: String = Messages.PAST_OR_PRESENT
+    message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isAfter(OffsetDateTime.now()) }
@@ -173,7 +173,7 @@ public fun ValidationNode<OffsetDateTime>.pastOrPresent(
 
 @JvmName("pastOrPresentInstant")
 public fun ValidationNode<Instant>.pastOrPresent(
-    message: String = Messages.PAST_OR_PRESENT
+    message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isAfter(Instant.now()) }
@@ -181,7 +181,7 @@ public fun ValidationNode<Instant>.pastOrPresent(
 
 @JvmName("pastOrPresentYearMonth")
 public fun ValidationNode<YearMonth>.pastOrPresent(
-    message: String = Messages.PAST_OR_PRESENT
+    message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isAfter(YearMonth.now()) }
@@ -189,7 +189,7 @@ public fun ValidationNode<YearMonth>.pastOrPresent(
 
 @JvmName("pastOrPresentYear")
 public fun ValidationNode<Year>.pastOrPresent(
-    message: String = Messages.PAST_OR_PRESENT
+    message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isAfter(Year.now()) }
@@ -197,14 +197,14 @@ public fun ValidationNode<Year>.pastOrPresent(
 
 @JvmName("pastOrPresentDate")
 public fun ValidationNode<Date>.pastOrPresent(
-    message: String = Messages.PAST_OR_PRESENT
+    message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.after(Date()) }
 )
 
 public fun ValidationNode<LocalDate>.futureOrPresent(
-    message: String = Messages.FUTURE_OR_PRESENT
+    message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isBefore(LocalDate.now()) }
@@ -212,7 +212,7 @@ public fun ValidationNode<LocalDate>.futureOrPresent(
 
 @JvmName("futureOrPresentLocalDateTime")
 public fun ValidationNode<LocalDateTime>.futureOrPresent(
-    message: String = Messages.FUTURE_OR_PRESENT
+    message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isBefore(LocalDateTime.now()) }
@@ -220,7 +220,7 @@ public fun ValidationNode<LocalDateTime>.futureOrPresent(
 
 @JvmName("futureOrPresentZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.futureOrPresent(
-    message: String = Messages.FUTURE_OR_PRESENT
+    message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isBefore(ZonedDateTime.now()) }
@@ -228,7 +228,7 @@ public fun ValidationNode<ZonedDateTime>.futureOrPresent(
 
 @JvmName("futureOrPresentOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.futureOrPresent(
-    message: String = Messages.FUTURE_OR_PRESENT
+    message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isBefore(OffsetDateTime.now()) }
@@ -236,7 +236,7 @@ public fun ValidationNode<OffsetDateTime>.futureOrPresent(
 
 @JvmName("futureOrPresentInstant")
 public fun ValidationNode<Instant>.futureOrPresent(
-    message: String = Messages.FUTURE_OR_PRESENT
+    message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isBefore(Instant.now()) }
@@ -244,7 +244,7 @@ public fun ValidationNode<Instant>.futureOrPresent(
 
 @JvmName("futureOrPresentYearMonth")
 public fun ValidationNode<YearMonth>.futureOrPresent(
-    message: String = Messages.FUTURE_OR_PRESENT
+    message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isBefore(YearMonth.now()) }
@@ -252,7 +252,7 @@ public fun ValidationNode<YearMonth>.futureOrPresent(
 
 @JvmName("futureOrPresentYear")
 public fun ValidationNode<Year>.futureOrPresent(
-    message: String = Messages.FUTURE_OR_PRESENT
+    message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.isBefore(Year.now()) }
@@ -260,7 +260,7 @@ public fun ValidationNode<Year>.futureOrPresent(
 
 @JvmName("futureOrPresentDate")
 public fun ValidationNode<Date>.futureOrPresent(
-    message: String = Messages.FUTURE_OR_PRESENT
+    message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
     predicate = { !it.before(Date()) }
@@ -268,7 +268,7 @@ public fun ValidationNode<Date>.futureOrPresent(
 
 public fun ValidationNode<LocalDate>.after(
     other: LocalDate?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -284,7 +284,7 @@ public fun ValidationNode<LocalDate>.after(
 
 public fun ValidationNode<LocalDateTime>.after(
     other: LocalDateTime?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -300,7 +300,7 @@ public fun ValidationNode<LocalDateTime>.after(
 
 public fun ValidationNode<LocalTime>.after(
     other: LocalTime?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -316,7 +316,7 @@ public fun ValidationNode<LocalTime>.after(
 
 public fun ValidationNode<OffsetTime>.after(
     other: OffsetTime?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -332,7 +332,7 @@ public fun ValidationNode<OffsetTime>.after(
 
 public fun ValidationNode<ZonedDateTime>.after(
     other: ZonedDateTime?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -348,7 +348,7 @@ public fun ValidationNode<ZonedDateTime>.after(
 
 public fun ValidationNode<OffsetDateTime>.after(
     other: OffsetDateTime?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -364,7 +364,7 @@ public fun ValidationNode<OffsetDateTime>.after(
 
 public fun ValidationNode<Instant>.after(
     other: Instant?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -380,7 +380,7 @@ public fun ValidationNode<Instant>.after(
 
 public fun ValidationNode<YearMonth>.after(
     other: YearMonth?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -396,7 +396,7 @@ public fun ValidationNode<YearMonth>.after(
 
 public fun ValidationNode<Year>.after(
     other: Year?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -412,7 +412,7 @@ public fun ValidationNode<Year>.after(
 
 public fun ValidationNode<Date>.after(
     other: Date?,
-    message: String = Messages.AFTER
+    message: String = messages.after
 ): Unit = after(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -428,7 +428,7 @@ public fun ValidationNode<Date>.after(
 
 public fun ValidationNode<LocalDate>.before(
     other: LocalDate?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -444,7 +444,7 @@ public fun ValidationNode<LocalDate>.before(
 
 public fun ValidationNode<LocalDateTime>.before(
     other: LocalDateTime?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -460,7 +460,7 @@ public fun ValidationNode<LocalDateTime>.before(
 
 public fun ValidationNode<LocalTime>.before(
     other: LocalTime?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -476,7 +476,7 @@ public fun ValidationNode<LocalTime>.before(
 
 public fun ValidationNode<OffsetTime>.before(
     other: OffsetTime?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -492,7 +492,7 @@ public fun ValidationNode<OffsetTime>.before(
 
 public fun ValidationNode<ZonedDateTime>.before(
     other: ZonedDateTime?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -508,7 +508,7 @@ public fun ValidationNode<ZonedDateTime>.before(
 
 public fun ValidationNode<OffsetDateTime>.before(
     other: OffsetDateTime?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -524,7 +524,7 @@ public fun ValidationNode<OffsetDateTime>.before(
 
 public fun ValidationNode<Instant>.before(
     other: Instant?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -540,7 +540,7 @@ public fun ValidationNode<Instant>.before(
 
 public fun ValidationNode<YearMonth>.before(
     other: YearMonth?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -556,7 +556,7 @@ public fun ValidationNode<YearMonth>.before(
 
 public fun ValidationNode<Year>.before(
     other: Year?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -572,7 +572,7 @@ public fun ValidationNode<Year>.before(
 
 public fun ValidationNode<Date>.before(
     other: Date?,
-    message: String = Messages.BEFORE
+    message: String = messages.before
 ): Unit = before(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -588,7 +588,7 @@ public fun ValidationNode<Date>.before(
 
 public fun ValidationNode<LocalDate>.afterOrEqual(
     other: LocalDate?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -604,7 +604,7 @@ public fun ValidationNode<LocalDate>.afterOrEqual(
 
 public fun ValidationNode<LocalDateTime>.afterOrEqual(
     other: LocalDateTime?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -620,7 +620,7 @@ public fun ValidationNode<LocalDateTime>.afterOrEqual(
 
 public fun ValidationNode<LocalTime>.afterOrEqual(
     other: LocalTime?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -636,7 +636,7 @@ public fun ValidationNode<LocalTime>.afterOrEqual(
 
 public fun ValidationNode<OffsetTime>.afterOrEqual(
     other: OffsetTime?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -652,7 +652,7 @@ public fun ValidationNode<OffsetTime>.afterOrEqual(
 
 public fun ValidationNode<ZonedDateTime>.afterOrEqual(
     other: ZonedDateTime?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -668,7 +668,7 @@ public fun ValidationNode<ZonedDateTime>.afterOrEqual(
 
 public fun ValidationNode<OffsetDateTime>.afterOrEqual(
     other: OffsetDateTime?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -684,7 +684,7 @@ public fun ValidationNode<OffsetDateTime>.afterOrEqual(
 
 public fun ValidationNode<Instant>.afterOrEqual(
     other: Instant?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -700,7 +700,7 @@ public fun ValidationNode<Instant>.afterOrEqual(
 
 public fun ValidationNode<YearMonth>.afterOrEqual(
     other: YearMonth?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -716,7 +716,7 @@ public fun ValidationNode<YearMonth>.afterOrEqual(
 
 public fun ValidationNode<Year>.afterOrEqual(
     other: Year?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -732,7 +732,7 @@ public fun ValidationNode<Year>.afterOrEqual(
 
 public fun ValidationNode<Date>.afterOrEqual(
     other: Date?,
-    message: String = Messages.AFTER_OR_EQUAL
+    message: String = messages.afterOrEqual
 ): Unit = afterOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -748,7 +748,7 @@ public fun ValidationNode<Date>.afterOrEqual(
 
 public fun ValidationNode<LocalDate>.beforeOrEqual(
     other: LocalDate?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -764,7 +764,7 @@ public fun ValidationNode<LocalDate>.beforeOrEqual(
 
 public fun ValidationNode<LocalDateTime>.beforeOrEqual(
     other: LocalDateTime?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -780,7 +780,7 @@ public fun ValidationNode<LocalDateTime>.beforeOrEqual(
 
 public fun ValidationNode<LocalTime>.beforeOrEqual(
     other: LocalTime?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -796,7 +796,7 @@ public fun ValidationNode<LocalTime>.beforeOrEqual(
 
 public fun ValidationNode<OffsetTime>.beforeOrEqual(
     other: OffsetTime?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -812,7 +812,7 @@ public fun ValidationNode<OffsetTime>.beforeOrEqual(
 
 public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
     other: ZonedDateTime?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -828,7 +828,7 @@ public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
 
 public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
     other: OffsetDateTime?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -844,7 +844,7 @@ public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
 
 public fun ValidationNode<Instant>.beforeOrEqual(
     other: Instant?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -860,7 +860,7 @@ public fun ValidationNode<Instant>.beforeOrEqual(
 
 public fun ValidationNode<YearMonth>.beforeOrEqual(
     other: YearMonth?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -876,7 +876,7 @@ public fun ValidationNode<YearMonth>.beforeOrEqual(
 
 public fun ValidationNode<Year>.beforeOrEqual(
     other: Year?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -892,7 +892,7 @@ public fun ValidationNode<Year>.beforeOrEqual(
 
 public fun ValidationNode<Date>.beforeOrEqual(
     other: Date?,
-    message: String = Messages.BEFORE_OR_EQUAL
+    message: String = messages.beforeOrEqual
 ): Unit = beforeOrEqual(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -909,7 +909,7 @@ public fun ValidationNode<Date>.beforeOrEqual(
 public fun ValidationNode<LocalDate>.between(
     start: LocalDate?,
     end: LocalDate?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -928,7 +928,7 @@ public fun ValidationNode<LocalDate>.between(
 public fun ValidationNode<LocalDateTime>.between(
     start: LocalDateTime?,
     end: LocalDateTime?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -947,7 +947,7 @@ public fun ValidationNode<LocalDateTime>.between(
 public fun ValidationNode<LocalTime>.between(
     start: LocalTime?,
     end: LocalTime?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -966,7 +966,7 @@ public fun ValidationNode<LocalTime>.between(
 public fun ValidationNode<OffsetTime>.between(
     start: OffsetTime?,
     end: OffsetTime?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -985,7 +985,7 @@ public fun ValidationNode<OffsetTime>.between(
 public fun ValidationNode<ZonedDateTime>.between(
     start: ZonedDateTime?,
     end: ZonedDateTime?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -1004,7 +1004,7 @@ public fun ValidationNode<ZonedDateTime>.between(
 public fun ValidationNode<OffsetDateTime>.between(
     start: OffsetDateTime?,
     end: OffsetDateTime?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -1023,7 +1023,7 @@ public fun ValidationNode<OffsetDateTime>.between(
 public fun ValidationNode<Instant>.between(
     start: Instant?,
     end: Instant?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -1042,7 +1042,7 @@ public fun ValidationNode<Instant>.between(
 public fun ValidationNode<YearMonth>.between(
     start: YearMonth?,
     end: YearMonth?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -1061,7 +1061,7 @@ public fun ValidationNode<YearMonth>.between(
 public fun ValidationNode<Year>.between(
     start: Year?,
     end: Year?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -1080,7 +1080,7 @@ public fun ValidationNode<Year>.between(
 public fun ValidationNode<Date>.between(
     start: Date?,
     end: Date?,
-    message: String = Messages.BETWEEN_DATES
+    message: String = messages.betweenDates
 ): Unit = between(
     start = start,
     end = end,
@@ -1098,7 +1098,7 @@ public fun ValidationNode<Date>.between(
 
 public fun ValidationNode<Duration>.min(
     min: Duration?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -1114,7 +1114,7 @@ public fun ValidationNode<Duration>.min(
 
 public fun ValidationNode<Duration>.max(
     max: Duration?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -1130,7 +1130,7 @@ public fun ValidationNode<Duration>.max(
 
 public fun ValidationNode<Duration>.greaterThan(
     other: Duration?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -1146,7 +1146,7 @@ public fun ValidationNode<Duration>.greaterThan(
 
 public fun ValidationNode<Duration>.lessThan(
     other: Duration?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -1163,7 +1163,7 @@ public fun ValidationNode<Duration>.lessThan(
 public fun ValidationNode<Duration>.between(
     min: Duration?,
     max: Duration?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,

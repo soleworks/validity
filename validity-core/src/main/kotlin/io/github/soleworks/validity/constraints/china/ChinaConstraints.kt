@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.china
 
-import io.github.soleworks.validity.ChinaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -25,7 +25,7 @@ private val POWERS = listOf(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)
 private val PARITY_BITS = listOf('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2')
 
 public fun ValidationNode<String>.residentId(
-    message: String = ChinaMessages.RESIDENT_ID
+    message: String = messages.china.residentId
 ): Unit = constraint(
     message = message,
     predicate = { it.isResidentId() }

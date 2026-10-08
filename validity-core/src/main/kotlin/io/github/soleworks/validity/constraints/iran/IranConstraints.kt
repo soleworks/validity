@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.iran
 
-import io.github.soleworks.validity.IranMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 11
 private const val FIRST_WEIGHT = 10
@@ -13,7 +13,7 @@ private const val SMALL_REMAINDER = 2
 private val CODE_FORMAT = Regex("\\d{10}")
 
 public fun ValidationNode<String>.codeMelli(
-    message: String = IranMessages.CODE_MELLI
+    message: String = messages.iran.codeMelli
 ): Unit = constraint(
     message = message,
     predicate = { CODE_FORMAT.matches(it) && it.isCodeMelli() }

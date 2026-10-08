@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.india
 
-import io.github.soleworks.validity.IndiaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val PERMUTATION_PERIOD = 8
 
@@ -32,14 +32,14 @@ private val VERHOEFF_PERMUTATION = listOf(
 )
 
 public fun ValidationNode<String>.aadhaar(
-    message: String = IndiaMessages.AADHAAR
+    message: String = messages.india.aadhaar
 ): Unit = constraint(
     message = message,
     predicate = { it.trim().let { value -> AADHAAR_FORMAT.matches(value) && value.isVerhoeff() } }
 )
 
 public fun ValidationNode<String>.pan(
-    message: String = IndiaMessages.PAN
+    message: String = messages.india.pan
 ): Unit = constraint(
     message = message,
     predicate = { PAN_FORMAT.matches(it) }

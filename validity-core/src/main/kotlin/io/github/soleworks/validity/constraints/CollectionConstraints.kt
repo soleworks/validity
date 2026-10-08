@@ -1,11 +1,11 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.Messages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 public fun ValidationNode<out Collection<*>>.minSize(
     min: Int,
-    message: String = Messages.MIN_SIZE
+    message: String = messages.minSize
 ): Unit = minSize(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -22,7 +22,7 @@ public fun ValidationNode<out Collection<*>>.minSize(
 @JvmName("minSizeArray")
 public fun ValidationNode<out Array<*>>.minSize(
     min: Int,
-    message: String = Messages.MIN_SIZE
+    message: String = messages.minSize
 ): Unit = minSize(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -39,7 +39,7 @@ public fun ValidationNode<out Array<*>>.minSize(
 
 public fun ValidationNode<out Collection<*>>.maxSize(
     max: Int,
-    message: String = Messages.MAX_SIZE
+    message: String = messages.maxSize
 ): Unit = maxSize(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -56,7 +56,7 @@ public fun ValidationNode<out Collection<*>>.maxSize(
 @JvmName("maxSizeArray")
 public fun ValidationNode<out Array<*>>.maxSize(
     max: Int,
-    message: String = Messages.MAX_SIZE
+    message: String = messages.maxSize
 ): Unit = maxSize(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -73,7 +73,7 @@ public fun ValidationNode<out Array<*>>.maxSize(
 
 public fun ValidationNode<out Collection<*>>.size(
     size: Int,
-    message: String = Messages.SIZE
+    message: String = messages.size
 ): Unit = size(
     size = size,
     message = { message.replace("{size}", "$size") }
@@ -90,7 +90,7 @@ public fun ValidationNode<out Collection<*>>.size(
 @JvmName("sizeArray")
 public fun ValidationNode<out Array<*>>.size(
     size: Int,
-    message: String = Messages.SIZE
+    message: String = messages.size
 ): Unit = size(
     size = size,
     message = { message.replace("{size}", "$size") }
@@ -108,7 +108,7 @@ public fun ValidationNode<out Array<*>>.size(
 public fun ValidationNode<out Collection<*>>.sizeBetween(
     min: Int,
     max: Int,
-    message: String = Messages.SIZE_BETWEEN
+    message: String = messages.sizeBetween
 ): Unit = sizeBetween(
     min = min,
     max = max,
@@ -128,7 +128,7 @@ public fun ValidationNode<out Collection<*>>.sizeBetween(
 public fun ValidationNode<out Array<*>>.sizeBetween(
     min: Int,
     max: Int,
-    message: String = Messages.SIZE_BETWEEN
+    message: String = messages.sizeBetween
 ): Unit = sizeBetween(
     min = min,
     max = max,
@@ -146,7 +146,7 @@ public fun ValidationNode<out Array<*>>.sizeBetween(
 )
 
 public fun ValidationNode<out Collection<*>>.notEmpty(
-    message: String = Messages.NOT_EMPTY
+    message: String = messages.notEmpty
 ): Unit = constraint(
     message = message,
     predicate = { it.isNotEmpty() }
@@ -154,14 +154,14 @@ public fun ValidationNode<out Collection<*>>.notEmpty(
 
 @JvmName("notEmptyArray")
 public fun ValidationNode<out Array<*>>.notEmpty(
-    message: String = Messages.NOT_EMPTY
+    message: String = messages.notEmpty
 ): Unit = constraint(
     message = message,
     predicate = { it.isNotEmpty() }
 )
 
 public fun ValidationNode<out Collection<*>>.distinct(
-    message: String = Messages.DISTINCT
+    message: String = messages.distinct
 ): Unit = constraint(
     message = message,
     predicate = { it.distinct().size == it.size }
@@ -169,7 +169,7 @@ public fun ValidationNode<out Collection<*>>.distinct(
 
 @JvmName("distinctArray")
 public fun ValidationNode<out Array<*>>.distinct(
-    message: String = Messages.DISTINCT
+    message: String = messages.distinct
 ): Unit = constraint(
     message = message,
     predicate = { it.distinct().size == it.size }
@@ -177,7 +177,7 @@ public fun ValidationNode<out Array<*>>.distinct(
 
 public fun <E, K> ValidationNode<List<E>>.distinctBy(
     selector: (E) -> K,
-    message: String = Messages.DISTINCT
+    message: String = messages.distinct
 ): Unit = constraint(
     message = message,
     predicate = { it.distinctBy(selector).size == it.size }
@@ -186,7 +186,7 @@ public fun <E, K> ValidationNode<List<E>>.distinctBy(
 @JvmName("distinctBySet")
 public fun <E, K> ValidationNode<Set<E>>.distinctBy(
     selector: (E) -> K,
-    message: String = Messages.DISTINCT
+    message: String = messages.distinct
 ): Unit = constraint(
     message = message,
     predicate = { it.distinctBy(selector).size == it.size }
@@ -195,7 +195,7 @@ public fun <E, K> ValidationNode<Set<E>>.distinctBy(
 @JvmName("distinctByArray")
 public fun <E, K> ValidationNode<Array<E>>.distinctBy(
     selector: (E) -> K,
-    message: String = Messages.DISTINCT
+    message: String = messages.distinct
 ): Unit = constraint(
     message = message,
     predicate = { it.distinctBy(selector).size == it.size }
@@ -203,7 +203,7 @@ public fun <E, K> ValidationNode<Array<E>>.distinctBy(
 
 public fun <E> ValidationNode<List<E>>.contains(
     element: E?,
-    message: String = Messages.CONTAINS_ELEMENT
+    message: String = messages.containsElement
 ): Unit = contains(
     element = element,
     message = { message.replace("{element}", "$element") }
@@ -220,7 +220,7 @@ public fun <E> ValidationNode<List<E>>.contains(
 @JvmName("containsSet")
 public fun <E> ValidationNode<Set<E>>.contains(
     element: E?,
-    message: String = Messages.CONTAINS_ELEMENT
+    message: String = messages.containsElement
 ): Unit = contains(
     element = element,
     message = { message.replace("{element}", "$element") }
@@ -238,7 +238,7 @@ public fun <E> ValidationNode<Set<E>>.contains(
 @JvmName("containsArray")
 public fun <E> ValidationNode<Array<E>>.contains(
     element: E?,
-    message: String = Messages.CONTAINS_ELEMENT
+    message: String = messages.containsElement
 ): Unit = contains(
     element = element,
     message = { message.replace("{element}", "$element") }
@@ -255,7 +255,7 @@ public fun <E> ValidationNode<Array<E>>.contains(
 
 public fun <E> ValidationNode<List<E>>.containsAll(
     elements: Iterable<E>?,
-    message: String = Messages.CONTAINS_ALL
+    message: String = messages.containsAll
 ): Unit = containsAll(
     elements = elements,
     message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
@@ -272,7 +272,7 @@ public fun <E> ValidationNode<List<E>>.containsAll(
 @JvmName("containsAllSet")
 public fun <E> ValidationNode<Set<E>>.containsAll(
     elements: Iterable<E>?,
-    message: String = Messages.CONTAINS_ALL
+    message: String = messages.containsAll
 ): Unit = containsAll(
     elements = elements,
     message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
@@ -290,7 +290,7 @@ public fun <E> ValidationNode<Set<E>>.containsAll(
 @JvmName("containsAllArray")
 public fun <E> ValidationNode<Array<E>>.containsAll(
     elements: Iterable<E>?,
-    message: String = Messages.CONTAINS_ALL
+    message: String = messages.containsAll
 ): Unit = containsAll(
     elements = elements,
     message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
@@ -307,7 +307,7 @@ public fun <E> ValidationNode<Array<E>>.containsAll(
 
 public fun <E> ValidationNode<List<E>>.containsAny(
     elements: Iterable<E>?,
-    message: String = Messages.CONTAINS_ANY
+    message: String = messages.containsAny
 ): Unit = containsAny(
     elements = elements,
     message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
@@ -324,7 +324,7 @@ public fun <E> ValidationNode<List<E>>.containsAny(
 @JvmName("containsAnySet")
 public fun <E> ValidationNode<Set<E>>.containsAny(
     elements: Iterable<E>?,
-    message: String = Messages.CONTAINS_ANY
+    message: String = messages.containsAny
 ): Unit = containsAny(
     elements = elements,
     message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
@@ -342,7 +342,7 @@ public fun <E> ValidationNode<Set<E>>.containsAny(
 @JvmName("containsAnyArray")
 public fun <E> ValidationNode<Array<E>>.containsAny(
     elements: Iterable<E>?,
-    message: String = Messages.CONTAINS_ANY
+    message: String = messages.containsAny
 ): Unit = containsAny(
     elements = elements,
     message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }

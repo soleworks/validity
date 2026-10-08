@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.bulgaria
 
-import io.github.soleworks.validity.BulgariaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val MODULUS = 11
@@ -16,7 +16,7 @@ private val EGN_FORMAT = Regex("(\\d{2})(\\d{2})(\\d{2})\\d{4}")
 private val EGN_WEIGHTS = listOf(2, 4, 8, 5, 10, 9, 7, 3, 6)
 
 public fun ValidationNode<String>.egn(
-    message: String = BulgariaMessages.EGN
+    message: String = messages.bulgaria.egn
 ): Unit = constraint(
     message = message,
     predicate = { it.isEgn() }

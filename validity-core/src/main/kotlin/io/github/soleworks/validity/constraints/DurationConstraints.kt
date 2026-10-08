@@ -1,12 +1,12 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.Messages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import kotlin.time.Duration
 
 public fun ValidationNode<Duration>.min(
     min: Duration?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -22,7 +22,7 @@ public fun ValidationNode<Duration>.min(
 
 public fun ValidationNode<Duration>.max(
     max: Duration?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -38,7 +38,7 @@ public fun ValidationNode<Duration>.max(
 
 public fun ValidationNode<Duration>.greaterThan(
     other: Duration?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -54,7 +54,7 @@ public fun ValidationNode<Duration>.greaterThan(
 
 public fun ValidationNode<Duration>.lessThan(
     other: Duration?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -71,7 +71,7 @@ public fun ValidationNode<Duration>.lessThan(
 public fun ValidationNode<Duration>.between(
     min: Duration?,
     max: Duration?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,

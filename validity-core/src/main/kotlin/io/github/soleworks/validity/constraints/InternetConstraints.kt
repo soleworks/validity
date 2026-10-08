@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.FormatMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.net.URI
 
 private const val IPV4_PREFIX_LENGTH = 32
@@ -30,7 +30,7 @@ private val MIME_TYPE_FORMAT = Regex(
 )
 
 public fun ValidationNode<String>.email(
-    message: String = FormatMessages.EMAIL
+    message: String = messages.email
 ): Unit = constraint(
     message = message,
     predicate = { EMAIL_FORMAT.matches(it) }
@@ -38,7 +38,7 @@ public fun ValidationNode<String>.email(
 
 public fun ValidationNode<String>.url(
     schemes: Set<String> = WEB_SCHEMES,
-    message: String = FormatMessages.URL
+    message: String = messages.url
 ): Unit = url(
     schemes = schemes,
     message = { message.replace("{schemes}", schemes.joinToString()) }
@@ -53,70 +53,70 @@ public fun ValidationNode<String>.url(
 )
 
 public fun ValidationNode<String>.hostname(
-    message: String = FormatMessages.HOSTNAME
+    message: String = messages.hostname
 ): Unit = constraint(
     message = message,
     predicate = { HOSTNAME_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.ipv4(
-    message: String = FormatMessages.IPV4
+    message: String = messages.ipv4
 ): Unit = constraint(
     message = message,
     predicate = { IPV4_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.ipv6(
-    message: String = FormatMessages.IPV6
+    message: String = messages.ipv6
 ): Unit = constraint(
     message = message,
     predicate = { it.isIpv6() }
 )
 
 public fun ValidationNode<String>.ip(
-    message: String = FormatMessages.IP
+    message: String = messages.ip
 ): Unit = constraint(
     message = message,
     predicate = { IPV4_FORMAT.matches(it) || it.isIpv6() }
 )
 
 public fun ValidationNode<String>.cidr(
-    message: String = FormatMessages.CIDR
+    message: String = messages.cidr
 ): Unit = constraint(
     message = message,
     predicate = { it.isCidr() }
 )
 
 public fun ValidationNode<String>.macAddress(
-    message: String = FormatMessages.MAC_ADDRESS
+    message: String = messages.macAddress
 ): Unit = constraint(
     message = message,
     predicate = { MAC_ADDRESS_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.slug(
-    message: String = FormatMessages.SLUG
+    message: String = messages.slug
 ): Unit = constraint(
     message = message,
     predicate = { SLUG_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.jwt(
-    message: String = FormatMessages.JWT
+    message: String = messages.jwt
 ): Unit = constraint(
     message = message,
     predicate = { JWT_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.dataUri(
-    message: String = FormatMessages.DATA_URI
+    message: String = messages.dataUri
 ): Unit = constraint(
     message = message,
     predicate = { DATA_URI_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.mimeType(
-    message: String = FormatMessages.MIME_TYPE
+    message: String = messages.mimeType
 ): Unit = constraint(
     message = message,
     predicate = { MIME_TYPE_FORMAT.matches(it) }

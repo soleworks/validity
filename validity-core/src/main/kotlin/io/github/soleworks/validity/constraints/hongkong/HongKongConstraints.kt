@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.hongkong
 
-import io.github.soleworks.validity.HongKongMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 11
 private const val WEIGHT_BASE = 9
@@ -16,7 +16,7 @@ private val HKID_FORMAT = Regex("[A-Z]{1,2}[0-9]{6}(\\([0-9A]\\)|\\[[0-9A]]|[0-9
 private val BRACKETS = setOf('[', ']', '(', ')')
 
 public fun ValidationNode<String>.hkid(
-    message: String = HongKongMessages.HKID
+    message: String = messages.hongKong.hkid
 ): Unit = constraint(
     message = message,
     predicate = { it.trim().uppercase().let { value -> HKID_FORMAT.matches(value) && value.isHkid() } }

@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.czechrepublic
 
-import io.github.soleworks.validity.CzechRepublicMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val MODULUS = 11L
@@ -19,7 +19,7 @@ private const val TWENTY_FIRST_CENTURY = 2000
 private val RODNE_CISLO_FORMAT = Regex("(\\d{2})(\\d{2})(\\d{2})/?(\\d{3,4})")
 
 public fun ValidationNode<String>.rodneCislo(
-    message: String = CzechRepublicMessages.RODNE_CISLO
+    message: String = messages.czechRepublic.rodneCislo
 ): Unit = constraint(
     message = message,
     predicate = { it.isRodneCislo() }

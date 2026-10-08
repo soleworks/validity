@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.sweden
 
-import io.github.soleworks.validity.SwedenMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val CENTURY = 100
@@ -20,14 +20,14 @@ private val PERSONAL_NUMBER_FORMAT = Regex("(\\d{6}[-+]?\\d{4}|(18|19|20)\\d{6}[
 private val NON_WORD = Regex("\\W")
 
 public fun ValidationNode<String>.personnummer(
-    message: String = SwedenMessages.PERSONNUMMER
+    message: String = messages.sweden.personnummer
 ): Unit = constraint(
     message = message,
     predicate = { PERSONAL_NUMBER_FORMAT.matches(it) && it.isValid() && !it.isCoordination() }
 )
 
 public fun ValidationNode<String>.samordningsnummer(
-    message: String = SwedenMessages.SAMORDNINGSNUMMER
+    message: String = messages.sweden.samordningsnummer
 ): Unit = constraint(
     message = message,
     predicate = { PERSONAL_NUMBER_FORMAT.matches(it) && it.isValid() && it.isCoordination() }

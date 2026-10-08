@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.germany
 
-import io.github.soleworks.validity.GermanyMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val CHECK_MODULUS = 11
 private const val DIGIT_MODULUS = 10
@@ -16,7 +16,7 @@ private val STEUER_ID_FORMAT = Regex("[1-9]\\d{10}")
 private val SEPARATORS = Regex("[/\\\\]")
 
 public fun ValidationNode<String>.steuerId(
-    message: String = GermanyMessages.STEUER_ID
+    message: String = messages.germany.steuerId
 ): Unit = constraint(
     message = message,
     predicate = {

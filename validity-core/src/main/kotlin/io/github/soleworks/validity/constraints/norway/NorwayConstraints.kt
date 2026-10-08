@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.norway
 
-import io.github.soleworks.validity.NorwayMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 11
 private const val EMPTY_NUMBER = "00000000000"
@@ -15,7 +15,7 @@ private val FIRST_WEIGHTS = listOf(3, 7, 6, 1, 8, 9, 4, 5, 2)
 private val SECOND_WEIGHTS = listOf(5, 4, 3, 2, 7, 6, 5, 4, 3)
 
 public fun ValidationNode<String>.fodselsnummer(
-    message: String = NorwayMessages.FODSELSNUMMER
+    message: String = messages.norway.fodselsnummer
 ): Unit = constraint(
     message = message,
     predicate = {

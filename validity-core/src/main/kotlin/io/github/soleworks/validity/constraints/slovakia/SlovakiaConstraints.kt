@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.slovakia
 
-import io.github.soleworks.validity.SlovakiaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val PRE_1954_LENGTH = 9
@@ -13,7 +13,7 @@ private const val TWENTIETH_CENTURY = 1900
 private val RODNE_CISLO_FORMAT = Regex("(\\d{2})(\\d{2})(\\d{2})/?(\\d{3,4})")
 
 public fun ValidationNode<String>.rodneCislo(
-    message: String = SlovakiaMessages.RODNE_CISLO
+    message: String = messages.slovakia.rodneCislo
 ): Unit = constraint(
     message = message,
     predicate = { RODNE_CISLO_FORMAT.matches(it) && (it.length != PRE_1954_LENGTH || it.isPre1954RodneCislo()) }

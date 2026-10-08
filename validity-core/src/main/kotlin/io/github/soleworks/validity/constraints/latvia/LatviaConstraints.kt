@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.latvia
 
-import io.github.soleworks.validity.LatviaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val MODULUS = 11
@@ -17,7 +17,7 @@ private val PERSONAS_KODS_FORMAT = Regex("(\\d{2})(\\d{2})(\\d{2})-?(\\d)\\d{4}"
 private val PERSONAS_KODS_WEIGHTS = listOf(1, 6, 3, 7, 9, 10, 5, 8, 4, 2)
 
 public fun ValidationNode<String>.personasKods(
-    message: String = LatviaMessages.PERSONAS_KODS
+    message: String = messages.latvia.personasKods
 ): Unit = constraint(
     message = message,
     predicate = { it.isPersonasKods() }

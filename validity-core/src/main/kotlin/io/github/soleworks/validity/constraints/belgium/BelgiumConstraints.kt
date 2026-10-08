@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.belgium
 
-import io.github.soleworks.validity.BelgiumMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val MODULUS = 97L
@@ -16,7 +16,7 @@ private val RIJKSREGISTERNUMMER_FORMAT = Regex("\\d{11}")
 private val SYMBOLS = Regex("[-\\\\/!@#\$%^&*()+=\\[\\]]+")
 
 public fun ValidationNode<String>.rijksregisternummer(
-    message: String = BelgiumMessages.RIJKSREGISTERNUMMER
+    message: String = messages.belgium.rijksregisternummer
 ): Unit = constraint(
     message = message,
     predicate = {

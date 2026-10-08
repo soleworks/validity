@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.FormatMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.math.BigDecimal
 import java.time.ZoneId
 import java.util.Locale
@@ -18,42 +18,42 @@ private val LONGITUDES = BigDecimal.valueOf(-MAX_LONGITUDE)..BigDecimal.valueOf(
 private val DECIMAL_FORMAT = Regex("[+-]?\\d+(?:\\.\\d+)?")
 
 public fun ValidationNode<String>.isoCountryCode(
-    message: String = FormatMessages.ISO_COUNTRY_CODE
+    message: String = messages.isoCountryCode
 ): Unit = constraint(
     message = message,
     predicate = { it in COUNTRY_CODES }
 )
 
 public fun ValidationNode<String>.isoCountryCodeAlpha3(
-    message: String = FormatMessages.ISO_COUNTRY_CODE_ALPHA3
+    message: String = messages.isoCountryCodeAlpha3
 ): Unit = constraint(
     message = message,
     predicate = { it in COUNTRY_CODES_ALPHA3 }
 )
 
 public fun ValidationNode<String>.languageCode(
-    message: String = FormatMessages.LANGUAGE_CODE
+    message: String = messages.languageCode
 ): Unit = constraint(
     message = message,
     predicate = { it in LANGUAGE_CODES }
 )
 
 public fun ValidationNode<String>.locale(
-    message: String = FormatMessages.LOCALE
+    message: String = messages.locale
 ): Unit = constraint(
     message = message,
     predicate = { it.isNotEmpty() && runCatching { Locale.Builder().setLanguageTag(it).build() }.isSuccess }
 )
 
 public fun ValidationNode<String>.timeZone(
-    message: String = FormatMessages.TIME_ZONE
+    message: String = messages.timeZone
 ): Unit = constraint(
     message = message,
     predicate = { it in TIME_ZONES }
 )
 
 public fun ValidationNode<Double>.latitude(
-    message: String = FormatMessages.LATITUDE
+    message: String = messages.latitude
 ): Unit = constraint(
     message = message,
     predicate = { it in -MAX_LATITUDE..MAX_LATITUDE }
@@ -61,7 +61,7 @@ public fun ValidationNode<Double>.latitude(
 
 @JvmName("latitudeFloat")
 public fun ValidationNode<Float>.latitude(
-    message: String = FormatMessages.LATITUDE
+    message: String = messages.latitude
 ): Unit = constraint(
     message = message,
     predicate = { it.toDouble() in -MAX_LATITUDE..MAX_LATITUDE }
@@ -69,7 +69,7 @@ public fun ValidationNode<Float>.latitude(
 
 @JvmName("latitudeBigDecimal")
 public fun ValidationNode<BigDecimal>.latitude(
-    message: String = FormatMessages.LATITUDE
+    message: String = messages.latitude
 ): Unit = constraint(
     message = message,
     predicate = { it in LATITUDES }
@@ -77,14 +77,14 @@ public fun ValidationNode<BigDecimal>.latitude(
 
 @JvmName("latitudeString")
 public fun ValidationNode<String>.latitude(
-    message: String = FormatMessages.LATITUDE
+    message: String = messages.latitude
 ): Unit = constraint(
     message = message,
     predicate = { DECIMAL_FORMAT.matches(it) && BigDecimal(it) in LATITUDES }
 )
 
 public fun ValidationNode<Double>.longitude(
-    message: String = FormatMessages.LONGITUDE
+    message: String = messages.longitude
 ): Unit = constraint(
     message = message,
     predicate = { it in -MAX_LONGITUDE..MAX_LONGITUDE }
@@ -92,7 +92,7 @@ public fun ValidationNode<Double>.longitude(
 
 @JvmName("longitudeFloat")
 public fun ValidationNode<Float>.longitude(
-    message: String = FormatMessages.LONGITUDE
+    message: String = messages.longitude
 ): Unit = constraint(
     message = message,
     predicate = { it.toDouble() in -MAX_LONGITUDE..MAX_LONGITUDE }
@@ -100,7 +100,7 @@ public fun ValidationNode<Float>.longitude(
 
 @JvmName("longitudeBigDecimal")
 public fun ValidationNode<BigDecimal>.longitude(
-    message: String = FormatMessages.LONGITUDE
+    message: String = messages.longitude
 ): Unit = constraint(
     message = message,
     predicate = { it in LONGITUDES }
@@ -108,7 +108,7 @@ public fun ValidationNode<BigDecimal>.longitude(
 
 @JvmName("longitudeString")
 public fun ValidationNode<String>.longitude(
-    message: String = FormatMessages.LONGITUDE
+    message: String = messages.longitude
 ): Unit = constraint(
     message = message,
     predicate = { DECIMAL_FORMAT.matches(it) && BigDecimal(it) in LONGITUDES }

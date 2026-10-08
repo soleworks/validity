@@ -1,13 +1,13 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.Messages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.math.BigDecimal
 import java.math.BigInteger
 
 public fun ValidationNode<Int>.min(
     min: Int?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -23,7 +23,7 @@ public fun ValidationNode<Int>.min(
 
 public fun ValidationNode<Long>.min(
     min: Long?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -39,7 +39,7 @@ public fun ValidationNode<Long>.min(
 
 public fun ValidationNode<Short>.min(
     min: Short?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -55,7 +55,7 @@ public fun ValidationNode<Short>.min(
 
 public fun ValidationNode<Byte>.min(
     min: Byte?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -71,7 +71,7 @@ public fun ValidationNode<Byte>.min(
 
 public fun ValidationNode<Double>.min(
     min: Double?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -87,7 +87,7 @@ public fun ValidationNode<Double>.min(
 
 public fun ValidationNode<Float>.min(
     min: Float?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -103,7 +103,7 @@ public fun ValidationNode<Float>.min(
 
 public fun ValidationNode<BigInteger>.min(
     min: BigInteger?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -119,7 +119,7 @@ public fun ValidationNode<BigInteger>.min(
 
 public fun ValidationNode<BigDecimal>.min(
     min: BigDecimal?,
-    message: String = Messages.MIN
+    message: String = messages.min
 ): Unit = min(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -135,7 +135,7 @@ public fun ValidationNode<BigDecimal>.min(
 
 public fun ValidationNode<Int>.max(
     max: Int?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -151,7 +151,7 @@ public fun ValidationNode<Int>.max(
 
 public fun ValidationNode<Long>.max(
     max: Long?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -167,7 +167,7 @@ public fun ValidationNode<Long>.max(
 
 public fun ValidationNode<Short>.max(
     max: Short?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -183,7 +183,7 @@ public fun ValidationNode<Short>.max(
 
 public fun ValidationNode<Byte>.max(
     max: Byte?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -199,7 +199,7 @@ public fun ValidationNode<Byte>.max(
 
 public fun ValidationNode<Double>.max(
     max: Double?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -215,7 +215,7 @@ public fun ValidationNode<Double>.max(
 
 public fun ValidationNode<Float>.max(
     max: Float?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -231,7 +231,7 @@ public fun ValidationNode<Float>.max(
 
 public fun ValidationNode<BigInteger>.max(
     max: BigInteger?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -247,7 +247,7 @@ public fun ValidationNode<BigInteger>.max(
 
 public fun ValidationNode<BigDecimal>.max(
     max: BigDecimal?,
-    message: String = Messages.MAX
+    message: String = messages.max
 ): Unit = max(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -263,7 +263,7 @@ public fun ValidationNode<BigDecimal>.max(
 
 public fun ValidationNode<Int>.greaterThan(
     other: Int?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -279,7 +279,7 @@ public fun ValidationNode<Int>.greaterThan(
 
 public fun ValidationNode<Long>.greaterThan(
     other: Long?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -295,7 +295,7 @@ public fun ValidationNode<Long>.greaterThan(
 
 public fun ValidationNode<Short>.greaterThan(
     other: Short?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -311,7 +311,7 @@ public fun ValidationNode<Short>.greaterThan(
 
 public fun ValidationNode<Byte>.greaterThan(
     other: Byte?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -327,7 +327,7 @@ public fun ValidationNode<Byte>.greaterThan(
 
 public fun ValidationNode<Double>.greaterThan(
     other: Double?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -343,7 +343,7 @@ public fun ValidationNode<Double>.greaterThan(
 
 public fun ValidationNode<Float>.greaterThan(
     other: Float?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -359,7 +359,7 @@ public fun ValidationNode<Float>.greaterThan(
 
 public fun ValidationNode<BigInteger>.greaterThan(
     other: BigInteger?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -375,7 +375,7 @@ public fun ValidationNode<BigInteger>.greaterThan(
 
 public fun ValidationNode<BigDecimal>.greaterThan(
     other: BigDecimal?,
-    message: String = Messages.GREATER_THAN
+    message: String = messages.greaterThan
 ): Unit = greaterThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -391,7 +391,7 @@ public fun ValidationNode<BigDecimal>.greaterThan(
 
 public fun ValidationNode<Int>.lessThan(
     other: Int?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -407,7 +407,7 @@ public fun ValidationNode<Int>.lessThan(
 
 public fun ValidationNode<Long>.lessThan(
     other: Long?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -423,7 +423,7 @@ public fun ValidationNode<Long>.lessThan(
 
 public fun ValidationNode<Short>.lessThan(
     other: Short?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -439,7 +439,7 @@ public fun ValidationNode<Short>.lessThan(
 
 public fun ValidationNode<Byte>.lessThan(
     other: Byte?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -455,7 +455,7 @@ public fun ValidationNode<Byte>.lessThan(
 
 public fun ValidationNode<Double>.lessThan(
     other: Double?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -471,7 +471,7 @@ public fun ValidationNode<Double>.lessThan(
 
 public fun ValidationNode<Float>.lessThan(
     other: Float?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -487,7 +487,7 @@ public fun ValidationNode<Float>.lessThan(
 
 public fun ValidationNode<BigInteger>.lessThan(
     other: BigInteger?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -503,7 +503,7 @@ public fun ValidationNode<BigInteger>.lessThan(
 
 public fun ValidationNode<BigDecimal>.lessThan(
     other: BigDecimal?,
-    message: String = Messages.LESS_THAN
+    message: String = messages.lessThan
 ): Unit = lessThan(
     other = other,
     message = { message.replace("{other}", "$other") }
@@ -520,7 +520,7 @@ public fun ValidationNode<BigDecimal>.lessThan(
 public fun ValidationNode<Int>.between(
     min: Int?,
     max: Int?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,
@@ -539,7 +539,7 @@ public fun ValidationNode<Int>.between(
 public fun ValidationNode<Long>.between(
     min: Long?,
     max: Long?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,
@@ -558,7 +558,7 @@ public fun ValidationNode<Long>.between(
 public fun ValidationNode<Short>.between(
     min: Short?,
     max: Short?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,
@@ -577,7 +577,7 @@ public fun ValidationNode<Short>.between(
 public fun ValidationNode<Byte>.between(
     min: Byte?,
     max: Byte?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,
@@ -596,7 +596,7 @@ public fun ValidationNode<Byte>.between(
 public fun ValidationNode<Double>.between(
     min: Double?,
     max: Double?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,
@@ -615,7 +615,7 @@ public fun ValidationNode<Double>.between(
 public fun ValidationNode<Float>.between(
     min: Float?,
     max: Float?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,
@@ -634,7 +634,7 @@ public fun ValidationNode<Float>.between(
 public fun ValidationNode<BigInteger>.between(
     min: BigInteger?,
     max: BigInteger?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,
@@ -653,7 +653,7 @@ public fun ValidationNode<BigInteger>.between(
 public fun ValidationNode<BigDecimal>.between(
     min: BigDecimal?,
     max: BigDecimal?,
-    message: String = Messages.BETWEEN
+    message: String = messages.between
 ): Unit = between(
     min = min,
     max = max,
@@ -670,7 +670,7 @@ public fun ValidationNode<BigDecimal>.between(
 )
 
 public fun ValidationNode<Int>.positive(
-    message: String = Messages.POSITIVE
+    message: String = messages.positive
 ): Unit = constraint(
     message = message,
     predicate = { it > 0 }
@@ -678,7 +678,7 @@ public fun ValidationNode<Int>.positive(
 
 @JvmName("positiveLong")
 public fun ValidationNode<Long>.positive(
-    message: String = Messages.POSITIVE
+    message: String = messages.positive
 ): Unit = constraint(
     message = message,
     predicate = { it > 0 }
@@ -686,7 +686,7 @@ public fun ValidationNode<Long>.positive(
 
 @JvmName("positiveShort")
 public fun ValidationNode<Short>.positive(
-    message: String = Messages.POSITIVE
+    message: String = messages.positive
 ): Unit = constraint(
     message = message,
     predicate = { it > 0 }
@@ -694,7 +694,7 @@ public fun ValidationNode<Short>.positive(
 
 @JvmName("positiveByte")
 public fun ValidationNode<Byte>.positive(
-    message: String = Messages.POSITIVE
+    message: String = messages.positive
 ): Unit = constraint(
     message = message,
     predicate = { it > 0 }
@@ -702,7 +702,7 @@ public fun ValidationNode<Byte>.positive(
 
 @JvmName("positiveDouble")
 public fun ValidationNode<Double>.positive(
-    message: String = Messages.POSITIVE
+    message: String = messages.positive
 ): Unit = constraint(
     message = message,
     predicate = { it > 0.0 }
@@ -710,7 +710,7 @@ public fun ValidationNode<Double>.positive(
 
 @JvmName("positiveFloat")
 public fun ValidationNode<Float>.positive(
-    message: String = Messages.POSITIVE
+    message: String = messages.positive
 ): Unit = constraint(
     message = message,
     predicate = { it > 0f }
@@ -718,7 +718,7 @@ public fun ValidationNode<Float>.positive(
 
 @JvmName("positiveBigInteger")
 public fun ValidationNode<BigInteger>.positive(
-    message: String = Messages.POSITIVE
+    message: String = messages.positive
 ): Unit = constraint(
     message = message,
     predicate = { it.signum() > 0 }
@@ -726,14 +726,14 @@ public fun ValidationNode<BigInteger>.positive(
 
 @JvmName("positiveBigDecimal")
 public fun ValidationNode<BigDecimal>.positive(
-    message: String = Messages.POSITIVE
+    message: String = messages.positive
 ): Unit = constraint(
     message = message,
     predicate = { it.signum() > 0 }
 )
 
 public fun ValidationNode<Int>.negative(
-    message: String = Messages.NEGATIVE
+    message: String = messages.negative
 ): Unit = constraint(
     message = message,
     predicate = { it < 0 }
@@ -741,7 +741,7 @@ public fun ValidationNode<Int>.negative(
 
 @JvmName("negativeLong")
 public fun ValidationNode<Long>.negative(
-    message: String = Messages.NEGATIVE
+    message: String = messages.negative
 ): Unit = constraint(
     message = message,
     predicate = { it < 0 }
@@ -749,7 +749,7 @@ public fun ValidationNode<Long>.negative(
 
 @JvmName("negativeShort")
 public fun ValidationNode<Short>.negative(
-    message: String = Messages.NEGATIVE
+    message: String = messages.negative
 ): Unit = constraint(
     message = message,
     predicate = { it < 0 }
@@ -757,7 +757,7 @@ public fun ValidationNode<Short>.negative(
 
 @JvmName("negativeByte")
 public fun ValidationNode<Byte>.negative(
-    message: String = Messages.NEGATIVE
+    message: String = messages.negative
 ): Unit = constraint(
     message = message,
     predicate = { it < 0 }
@@ -765,7 +765,7 @@ public fun ValidationNode<Byte>.negative(
 
 @JvmName("negativeDouble")
 public fun ValidationNode<Double>.negative(
-    message: String = Messages.NEGATIVE
+    message: String = messages.negative
 ): Unit = constraint(
     message = message,
     predicate = { it < 0.0 }
@@ -773,7 +773,7 @@ public fun ValidationNode<Double>.negative(
 
 @JvmName("negativeFloat")
 public fun ValidationNode<Float>.negative(
-    message: String = Messages.NEGATIVE
+    message: String = messages.negative
 ): Unit = constraint(
     message = message,
     predicate = { it < 0f }
@@ -781,7 +781,7 @@ public fun ValidationNode<Float>.negative(
 
 @JvmName("negativeBigInteger")
 public fun ValidationNode<BigInteger>.negative(
-    message: String = Messages.NEGATIVE
+    message: String = messages.negative
 ): Unit = constraint(
     message = message,
     predicate = { it.signum() < 0 }
@@ -789,14 +789,14 @@ public fun ValidationNode<BigInteger>.negative(
 
 @JvmName("negativeBigDecimal")
 public fun ValidationNode<BigDecimal>.negative(
-    message: String = Messages.NEGATIVE
+    message: String = messages.negative
 ): Unit = constraint(
     message = message,
     predicate = { it.signum() < 0 }
 )
 
 public fun ValidationNode<Int>.positiveOrZero(
-    message: String = Messages.POSITIVE_OR_ZERO
+    message: String = messages.positiveOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it >= 0 }
@@ -804,7 +804,7 @@ public fun ValidationNode<Int>.positiveOrZero(
 
 @JvmName("positiveOrZeroLong")
 public fun ValidationNode<Long>.positiveOrZero(
-    message: String = Messages.POSITIVE_OR_ZERO
+    message: String = messages.positiveOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it >= 0 }
@@ -812,7 +812,7 @@ public fun ValidationNode<Long>.positiveOrZero(
 
 @JvmName("positiveOrZeroShort")
 public fun ValidationNode<Short>.positiveOrZero(
-    message: String = Messages.POSITIVE_OR_ZERO
+    message: String = messages.positiveOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it >= 0 }
@@ -820,7 +820,7 @@ public fun ValidationNode<Short>.positiveOrZero(
 
 @JvmName("positiveOrZeroByte")
 public fun ValidationNode<Byte>.positiveOrZero(
-    message: String = Messages.POSITIVE_OR_ZERO
+    message: String = messages.positiveOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it >= 0 }
@@ -828,7 +828,7 @@ public fun ValidationNode<Byte>.positiveOrZero(
 
 @JvmName("positiveOrZeroDouble")
 public fun ValidationNode<Double>.positiveOrZero(
-    message: String = Messages.POSITIVE_OR_ZERO
+    message: String = messages.positiveOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it >= 0.0 }
@@ -836,7 +836,7 @@ public fun ValidationNode<Double>.positiveOrZero(
 
 @JvmName("positiveOrZeroFloat")
 public fun ValidationNode<Float>.positiveOrZero(
-    message: String = Messages.POSITIVE_OR_ZERO
+    message: String = messages.positiveOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it >= 0f }
@@ -844,7 +844,7 @@ public fun ValidationNode<Float>.positiveOrZero(
 
 @JvmName("positiveOrZeroBigInteger")
 public fun ValidationNode<BigInteger>.positiveOrZero(
-    message: String = Messages.POSITIVE_OR_ZERO
+    message: String = messages.positiveOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it.signum() >= 0 }
@@ -852,14 +852,14 @@ public fun ValidationNode<BigInteger>.positiveOrZero(
 
 @JvmName("positiveOrZeroBigDecimal")
 public fun ValidationNode<BigDecimal>.positiveOrZero(
-    message: String = Messages.POSITIVE_OR_ZERO
+    message: String = messages.positiveOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it.signum() >= 0 }
 )
 
 public fun ValidationNode<Int>.negativeOrZero(
-    message: String = Messages.NEGATIVE_OR_ZERO
+    message: String = messages.negativeOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it <= 0 }
@@ -867,7 +867,7 @@ public fun ValidationNode<Int>.negativeOrZero(
 
 @JvmName("negativeOrZeroLong")
 public fun ValidationNode<Long>.negativeOrZero(
-    message: String = Messages.NEGATIVE_OR_ZERO
+    message: String = messages.negativeOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it <= 0 }
@@ -875,7 +875,7 @@ public fun ValidationNode<Long>.negativeOrZero(
 
 @JvmName("negativeOrZeroShort")
 public fun ValidationNode<Short>.negativeOrZero(
-    message: String = Messages.NEGATIVE_OR_ZERO
+    message: String = messages.negativeOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it <= 0 }
@@ -883,7 +883,7 @@ public fun ValidationNode<Short>.negativeOrZero(
 
 @JvmName("negativeOrZeroByte")
 public fun ValidationNode<Byte>.negativeOrZero(
-    message: String = Messages.NEGATIVE_OR_ZERO
+    message: String = messages.negativeOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it <= 0 }
@@ -891,7 +891,7 @@ public fun ValidationNode<Byte>.negativeOrZero(
 
 @JvmName("negativeOrZeroDouble")
 public fun ValidationNode<Double>.negativeOrZero(
-    message: String = Messages.NEGATIVE_OR_ZERO
+    message: String = messages.negativeOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it <= 0.0 }
@@ -899,7 +899,7 @@ public fun ValidationNode<Double>.negativeOrZero(
 
 @JvmName("negativeOrZeroFloat")
 public fun ValidationNode<Float>.negativeOrZero(
-    message: String = Messages.NEGATIVE_OR_ZERO
+    message: String = messages.negativeOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it <= 0f }
@@ -907,7 +907,7 @@ public fun ValidationNode<Float>.negativeOrZero(
 
 @JvmName("negativeOrZeroBigInteger")
 public fun ValidationNode<BigInteger>.negativeOrZero(
-    message: String = Messages.NEGATIVE_OR_ZERO
+    message: String = messages.negativeOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it.signum() <= 0 }
@@ -915,7 +915,7 @@ public fun ValidationNode<BigInteger>.negativeOrZero(
 
 @JvmName("negativeOrZeroBigDecimal")
 public fun ValidationNode<BigDecimal>.negativeOrZero(
-    message: String = Messages.NEGATIVE_OR_ZERO
+    message: String = messages.negativeOrZero
 ): Unit = constraint(
     message = message,
     predicate = { it.signum() <= 0 }
@@ -923,7 +923,7 @@ public fun ValidationNode<BigDecimal>.negativeOrZero(
 
 public fun ValidationNode<Int>.multipleOf(
     factor: Int,
-    message: String = Messages.MULTIPLE_OF
+    message: String = messages.multipleOf
 ): Unit = multipleOf(
     factor = factor,
     message = { message.replace("{factor}", "$factor") }
@@ -939,7 +939,7 @@ public fun ValidationNode<Int>.multipleOf(
 
 public fun ValidationNode<Long>.multipleOf(
     factor: Long,
-    message: String = Messages.MULTIPLE_OF
+    message: String = messages.multipleOf
 ): Unit = multipleOf(
     factor = factor,
     message = { message.replace("{factor}", "$factor") }
@@ -955,7 +955,7 @@ public fun ValidationNode<Long>.multipleOf(
 
 public fun ValidationNode<Short>.multipleOf(
     factor: Short,
-    message: String = Messages.MULTIPLE_OF
+    message: String = messages.multipleOf
 ): Unit = multipleOf(
     factor = factor,
     message = { message.replace("{factor}", "$factor") }
@@ -971,7 +971,7 @@ public fun ValidationNode<Short>.multipleOf(
 
 public fun ValidationNode<Byte>.multipleOf(
     factor: Byte,
-    message: String = Messages.MULTIPLE_OF
+    message: String = messages.multipleOf
 ): Unit = multipleOf(
     factor = factor,
     message = { message.replace("{factor}", "$factor") }
@@ -987,7 +987,7 @@ public fun ValidationNode<Byte>.multipleOf(
 
 public fun ValidationNode<BigInteger>.multipleOf(
     factor: BigInteger,
-    message: String = Messages.MULTIPLE_OF
+    message: String = messages.multipleOf
 ): Unit = multipleOf(
     factor = factor,
     message = { message.replace("{factor}", "$factor") }
@@ -1003,7 +1003,7 @@ public fun ValidationNode<BigInteger>.multipleOf(
 
 public fun ValidationNode<BigDecimal>.multipleOf(
     factor: BigDecimal,
-    message: String = Messages.MULTIPLE_OF
+    message: String = messages.multipleOf
 ): Unit = multipleOf(
     factor = factor,
     message = { message.replace("{factor}", "$factor") }
@@ -1018,7 +1018,7 @@ public fun ValidationNode<BigDecimal>.multipleOf(
 )
 
 public fun ValidationNode<Double>.finite(
-    message: String = Messages.FINITE
+    message: String = messages.finite
 ): Unit = constraint(
     message = message,
     predicate = { it.isFinite() }
@@ -1026,7 +1026,7 @@ public fun ValidationNode<Double>.finite(
 
 @JvmName("finiteFloat")
 public fun ValidationNode<Float>.finite(
-    message: String = Messages.FINITE
+    message: String = messages.finite
 ): Unit = constraint(
     message = message,
     predicate = { it.isFinite() }
@@ -1034,7 +1034,7 @@ public fun ValidationNode<Float>.finite(
 
 public fun ValidationNode<BigDecimal>.maxDecimalPlaces(
     max: Int,
-    message: String = Messages.MAX_DECIMAL_PLACES
+    message: String = messages.maxDecimalPlaces
 ): Unit = maxDecimalPlaces(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -1050,7 +1050,7 @@ public fun ValidationNode<BigDecimal>.maxDecimalPlaces(
 
 public fun ValidationNode<BigDecimal>.maxIntegerDigits(
     max: Int,
-    message: String = Messages.MAX_INTEGER_DIGITS
+    message: String = messages.maxIntegerDigits
 ): Unit = maxIntegerDigits(
     max = max,
     message = { message.replace("{max}", "$max") }

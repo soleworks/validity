@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.austria
 
-import io.github.soleworks.validity.AustriaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 10
 private const val DOUBLE_DIGIT_LIMIT = 9
@@ -11,7 +11,7 @@ private val ABGABENKONTONUMMER_FORMAT = Regex("\\d{9}")
 private val SYMBOLS = Regex("[-\\\\/!@#\$%^&*()+=\\[\\]]+")
 
 public fun ValidationNode<String>.abgabenkontonummer(
-    message: String = AustriaMessages.ABGABENKONTONUMMER
+    message: String = messages.austria.abgabenkontonummer
 ): Unit = constraint(
     message = message,
     predicate = {

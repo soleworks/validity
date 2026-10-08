@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.ukraine
 
-import io.github.soleworks.validity.UkraineMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 11
 private const val INVALID_REMAINDER = 10
@@ -10,7 +10,7 @@ private val RNOKPP_FORMAT = Regex("\\d{10}")
 private val RNOKPP_WEIGHTS = listOf(-1, 5, 7, 9, 4, 6, 10, 5, 7)
 
 public fun ValidationNode<String>.rnokpp(
-    message: String = UkraineMessages.RNOKPP
+    message: String = messages.ukraine.rnokpp
 ): Unit = constraint(
     message = message,
     predicate = { RNOKPP_FORMAT.matches(it) && it.isRnokpp() }

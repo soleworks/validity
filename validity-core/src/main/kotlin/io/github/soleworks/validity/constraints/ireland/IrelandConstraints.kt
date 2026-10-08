@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.ireland
 
-import io.github.soleworks.validity.IrelandMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 23
 private const val LETTER_OFFSET = 64
@@ -14,7 +14,7 @@ private const val ZERO_REMAINDER_LETTER = 'W'
 private val PPS_FORMAT = Regex("\\d{7}[A-W][A-IW]?", RegexOption.IGNORE_CASE)
 
 public fun ValidationNode<String>.pps(
-    message: String = IrelandMessages.PPS
+    message: String = messages.ireland.pps
 ): Unit = constraint(
     message = message,
     predicate = { PPS_FORMAT.matches(it) && it.isPps() }

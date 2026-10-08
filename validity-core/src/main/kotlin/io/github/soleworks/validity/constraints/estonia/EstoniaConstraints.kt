@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.estonia
 
-import io.github.soleworks.validity.EstoniaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val MODULUS = 11
@@ -19,7 +19,7 @@ private val NINETEENTH_CENTURY_DIGITS = setOf('1', '2')
 private val TWENTIETH_CENTURY_DIGITS = setOf('3', '4')
 
 public fun ValidationNode<String>.isikukood(
-    message: String = EstoniaMessages.ISIKUKOOD
+    message: String = messages.estonia.isikukood
 ): Unit = constraint(
     message = message,
     predicate = { it.isPersonalCode() }

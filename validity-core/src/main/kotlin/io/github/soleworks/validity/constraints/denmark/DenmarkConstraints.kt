@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.denmark
 
-import io.github.soleworks.validity.DenmarkMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val MODULUS = 11
@@ -21,7 +21,7 @@ private val CPR_FORMAT = Regex("\\d{6}-?\\d{4}")
 private val CPR_WEIGHTS = listOf(4, 3, 2, 7, 6, 5, 4, 3, 2)
 
 public fun ValidationNode<String>.cpr(
-    message: String = DenmarkMessages.CPR
+    message: String = messages.denmark.cpr
 ): Unit = constraint(
     message = message,
     predicate = { CPR_FORMAT.matches(it) && it.replace(SEPARATOR, "").isCpr() }

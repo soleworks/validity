@@ -1,15 +1,14 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.FormatMessages
-import io.github.soleworks.validity.Messages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private val NUMERIC_FORMAT = Regex("[+-]?\\d+(?:\\.\\d+)?")
 private val INTEGER_FORMAT = Regex("[+-]?\\d+")
 
 public fun ValidationNode<String>.minLength(
     min: Int,
-    message: String = Messages.MIN_LENGTH
+    message: String = messages.minLength
 ): Unit = minLength(
     min = min,
     message = { message.replace("{min}", "$min") }
@@ -25,7 +24,7 @@ public fun ValidationNode<String>.minLength(
 
 public fun ValidationNode<String>.maxLength(
     max: Int,
-    message: String = Messages.MAX_LENGTH
+    message: String = messages.maxLength
 ): Unit = maxLength(
     max = max,
     message = { message.replace("{max}", "$max") }
@@ -41,7 +40,7 @@ public fun ValidationNode<String>.maxLength(
 
 public fun ValidationNode<String>.length(
     length: Int,
-    message: String = Messages.LENGTH
+    message: String = messages.length
 ): Unit = length(
     length = length,
     message = { message.replace("{length}", "$length") }
@@ -58,7 +57,7 @@ public fun ValidationNode<String>.length(
 public fun ValidationNode<String>.lengthBetween(
     min: Int,
     max: Int,
-    message: String = Messages.LENGTH_BETWEEN
+    message: String = messages.lengthBetween
 ): Unit = lengthBetween(
     min = min,
     max = max,
@@ -75,14 +74,14 @@ public fun ValidationNode<String>.lengthBetween(
 )
 
 public fun ValidationNode<String>.notEmpty(
-    message: String = Messages.NOT_EMPTY
+    message: String = messages.notEmpty
 ): Unit = constraint(
     message = message,
     predicate = { it.isNotEmpty() }
 )
 
 public fun ValidationNode<String>.notBlank(
-    message: String = Messages.NOT_BLANK
+    message: String = messages.notBlank
 ): Unit = constraint(
     message = message,
     predicate = { it.isNotBlank() }
@@ -90,7 +89,7 @@ public fun ValidationNode<String>.notBlank(
 
 public fun ValidationNode<String>.matches(
     regex: Regex,
-    message: String = Messages.MATCHES
+    message: String = messages.matches
 ): Unit = matches(
     regex = regex,
     message = { message.replace("{regex}", "$regex") }
@@ -106,7 +105,7 @@ public fun ValidationNode<String>.matches(
 
 public fun ValidationNode<String>.notMatches(
     regex: Regex,
-    message: String = Messages.NOT_MATCHES
+    message: String = messages.notMatches
 ): Unit = notMatches(
     regex = regex,
     message = { message.replace("{regex}", "$regex") }
@@ -122,7 +121,7 @@ public fun ValidationNode<String>.notMatches(
 
 public fun ValidationNode<String>.contains(
     text: String?,
-    message: String = Messages.CONTAINS
+    message: String = messages.contains
 ): Unit = contains(
     text = text,
     message = { message.replace("{text}", "$text") }
@@ -138,7 +137,7 @@ public fun ValidationNode<String>.contains(
 
 public fun ValidationNode<String>.notContains(
     text: String?,
-    message: String = Messages.NOT_CONTAINS
+    message: String = messages.notContains
 ): Unit = notContains(
     text = text,
     message = { message.replace("{text}", "$text") }
@@ -154,7 +153,7 @@ public fun ValidationNode<String>.notContains(
 
 public fun ValidationNode<String>.startsWith(
     prefix: String?,
-    message: String = Messages.STARTS_WITH
+    message: String = messages.startsWith
 ): Unit = startsWith(
     prefix = prefix,
     message = { message.replace("{prefix}", "$prefix") }
@@ -170,7 +169,7 @@ public fun ValidationNode<String>.startsWith(
 
 public fun ValidationNode<String>.notStartsWith(
     prefix: String?,
-    message: String = Messages.NOT_STARTS_WITH
+    message: String = messages.notStartsWith
 ): Unit = notStartsWith(
     prefix = prefix,
     message = { message.replace("{prefix}", "$prefix") }
@@ -186,7 +185,7 @@ public fun ValidationNode<String>.notStartsWith(
 
 public fun ValidationNode<String>.endsWith(
     suffix: String?,
-    message: String = Messages.ENDS_WITH
+    message: String = messages.endsWith
 ): Unit = endsWith(
     suffix = suffix,
     message = { message.replace("{suffix}", "$suffix") }
@@ -202,7 +201,7 @@ public fun ValidationNode<String>.endsWith(
 
 public fun ValidationNode<String>.notEndsWith(
     suffix: String?,
-    message: String = Messages.NOT_ENDS_WITH
+    message: String = messages.notEndsWith
 ): Unit = notEndsWith(
     suffix = suffix,
     message = { message.replace("{suffix}", "$suffix") }
@@ -217,84 +216,84 @@ public fun ValidationNode<String>.notEndsWith(
 )
 
 public fun ValidationNode<String>.uppercase(
-    message: String = Messages.UPPERCASE
+    message: String = messages.uppercase
 ): Unit = constraint(
     message = message,
     predicate = { it.none(Char::isLowerCase) }
 )
 
 public fun ValidationNode<String>.lowercase(
-    message: String = Messages.LOWERCASE
+    message: String = messages.lowercase
 ): Unit = constraint(
     message = message,
     predicate = { it.none(Char::isUpperCase) }
 )
 
 public fun ValidationNode<String>.letters(
-    message: String = Messages.LETTERS
+    message: String = messages.letters
 ): Unit = constraint(
     message = message,
     predicate = { it.all(Char::isLetter) }
 )
 
 public fun ValidationNode<String>.digits(
-    message: String = Messages.DIGITS
+    message: String = messages.digits
 ): Unit = constraint(
     message = message,
     predicate = { it.all(Char::isDigit) }
 )
 
 public fun ValidationNode<String>.lettersOrDigits(
-    message: String = Messages.LETTERS_OR_DIGITS
+    message: String = messages.lettersOrDigits
 ): Unit = constraint(
     message = message,
     predicate = { it.all(Char::isLetterOrDigit) }
 )
 
 public fun ValidationNode<String>.ascii(
-    message: String = Messages.ASCII
+    message: String = messages.ascii
 ): Unit = constraint(
     message = message,
     predicate = { Charsets.US_ASCII.newEncoder().canEncode(it) }
 )
 
 public fun ValidationNode<String>.numeric(
-    message: String = FormatMessages.NUMERIC
+    message: String = messages.numeric
 ): Unit = constraint(
     message = message,
     predicate = { NUMERIC_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.integer(
-    message: String = FormatMessages.INTEGER
+    message: String = messages.integer
 ): Unit = constraint(
     message = message,
     predicate = { INTEGER_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.containsUppercase(
-    message: String = FormatMessages.CONTAINS_UPPERCASE
+    message: String = messages.containsUppercase
 ): Unit = constraint(
     message = message,
     predicate = { it.any(Char::isUpperCase) }
 )
 
 public fun ValidationNode<String>.containsLowercase(
-    message: String = FormatMessages.CONTAINS_LOWERCASE
+    message: String = messages.containsLowercase
 ): Unit = constraint(
     message = message,
     predicate = { it.any(Char::isLowerCase) }
 )
 
 public fun ValidationNode<String>.containsDigit(
-    message: String = FormatMessages.CONTAINS_DIGIT
+    message: String = messages.containsDigit
 ): Unit = constraint(
     message = message,
     predicate = { it.any(Char::isDigit) }
 )
 
 public fun ValidationNode<String>.containsSymbol(
-    message: String = FormatMessages.CONTAINS_SYMBOL
+    message: String = messages.containsSymbol
 ): Unit = constraint(
     message = message,
     predicate = { it.any { char -> !char.isLetterOrDigit() && !char.isWhitespace() } }
