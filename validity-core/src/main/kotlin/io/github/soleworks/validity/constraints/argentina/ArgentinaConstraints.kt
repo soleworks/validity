@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.argentina
 
-import io.github.soleworks.validity.ArgentinaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 11
 private const val PREFIX_LENGTH = 2
@@ -12,14 +12,14 @@ private val CUIL_PREFIXES = setOf("20", "23", "24", "25", "26", "27")
 private val CUIT_PREFIXES = CUIL_PREFIXES + setOf("30", "33", "34")
 
 public fun ValidationNode<String>.cuit(
-    message: String = ArgentinaMessages.CUIT
+    message: String = messages.argentina.cuit
 ): Unit = constraint(
     message = message,
     predicate = { TAX_ID_FORMAT.matches(it) && it.isTaxId(CUIT_PREFIXES) }
 )
 
 public fun ValidationNode<String>.cuil(
-    message: String = ArgentinaMessages.CUIL
+    message: String = messages.argentina.cuil
 ): Unit = constraint(
     message = message,
     predicate = { TAX_ID_FORMAT.matches(it) && it.isTaxId(CUIL_PREFIXES) }

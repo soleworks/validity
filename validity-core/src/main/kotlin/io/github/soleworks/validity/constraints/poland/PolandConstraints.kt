@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.poland
 
-import io.github.soleworks.validity.PolandMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val DECIMAL_MODULUS = 10
@@ -25,28 +25,28 @@ private val REGON_LONG_WEIGHTS = listOf(2, 4, 8, 5, 0, 9, 7, 3, 6, 1, 2, 4, 8)
 private val ID_CARD_WEIGHTS = listOf(7, 3, 1, 0, 7, 3, 1, 7, 3)
 
 public fun ValidationNode<String>.pesel(
-    message: String = PolandMessages.PESEL
+    message: String = messages.poland.pesel
 ): Unit = constraint(
     message = message,
     predicate = { it.isPesel() }
 )
 
 public fun ValidationNode<String>.nip(
-    message: String = PolandMessages.NIP
+    message: String = messages.poland.nip
 ): Unit = constraint(
     message = message,
     predicate = { NIP_FORMAT.matches(it) && it.digits().isNip() }
 )
 
 public fun ValidationNode<String>.regon(
-    message: String = PolandMessages.REGON
+    message: String = messages.poland.regon
 ): Unit = constraint(
     message = message,
     predicate = { REGON_FORMAT.matches(it) && it.digits().isRegon() }
 )
 
 public fun ValidationNode<String>.dowodOsobisty(
-    message: String = PolandMessages.DOWOD_OSOBISTY
+    message: String = messages.poland.dowodOsobisty
 ): Unit = constraint(
     message = message,
     predicate = { ID_CARD_FORMAT.matches(it) && it.isDowodOsobisty() }

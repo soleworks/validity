@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.unitedstates
 
-import io.github.soleworks.validity.UnitedStatesMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val PREFIX_LENGTH = 2
 
@@ -15,7 +15,7 @@ private val EIN_PREFIXES = setOf(
 )
 
 public fun ValidationNode<String>.ein(
-    message: String = UnitedStatesMessages.EIN
+    message: String = messages.unitedStates.ein
 ): Unit = constraint(
     message = message,
     predicate = { EIN_FORMAT.matches(it) && it.take(PREFIX_LENGTH) in EIN_PREFIXES }

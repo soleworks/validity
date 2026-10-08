@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.FormatMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val HEX_RADIX = 16
 private const val UNICODE_ESCAPE_LENGTH = 4
@@ -17,42 +17,42 @@ private val JSON_WHITESPACE = setOf(' ', '\t', '\n', '\r')
 private val JSON_ESCAPES = setOf('"', '\\', '/', 'b', 'f', 'n', 'r', 't')
 
 public fun ValidationNode<String>.base64(
-    message: String = FormatMessages.BASE64
+    message: String = messages.base64
 ): Unit = constraint(
     message = message,
     predicate = { BASE64_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.base64Url(
-    message: String = FormatMessages.BASE64_URL
+    message: String = messages.base64Url
 ): Unit = constraint(
     message = message,
     predicate = { BASE64_URL_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.base32(
-    message: String = FormatMessages.BASE32
+    message: String = messages.base32
 ): Unit = constraint(
     message = message,
     predicate = { BASE32_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.base58(
-    message: String = FormatMessages.BASE58
+    message: String = messages.base58
 ): Unit = constraint(
     message = message,
     predicate = { BASE58_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.hexadecimal(
-    message: String = FormatMessages.HEXADECIMAL
+    message: String = messages.hexadecimal
 ): Unit = constraint(
     message = message,
     predicate = { HEXADECIMAL_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.json(
-    message: String = FormatMessages.JSON
+    message: String = messages.json
 ): Unit = constraint(
     message = message,
     predicate = { JsonReader(it).isValid() }

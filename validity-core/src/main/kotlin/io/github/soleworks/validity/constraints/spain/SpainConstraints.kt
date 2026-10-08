@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.spain
 
-import io.github.soleworks.validity.SpainMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 23
 private const val CONTROL_LETTERS = "TRWAGMYFPDXBNJZSQVHLCKE"
@@ -15,21 +15,21 @@ private val NIE_PREFIX_VALUES = mapOf('X' to '0', 'Y' to '1', 'Z' to '2')
 private val NIF_PREFIX_VALUES = mapOf('Y' to '1', 'Z' to '2')
 
 public fun ValidationNode<String>.dni(
-    message: String = SpainMessages.DNI
+    message: String = messages.spain.dni
 ): Unit = constraint(
     message = message,
     predicate = { it.trim().uppercase().let { value -> DNI_FORMAT.matches(value) && value.hasControlLetter() } }
 )
 
 public fun ValidationNode<String>.nie(
-    message: String = SpainMessages.NIE
+    message: String = messages.spain.nie
 ): Unit = constraint(
     message = message,
     predicate = { it.trim().uppercase().let { value -> NIE_FORMAT.matches(value) && value.hasControlLetter() } }
 )
 
 public fun ValidationNode<String>.nif(
-    message: String = SpainMessages.NIF
+    message: String = messages.spain.nif
 ): Unit = constraint(
     message = message,
     predicate = { NIF_FORMAT.matches(it) && it.uppercase().hasNifControlLetter() }

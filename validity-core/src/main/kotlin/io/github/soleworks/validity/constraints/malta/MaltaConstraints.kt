@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.malta
 
-import io.github.soleworks.validity.MaltaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val ID_CARD_LENGTH = 8
 private const val LETTER_INDEX = 7
@@ -13,7 +13,7 @@ private const val FIRST_PART_LIMIT = 32000
 private val ID_CARD_FORMAT = Regex("\\d{3,7}[APMGLHBZ]", RegexOption.IGNORE_CASE)
 
 public fun ValidationNode<String>.idCardNumber(
-    message: String = MaltaMessages.ID_CARD_NUMBER
+    message: String = messages.malta.idCardNumber
 ): Unit = constraint(
     message = message,
     predicate = { ID_CARD_FORMAT.matches(it) && it.isIdCardNumber() }

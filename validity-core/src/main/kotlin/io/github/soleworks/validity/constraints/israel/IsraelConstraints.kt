@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.israel
 
-import io.github.soleworks.validity.IsraelMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 10
 private const val PARITY = 2
@@ -10,7 +10,7 @@ private const val MAX_DIGIT = 9
 private val TEUDAT_ZEHUT_FORMAT = Regex("\\d{9}")
 
 public fun ValidationNode<String>.teudatZehut(
-    message: String = IsraelMessages.TEUDAT_ZEHUT
+    message: String = messages.israel.teudatZehut
 ): Unit = constraint(
     message = message,
     predicate = { it.trim().let { value -> TEUDAT_ZEHUT_FORMAT.matches(value) && value.isTeudatZehut() } }

@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.italy
 
-import io.github.soleworks.validity.ItalyMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val CENTURY = 100
@@ -34,14 +34,14 @@ private val ODD_CONVERSIONS = mapOf(
 )
 
 public fun ValidationNode<String>.codiceFiscale(
-    message: String = ItalyMessages.CODICE_FISCALE
+    message: String = messages.italy.codiceFiscale
 ): Unit = constraint(
     message = message,
     predicate = { CODICE_FISCALE_FORMAT.matches(it) && it.uppercase().isCodiceFiscale() }
 )
 
 public fun ValidationNode<String>.cie(
-    message: String = ItalyMessages.CIE
+    message: String = messages.italy.cie
 ): Unit = constraint(
     message = message,
     predicate = { it.length == CIE_LENGTH && it != CIE_PLACEHOLDER && CIE_FORMAT.matches(it) }

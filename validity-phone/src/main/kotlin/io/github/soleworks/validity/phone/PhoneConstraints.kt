@@ -6,7 +6,7 @@ public fun ValidationNode<String>.phone(
     countryCode: String? = null,
     areaCode: String? = null,
     format: PhoneFormat? = null,
-    message: String = PhoneMessages.PHONE
+    message: String = phoneMessages.phone
 ): Unit = phone(
     countryCode = countryCode,
     areaCode = areaCode,
@@ -28,7 +28,7 @@ public fun ValidationNode<String>.mobilePhone(
     countryCode: String? = null,
     areaCode: String? = null,
     format: PhoneFormat? = null,
-    message: String = PhoneMessages.MOBILE_PHONE
+    message: String = phoneMessages.mobilePhone
 ): Unit = mobilePhone(
     countryCode = countryCode,
     areaCode = areaCode,
@@ -47,7 +47,7 @@ public fun ValidationNode<String>.mobilePhone(
 )
 
 public fun ValidationNode<String>.countryCode(
-    message: String = PhoneMessages.COUNTRY_CODE
+    message: String = phoneMessages.countryCode
 ): Unit = constraint(
     message = message,
     predicate = { PhoneNumbers.isCountryCode(it) }
@@ -55,7 +55,7 @@ public fun ValidationNode<String>.countryCode(
 
 public fun ValidationNode<String>.areaCode(
     countryCode: String? = null,
-    message: String = PhoneMessages.AREA_CODE
+    message: String = phoneMessages.areaCode
 ): Unit = areaCode(
     countryCode = countryCode,
     message = { message.replace("{countryCode}", "$countryCode") }

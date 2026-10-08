@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.finland
 
-import io.github.soleworks.validity.FinlandMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val MODULUS = 31
@@ -16,7 +16,7 @@ private const val INDIVIDUAL_END = 10
 private val HETU_FORMAT = Regex("\\d{6}[-+A]\\d{3}[0-9A-FHJ-NPR-Y]", RegexOption.IGNORE_CASE)
 
 public fun ValidationNode<String>.hetu(
-    message: String = FinlandMessages.HETU
+    message: String = messages.finland.hetu
 ): Unit = constraint(
     message = message,
     predicate = { HETU_FORMAT.matches(it) && it.hasValidBirthDate() && it.hasValidCheckCharacter() }

@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.brazil
 
-import io.github.soleworks.validity.BrazilMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 11
 
@@ -21,56 +21,56 @@ private val TITULO_ELEITORAL_STATES = 1..28
 private val SAO_PAULO_AND_MINAS_GERAIS = setOf(1, 2)
 
 public fun ValidationNode<String>.cpf(
-    message: String = BrazilMessages.CPF
+    message: String = messages.brazil.cpf
 ): Unit = constraint(
     message = message,
     predicate = { CPF_FORMAT.matches(it) && it.digits().isCpf() }
 )
 
 public fun ValidationNode<String>.cnpj(
-    message: String = BrazilMessages.CNPJ
+    message: String = messages.brazil.cnpj
 ): Unit = constraint(
     message = message,
     predicate = { CNPJ_FORMAT.matches(it) && it.cnpjValues().isCnpj() }
 )
 
 public fun ValidationNode<String>.cnh(
-    message: String = BrazilMessages.CNH
+    message: String = messages.brazil.cnh
 ): Unit = constraint(
     message = message,
     predicate = { CNH_FORMAT.matches(it) && it.digits().isCnh() }
 )
 
 public fun ValidationNode<String>.pis(
-    message: String = BrazilMessages.PIS
+    message: String = messages.brazil.pis
 ): Unit = constraint(
     message = message,
     predicate = { PIS_FORMAT.matches(it) && it.digits().isPis() }
 )
 
 public fun ValidationNode<String>.tituloEleitoral(
-    message: String = BrazilMessages.TITULO_ELEITORAL
+    message: String = messages.brazil.tituloEleitoral
 ): Unit = constraint(
     message = message,
     predicate = { TITULO_ELEITORAL_FORMAT.matches(it) && it.digits().isTituloEleitoral() }
 )
 
 public fun ValidationNode<String>.chaveNfe(
-    message: String = BrazilMessages.CHAVE_NFE
+    message: String = messages.brazil.chaveNfe
 ): Unit = constraint(
     message = message,
     predicate = { CHAVE_NFE_FORMAT.matches(it) && it.digits().isChaveNfe() }
 )
 
 public fun ValidationNode<String>.cep(
-    message: String = BrazilMessages.CEP
+    message: String = messages.brazil.cep
 ): Unit = constraint(
     message = message,
     predicate = { CEP_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.placa(
-    message: String = BrazilMessages.PLACA
+    message: String = messages.brazil.placa
 ): Unit = constraint(
     message = message,
     predicate = { PLACA_FORMAT.matches(it) }

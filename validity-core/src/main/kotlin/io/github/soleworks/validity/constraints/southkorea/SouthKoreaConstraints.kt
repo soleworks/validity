@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.southkorea
 
-import io.github.soleworks.validity.SouthKoreaMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 11
 private const val CHECK_DIGIT_MODULUS = 10
@@ -21,7 +21,7 @@ private val SHORT_MONTHS = setOf(4, 6, 9, 11)
 private val WEIGHTS = listOf(5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2).reversed()
 
 public fun ValidationNode<String>.rrn(
-    message: String = SouthKoreaMessages.RRN
+    message: String = messages.southKorea.rrn
 ): Unit = constraint(
     message = message,
     predicate = { it.replace("-", "").let { value -> RRN_FORMAT.matches(value) && value.isRrn() } }

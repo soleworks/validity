@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints.taiwan
 
-import io.github.soleworks.validity.TaiwanMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 
 private const val MODULUS = 10
 private const val WEIGHT_BASE = 9
@@ -15,7 +15,7 @@ private val LETTER_CODES = mapOf(
 )
 
 public fun ValidationNode<String>.nationalId(
-    message: String = TaiwanMessages.NATIONAL_ID
+    message: String = messages.taiwan.nationalId
 ): Unit = constraint(
     message = message,
     predicate = { it.trim().uppercase().let { value -> NATIONAL_ID_FORMAT.matches(value) && value.isNationalId() } }

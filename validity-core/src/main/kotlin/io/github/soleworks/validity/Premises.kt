@@ -7,7 +7,7 @@ context(validation: Validation)
 public infix fun <V : Any> KProperty0<V?>.required(
     block: ValidationNode<V>.() -> Unit
 ): Unit = required(
-    message = Messages.REQUIRED,
+    message = messages.required,
     block = block
 )
 

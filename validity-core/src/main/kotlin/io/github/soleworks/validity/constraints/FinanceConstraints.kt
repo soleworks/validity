@@ -1,7 +1,7 @@
 package io.github.soleworks.validity.constraints
 
-import io.github.soleworks.validity.FormatMessages
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.messages
 import java.math.BigInteger
 import java.util.Currency
 
@@ -126,49 +126,49 @@ private val IBAN_FORMATS: Map<String, Regex> = mapOf(
 )
 
 public fun ValidationNode<String>.creditCard(
-    message: String = FormatMessages.CREDIT_CARD
+    message: String = messages.creditCard
 ): Unit = constraint(
     message = message,
     predicate = { CREDIT_CARD_FORMAT.matches(it) && it.hasLuhnCheckDigit() }
 )
 
 public fun ValidationNode<String>.iban(
-    message: String = FormatMessages.IBAN
+    message: String = messages.iban
 ): Unit = constraint(
     message = message,
     predicate = { IBAN_FORMATS[it.take(2)]?.matches(it) == true && it.hasIbanCheckDigits() }
 )
 
 public fun ValidationNode<String>.bic(
-    message: String = FormatMessages.BIC
+    message: String = messages.bic
 ): Unit = constraint(
     message = message,
     predicate = { BIC_FORMAT.matchEntire(it)?.groupValues?.get(1) in COUNTRY_CODES }
 )
 
 public fun ValidationNode<String>.isin(
-    message: String = FormatMessages.ISIN
+    message: String = messages.isin
 ): Unit = constraint(
     message = message,
     predicate = { ISIN_FORMAT.matches(it) && it.toDigitString().hasLuhnCheckDigit() }
 )
 
 public fun ValidationNode<String>.currencyCode(
-    message: String = FormatMessages.CURRENCY_CODE
+    message: String = messages.currencyCode
 ): Unit = constraint(
     message = message,
     predicate = { it in CURRENCY_CODES }
 )
 
 public fun ValidationNode<String>.bitcoinAddress(
-    message: String = FormatMessages.BITCOIN_ADDRESS
+    message: String = messages.bitcoinAddress
 ): Unit = constraint(
     message = message,
     predicate = { BITCOIN_ADDRESS_FORMAT.matches(it) }
 )
 
 public fun ValidationNode<String>.ethereumAddress(
-    message: String = FormatMessages.ETHEREUM_ADDRESS
+    message: String = messages.ethereumAddress
 ): Unit = constraint(
     message = message,
     predicate = { ETHEREUM_ADDRESS_FORMAT.matches(it) }
