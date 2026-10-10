@@ -3,6 +3,10 @@ package io.github.soleworks.validity
 @ValidityDsl
 public class Messages internal constructor() {
     public var required: String = "is required"
+    public var forbidden: String = "must be null"
+    public var atLeastOneOf: String = "at least one of {fields} is required"
+    public var atMostOneOf: String = "at most one of {fields} can be filled"
+    public var exactlyOneOf: String = "exactly one of {fields} must be filled"
     public var equalTo: String = "must be equal to {other}"
     public var notEqualTo: String = "must not be equal to {other}"
     public var oneOf: String = "must be one of {values}"

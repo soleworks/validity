@@ -2,6 +2,7 @@ package io.github.soleworks.validity
 
 import io.github.soleworks.validity.constraints.brazil.cpf
 import io.github.soleworks.validity.samples.Customer
+import io.github.soleworks.validity.samples.Recipient
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -94,6 +95,24 @@ class ValidityTest {
             val customer = Customer(name = "A")
 
             customer.validate().violations shouldBe listOf(Violation("name", "must have at least 2 characters", "minLength"))
+        }
+
+        @Test
+        fun `given the presence messages should report them with the fields`() {
+            Validity.configure {
+                messages {
+                    atLeastOneOf = "informe {fields}"
+                    forbidden = "deve ficar vazio"
+                }
+            }
+
+            val recipient = Recipient(email = null, phone = null, companyName = "Ana LTDA")
+
+            recipient.validate().violations shouldBe listOf(
+                Violation("email", "informe email, phone", "atLeastOneOf"),
+                Violation("phone", "informe email, phone", "atLeastOneOf"),
+                Violation("companyName", "deve ficar vazio", "forbidden")
+            )
         }
     }
 }
