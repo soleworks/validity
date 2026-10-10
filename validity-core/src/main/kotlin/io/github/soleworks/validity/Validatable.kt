@@ -5,3 +5,5 @@ public interface Validatable {
 }
 
 public fun Validatable.validate(): ValidationResult = validation().validate()
+
+public fun Validatable.validateOrThrow(): Unit = validate().orThrow()
