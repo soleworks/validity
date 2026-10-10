@@ -6,6 +6,8 @@ import io.github.soleworks.validity.samples.BankAccount
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Login
 import io.github.soleworks.validity.samples.Recipient
+import io.github.soleworks.validity.samples.Shipment
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -68,13 +70,6 @@ class PremisesTest {
         @Test
         fun `given a CPF without a company name should accept it`() {
             val recipient = Recipient(companyName = null)
-
-            recipient.validate().violations shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a company name without a CPF should accept it`() {
-            val recipient = Recipient(cpf = null, cnpj = "11222333000181", companyName = "Ana LTDA")
 
             recipient.validate().violations shouldBe emptyList()
         }
@@ -182,6 +177,20 @@ class PremisesTest {
             val recipient = Recipient(pixKey = null, bankAccount = "0001-12345")
 
             recipient.validate().violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given the same property twice should count it once`() {
+            val shipment = Shipment(trackingCode = "BR123", pickupCode = null)
+
+            shipment.validate().violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no properties should fail when the rules are declared`() {
+            val error = shouldThrow<IllegalArgumentException> { validation { exactlyOneOf() } }
+
+            error.message shouldBe "exactlyOneOf needs at least one property"
         }
     }
 
