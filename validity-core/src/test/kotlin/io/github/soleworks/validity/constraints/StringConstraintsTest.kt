@@ -3,6 +3,7 @@ package io.github.soleworks.validity.constraints
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Violation
 import io.github.soleworks.validity.samples.Customer
+import io.github.soleworks.validity.samples.PaymentMethod
 import io.github.soleworks.validity.samples.Product
 import io.github.soleworks.validity.validate
 import io.kotest.matchers.shouldBe
@@ -686,6 +687,42 @@ class StringConstraintsTest {
             val node = ValidationNode("password", password).apply { containsSymbol() }
 
             node.validate() shouldBe listOf(Violation("password", "must contain a symbol", "containsSymbol"))
+        }
+    }
+
+    @Nested
+    @DisplayName("When enum is called")
+    inner class Enum {
+        @ParameterizedTest
+        @ValueSource(strings = ["PIX", "TED", "BOLETO"])
+        fun `given the name of a constant should accept it`(method: String) {
+            val node = ValidationNode("method", method).apply { enum<PaymentMethod>() }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["pix", "DOC", ""])
+        fun `given another text should report it with the names of the constants`(method: String) {
+            val node = ValidationNode("method", method).apply { enum<PaymentMethod>() }
+
+            node.validate() shouldBe listOf(Violation("method", "must be one of PIX, TED, BOLETO", "enum"))
+        }
+
+        @Test
+        fun `given a custom message with the values placeholder should replace it`() {
+            val node = ValidationNode("method", "DOC").apply { enum<PaymentMethod>("use {values}") }
+
+            node.validate() shouldBe listOf(Violation("method", "use PIX, TED, BOLETO", "enum"))
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the constants`() {
+            val node = ValidationNode("method", "DOC").apply {
+                enum<PaymentMethod> { methods -> "$this is not one of ${methods.size} methods" }
+            }
+
+            node.validate() shouldBe listOf(Violation("method", "DOC is not one of 3 methods", "enum"))
         }
     }
 }
