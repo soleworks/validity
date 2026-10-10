@@ -1,5 +1,6 @@
 package io.github.soleworks.validity
 
+import io.github.soleworks.validity.samples.Company
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -34,6 +35,42 @@ class ValidationNodeTest {
             }
 
             node.validate() shouldBe listOf(Violation("amount", "must be positive", ""))
+        }
+
+        @Test
+        fun `given the path and value placeholders should replace them in the message`() {
+            val node = ValidationNode("amount", -1).apply {
+                constraint("{path} must be positive, got {value}", "positive") { it > 0 }
+            }
+
+            node.validate() shouldBe listOf(Violation("amount", "amount must be positive, got -1", "positive"))
+        }
+
+        @Test
+        fun `given the placeholders in a message function should replace them too`() {
+            val node = ValidationNode("amount", -1).apply {
+                constraint({ "{path}: $it is not positive" }, "positive") { it > 0 }
+            }
+
+            node.validate() shouldBe listOf(Violation("amount", "amount: -1 is not positive", "positive"))
+        }
+
+        @Test
+        fun `given a path with a placeholder text should not fill it again`() {
+            val node = ValidationNode("prices[{value}]", -1).apply {
+                constraint("{path} must be positive") { it > 0 }
+            }
+
+            node.validate() shouldBe listOf(Violation("prices[{value}]", "prices[{value}] must be positive", ""))
+        }
+
+        @Test
+        fun `given a path placeholder inside a logical operator of a nested object should fill the full path`() {
+            val node = ValidationNode("company", Company(document = "123")).apply { valid() }
+
+            node.validate() shouldBe listOf(
+                Violation("company.document", "company.document is not a CPF or company.document is not a CNPJ", "or")
+            )
         }
     }
 }
