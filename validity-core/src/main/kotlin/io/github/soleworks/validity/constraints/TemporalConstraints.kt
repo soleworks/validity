@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.clock
 import io.github.soleworks.validity.messages
 import java.time.Duration
 import java.time.Instant
@@ -19,7 +20,7 @@ public fun ValidationNode<LocalDate>.past(
 ): Unit = constraint(
     message = message,
     code = "past",
-    predicate = { it.isBefore(LocalDate.now()) }
+    predicate = { it.isBefore(LocalDate.now(clock)) }
 )
 
 @JvmName("pastLocalDateTime")
@@ -28,7 +29,7 @@ public fun ValidationNode<LocalDateTime>.past(
 ): Unit = constraint(
     message = message,
     code = "past",
-    predicate = { it.isBefore(LocalDateTime.now()) }
+    predicate = { it.isBefore(LocalDateTime.now(clock)) }
 )
 
 @JvmName("pastZonedDateTime")
@@ -37,7 +38,7 @@ public fun ValidationNode<ZonedDateTime>.past(
 ): Unit = constraint(
     message = message,
     code = "past",
-    predicate = { it.isBefore(ZonedDateTime.now()) }
+    predicate = { it.isBefore(ZonedDateTime.now(clock)) }
 )
 
 @JvmName("pastOffsetDateTime")
@@ -46,7 +47,7 @@ public fun ValidationNode<OffsetDateTime>.past(
 ): Unit = constraint(
     message = message,
     code = "past",
-    predicate = { it.isBefore(OffsetDateTime.now()) }
+    predicate = { it.isBefore(OffsetDateTime.now(clock)) }
 )
 
 @JvmName("pastInstant")
@@ -55,7 +56,7 @@ public fun ValidationNode<Instant>.past(
 ): Unit = constraint(
     message = message,
     code = "past",
-    predicate = { it.isBefore(Instant.now()) }
+    predicate = { it.isBefore(Instant.now(clock)) }
 )
 
 @JvmName("pastYearMonth")
@@ -64,7 +65,7 @@ public fun ValidationNode<YearMonth>.past(
 ): Unit = constraint(
     message = message,
     code = "past",
-    predicate = { it.isBefore(YearMonth.now()) }
+    predicate = { it.isBefore(YearMonth.now(clock)) }
 )
 
 @JvmName("pastYear")
@@ -73,7 +74,7 @@ public fun ValidationNode<Year>.past(
 ): Unit = constraint(
     message = message,
     code = "past",
-    predicate = { it.isBefore(Year.now()) }
+    predicate = { it.isBefore(Year.now(clock)) }
 )
 
 @JvmName("pastDate")
@@ -82,7 +83,7 @@ public fun ValidationNode<Date>.past(
 ): Unit = constraint(
     message = message,
     code = "past",
-    predicate = { it.before(Date()) }
+    predicate = { it.before(Date(clock.millis())) }
 )
 
 public fun ValidationNode<LocalDate>.future(
@@ -90,7 +91,7 @@ public fun ValidationNode<LocalDate>.future(
 ): Unit = constraint(
     message = message,
     code = "future",
-    predicate = { it.isAfter(LocalDate.now()) }
+    predicate = { it.isAfter(LocalDate.now(clock)) }
 )
 
 @JvmName("futureLocalDateTime")
@@ -99,7 +100,7 @@ public fun ValidationNode<LocalDateTime>.future(
 ): Unit = constraint(
     message = message,
     code = "future",
-    predicate = { it.isAfter(LocalDateTime.now()) }
+    predicate = { it.isAfter(LocalDateTime.now(clock)) }
 )
 
 @JvmName("futureZonedDateTime")
@@ -108,7 +109,7 @@ public fun ValidationNode<ZonedDateTime>.future(
 ): Unit = constraint(
     message = message,
     code = "future",
-    predicate = { it.isAfter(ZonedDateTime.now()) }
+    predicate = { it.isAfter(ZonedDateTime.now(clock)) }
 )
 
 @JvmName("futureOffsetDateTime")
@@ -117,7 +118,7 @@ public fun ValidationNode<OffsetDateTime>.future(
 ): Unit = constraint(
     message = message,
     code = "future",
-    predicate = { it.isAfter(OffsetDateTime.now()) }
+    predicate = { it.isAfter(OffsetDateTime.now(clock)) }
 )
 
 @JvmName("futureInstant")
@@ -126,7 +127,7 @@ public fun ValidationNode<Instant>.future(
 ): Unit = constraint(
     message = message,
     code = "future",
-    predicate = { it.isAfter(Instant.now()) }
+    predicate = { it.isAfter(Instant.now(clock)) }
 )
 
 @JvmName("futureYearMonth")
@@ -135,7 +136,7 @@ public fun ValidationNode<YearMonth>.future(
 ): Unit = constraint(
     message = message,
     code = "future",
-    predicate = { it.isAfter(YearMonth.now()) }
+    predicate = { it.isAfter(YearMonth.now(clock)) }
 )
 
 @JvmName("futureYear")
@@ -144,7 +145,7 @@ public fun ValidationNode<Year>.future(
 ): Unit = constraint(
     message = message,
     code = "future",
-    predicate = { it.isAfter(Year.now()) }
+    predicate = { it.isAfter(Year.now(clock)) }
 )
 
 @JvmName("futureDate")
@@ -153,7 +154,7 @@ public fun ValidationNode<Date>.future(
 ): Unit = constraint(
     message = message,
     code = "future",
-    predicate = { it.after(Date()) }
+    predicate = { it.after(Date(clock.millis())) }
 )
 
 public fun ValidationNode<LocalDate>.pastOrPresent(
@@ -161,7 +162,7 @@ public fun ValidationNode<LocalDate>.pastOrPresent(
 ): Unit = constraint(
     message = message,
     code = "pastOrPresent",
-    predicate = { !it.isAfter(LocalDate.now()) }
+    predicate = { !it.isAfter(LocalDate.now(clock)) }
 )
 
 @JvmName("pastOrPresentLocalDateTime")
@@ -170,7 +171,7 @@ public fun ValidationNode<LocalDateTime>.pastOrPresent(
 ): Unit = constraint(
     message = message,
     code = "pastOrPresent",
-    predicate = { !it.isAfter(LocalDateTime.now()) }
+    predicate = { !it.isAfter(LocalDateTime.now(clock)) }
 )
 
 @JvmName("pastOrPresentZonedDateTime")
@@ -179,7 +180,7 @@ public fun ValidationNode<ZonedDateTime>.pastOrPresent(
 ): Unit = constraint(
     message = message,
     code = "pastOrPresent",
-    predicate = { !it.isAfter(ZonedDateTime.now()) }
+    predicate = { !it.isAfter(ZonedDateTime.now(clock)) }
 )
 
 @JvmName("pastOrPresentOffsetDateTime")
@@ -188,7 +189,7 @@ public fun ValidationNode<OffsetDateTime>.pastOrPresent(
 ): Unit = constraint(
     message = message,
     code = "pastOrPresent",
-    predicate = { !it.isAfter(OffsetDateTime.now()) }
+    predicate = { !it.isAfter(OffsetDateTime.now(clock)) }
 )
 
 @JvmName("pastOrPresentInstant")
@@ -197,7 +198,7 @@ public fun ValidationNode<Instant>.pastOrPresent(
 ): Unit = constraint(
     message = message,
     code = "pastOrPresent",
-    predicate = { !it.isAfter(Instant.now()) }
+    predicate = { !it.isAfter(Instant.now(clock)) }
 )
 
 @JvmName("pastOrPresentYearMonth")
@@ -206,7 +207,7 @@ public fun ValidationNode<YearMonth>.pastOrPresent(
 ): Unit = constraint(
     message = message,
     code = "pastOrPresent",
-    predicate = { !it.isAfter(YearMonth.now()) }
+    predicate = { !it.isAfter(YearMonth.now(clock)) }
 )
 
 @JvmName("pastOrPresentYear")
@@ -215,7 +216,7 @@ public fun ValidationNode<Year>.pastOrPresent(
 ): Unit = constraint(
     message = message,
     code = "pastOrPresent",
-    predicate = { !it.isAfter(Year.now()) }
+    predicate = { !it.isAfter(Year.now(clock)) }
 )
 
 @JvmName("pastOrPresentDate")
@@ -224,7 +225,7 @@ public fun ValidationNode<Date>.pastOrPresent(
 ): Unit = constraint(
     message = message,
     code = "pastOrPresent",
-    predicate = { !it.after(Date()) }
+    predicate = { !it.after(Date(clock.millis())) }
 )
 
 public fun ValidationNode<LocalDate>.futureOrPresent(
@@ -232,7 +233,7 @@ public fun ValidationNode<LocalDate>.futureOrPresent(
 ): Unit = constraint(
     message = message,
     code = "futureOrPresent",
-    predicate = { !it.isBefore(LocalDate.now()) }
+    predicate = { !it.isBefore(LocalDate.now(clock)) }
 )
 
 @JvmName("futureOrPresentLocalDateTime")
@@ -241,7 +242,7 @@ public fun ValidationNode<LocalDateTime>.futureOrPresent(
 ): Unit = constraint(
     message = message,
     code = "futureOrPresent",
-    predicate = { !it.isBefore(LocalDateTime.now()) }
+    predicate = { !it.isBefore(LocalDateTime.now(clock)) }
 )
 
 @JvmName("futureOrPresentZonedDateTime")
@@ -250,7 +251,7 @@ public fun ValidationNode<ZonedDateTime>.futureOrPresent(
 ): Unit = constraint(
     message = message,
     code = "futureOrPresent",
-    predicate = { !it.isBefore(ZonedDateTime.now()) }
+    predicate = { !it.isBefore(ZonedDateTime.now(clock)) }
 )
 
 @JvmName("futureOrPresentOffsetDateTime")
@@ -259,7 +260,7 @@ public fun ValidationNode<OffsetDateTime>.futureOrPresent(
 ): Unit = constraint(
     message = message,
     code = "futureOrPresent",
-    predicate = { !it.isBefore(OffsetDateTime.now()) }
+    predicate = { !it.isBefore(OffsetDateTime.now(clock)) }
 )
 
 @JvmName("futureOrPresentInstant")
@@ -268,7 +269,7 @@ public fun ValidationNode<Instant>.futureOrPresent(
 ): Unit = constraint(
     message = message,
     code = "futureOrPresent",
-    predicate = { !it.isBefore(Instant.now()) }
+    predicate = { !it.isBefore(Instant.now(clock)) }
 )
 
 @JvmName("futureOrPresentYearMonth")
@@ -277,7 +278,7 @@ public fun ValidationNode<YearMonth>.futureOrPresent(
 ): Unit = constraint(
     message = message,
     code = "futureOrPresent",
-    predicate = { !it.isBefore(YearMonth.now()) }
+    predicate = { !it.isBefore(YearMonth.now(clock)) }
 )
 
 @JvmName("futureOrPresentYear")
@@ -286,7 +287,7 @@ public fun ValidationNode<Year>.futureOrPresent(
 ): Unit = constraint(
     message = message,
     code = "futureOrPresent",
-    predicate = { !it.isBefore(Year.now()) }
+    predicate = { !it.isBefore(Year.now(clock)) }
 )
 
 @JvmName("futureOrPresentDate")
@@ -295,7 +296,7 @@ public fun ValidationNode<Date>.futureOrPresent(
 ): Unit = constraint(
     message = message,
     code = "futureOrPresent",
-    predicate = { !it.before(Date()) }
+    predicate = { !it.before(Date(clock.millis())) }
 )
 
 public fun ValidationNode<LocalDate>.after(

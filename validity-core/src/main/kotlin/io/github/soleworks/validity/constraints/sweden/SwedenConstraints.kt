@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.constraints.sweden
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.clock
 import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
@@ -44,13 +45,13 @@ private fun String.isCoordination(): Boolean = rawDay() > COORDINATION_OFFSET
 private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
 
 private fun isShortYearDate(shortYear: Int, month: Int, day: Int): Boolean {
-    val century = if (shortYear < LocalDate.now().year % CENTURY) TWENTY_FIRST_CENTURY else TWENTIETH_CENTURY
+    val century = if (shortYear < LocalDate.now(clock).year % CENTURY) TWENTY_FIRST_CENTURY else TWENTIETH_CENTURY
 
     return isDate(century + shortYear, month, day)
 }
 
 private fun String.centenarianYear(): Int? {
-    val currentYear = LocalDate.now().year
+    val currentYear = LocalDate.now(clock).year
     val currentCentury = currentYear / CENTURY
     val shortYear = take(CENTURY_DIGITS).toInt()
     val sameCentury = currentCentury * CENTURY + shortYear
