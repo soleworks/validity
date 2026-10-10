@@ -30,8 +30,10 @@ public class ValidationNode<V>(
         nodes += node
     }
 
-    internal fun validate(): List<Violation> =
-        constraints.flatMap { it.validate(path, value) } + nodes.flatMap { it.validate() }
+    internal fun validate(): List<Violation> = branches().flatten()
+
+    internal fun branches(): List<List<Violation>> =
+        constraints.map { it.validate(path, value) } + nodes.map { it.validate() }
 
     internal fun prefixed(prefix: String): ValidationNode<V> = ValidationNode("$prefix.$path", value).also {
         it.constraints += constraints
