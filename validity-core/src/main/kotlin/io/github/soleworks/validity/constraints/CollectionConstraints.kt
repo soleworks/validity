@@ -230,6 +230,7 @@ public fun <E> ValidationNode<List<E>>.contains(
 ): Unit = constraint(
     message = { it.message(element) },
     code = "contains",
+    skipped = element == null,
     predicate = { element == null || element in it }
 )
 
@@ -249,6 +250,7 @@ public fun <E> ValidationNode<Set<E>>.contains(
 ): Unit = constraint(
     message = { it.message(element) },
     code = "contains",
+    skipped = element == null,
     predicate = { element == null || element in it }
 )
 
@@ -268,6 +270,7 @@ public fun <E> ValidationNode<Array<E>>.contains(
 ): Unit = constraint(
     message = { it.message(element) },
     code = "contains",
+    skipped = element == null,
     predicate = { element == null || element in it }
 )
 
@@ -285,6 +288,7 @@ public fun <E> ValidationNode<List<E>>.containsAll(
 ): Unit = constraint(
     message = { it.message(elements) },
     code = "containsAll",
+    skipped = elements == null,
     predicate = { elements == null || elements.all { element -> element in it } }
 )
 
@@ -304,6 +308,7 @@ public fun <E> ValidationNode<Set<E>>.containsAll(
 ): Unit = constraint(
     message = { it.message(elements) },
     code = "containsAll",
+    skipped = elements == null,
     predicate = { elements == null || elements.all { element -> element in it } }
 )
 
@@ -323,6 +328,7 @@ public fun <E> ValidationNode<Array<E>>.containsAll(
 ): Unit = constraint(
     message = { it.message(elements) },
     code = "containsAll",
+    skipped = elements == null,
     predicate = { elements == null || elements.all { element -> element in it } }
 )
 
@@ -340,6 +346,7 @@ public fun <E> ValidationNode<List<E>>.containsAny(
 ): Unit = constraint(
     message = { it.message(elements) },
     code = "containsAny",
+    skipped = elements == null,
     predicate = { elements == null || elements.any { element -> element in it } }
 )
 
@@ -359,6 +366,7 @@ public fun <E> ValidationNode<Set<E>>.containsAny(
 ): Unit = constraint(
     message = { it.message(elements) },
     code = "containsAny",
+    skipped = elements == null,
     predicate = { elements == null || elements.any { element -> element in it } }
 )
 
@@ -378,5 +386,6 @@ public fun <E> ValidationNode<Array<E>>.containsAny(
 ): Unit = constraint(
     message = { it.message(elements) },
     code = "containsAny",
+    skipped = elements == null,
     predicate = { elements == null || elements.any { element -> element in it } }
 )

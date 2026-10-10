@@ -1,64 +1,51 @@
 package io.github.soleworks.validity.constraints
 
+import io.github.soleworks.validity.Constraint
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Violation
 import io.github.soleworks.validity.messages
 
+private const val OR = "or"
+private const val AND = "and"
+private const val NOT = "not"
+
+private val TEMPLATE_PLACEHOLDERS = Regex("\\{left}|\\{right}")
+
 public fun <V> ValidationNode<V>.or(
     block: ValidationNode<V>.() -> Unit
-) {
-    val template = messages.or
-
-    or(
-        message = { failures -> failures.joined(template) },
-        block = block
-    )
-}
+): Unit = combine(
+    operator = OR,
+    message = null,
+    passes = ::anyPasses,
+    block = block
+)
 
 public fun <V> ValidationNode<V>.or(
     message: String,
     block: ValidationNode<V>.() -> Unit
-): Unit = or(
-    message = { message },
-    block = block
-)
-
-private fun <V> ValidationNode<V>.or(
-    message: (List<String>) -> String,
-    block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
-    code = "or",
+    operator = OR,
     message = message,
-    passes = { branches -> branches.any { it.isEmpty() } },
+    passes = ::anyPasses,
     block = block
 )
 
 public fun <V> ValidationNode<V>.and(
     block: ValidationNode<V>.() -> Unit
-) {
-    val template = messages.and
-
-    and(
-        message = { failures -> failures.joined(template) },
-        block = block
-    )
-}
+): Unit = combine(
+    operator = AND,
+    message = null,
+    passes = ::allPass,
+    block = block
+)
 
 public fun <V> ValidationNode<V>.and(
     message: String,
     block: ValidationNode<V>.() -> Unit
-): Unit = and(
-    message = { message },
-    block = block
-)
-
-private fun <V> ValidationNode<V>.and(
-    message: (List<String>) -> String,
-    block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
-    code = "and",
+    operator = AND,
     message = message,
-    passes = { branches -> branches.all { it.isEmpty() } },
+    passes = ::allPass,
     block = block
 )
 
@@ -66,36 +53,71 @@ public fun <V> ValidationNode<V>.not(
     message: String = messages.not,
     block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
-    code = "not",
-    message = { message },
-    passes = { branches -> branches.all { it.isNotEmpty() } },
+    operator = NOT,
+    message = message,
+    passes = ::nonePasses,
     block = block
 )
 
+private fun anyPasses(branches: List<List<Violation>>): Boolean = branches.isEmpty() || branches.any { it.isEmpty() }
+
+private fun allPass(branches: List<List<Violation>>): Boolean = branches.all { it.isEmpty() }
+
+private fun nonePasses(branches: List<List<Violation>>): Boolean = branches.all { it.isNotEmpty() }
+
 private fun <V> ValidationNode<V>.combine(
-    code: String,
-    message: (List<String>) -> String,
+    operator: String,
+    message: String?,
     passes: (List<List<Violation>>) -> Boolean,
     block: ValidationNode<V>.() -> Unit
 ) {
-    val rules = ValidationNode(path, value).apply(block)
-    val template = messages.and
+    val rules = ValidationNode(path, value).also { it.operator = operator }.apply(block)
+    val outer = this.operator
+    val template = if (operator == OR) messages.or else messages.and
+    val and = messages.and
 
-    constraint(
-        message = { message(rules.failures(template)) },
-        code = code,
-        predicate = { passes(rules.branches()) }
+    add(
+        Constraint { path, _ ->
+            val branches = rules.branches()
+
+            if (passes(branches))
+                null
+            else
+                Violation(path, message ?: branches.described(operator, outer, template, and), operator)
+        }
     )
 }
 
-private fun ValidationNode<*>.failures(
-    template: String
-): List<String> = branches()
-    .filter { it.isNotEmpty() }
-    .map { branch -> branch.map(Violation::message).joined(template) }
+private fun List<List<Violation>>.described(
+    operator: String,
+    outer: String?,
+    template: String,
+    and: String
+): String {
+    val failures = filter { it.isNotEmpty() }
+        .map { branch -> branch.described(operator, and) }
+        .distinct()
+    val text = failures.joined(template)
+
+    return if (failures.size > 1 && outer != null && outer != operator)
+        "($text)"
+    else
+        text
+}
+
+private fun List<Violation>.described(
+    operator: String,
+    and: String
+): String {
+    val messages = map { it.message }.distinct()
+    val text = messages.joined(and)
+
+    return if (messages.size > 1 && operator != AND)
+        "($text)"
+    else
+        text
+}
 
 private fun List<String>.joined(template: String): String = reduceOrNull { left, right ->
-    template
-        .replace("{left}", left)
-        .replace("{right}", right)
+    TEMPLATE_PLACEHOLDERS.replace(template) { if (it.value == "{left}") left else right }
 }.orEmpty()
