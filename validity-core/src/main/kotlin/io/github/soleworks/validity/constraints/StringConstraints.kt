@@ -141,6 +141,7 @@ public fun ValidationNode<String>.contains(
 ): Unit = constraint(
     message = { it.message(text) },
     code = "contains",
+    skipped = text == null,
     predicate = { text == null || it.contains(text) }
 )
 
@@ -158,6 +159,7 @@ public fun ValidationNode<String>.notContains(
 ): Unit = constraint(
     message = { it.message(text) },
     code = "notContains",
+    skipped = text == null,
     predicate = { text == null || !it.contains(text) }
 )
 
@@ -175,6 +177,7 @@ public fun ValidationNode<String>.startsWith(
 ): Unit = constraint(
     message = { it.message(prefix) },
     code = "startsWith",
+    skipped = prefix == null,
     predicate = { prefix == null || it.startsWith(prefix) }
 )
 
@@ -192,6 +195,7 @@ public fun ValidationNode<String>.notStartsWith(
 ): Unit = constraint(
     message = { it.message(prefix) },
     code = "notStartsWith",
+    skipped = prefix == null,
     predicate = { prefix == null || !it.startsWith(prefix) }
 )
 
@@ -209,6 +213,7 @@ public fun ValidationNode<String>.endsWith(
 ): Unit = constraint(
     message = { it.message(suffix) },
     code = "endsWith",
+    skipped = suffix == null,
     predicate = { suffix == null || it.endsWith(suffix) }
 )
 
@@ -226,6 +231,7 @@ public fun ValidationNode<String>.notEndsWith(
 ): Unit = constraint(
     message = { it.message(suffix) },
     code = "notEndsWith",
+    skipped = suffix == null,
     predicate = { suffix == null || !it.endsWith(suffix) }
 )
 
