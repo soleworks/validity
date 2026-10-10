@@ -25,19 +25,7 @@ context(validation: Validation)
 public fun <V : Any> required(
     name: String,
     value: V?,
-    block: ValidationNode<V>.() -> Unit
-): Unit = required(
-    name = name,
-    value = value,
-    message = messages.required,
-    block = block
-)
-
-context(validation: Validation)
-public fun <V : Any> required(
-    name: String,
-    value: V?,
-    message: String,
+    message: String = messages.required,
     block: ValidationNode<V>.() -> Unit
 ) {
     if (value == null)

@@ -29,20 +29,8 @@ public class ValidationNode<V>(
             if (predicate(value))
                 null
             else
-                Violation(path, message(value), code)
+                Violation(path, message(value).filled(path, value), code)
         }
-    )
-
-    internal fun constraint(
-        message: String,
-        code: String,
-        skipped: Boolean,
-        predicate: (V) -> Boolean
-    ): Unit = constraint(
-        message = { message },
-        code = code,
-        skipped = skipped,
-        predicate = predicate
     )
 
     internal fun constraint(
@@ -61,23 +49,26 @@ public class ValidationNode<V>(
         )
     }
 
-    internal fun add(constraint: Constraint<V>) {
+    internal fun add(
+        constraint: Constraint<V>
+    ) {
         constraints += constraint
     }
 
-    internal fun add(nodes: List<ValidationNode<*>>) {
+    internal fun add(
+        nodes: List<ValidationNode<*>>
+    ) {
         groups += nodes
     }
 
-    internal fun validate(): List<Violation> =
-        constraints.flatMap { it.validate(path, value) } + groups.flatMap { nodes -> nodes.flatMap { it.validate() } }
+    internal fun validate(): List<Violation> = branches().flatten()
 
     internal fun branches(): List<List<Violation>> =
         constraints.map { it.validate(path, value) } + groups.map { nodes -> nodes.flatMap { it.validate() } }
 
-    internal fun prefixed(prefix: String): ValidationNode<V> = relocated("$prefix.$path")
-
-    internal fun relocated(path: String): ValidationNode<V> = if (path == this.path)
+    internal fun relocated(
+        path: String
+    ): ValidationNode<V> = if (path == this.path)
         this
     else
         ValidationNode(path, value).also {
