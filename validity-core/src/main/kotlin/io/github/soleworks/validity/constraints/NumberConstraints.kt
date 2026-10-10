@@ -19,6 +19,7 @@ public fun ValidationNode<Int>.min(
 ): Unit = constraint(
     message = { it.message(min) },
     code = "min",
+    skipped = min == null,
     predicate = { min == null || it >= min }
 )
 
@@ -36,6 +37,7 @@ public fun ValidationNode<Long>.min(
 ): Unit = constraint(
     message = { it.message(min) },
     code = "min",
+    skipped = min == null,
     predicate = { min == null || it >= min }
 )
 
@@ -53,6 +55,7 @@ public fun ValidationNode<Short>.min(
 ): Unit = constraint(
     message = { it.message(min) },
     code = "min",
+    skipped = min == null,
     predicate = { min == null || it >= min }
 )
 
@@ -70,6 +73,7 @@ public fun ValidationNode<Byte>.min(
 ): Unit = constraint(
     message = { it.message(min) },
     code = "min",
+    skipped = min == null,
     predicate = { min == null || it >= min }
 )
 
@@ -87,6 +91,7 @@ public fun ValidationNode<Double>.min(
 ): Unit = constraint(
     message = { it.message(min) },
     code = "min",
+    skipped = min == null,
     predicate = { min == null || it >= min }
 )
 
@@ -104,6 +109,7 @@ public fun ValidationNode<Float>.min(
 ): Unit = constraint(
     message = { it.message(min) },
     code = "min",
+    skipped = min == null,
     predicate = { min == null || it >= min }
 )
 
@@ -121,6 +127,7 @@ public fun ValidationNode<BigInteger>.min(
 ): Unit = constraint(
     message = { it.message(min) },
     code = "min",
+    skipped = min == null,
     predicate = { min == null || it >= min }
 )
 
@@ -138,6 +145,7 @@ public fun ValidationNode<BigDecimal>.min(
 ): Unit = constraint(
     message = { it.message(min) },
     code = "min",
+    skipped = min == null,
     predicate = { min == null || it >= min }
 )
 
@@ -155,6 +163,7 @@ public fun ValidationNode<Int>.max(
 ): Unit = constraint(
     message = { it.message(max) },
     code = "max",
+    skipped = max == null,
     predicate = { max == null || it <= max }
 )
 
@@ -172,6 +181,7 @@ public fun ValidationNode<Long>.max(
 ): Unit = constraint(
     message = { it.message(max) },
     code = "max",
+    skipped = max == null,
     predicate = { max == null || it <= max }
 )
 
@@ -189,6 +199,7 @@ public fun ValidationNode<Short>.max(
 ): Unit = constraint(
     message = { it.message(max) },
     code = "max",
+    skipped = max == null,
     predicate = { max == null || it <= max }
 )
 
@@ -206,6 +217,7 @@ public fun ValidationNode<Byte>.max(
 ): Unit = constraint(
     message = { it.message(max) },
     code = "max",
+    skipped = max == null,
     predicate = { max == null || it <= max }
 )
 
@@ -223,6 +235,7 @@ public fun ValidationNode<Double>.max(
 ): Unit = constraint(
     message = { it.message(max) },
     code = "max",
+    skipped = max == null,
     predicate = { max == null || it <= max }
 )
 
@@ -240,6 +253,7 @@ public fun ValidationNode<Float>.max(
 ): Unit = constraint(
     message = { it.message(max) },
     code = "max",
+    skipped = max == null,
     predicate = { max == null || it <= max }
 )
 
@@ -257,6 +271,7 @@ public fun ValidationNode<BigInteger>.max(
 ): Unit = constraint(
     message = { it.message(max) },
     code = "max",
+    skipped = max == null,
     predicate = { max == null || it <= max }
 )
 
@@ -274,6 +289,7 @@ public fun ValidationNode<BigDecimal>.max(
 ): Unit = constraint(
     message = { it.message(max) },
     code = "max",
+    skipped = max == null,
     predicate = { max == null || it <= max }
 )
 
@@ -291,6 +307,7 @@ public fun ValidationNode<Int>.greaterThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "greaterThan",
+    skipped = other == null,
     predicate = { other == null || it > other }
 )
 
@@ -308,6 +325,7 @@ public fun ValidationNode<Long>.greaterThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "greaterThan",
+    skipped = other == null,
     predicate = { other == null || it > other }
 )
 
@@ -325,6 +343,7 @@ public fun ValidationNode<Short>.greaterThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "greaterThan",
+    skipped = other == null,
     predicate = { other == null || it > other }
 )
 
@@ -342,6 +361,7 @@ public fun ValidationNode<Byte>.greaterThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "greaterThan",
+    skipped = other == null,
     predicate = { other == null || it > other }
 )
 
@@ -359,6 +379,7 @@ public fun ValidationNode<Double>.greaterThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "greaterThan",
+    skipped = other == null,
     predicate = { other == null || it > other }
 )
 
@@ -376,6 +397,7 @@ public fun ValidationNode<Float>.greaterThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "greaterThan",
+    skipped = other == null,
     predicate = { other == null || it > other }
 )
 
@@ -393,6 +415,7 @@ public fun ValidationNode<BigInteger>.greaterThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "greaterThan",
+    skipped = other == null,
     predicate = { other == null || it > other }
 )
 
@@ -410,6 +433,7 @@ public fun ValidationNode<BigDecimal>.greaterThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "greaterThan",
+    skipped = other == null,
     predicate = { other == null || it > other }
 )
 
@@ -427,6 +451,7 @@ public fun ValidationNode<Int>.lessThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "lessThan",
+    skipped = other == null,
     predicate = { other == null || it < other }
 )
 
@@ -444,6 +469,7 @@ public fun ValidationNode<Long>.lessThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "lessThan",
+    skipped = other == null,
     predicate = { other == null || it < other }
 )
 
@@ -461,6 +487,7 @@ public fun ValidationNode<Short>.lessThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "lessThan",
+    skipped = other == null,
     predicate = { other == null || it < other }
 )
 
@@ -478,6 +505,7 @@ public fun ValidationNode<Byte>.lessThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "lessThan",
+    skipped = other == null,
     predicate = { other == null || it < other }
 )
 
@@ -495,6 +523,7 @@ public fun ValidationNode<Double>.lessThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "lessThan",
+    skipped = other == null,
     predicate = { other == null || it < other }
 )
 
@@ -512,6 +541,7 @@ public fun ValidationNode<Float>.lessThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "lessThan",
+    skipped = other == null,
     predicate = { other == null || it < other }
 )
 
@@ -529,6 +559,7 @@ public fun ValidationNode<BigInteger>.lessThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "lessThan",
+    skipped = other == null,
     predicate = { other == null || it < other }
 )
 
@@ -546,6 +577,7 @@ public fun ValidationNode<BigDecimal>.lessThan(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "lessThan",
+    skipped = other == null,
     predicate = { other == null || it < other }
 )
 
@@ -566,6 +598,7 @@ public fun ValidationNode<Int>.between(
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "between",
+    skipped = min == null || max == null,
     predicate = { min == null || max == null || it in min..max }
 )
 
@@ -586,6 +619,7 @@ public fun ValidationNode<Long>.between(
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "between",
+    skipped = min == null || max == null,
     predicate = { min == null || max == null || it in min..max }
 )
 
@@ -606,6 +640,7 @@ public fun ValidationNode<Short>.between(
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "between",
+    skipped = min == null || max == null,
     predicate = { min == null || max == null || it in min..max }
 )
 
@@ -626,6 +661,7 @@ public fun ValidationNode<Byte>.between(
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "between",
+    skipped = min == null || max == null,
     predicate = { min == null || max == null || it in min..max }
 )
 
@@ -646,6 +682,7 @@ public fun ValidationNode<Double>.between(
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "between",
+    skipped = min == null || max == null,
     predicate = { min == null || max == null || it in min..max }
 )
 
@@ -666,6 +703,7 @@ public fun ValidationNode<Float>.between(
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "between",
+    skipped = min == null || max == null,
     predicate = { min == null || max == null || it in min..max }
 )
 
@@ -686,6 +724,7 @@ public fun ValidationNode<BigInteger>.between(
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "between",
+    skipped = min == null || max == null,
     predicate = { min == null || max == null || it in min..max }
 )
 
@@ -706,6 +745,7 @@ public fun ValidationNode<BigDecimal>.between(
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "between",
+    skipped = min == null || max == null,
     predicate = { min == null || max == null || it in min..max }
 )
 
