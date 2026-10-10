@@ -25,6 +25,7 @@ public fun <V> ValidationNode<V>.equalTo(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "equalTo",
+    skipped = other == null,
     predicate = { other == null || it == other }
 )
 
@@ -42,6 +43,7 @@ public fun <V> ValidationNode<V>.notEqualTo(
 ): Unit = constraint(
     message = { it.message(other) },
     code = "notEqualTo",
+    skipped = other == null,
     predicate = { other == null || it != other }
 )
 
@@ -59,6 +61,7 @@ public fun <V> ValidationNode<V>.oneOf(
 ): Unit = constraint(
     message = { it.message(values) },
     code = "oneOf",
+    skipped = values == null,
     predicate = { values == null || it in values }
 )
 
@@ -76,5 +79,6 @@ public fun <V> ValidationNode<V>.noneOf(
 ): Unit = constraint(
     message = { it.message(values) },
     code = "noneOf",
+    skipped = values == null,
     predicate = { values == null || it !in values }
 )
