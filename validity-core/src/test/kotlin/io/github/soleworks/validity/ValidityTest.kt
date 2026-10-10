@@ -2,6 +2,7 @@ package io.github.soleworks.validity
 
 import io.github.soleworks.validity.constraints.brazil.cpf
 import io.github.soleworks.validity.samples.Customer
+import io.github.soleworks.validity.samples.Recipient
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -94,6 +95,44 @@ class ValidityTest {
             val customer = Customer(name = "A")
 
             customer.validate().violations shouldBe listOf(Violation("name", "must have at least 2 characters", "minLength"))
+        }
+
+        @Test
+        fun `given the presence messages should report them with the fields`() {
+            Validity.configure {
+                messages {
+                    atLeastOneOf = "informe {fields}"
+                    forbidden = "deve ficar vazio"
+                }
+            }
+
+            val recipient = Recipient(email = null, phone = null, companyName = "Ana LTDA")
+
+            recipient.validate().violations shouldBe listOf(
+                Violation("email", "informe email, phone", "atLeastOneOf"),
+                Violation("phone", "informe email, phone", "atLeastOneOf"),
+                Violation("companyName", "deve ficar vazio", "forbidden")
+            )
+        }
+
+        @Test
+        fun `given the at most and exactly one messages should report them with the fields`() {
+            Validity.configure {
+                messages {
+                    atMostOneOf = "no máximo um de {fields}"
+                    exactlyOneOf = "exatamente um de {fields}"
+                }
+            }
+
+            val recipient = Recipient(pixKey = null, cnpj = "11222333000181")
+
+            recipient.validate().violations shouldBe listOf(
+                Violation("pixKey", "exatamente um de pixKey, bankAccount, boleto", "exactlyOneOf"),
+                Violation("bankAccount", "exatamente um de pixKey, bankAccount, boleto", "exactlyOneOf"),
+                Violation("boleto", "exatamente um de pixKey, bankAccount, boleto", "exactlyOneOf"),
+                Violation("cpf", "no máximo um de cpf, cnpj, passport", "atMostOneOf"),
+                Violation("cnpj", "no máximo um de cpf, cnpj, passport", "atMostOneOf")
+            )
         }
     }
 }

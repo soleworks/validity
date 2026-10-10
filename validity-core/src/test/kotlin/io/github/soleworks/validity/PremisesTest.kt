@@ -1,6 +1,10 @@
 package io.github.soleworks.validity
 
 import io.github.soleworks.validity.samples.Customer
+import io.github.soleworks.validity.samples.Login
+import io.github.soleworks.validity.samples.Recipient
+import io.github.soleworks.validity.samples.Shipment
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -47,6 +51,143 @@ class PremisesTest {
             val customer = Customer(nickname = "Al")
 
             customer.validate().violations shouldBe listOf(Violation("nickname", "must have at least 3 characters", "minLength"))
+        }
+    }
+
+    @Nested
+    @DisplayName("When forbidden is called")
+    inner class Forbidden {
+        @Test
+        fun `given a CPF and a company name should report the company name`() {
+            val recipient = Recipient(companyName = "Ana LTDA")
+
+            recipient.validate().violations shouldBe listOf(Violation("companyName", "must be null", "forbidden"))
+        }
+
+        @Test
+        fun `given a CPF without a company name should accept it`() {
+            val recipient = Recipient(companyName = null)
+
+            recipient.validate().violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a custom message should report it`() {
+            val login = Login(email = null, phone = "11999999999", password = "secret")
+
+            login.validate().violations shouldBe listOf(Violation("password", "password needs an email", "forbidden"))
+        }
+    }
+
+    @Nested
+    @DisplayName("When atLeastOneOf is called")
+    inner class AtLeastOneOf {
+        @Test
+        fun `given neither an email nor a phone should report both fields`() {
+            val recipient = Recipient(email = null, phone = null)
+
+            recipient.validate().violations shouldBe listOf(
+                Violation("email", "at least one of email, phone is required", "atLeastOneOf"),
+                Violation("phone", "at least one of email, phone is required", "atLeastOneOf")
+            )
+        }
+
+        @Test
+        fun `given only a phone should accept it`() {
+            val recipient = Recipient(email = null, phone = "11999999999")
+
+            recipient.validate().violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given both an email and a phone should accept them`() {
+            val recipient = Recipient(email = "ana@mail.com", phone = "11999999999")
+
+            recipient.validate().violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a custom message should replace the fields placeholder`() {
+            val login = Login(email = null, phone = null)
+
+            login.validate().violations shouldBe listOf(
+                Violation("email", "informe email, phone", "atLeastOneOf"),
+                Violation("phone", "informe email, phone", "atLeastOneOf")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When atMostOneOf is called")
+    inner class AtMostOneOf {
+        @Test
+        fun `given a CPF and a CNPJ should report only the filled fields`() {
+            val recipient = Recipient(cpf = "52998224725", cnpj = "11222333000181")
+
+            recipient.validate().violations shouldBe listOf(
+                Violation("cpf", "at most one of cpf, cnpj, passport can be filled", "atMostOneOf"),
+                Violation("cnpj", "at most one of cpf, cnpj, passport can be filled", "atMostOneOf")
+            )
+        }
+
+        @Test
+        fun `given only a CNPJ should accept it`() {
+            val recipient = Recipient(cpf = null, cnpj = "11222333000181")
+
+            recipient.validate().violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given neither a CPF nor a CNPJ should accept it`() {
+            val recipient = Recipient(cpf = null, cnpj = null)
+
+            recipient.validate().violations shouldBe emptyList()
+        }
+    }
+
+    @Nested
+    @DisplayName("When exactlyOneOf is called")
+    inner class ExactlyOneOf {
+        @Test
+        fun `given no way to pay should report every field`() {
+            val recipient = Recipient(pixKey = null, bankAccount = null, boleto = null)
+
+            recipient.validate().violations shouldBe listOf(
+                Violation("pixKey", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf"),
+                Violation("bankAccount", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf"),
+                Violation("boleto", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf")
+            )
+        }
+
+        @Test
+        fun `given a pix key and a bank account should report only the filled fields`() {
+            val recipient = Recipient(pixKey = "ana@mail.com", bankAccount = "0001-12345")
+
+            recipient.validate().violations shouldBe listOf(
+                Violation("pixKey", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf"),
+                Violation("bankAccount", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf")
+            )
+        }
+
+        @Test
+        fun `given only a bank account should accept it`() {
+            val recipient = Recipient(pixKey = null, bankAccount = "0001-12345")
+
+            recipient.validate().violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given the same property twice should count it once`() {
+            val shipment = Shipment(trackingCode = "BR123", pickupCode = null)
+
+            shipment.validate().violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no properties should fail when the rules are declared`() {
+            val error = shouldThrow<IllegalArgumentException> { validation { exactlyOneOf() } }
+
+            error.message shouldBe "exactlyOneOf needs at least one property"
         }
     }
 }
