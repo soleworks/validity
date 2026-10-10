@@ -22,8 +22,13 @@ public fun <V> ValidationNode<out Map<*, V>>.eachValue(
     block: ValidationNode<V>.() -> Unit
 ): Unit = value.forEach { (key, item) -> access("$path[$key]", item, block) }
 
-public fun <V : Validatable> ValidationNode<V>.valid(): Unit = value
-    .validation()
+public fun <V : Validatable> ValidationNode<V>.valid(): Unit = valid(
+    validation = { it.validation() }
+)
+
+public fun <V> ValidationNode<V>.valid(
+    validation: (V) -> Validation
+): Unit = validation(value)
     .nodes
     .forEach { node -> add(node.prefixed(path)) }
 

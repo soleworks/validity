@@ -1,6 +1,7 @@
 package io.github.soleworks.validity
 
 import io.github.soleworks.validity.samples.Address
+import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Order
 import io.kotest.matchers.shouldBe
@@ -105,6 +106,33 @@ class AccessorsTest {
             val customer = Customer(address = null)
 
             customer.validate().violations shouldBe listOf(Violation("address", "is required"))
+        }
+    }
+
+    @Nested
+    @DisplayName("When valid is called with a validation")
+    inner class ValidWithValidation {
+        @Test
+        fun `given a contact with a short phone should report it under the contact`() {
+            val customer = Customer(contact = Contact(phone = "123"))
+
+            customer.validate().violations shouldBe listOf(
+                Violation("contact.phone", "must have at least 8 characters")
+            )
+        }
+
+        @Test
+        fun `given a list of contacts should report each one under its index`() {
+            val customer = Customer(contacts = listOf(Contact(), Contact(phone = null)))
+
+            customer.validate().violations shouldBe listOf(Violation("contacts[1].phone", "is required"))
+        }
+
+        @Test
+        fun `given a customer without a contact should report only that it is required`() {
+            val customer = Customer(contact = null)
+
+            customer.validate().violations shouldBe listOf(Violation("contact", "is required"))
         }
     }
 }

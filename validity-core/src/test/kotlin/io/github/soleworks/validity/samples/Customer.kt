@@ -13,7 +13,9 @@ data class Customer(
     val nickname: String? = null,
     val email: String? = "ana@mail.com",
     val address: Address? = Address(),
-    val addresses: List<Address>? = emptyList()
+    val addresses: List<Address>? = emptyList(),
+    val contact: Contact? = Contact(),
+    val contacts: List<Contact>? = emptyList()
 ) : Validatable {
     override fun validation() = validation {
         ::name required { minLength(2) }
@@ -21,5 +23,7 @@ data class Customer(
         ::email.required("email is mandatory") { minLength(5) }
         ::address required { valid() }
         ::addresses required { each { valid() } }
+        ::contact required { valid(Contact::validation) }
+        ::contacts required { each { valid(Contact::validation) } }
     }
 }
