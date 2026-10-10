@@ -8,7 +8,9 @@ public class Validation internal constructor() {
         nodes += node
     }
 
-    internal fun validate(): List<Violation> = nodes.flatMap { it.validate() }
+    public fun validate(): ValidationResult = ValidationResult(
+        violations = nodes.flatMap { it.validate() }
+    )
 }
 
 public fun validation(block: Validation.() -> Unit): Validation = Validation().apply(block)

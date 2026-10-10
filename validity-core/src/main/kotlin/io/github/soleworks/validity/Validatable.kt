@@ -4,8 +4,4 @@ public interface Validatable {
     public fun validation(): Validation
 }
 
-public fun Validatable.validate(): ValidationResult {
-    val violations = validation().validate()
-
-    return ValidationResult(violations)
-}
+public fun Validatable.validate(): ValidationResult = validation().validate()
