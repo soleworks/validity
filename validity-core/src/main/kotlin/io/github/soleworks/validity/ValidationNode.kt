@@ -75,8 +75,13 @@ public class ValidationNode<V>(
     internal fun branches(): List<List<Violation>> =
         constraints.map { it.validate(path, value) } + groups.map { nodes -> nodes.flatMap { it.validate() } }
 
-    internal fun prefixed(prefix: String): ValidationNode<V> = ValidationNode("$prefix.$path", value).also {
-        it.constraints += constraints
-        it.groups += groups.map { nodes -> nodes.map { node -> node.prefixed(prefix) } }
-    }
+    internal fun prefixed(prefix: String): ValidationNode<V> = relocated("$prefix.$path")
+
+    internal fun relocated(path: String): ValidationNode<V> = if (path == this.path)
+        this
+    else
+        ValidationNode(path, value).also {
+            it.constraints += constraints
+            it.groups += groups.map { nodes -> nodes.map { node -> node.relocated(path + node.path.removePrefix(this.path)) } }
+        }
 }
