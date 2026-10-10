@@ -33,6 +33,7 @@ public fun ValidationNode<String>.email(
     message: String = messages.email
 ): Unit = constraint(
     message = message,
+    code = "email",
     predicate = { EMAIL_FORMAT.matches(it) }
 )
 
@@ -49,6 +50,7 @@ public fun ValidationNode<String>.url(
     message: String.(Set<String>) -> String
 ): Unit = constraint(
     message = { it.message(schemes) },
+    code = "url",
     predicate = { it.isUrl(schemes) }
 )
 
@@ -56,6 +58,7 @@ public fun ValidationNode<String>.hostname(
     message: String = messages.hostname
 ): Unit = constraint(
     message = message,
+    code = "hostname",
     predicate = { HOSTNAME_FORMAT.matches(it) }
 )
 
@@ -63,6 +66,7 @@ public fun ValidationNode<String>.ipv4(
     message: String = messages.ipv4
 ): Unit = constraint(
     message = message,
+    code = "ipv4",
     predicate = { IPV4_FORMAT.matches(it) }
 )
 
@@ -70,6 +74,7 @@ public fun ValidationNode<String>.ipv6(
     message: String = messages.ipv6
 ): Unit = constraint(
     message = message,
+    code = "ipv6",
     predicate = { it.isIpv6() }
 )
 
@@ -77,6 +82,7 @@ public fun ValidationNode<String>.ip(
     message: String = messages.ip
 ): Unit = constraint(
     message = message,
+    code = "ip",
     predicate = { IPV4_FORMAT.matches(it) || it.isIpv6() }
 )
 
@@ -84,6 +90,7 @@ public fun ValidationNode<String>.cidr(
     message: String = messages.cidr
 ): Unit = constraint(
     message = message,
+    code = "cidr",
     predicate = { it.isCidr() }
 )
 
@@ -91,6 +98,7 @@ public fun ValidationNode<String>.macAddress(
     message: String = messages.macAddress
 ): Unit = constraint(
     message = message,
+    code = "macAddress",
     predicate = { MAC_ADDRESS_FORMAT.matches(it) }
 )
 
@@ -98,6 +106,7 @@ public fun ValidationNode<String>.slug(
     message: String = messages.slug
 ): Unit = constraint(
     message = message,
+    code = "slug",
     predicate = { SLUG_FORMAT.matches(it) }
 )
 
@@ -105,6 +114,7 @@ public fun ValidationNode<String>.jwt(
     message: String = messages.jwt
 ): Unit = constraint(
     message = message,
+    code = "jwt",
     predicate = { JWT_FORMAT.matches(it) }
 )
 
@@ -112,6 +122,7 @@ public fun ValidationNode<String>.dataUri(
     message: String = messages.dataUri
 ): Unit = constraint(
     message = message,
+    code = "dataUri",
     predicate = { DATA_URI_FORMAT.matches(it) }
 )
 
@@ -119,6 +130,7 @@ public fun ValidationNode<String>.mimeType(
     message: String = messages.mimeType
 ): Unit = constraint(
     message = message,
+    code = "mimeType",
     predicate = { MIME_TYPE_FORMAT.matches(it) }
 )
 

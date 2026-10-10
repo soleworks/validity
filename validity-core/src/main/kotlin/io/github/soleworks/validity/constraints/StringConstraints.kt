@@ -19,6 +19,7 @@ public fun ValidationNode<String>.minLength(
     message: String.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
+    code = "minLength",
     predicate = { it.length >= min }
 )
 
@@ -35,6 +36,7 @@ public fun ValidationNode<String>.maxLength(
     message: String.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
+    code = "maxLength",
     predicate = { it.length <= max }
 )
 
@@ -51,6 +53,7 @@ public fun ValidationNode<String>.length(
     message: String.(Int) -> String
 ): Unit = constraint(
     message = { it.message(length) },
+    code = "length",
     predicate = { it.length == length }
 )
 
@@ -70,6 +73,7 @@ public fun ValidationNode<String>.lengthBetween(
     message: String.(Int, Int) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
+    code = "lengthBetween",
     predicate = { it.length in min..max }
 )
 
@@ -77,6 +81,7 @@ public fun ValidationNode<String>.notEmpty(
     message: String = messages.notEmpty
 ): Unit = constraint(
     message = message,
+    code = "notEmpty",
     predicate = { it.isNotEmpty() }
 )
 
@@ -84,6 +89,7 @@ public fun ValidationNode<String>.notBlank(
     message: String = messages.notBlank
 ): Unit = constraint(
     message = message,
+    code = "notBlank",
     predicate = { it.isNotBlank() }
 )
 
@@ -100,6 +106,7 @@ public fun ValidationNode<String>.matches(
     message: String.(Regex) -> String
 ): Unit = constraint(
     message = { it.message(regex) },
+    code = "matches",
     predicate = { regex.matches(it) }
 )
 
@@ -116,6 +123,7 @@ public fun ValidationNode<String>.notMatches(
     message: String.(Regex) -> String
 ): Unit = constraint(
     message = { it.message(regex) },
+    code = "notMatches",
     predicate = { !regex.matches(it) }
 )
 
@@ -132,6 +140,7 @@ public fun ValidationNode<String>.contains(
     message: String.(String?) -> String
 ): Unit = constraint(
     message = { it.message(text) },
+    code = "contains",
     predicate = { text == null || it.contains(text) }
 )
 
@@ -148,6 +157,7 @@ public fun ValidationNode<String>.notContains(
     message: String.(String?) -> String
 ): Unit = constraint(
     message = { it.message(text) },
+    code = "notContains",
     predicate = { text == null || !it.contains(text) }
 )
 
@@ -164,6 +174,7 @@ public fun ValidationNode<String>.startsWith(
     message: String.(String?) -> String
 ): Unit = constraint(
     message = { it.message(prefix) },
+    code = "startsWith",
     predicate = { prefix == null || it.startsWith(prefix) }
 )
 
@@ -180,6 +191,7 @@ public fun ValidationNode<String>.notStartsWith(
     message: String.(String?) -> String
 ): Unit = constraint(
     message = { it.message(prefix) },
+    code = "notStartsWith",
     predicate = { prefix == null || !it.startsWith(prefix) }
 )
 
@@ -196,6 +208,7 @@ public fun ValidationNode<String>.endsWith(
     message: String.(String?) -> String
 ): Unit = constraint(
     message = { it.message(suffix) },
+    code = "endsWith",
     predicate = { suffix == null || it.endsWith(suffix) }
 )
 
@@ -212,6 +225,7 @@ public fun ValidationNode<String>.notEndsWith(
     message: String.(String?) -> String
 ): Unit = constraint(
     message = { it.message(suffix) },
+    code = "notEndsWith",
     predicate = { suffix == null || !it.endsWith(suffix) }
 )
 
@@ -219,6 +233,7 @@ public fun ValidationNode<String>.uppercase(
     message: String = messages.uppercase
 ): Unit = constraint(
     message = message,
+    code = "uppercase",
     predicate = { it.none(Char::isLowerCase) }
 )
 
@@ -226,6 +241,7 @@ public fun ValidationNode<String>.lowercase(
     message: String = messages.lowercase
 ): Unit = constraint(
     message = message,
+    code = "lowercase",
     predicate = { it.none(Char::isUpperCase) }
 )
 
@@ -233,6 +249,7 @@ public fun ValidationNode<String>.letters(
     message: String = messages.letters
 ): Unit = constraint(
     message = message,
+    code = "letters",
     predicate = { it.all(Char::isLetter) }
 )
 
@@ -240,6 +257,7 @@ public fun ValidationNode<String>.digits(
     message: String = messages.digits
 ): Unit = constraint(
     message = message,
+    code = "digits",
     predicate = { it.all(Char::isDigit) }
 )
 
@@ -247,6 +265,7 @@ public fun ValidationNode<String>.lettersOrDigits(
     message: String = messages.lettersOrDigits
 ): Unit = constraint(
     message = message,
+    code = "lettersOrDigits",
     predicate = { it.all(Char::isLetterOrDigit) }
 )
 
@@ -254,6 +273,7 @@ public fun ValidationNode<String>.ascii(
     message: String = messages.ascii
 ): Unit = constraint(
     message = message,
+    code = "ascii",
     predicate = { Charsets.US_ASCII.newEncoder().canEncode(it) }
 )
 
@@ -261,6 +281,7 @@ public fun ValidationNode<String>.numeric(
     message: String = messages.numeric
 ): Unit = constraint(
     message = message,
+    code = "numeric",
     predicate = { NUMERIC_FORMAT.matches(it) }
 )
 
@@ -268,6 +289,7 @@ public fun ValidationNode<String>.integer(
     message: String = messages.integer
 ): Unit = constraint(
     message = message,
+    code = "integer",
     predicate = { INTEGER_FORMAT.matches(it) }
 )
 
@@ -275,6 +297,7 @@ public fun ValidationNode<String>.containsUppercase(
     message: String = messages.containsUppercase
 ): Unit = constraint(
     message = message,
+    code = "containsUppercase",
     predicate = { it.any(Char::isUpperCase) }
 )
 
@@ -282,6 +305,7 @@ public fun ValidationNode<String>.containsLowercase(
     message: String = messages.containsLowercase
 ): Unit = constraint(
     message = message,
+    code = "containsLowercase",
     predicate = { it.any(Char::isLowerCase) }
 )
 
@@ -289,6 +313,7 @@ public fun ValidationNode<String>.containsDigit(
     message: String = messages.containsDigit
 ): Unit = constraint(
     message = message,
+    code = "containsDigit",
     predicate = { it.any(Char::isDigit) }
 )
 
@@ -296,5 +321,6 @@ public fun ValidationNode<String>.containsSymbol(
     message: String = messages.containsSymbol
 ): Unit = constraint(
     message = message,
+    code = "containsSymbol",
     predicate = { it.any { char -> !char.isLetterOrDigit() && !char.isWhitespace() } }
 )

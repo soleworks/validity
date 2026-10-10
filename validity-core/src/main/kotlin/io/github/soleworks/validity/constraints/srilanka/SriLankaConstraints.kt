@@ -9,5 +9,6 @@ public fun ValidationNode<String>.nic(
     message: String = messages.sriLanka.nic
 ): Unit = constraint(
     message = message,
+    code = "nic",
     predicate = { NIC_FORMAT.matches(it) }
 )

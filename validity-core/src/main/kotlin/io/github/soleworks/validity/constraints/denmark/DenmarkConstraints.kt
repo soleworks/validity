@@ -24,6 +24,7 @@ public fun ValidationNode<String>.cpr(
     message: String = messages.denmark.cpr
 ): Unit = constraint(
     message = message,
+    code = "cpr",
     predicate = { CPR_FORMAT.matches(it) && it.replace(SEPARATOR, "").isCpr() }
 )
 

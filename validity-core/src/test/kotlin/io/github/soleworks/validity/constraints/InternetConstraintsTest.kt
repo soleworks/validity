@@ -26,7 +26,7 @@ class InternetConstraintsTest {
         fun `given an invalid email should report it`(email: String) {
             val node = ValidationNode("email", email).apply { email() }
 
-            node.validate() shouldBe listOf(Violation("email", "must be a valid email"))
+            node.validate() shouldBe listOf(Violation("email", "must be a valid email", "email"))
         }
     }
 
@@ -46,7 +46,7 @@ class InternetConstraintsTest {
         fun `given an invalid web URL should report it`(website: String) {
             val node = ValidationNode("website", website).apply { url() }
 
-            node.validate() shouldBe listOf(Violation("website", "must be a valid URL"))
+            node.validate() shouldBe listOf(Violation("website", "must be a valid URL", "url"))
         }
 
         @Test
@@ -60,7 +60,7 @@ class InternetConstraintsTest {
         fun `given a custom message with the schemes placeholder should replace it`() {
             val node = ValidationNode("website", "ftp://example.com").apply { url(message = "must use {schemes}") }
 
-            node.validate() shouldBe listOf(Violation("website", "must use http, https"))
+            node.validate() shouldBe listOf(Violation("website", "must use http, https", "url"))
         }
 
         @Test
@@ -69,7 +69,7 @@ class InternetConstraintsTest {
                 url { schemes -> "$this must use $schemes" }
             }
 
-            node.validate() shouldBe listOf(Violation("website", "ftp://example.com must use [http, https]"))
+            node.validate() shouldBe listOf(Violation("website", "ftp://example.com must use [http, https]", "url"))
         }
     }
 
@@ -96,7 +96,7 @@ class InternetConstraintsTest {
         fun `given an invalid hostname should report it`(host: String) {
             val node = ValidationNode("host", host).apply { hostname() }
 
-            node.validate() shouldBe listOf(Violation("host", "must be a valid hostname"))
+            node.validate() shouldBe listOf(Violation("host", "must be a valid hostname", "hostname"))
         }
     }
 
@@ -116,7 +116,7 @@ class InternetConstraintsTest {
         fun `given an invalid IPv4 address should report it`(ip: String) {
             val node = ValidationNode("ip", ip).apply { ipv4() }
 
-            node.validate() shouldBe listOf(Violation("ip", "must be a valid IPv4 address"))
+            node.validate() shouldBe listOf(Violation("ip", "must be a valid IPv4 address", "ipv4"))
         }
     }
 
@@ -154,7 +154,7 @@ class InternetConstraintsTest {
         fun `given an invalid IPv6 address should report it`(ip: String) {
             val node = ValidationNode("ip", ip).apply { ipv6() }
 
-            node.validate() shouldBe listOf(Violation("ip", "must be a valid IPv6 address"))
+            node.validate() shouldBe listOf(Violation("ip", "must be a valid IPv6 address", "ipv6"))
         }
     }
 
@@ -174,7 +174,7 @@ class InternetConstraintsTest {
         fun `given an invalid IP address should report it`(ip: String) {
             val node = ValidationNode("ip", ip).apply { ip() }
 
-            node.validate() shouldBe listOf(Violation("ip", "must be a valid IP address"))
+            node.validate() shouldBe listOf(Violation("ip", "must be a valid IP address", "ip"))
         }
     }
 
@@ -194,7 +194,7 @@ class InternetConstraintsTest {
         fun `given an invalid CIDR block should report it`(network: String) {
             val node = ValidationNode("network", network).apply { cidr() }
 
-            node.validate() shouldBe listOf(Violation("network", "must be a valid CIDR block"))
+            node.validate() shouldBe listOf(Violation("network", "must be a valid CIDR block", "cidr"))
         }
     }
 
@@ -214,7 +214,7 @@ class InternetConstraintsTest {
         fun `given an invalid MAC address should report it`(macAddress: String) {
             val node = ValidationNode("macAddress", macAddress).apply { macAddress() }
 
-            node.validate() shouldBe listOf(Violation("macAddress", "must be a valid MAC address"))
+            node.validate() shouldBe listOf(Violation("macAddress", "must be a valid MAC address", "macAddress"))
         }
     }
 
@@ -234,7 +234,7 @@ class InternetConstraintsTest {
         fun `given an invalid slug should report it`(slug: String) {
             val node = ValidationNode("slug", slug).apply { slug() }
 
-            node.validate() shouldBe listOf(Violation("slug", "must be a valid slug"))
+            node.validate() shouldBe listOf(Violation("slug", "must be a valid slug", "slug"))
         }
     }
 
@@ -254,7 +254,7 @@ class InternetConstraintsTest {
         fun `given an invalid JWT should report it`(token: String) {
             val node = ValidationNode("token", token).apply { jwt() }
 
-            node.validate() shouldBe listOf(Violation("token", "must be a valid JWT"))
+            node.validate() shouldBe listOf(Violation("token", "must be a valid JWT", "jwt"))
         }
     }
 
@@ -274,7 +274,7 @@ class InternetConstraintsTest {
         fun `given an invalid data URI should report it`(avatar: String) {
             val node = ValidationNode("avatar", avatar).apply { dataUri() }
 
-            node.validate() shouldBe listOf(Violation("avatar", "must be a valid data URI"))
+            node.validate() shouldBe listOf(Violation("avatar", "must be a valid data URI", "dataUri"))
         }
     }
 
@@ -294,7 +294,7 @@ class InternetConstraintsTest {
         fun `given an invalid MIME type should report it`(contentType: String) {
             val node = ValidationNode("contentType", contentType).apply { mimeType() }
 
-            node.validate() shouldBe listOf(Violation("contentType", "must be a valid MIME type"))
+            node.validate() shouldBe listOf(Violation("contentType", "must be a valid MIME type", "mimeType"))
         }
     }
 }

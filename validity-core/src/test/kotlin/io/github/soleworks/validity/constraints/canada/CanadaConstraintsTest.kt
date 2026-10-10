@@ -25,7 +25,7 @@ class CanadaConstraintsTest {
         fun `given an invalid SIN should report it`(value: String) {
             val node = ValidationNode("sin", value).apply { sin() }
 
-            node.validate() shouldBe listOf(Violation("sin", "must be a valid SIN"))
+            node.validate() shouldBe listOf(Violation("sin", "must be a valid SIN", "sin"))
         }
     }
 }

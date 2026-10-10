@@ -25,7 +25,7 @@ class IndiaConstraintsTest {
         fun `given an invalid Aadhaar should report it`(value: String) {
             val node = ValidationNode("aadhaar", value).apply { aadhaar() }
 
-            node.validate() shouldBe listOf(Violation("aadhaar", "must be a valid Aadhaar"))
+            node.validate() shouldBe listOf(Violation("aadhaar", "must be a valid Aadhaar", "aadhaar"))
         }
     }
 
@@ -45,7 +45,7 @@ class IndiaConstraintsTest {
         fun `given an invalid PAN should report it`(value: String) {
             val node = ValidationNode("pan", value).apply { pan() }
 
-            node.validate() shouldBe listOf(Violation("pan", "must be a valid PAN"))
+            node.validate() shouldBe listOf(Violation("pan", "must be a valid PAN", "pan"))
         }
     }
 }

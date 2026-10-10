@@ -25,7 +25,7 @@ class HongKongConstraintsTest {
         fun `given an invalid HKID should report it`(value: String) {
             val node = ValidationNode("hkid", value).apply { hkid() }
 
-            node.validate() shouldBe listOf(Violation("hkid", "must be a valid HKID"))
+            node.validate() shouldBe listOf(Violation("hkid", "must be a valid HKID", "hkid"))
         }
     }
 }

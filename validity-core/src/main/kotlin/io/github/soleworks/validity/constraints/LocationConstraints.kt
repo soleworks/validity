@@ -21,6 +21,7 @@ public fun ValidationNode<String>.isoCountryCode(
     message: String = messages.isoCountryCode
 ): Unit = constraint(
     message = message,
+    code = "isoCountryCode",
     predicate = { it in COUNTRY_CODES }
 )
 
@@ -28,6 +29,7 @@ public fun ValidationNode<String>.isoCountryCodeAlpha3(
     message: String = messages.isoCountryCodeAlpha3
 ): Unit = constraint(
     message = message,
+    code = "isoCountryCodeAlpha3",
     predicate = { it in COUNTRY_CODES_ALPHA3 }
 )
 
@@ -35,6 +37,7 @@ public fun ValidationNode<String>.languageCode(
     message: String = messages.languageCode
 ): Unit = constraint(
     message = message,
+    code = "languageCode",
     predicate = { it in LANGUAGE_CODES }
 )
 
@@ -42,6 +45,7 @@ public fun ValidationNode<String>.locale(
     message: String = messages.locale
 ): Unit = constraint(
     message = message,
+    code = "locale",
     predicate = { it.isNotEmpty() && runCatching { Locale.Builder().setLanguageTag(it).build() }.isSuccess }
 )
 
@@ -49,6 +53,7 @@ public fun ValidationNode<String>.timeZone(
     message: String = messages.timeZone
 ): Unit = constraint(
     message = message,
+    code = "timeZone",
     predicate = { it in TIME_ZONES }
 )
 
@@ -56,6 +61,7 @@ public fun ValidationNode<Double>.latitude(
     message: String = messages.latitude
 ): Unit = constraint(
     message = message,
+    code = "latitude",
     predicate = { it in -MAX_LATITUDE..MAX_LATITUDE }
 )
 
@@ -64,6 +70,7 @@ public fun ValidationNode<Float>.latitude(
     message: String = messages.latitude
 ): Unit = constraint(
     message = message,
+    code = "latitude",
     predicate = { it.toDouble() in -MAX_LATITUDE..MAX_LATITUDE }
 )
 
@@ -72,6 +79,7 @@ public fun ValidationNode<BigDecimal>.latitude(
     message: String = messages.latitude
 ): Unit = constraint(
     message = message,
+    code = "latitude",
     predicate = { it in LATITUDES }
 )
 
@@ -80,6 +88,7 @@ public fun ValidationNode<String>.latitude(
     message: String = messages.latitude
 ): Unit = constraint(
     message = message,
+    code = "latitude",
     predicate = { DECIMAL_FORMAT.matches(it) && BigDecimal(it) in LATITUDES }
 )
 
@@ -87,6 +96,7 @@ public fun ValidationNode<Double>.longitude(
     message: String = messages.longitude
 ): Unit = constraint(
     message = message,
+    code = "longitude",
     predicate = { it in -MAX_LONGITUDE..MAX_LONGITUDE }
 )
 
@@ -95,6 +105,7 @@ public fun ValidationNode<Float>.longitude(
     message: String = messages.longitude
 ): Unit = constraint(
     message = message,
+    code = "longitude",
     predicate = { it.toDouble() in -MAX_LONGITUDE..MAX_LONGITUDE }
 )
 
@@ -103,6 +114,7 @@ public fun ValidationNode<BigDecimal>.longitude(
     message: String = messages.longitude
 ): Unit = constraint(
     message = message,
+    code = "longitude",
     predicate = { it in LONGITUDES }
 )
 
@@ -111,5 +123,6 @@ public fun ValidationNode<String>.longitude(
     message: String = messages.longitude
 ): Unit = constraint(
     message = message,
+    code = "longitude",
     predicate = { DECIMAL_FORMAT.matches(it) && BigDecimal(it) in LONGITUDES }
 )

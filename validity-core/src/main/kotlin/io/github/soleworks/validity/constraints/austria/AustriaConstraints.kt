@@ -14,6 +14,7 @@ public fun ValidationNode<String>.abgabenkontonummer(
     message: String = messages.austria.abgabenkontonummer
 ): Unit = constraint(
     message = message,
+    code = "abgabenkontonummer",
     predicate = {
         it.replace(SYMBOLS, "").let { number -> ABGABENKONTONUMMER_FORMAT.matches(number) && number.isLuhnValid() }
     }

@@ -36,7 +36,7 @@ class ItalyConstraintsTest {
         fun `given an invalid codice fiscale should report it`(value: String) {
             val node = ValidationNode("codiceFiscale", value).apply { codiceFiscale() }
 
-            node.validate() shouldBe listOf(Violation("codiceFiscale", "must be a valid codice fiscale"))
+            node.validate() shouldBe listOf(Violation("codiceFiscale", "must be a valid codice fiscale", "codiceFiscale"))
         }
     }
 
@@ -56,7 +56,7 @@ class ItalyConstraintsTest {
         fun `given an invalid CIE should report it`(value: String) {
             val node = ValidationNode("cie", value).apply { cie() }
 
-            node.validate() shouldBe listOf(Violation("cie", "must be a valid CIE number"))
+            node.validate() shouldBe listOf(Violation("cie", "must be a valid CIE number", "cie"))
         }
     }
 }

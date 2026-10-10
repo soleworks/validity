@@ -36,7 +36,7 @@ class NorwayConstraintsTest {
         fun `given an invalid fødselsnummer should report it`(value: String) {
             val node = ValidationNode("fodselsnummer", value).apply { fodselsnummer() }
 
-            node.validate() shouldBe listOf(Violation("fodselsnummer", "must be a valid fødselsnummer"))
+            node.validate() shouldBe listOf(Violation("fodselsnummer", "must be a valid fødselsnummer", "fodselsnummer"))
         }
     }
 }

@@ -28,6 +28,7 @@ public fun ValidationNode<String>.residentId(
     message: String = messages.china.residentId
 ): Unit = constraint(
     message = message,
+    code = "residentId",
     predicate = { it.isResidentId() }
 )
 

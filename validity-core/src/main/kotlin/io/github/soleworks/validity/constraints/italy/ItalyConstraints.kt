@@ -37,6 +37,7 @@ public fun ValidationNode<String>.codiceFiscale(
     message: String = messages.italy.codiceFiscale
 ): Unit = constraint(
     message = message,
+    code = "codiceFiscale",
     predicate = { CODICE_FISCALE_FORMAT.matches(it) && it.uppercase().isCodiceFiscale() }
 )
 
@@ -44,6 +45,7 @@ public fun ValidationNode<String>.cie(
     message: String = messages.italy.cie
 ): Unit = constraint(
     message = message,
+    code = "cie",
     predicate = { it.length == CIE_LENGTH && it != CIE_PLACEHOLDER && CIE_FORMAT.matches(it) }
 )
 

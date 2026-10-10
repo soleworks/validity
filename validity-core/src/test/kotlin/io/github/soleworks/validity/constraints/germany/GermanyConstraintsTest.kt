@@ -35,7 +35,7 @@ class GermanyConstraintsTest {
         fun `given an invalid Steuer-IdNr should report it`(value: String) {
             val node = ValidationNode("steuerId", value).apply { steuerId() }
 
-            node.validate() shouldBe listOf(Violation("steuerId", "must be a valid Steuer-IdNr"))
+            node.validate() shouldBe listOf(Violation("steuerId", "must be a valid Steuer-IdNr", "steuerId"))
         }
     }
 }

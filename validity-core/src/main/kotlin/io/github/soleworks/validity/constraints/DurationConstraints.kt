@@ -17,6 +17,7 @@ public fun ValidationNode<Duration>.min(
     message: Duration.(Duration?) -> String
 ): Unit = constraint(
     message = { it.message(min) },
+    code = "min",
     predicate = { min == null || it >= min }
 )
 
@@ -33,6 +34,7 @@ public fun ValidationNode<Duration>.max(
     message: Duration.(Duration?) -> String
 ): Unit = constraint(
     message = { it.message(max) },
+    code = "max",
     predicate = { max == null || it <= max }
 )
 
@@ -49,6 +51,7 @@ public fun ValidationNode<Duration>.greaterThan(
     message: Duration.(Duration?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "greaterThan",
     predicate = { other == null || it > other }
 )
 
@@ -65,6 +68,7 @@ public fun ValidationNode<Duration>.lessThan(
     message: Duration.(Duration?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "lessThan",
     predicate = { other == null || it < other }
 )
 
@@ -84,5 +88,6 @@ public fun ValidationNode<Duration>.between(
     message: Duration.(Duration?, Duration?) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
+    code = "between",
     predicate = { min == null || max == null || it in min..max }
 )

@@ -15,6 +15,7 @@ public fun ValidationNode<String>.cuit(
     message: String = messages.argentina.cuit
 ): Unit = constraint(
     message = message,
+    code = "cuit",
     predicate = { TAX_ID_FORMAT.matches(it) && it.isTaxId(CUIT_PREFIXES) }
 )
 
@@ -22,6 +23,7 @@ public fun ValidationNode<String>.cuil(
     message: String = messages.argentina.cuil
 ): Unit = constraint(
     message = message,
+    code = "cuil",
     predicate = { TAX_ID_FORMAT.matches(it) && it.isTaxId(CUIL_PREFIXES) }
 )
 

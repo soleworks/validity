@@ -13,6 +13,7 @@ public fun ValidationNode<String>.afm(
     message: String = messages.cyprus.afm
 ): Unit = constraint(
     message = message,
+    code = "afm",
     predicate = { AFM_FORMAT.matches(it) && it.isAfm() }
 )
 

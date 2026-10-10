@@ -14,21 +14,21 @@ class PremisesTest {
         fun `given a customer without a name should report only that it is required`() {
             val customer = Customer(name = null)
 
-            customer.validate().violations shouldBe listOf(Violation("name", "is required"))
+            customer.validate().violations shouldBe listOf(Violation("name", "is required", "required"))
         }
 
         @Test
         fun `given a customer with a short name should run the rules of the name`() {
             val customer = Customer(name = "A")
 
-            customer.validate().violations shouldBe listOf(Violation("name", "must have at least 2 characters"))
+            customer.validate().violations shouldBe listOf(Violation("name", "must have at least 2 characters", "minLength"))
         }
 
         @Test
         fun `given a custom message should report it when the email is missing`() {
             val customer = Customer(email = null)
 
-            customer.validate().violations shouldBe listOf(Violation("email", "email is mandatory"))
+            customer.validate().violations shouldBe listOf(Violation("email", "email is mandatory", "required"))
         }
     }
 
@@ -46,7 +46,7 @@ class PremisesTest {
         fun `given a short nickname should run its rules`() {
             val customer = Customer(nickname = "Al")
 
-            customer.validate().violations shouldBe listOf(Violation("nickname", "must have at least 3 characters"))
+            customer.validate().violations shouldBe listOf(Violation("nickname", "must have at least 3 characters", "minLength"))
         }
     }
 }

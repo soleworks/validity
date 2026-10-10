@@ -15,7 +15,7 @@ class MapConstraintsTest {
         fun `given fewer prices than the minimum should report it`() {
             val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { minSize(2) }
 
-            node.validate() shouldBe listOf(Violation("prices", "must have at least 2 entries"))
+            node.validate() shouldBe listOf(Violation("prices", "must have at least 2 entries", "minSize"))
         }
 
         @Test
@@ -31,7 +31,7 @@ class MapConstraintsTest {
                 minSize(2) { min -> "has $size prices, needs at least $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has 1 prices, needs at least 2"))
+            node.validate() shouldBe listOf(Violation("prices", "has 1 prices, needs at least 2", "minSize"))
         }
     }
 
@@ -42,7 +42,7 @@ class MapConstraintsTest {
         fun `given more prices than the maximum should report it`() {
             val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000, "EUR" to 900)).apply { maxSize(2) }
 
-            node.validate() shouldBe listOf(Violation("prices", "must have at most 2 entries"))
+            node.validate() shouldBe listOf(Violation("prices", "must have at most 2 entries", "maxSize"))
         }
 
         @Test
@@ -58,7 +58,7 @@ class MapConstraintsTest {
                 maxSize(2) { max -> "has $size prices, allows at most $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has 3 prices, allows at most 2"))
+            node.validate() shouldBe listOf(Violation("prices", "has 3 prices, allows at most 2", "maxSize"))
         }
     }
 
@@ -69,7 +69,7 @@ class MapConstraintsTest {
         fun `given prices without exactly the expected count should report it`() {
             val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { size(2) }
 
-            node.validate() shouldBe listOf(Violation("prices", "must have exactly 2 entries"))
+            node.validate() shouldBe listOf(Violation("prices", "must have exactly 2 entries", "size"))
         }
 
         @Test
@@ -85,7 +85,7 @@ class MapConstraintsTest {
                 size(2) { size -> "has ${this.size} prices, needs $size" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has 1 prices, needs 2"))
+            node.validate() shouldBe listOf(Violation("prices", "has 1 prices, needs 2", "size"))
         }
     }
 
@@ -96,7 +96,7 @@ class MapConstraintsTest {
         fun `given prices below the range should report it`() {
             val node = ValidationNode("prices", emptyMap<String, Int>()).apply { sizeBetween(1, 2) }
 
-            node.validate() shouldBe listOf(Violation("prices", "must have between 1 and 2 entries"))
+            node.validate() shouldBe listOf(Violation("prices", "must have between 1 and 2 entries", "sizeBetween"))
         }
 
         @Test
@@ -105,7 +105,7 @@ class MapConstraintsTest {
                 sizeBetween(1, 2)
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "must have between 1 and 2 entries"))
+            node.validate() shouldBe listOf(Violation("prices", "must have between 1 and 2 entries", "sizeBetween"))
         }
 
         @Test
@@ -128,7 +128,7 @@ class MapConstraintsTest {
                 sizeBetween(1, 2) { min, max -> "has $size prices, needs from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has 0 prices, needs from 1 to 2"))
+            node.validate() shouldBe listOf(Violation("prices", "has 0 prices, needs from 1 to 2", "sizeBetween"))
         }
     }
 
@@ -139,7 +139,7 @@ class MapConstraintsTest {
         fun `given no prices should report it`() {
             val node = ValidationNode("prices", emptyMap<String, Int>()).apply { notEmpty() }
 
-            node.validate() shouldBe listOf(Violation("prices", "must not be empty"))
+            node.validate() shouldBe listOf(Violation("prices", "must not be empty", "notEmpty"))
         }
 
         @Test
@@ -157,7 +157,7 @@ class MapConstraintsTest {
         fun `given prices without the local currency should report it`() {
             val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { containsKey("BRL") }
 
-            node.validate() shouldBe listOf(Violation("prices", "must contain the key BRL"))
+            node.validate() shouldBe listOf(Violation("prices", "must contain the key BRL", "containsKey"))
         }
 
         @Test
@@ -182,7 +182,7 @@ class MapConstraintsTest {
                 containsKey("BRL") { key -> "has no price in $key" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has no price in BRL"))
+            node.validate() shouldBe listOf(Violation("prices", "has no price in BRL", "containsKey"))
         }
     }
 
@@ -193,7 +193,7 @@ class MapConstraintsTest {
         fun `given prices missing one of the required currencies should report it`() {
             val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { containsKeys(listOf("BRL", "USD")) }
 
-            node.validate() shouldBe listOf(Violation("prices", "must contain the keys BRL, USD"))
+            node.validate() shouldBe listOf(Violation("prices", "must contain the keys BRL, USD", "containsKeys"))
         }
 
         @Test
@@ -220,7 +220,7 @@ class MapConstraintsTest {
                 containsKeys(listOf("BRL", "USD")) { keys -> "needs prices in $keys" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "needs prices in [BRL, USD]"))
+            node.validate() shouldBe listOf(Violation("prices", "needs prices in [BRL, USD]", "containsKeys"))
         }
     }
 }

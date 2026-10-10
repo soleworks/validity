@@ -25,7 +25,7 @@ class BrazilConstraintsTest {
         fun `given a CPF with wrong check digits, repeated digits or another format should report it`(cpf: String) {
             val node = ValidationNode("cpf", cpf).apply { cpf() }
 
-            node.validate() shouldBe listOf(Violation("cpf", "must be a valid CPF"))
+            node.validate() shouldBe listOf(Violation("cpf", "must be a valid CPF", "cpf"))
         }
     }
 
@@ -53,7 +53,7 @@ class BrazilConstraintsTest {
         fun `given a CNPJ with wrong check digits, only zeros or another format should report it`(cnpj: String) {
             val node = ValidationNode("cnpj", cnpj).apply { cnpj() }
 
-            node.validate() shouldBe listOf(Violation("cnpj", "must be a valid CNPJ"))
+            node.validate() shouldBe listOf(Violation("cnpj", "must be a valid CNPJ", "cnpj"))
         }
     }
 
@@ -73,7 +73,7 @@ class BrazilConstraintsTest {
         fun `given a CNH with wrong check digits, repeated digits or another format should report it`(cnh: String) {
             val node = ValidationNode("cnh", cnh).apply { cnh() }
 
-            node.validate() shouldBe listOf(Violation("cnh", "must be a valid CNH"))
+            node.validate() shouldBe listOf(Violation("cnh", "must be a valid CNH", "cnh"))
         }
     }
 
@@ -93,7 +93,7 @@ class BrazilConstraintsTest {
         fun `given a PIS with a wrong check digit, repeated digits or another format should report it`(pis: String) {
             val node = ValidationNode("pis", pis).apply { pis() }
 
-            node.validate() shouldBe listOf(Violation("pis", "must be a valid PIS"))
+            node.validate() shouldBe listOf(Violation("pis", "must be a valid PIS", "pis"))
         }
     }
 
@@ -115,7 +115,7 @@ class BrazilConstraintsTest {
         ) {
             val node = ValidationNode("tituloEleitoral", tituloEleitoral).apply { tituloEleitoral() }
 
-            node.validate() shouldBe listOf(Violation("tituloEleitoral", "must be a valid título eleitoral"))
+            node.validate() shouldBe listOf(Violation("tituloEleitoral", "must be a valid título eleitoral", "tituloEleitoral"))
         }
     }
 
@@ -140,7 +140,7 @@ class BrazilConstraintsTest {
         fun `given an NF-e access key with a wrong check digit or length should report it`(chaveNfe: String) {
             val node = ValidationNode("chaveNfe", chaveNfe).apply { chaveNfe() }
 
-            node.validate() shouldBe listOf(Violation("chaveNfe", "must be a valid NF-e access key"))
+            node.validate() shouldBe listOf(Violation("chaveNfe", "must be a valid NF-e access key", "chaveNfe"))
         }
     }
 
@@ -160,7 +160,7 @@ class BrazilConstraintsTest {
         fun `given a CEP in another format should report it`(cep: String) {
             val node = ValidationNode("cep", cep).apply { cep() }
 
-            node.validate() shouldBe listOf(Violation("cep", "must be a valid CEP"))
+            node.validate() shouldBe listOf(Violation("cep", "must be a valid CEP", "cep"))
         }
     }
 
@@ -180,7 +180,7 @@ class BrazilConstraintsTest {
         fun `given a license plate in another format should report it`(placa: String) {
             val node = ValidationNode("placa", placa).apply { placa() }
 
-            node.validate() shouldBe listOf(Violation("placa", "must be a valid license plate"))
+            node.validate() shouldBe listOf(Violation("placa", "must be a valid license plate", "placa"))
         }
     }
 }

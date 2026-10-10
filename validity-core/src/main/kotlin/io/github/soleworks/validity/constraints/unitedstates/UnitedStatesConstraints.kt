@@ -18,5 +18,6 @@ public fun ValidationNode<String>.ein(
     message: String = messages.unitedStates.ein
 ): Unit = constraint(
     message = message,
+    code = "ein",
     predicate = { EIN_FORMAT.matches(it) && it.take(PREFIX_LENGTH) in EIN_PREFIXES }
 )

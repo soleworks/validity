@@ -19,6 +19,7 @@ public fun ValidationNode<String>.hkid(
     message: String = messages.hongKong.hkid
 ): Unit = constraint(
     message = message,
+    code = "hkid",
     predicate = { it.trim().uppercase().let { value -> HKID_FORMAT.matches(value) && value.isHkid() } }
 )
 

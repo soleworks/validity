@@ -28,6 +28,7 @@ public fun ValidationNode<String>.pesel(
     message: String = messages.poland.pesel
 ): Unit = constraint(
     message = message,
+    code = "pesel",
     predicate = { it.isPesel() }
 )
 
@@ -35,6 +36,7 @@ public fun ValidationNode<String>.nip(
     message: String = messages.poland.nip
 ): Unit = constraint(
     message = message,
+    code = "nip",
     predicate = { NIP_FORMAT.matches(it) && it.digits().isNip() }
 )
 
@@ -42,6 +44,7 @@ public fun ValidationNode<String>.regon(
     message: String = messages.poland.regon
 ): Unit = constraint(
     message = message,
+    code = "regon",
     predicate = { REGON_FORMAT.matches(it) && it.digits().isRegon() }
 )
 
@@ -49,6 +52,7 @@ public fun ValidationNode<String>.dowodOsobisty(
     message: String = messages.poland.dowodOsobisty
 ): Unit = constraint(
     message = message,
+    code = "dowodOsobisty",
     predicate = { ID_CARD_FORMAT.matches(it) && it.isDowodOsobisty() }
 )
 

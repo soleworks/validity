@@ -16,7 +16,7 @@ class ValidationTest {
             val coupon = Coupon(code = "OFF")
 
             coupon.validation().validate().violations shouldBe listOf(
-                Violation("code", "must have at least 5 characters")
+                Violation("code", "must have at least 5 characters", "minLength")
             )
         }
 

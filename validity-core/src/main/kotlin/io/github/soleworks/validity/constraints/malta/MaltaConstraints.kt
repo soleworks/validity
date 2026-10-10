@@ -16,6 +16,7 @@ public fun ValidationNode<String>.idCardNumber(
     message: String = messages.malta.idCardNumber
 ): Unit = constraint(
     message = message,
+    code = "idCardNumber",
     predicate = { ID_CARD_FORMAT.matches(it) && it.isIdCardNumber() }
 )
 

@@ -35,7 +35,7 @@ class ChinaConstraintsTest {
         fun `given an invalid resident identity card number should report it`(value: String) {
             val node = ValidationNode("residentId", value).apply { residentId() }
 
-            node.validate() shouldBe listOf(Violation("residentId", "must be a valid resident identity card number"))
+            node.validate() shouldBe listOf(Violation("residentId", "must be a valid resident identity card number", "residentId"))
         }
     }
 }

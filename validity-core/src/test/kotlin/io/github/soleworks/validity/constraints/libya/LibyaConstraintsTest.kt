@@ -25,7 +25,7 @@ class LibyaConstraintsTest {
         fun `given an invalid NIN should report it`(value: String) {
             val node = ValidationNode("nin", value).apply { nin() }
 
-            node.validate() shouldBe listOf(Violation("nin", "must be a valid NIN"))
+            node.validate() shouldBe listOf(Violation("nin", "must be a valid NIN", "nin"))
         }
     }
 }

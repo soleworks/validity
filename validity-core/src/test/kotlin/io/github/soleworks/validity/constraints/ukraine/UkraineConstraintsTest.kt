@@ -25,7 +25,7 @@ class UkraineConstraintsTest {
         fun `given an RNOKPP with a wrong check digit or another format should report it`(value: String) {
             val node = ValidationNode("rnokpp", value).apply { rnokpp() }
 
-            node.validate() shouldBe listOf(Violation("rnokpp", "must be a valid RNOKPP"))
+            node.validate() shouldBe listOf(Violation("rnokpp", "must be a valid RNOKPP", "rnokpp"))
         }
     }
 }

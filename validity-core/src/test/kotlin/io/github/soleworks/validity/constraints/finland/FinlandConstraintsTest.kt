@@ -25,7 +25,7 @@ class FinlandConstraintsTest {
         fun `given an invalid HETU should report it`(value: String) {
             val node = ValidationNode("hetu", value).apply { hetu() }
 
-            node.validate() shouldBe listOf(Violation("hetu", "must be a valid HETU"))
+            node.validate() shouldBe listOf(Violation("hetu", "must be a valid HETU", "hetu"))
         }
     }
 }

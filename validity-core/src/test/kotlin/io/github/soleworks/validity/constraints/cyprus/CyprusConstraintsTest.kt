@@ -25,7 +25,7 @@ class CyprusConstraintsTest {
         fun `given an AFM with a wrong check letter or another format should report it`(value: String) {
             val node = ValidationNode("afm", value).apply { afm() }
 
-            node.validate() shouldBe listOf(Violation("afm", "must be a valid AFM"))
+            node.validate() shouldBe listOf(Violation("afm", "must be a valid AFM", "afm"))
         }
     }
 }

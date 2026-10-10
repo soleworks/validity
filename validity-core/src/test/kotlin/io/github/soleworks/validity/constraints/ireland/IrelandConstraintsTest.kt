@@ -25,7 +25,7 @@ class IrelandConstraintsTest {
         fun `given an invalid PPS number should report it`(value: String) {
             val node = ValidationNode("pps", value).apply { pps() }
 
-            node.validate() shouldBe listOf(Violation("pps", "must be a valid PPS number"))
+            node.validate() shouldBe listOf(Violation("pps", "must be a valid PPS number", "pps"))
         }
     }
 }

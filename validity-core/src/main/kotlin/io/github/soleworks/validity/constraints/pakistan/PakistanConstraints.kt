@@ -9,5 +9,6 @@ public fun ValidationNode<String>.cnic(
     message: String = messages.pakistan.cnic
 ): Unit = constraint(
     message = message,
+    code = "cnic",
     predicate = { CNIC_FORMAT.matches(it.trim()) }
 )

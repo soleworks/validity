@@ -129,6 +129,7 @@ public fun ValidationNode<String>.creditCard(
     message: String = messages.creditCard
 ): Unit = constraint(
     message = message,
+    code = "creditCard",
     predicate = { CREDIT_CARD_FORMAT.matches(it) && it.hasLuhnCheckDigit() }
 )
 
@@ -136,6 +137,7 @@ public fun ValidationNode<String>.iban(
     message: String = messages.iban
 ): Unit = constraint(
     message = message,
+    code = "iban",
     predicate = { IBAN_FORMATS[it.take(2)]?.matches(it) == true && it.hasIbanCheckDigits() }
 )
 
@@ -143,6 +145,7 @@ public fun ValidationNode<String>.bic(
     message: String = messages.bic
 ): Unit = constraint(
     message = message,
+    code = "bic",
     predicate = { BIC_FORMAT.matchEntire(it)?.groupValues?.get(1) in COUNTRY_CODES }
 )
 
@@ -150,6 +153,7 @@ public fun ValidationNode<String>.isin(
     message: String = messages.isin
 ): Unit = constraint(
     message = message,
+    code = "isin",
     predicate = { ISIN_FORMAT.matches(it) && it.toDigitString().hasLuhnCheckDigit() }
 )
 
@@ -157,6 +161,7 @@ public fun ValidationNode<String>.currencyCode(
     message: String = messages.currencyCode
 ): Unit = constraint(
     message = message,
+    code = "currencyCode",
     predicate = { it in CURRENCY_CODES }
 )
 
@@ -164,6 +169,7 @@ public fun ValidationNode<String>.bitcoinAddress(
     message: String = messages.bitcoinAddress
 ): Unit = constraint(
     message = message,
+    code = "bitcoinAddress",
     predicate = { BITCOIN_ADDRESS_FORMAT.matches(it) }
 )
 
@@ -171,6 +177,7 @@ public fun ValidationNode<String>.ethereumAddress(
     message: String = messages.ethereumAddress
 ): Unit = constraint(
     message = message,
+    code = "ethereumAddress",
     predicate = { ETHEREUM_ADDRESS_FORMAT.matches(it) }
 )
 

@@ -15,7 +15,7 @@ class CollectionConstraintsTest {
         fun `given a list with fewer tags than the minimum should report it`() {
             val node = ValidationNode("tags", listOf("gift")).apply { minSize(2) }
 
-            node.validate() shouldBe listOf(Violation("tags", "must have at least 2 items"))
+            node.validate() shouldBe listOf(Violation("tags", "must have at least 2 items", "minSize"))
         }
 
         @Test
@@ -31,14 +31,14 @@ class CollectionConstraintsTest {
                 minSize(2) { min -> "has $size tags, needs at least $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("tags", "has 1 tags, needs at least 2"))
+            node.validate() shouldBe listOf(Violation("tags", "has 1 tags, needs at least 2", "minSize"))
         }
 
         @Test
         fun `given an array with fewer tags than the minimum should report it`() {
             val node = ValidationNode("tags", arrayOf("gift")).apply { minSize(2) }
 
-            node.validate() shouldBe listOf(Violation("tags", "must have at least 2 items"))
+            node.validate() shouldBe listOf(Violation("tags", "must have at least 2 items", "minSize"))
         }
 
         @Test
@@ -54,7 +54,7 @@ class CollectionConstraintsTest {
                 minSize(2) { min -> "has $size tags, needs at least $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("tags", "has 1 tags, needs at least 2"))
+            node.validate() shouldBe listOf(Violation("tags", "has 1 tags, needs at least 2", "minSize"))
         }
     }
 
@@ -65,7 +65,7 @@ class CollectionConstraintsTest {
         fun `given a list with more tags than the maximum should report it`() {
             val node = ValidationNode("tags", listOf("gift", "sale", "new", "summer")).apply { maxSize(3) }
 
-            node.validate() shouldBe listOf(Violation("tags", "must have at most 3 items"))
+            node.validate() shouldBe listOf(Violation("tags", "must have at most 3 items", "maxSize"))
         }
 
         @Test
@@ -81,14 +81,14 @@ class CollectionConstraintsTest {
                 maxSize(3) { max -> "has $size tags, allows at most $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("tags", "has 4 tags, allows at most 3"))
+            node.validate() shouldBe listOf(Violation("tags", "has 4 tags, allows at most 3", "maxSize"))
         }
 
         @Test
         fun `given an array with more tags than the maximum should report it`() {
             val node = ValidationNode("tags", arrayOf("gift", "sale", "new", "summer")).apply { maxSize(3) }
 
-            node.validate() shouldBe listOf(Violation("tags", "must have at most 3 items"))
+            node.validate() shouldBe listOf(Violation("tags", "must have at most 3 items", "maxSize"))
         }
 
         @Test
@@ -104,7 +104,7 @@ class CollectionConstraintsTest {
                 maxSize(3) { max -> "has $size tags, allows at most $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("tags", "has 4 tags, allows at most 3"))
+            node.validate() shouldBe listOf(Violation("tags", "has 4 tags, allows at most 3", "maxSize"))
         }
     }
 
@@ -115,7 +115,7 @@ class CollectionConstraintsTest {
         fun `given a list of coordinates without exactly 2 values should report it`() {
             val node = ValidationNode("coordinates", listOf(-23.55)).apply { size(2) }
 
-            node.validate() shouldBe listOf(Violation("coordinates", "must have exactly 2 items"))
+            node.validate() shouldBe listOf(Violation("coordinates", "must have exactly 2 items", "size"))
         }
 
         @Test
@@ -131,14 +131,14 @@ class CollectionConstraintsTest {
                 size(2) { size -> "has ${this.size} values, needs $size" }
             }
 
-            node.validate() shouldBe listOf(Violation("coordinates", "has 1 values, needs 2"))
+            node.validate() shouldBe listOf(Violation("coordinates", "has 1 values, needs 2", "size"))
         }
 
         @Test
         fun `given an array of coordinates without exactly 2 values should report it`() {
             val node = ValidationNode("coordinates", arrayOf(-23.55)).apply { size(2) }
 
-            node.validate() shouldBe listOf(Violation("coordinates", "must have exactly 2 items"))
+            node.validate() shouldBe listOf(Violation("coordinates", "must have exactly 2 items", "size"))
         }
 
         @Test
@@ -154,7 +154,7 @@ class CollectionConstraintsTest {
                 size(2) { size -> "has ${this.size} values, needs $size" }
             }
 
-            node.validate() shouldBe listOf(Violation("coordinates", "has 1 values, needs 2"))
+            node.validate() shouldBe listOf(Violation("coordinates", "has 1 values, needs 2", "size"))
         }
     }
 
@@ -165,7 +165,7 @@ class CollectionConstraintsTest {
         fun `given a list of phones below the range should report it`() {
             val node = ValidationNode("phones", emptyList<String>()).apply { sizeBetween(1, 3) }
 
-            node.validate() shouldBe listOf(Violation("phones", "must have between 1 and 3 items"))
+            node.validate() shouldBe listOf(Violation("phones", "must have between 1 and 3 items", "sizeBetween"))
         }
 
         @Test
@@ -174,7 +174,7 @@ class CollectionConstraintsTest {
 
             val node = ValidationNode("phones", phones).apply { sizeBetween(1, 3) }
 
-            node.validate() shouldBe listOf(Violation("phones", "must have between 1 and 3 items"))
+            node.validate() shouldBe listOf(Violation("phones", "must have between 1 and 3 items", "sizeBetween"))
         }
 
         @Test
@@ -199,14 +199,14 @@ class CollectionConstraintsTest {
                 sizeBetween(1, 3) { min, max -> "has $size phones, needs from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("phones", "has 0 phones, needs from 1 to 3"))
+            node.validate() shouldBe listOf(Violation("phones", "has 0 phones, needs from 1 to 3", "sizeBetween"))
         }
 
         @Test
         fun `given an array of phones below the range should report it`() {
             val node = ValidationNode("phones", emptyArray<String>()).apply { sizeBetween(1, 3) }
 
-            node.validate() shouldBe listOf(Violation("phones", "must have between 1 and 3 items"))
+            node.validate() shouldBe listOf(Violation("phones", "must have between 1 and 3 items", "sizeBetween"))
         }
 
         @Test
@@ -215,7 +215,7 @@ class CollectionConstraintsTest {
 
             val node = ValidationNode("phones", phones).apply { sizeBetween(1, 3) }
 
-            node.validate() shouldBe listOf(Violation("phones", "must have between 1 and 3 items"))
+            node.validate() shouldBe listOf(Violation("phones", "must have between 1 and 3 items", "sizeBetween"))
         }
 
         @Test
@@ -240,7 +240,7 @@ class CollectionConstraintsTest {
                 sizeBetween(1, 3) { min, max -> "has $size phones, needs from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("phones", "has 0 phones, needs from 1 to 3"))
+            node.validate() shouldBe listOf(Violation("phones", "has 0 phones, needs from 1 to 3", "sizeBetween"))
         }
     }
 
@@ -251,7 +251,7 @@ class CollectionConstraintsTest {
         fun `given a list without items should report it`() {
             val node = ValidationNode("items", emptyList<String>()).apply { notEmpty() }
 
-            node.validate() shouldBe listOf(Violation("items", "must not be empty"))
+            node.validate() shouldBe listOf(Violation("items", "must not be empty", "notEmpty"))
         }
 
         @Test
@@ -265,7 +265,7 @@ class CollectionConstraintsTest {
         fun `given an array without items should report it`() {
             val node = ValidationNode("items", emptyArray<String>()).apply { notEmpty() }
 
-            node.validate() shouldBe listOf(Violation("items", "must not be empty"))
+            node.validate() shouldBe listOf(Violation("items", "must not be empty", "notEmpty"))
         }
 
         @Test
@@ -283,7 +283,7 @@ class CollectionConstraintsTest {
         fun `given a list with a repeated tag should report it`() {
             val node = ValidationNode("tags", listOf("gift", "gift")).apply { distinct() }
 
-            node.validate() shouldBe listOf(Violation("tags", "must not contain duplicates"))
+            node.validate() shouldBe listOf(Violation("tags", "must not contain duplicates", "distinct"))
         }
 
         @Test
@@ -297,7 +297,7 @@ class CollectionConstraintsTest {
         fun `given an array with a repeated tag should report it`() {
             val node = ValidationNode("tags", arrayOf("gift", "gift")).apply { distinct() }
 
-            node.validate() shouldBe listOf(Violation("tags", "must not contain duplicates"))
+            node.validate() shouldBe listOf(Violation("tags", "must not contain duplicates", "distinct"))
         }
 
         @Test
@@ -317,7 +317,7 @@ class CollectionConstraintsTest {
 
             val node = ValidationNode("emails", emails).apply { distinctBy(String::lowercase) }
 
-            node.validate() shouldBe listOf(Violation("emails", "must not contain duplicates"))
+            node.validate() shouldBe listOf(Violation("emails", "must not contain duplicates", "distinctBy"))
         }
 
         @Test
@@ -335,7 +335,7 @@ class CollectionConstraintsTest {
 
             val node = ValidationNode("emails", emails).apply { distinctBy(String::lowercase) }
 
-            node.validate() shouldBe listOf(Violation("emails", "must not contain duplicates"))
+            node.validate() shouldBe listOf(Violation("emails", "must not contain duplicates", "distinctBy"))
         }
 
         @Test
@@ -353,7 +353,7 @@ class CollectionConstraintsTest {
 
             val node = ValidationNode("emails", emails).apply { distinctBy(String::lowercase) }
 
-            node.validate() shouldBe listOf(Violation("emails", "must not contain duplicates"))
+            node.validate() shouldBe listOf(Violation("emails", "must not contain duplicates", "distinctBy"))
         }
 
         @Test
@@ -373,7 +373,7 @@ class CollectionConstraintsTest {
         fun `given a list of roles without the admin role should report it`() {
             val node = ValidationNode("roles", listOf("USER")).apply { contains("ADMIN") }
 
-            node.validate() shouldBe listOf(Violation("roles", "must contain ADMIN"))
+            node.validate() shouldBe listOf(Violation("roles", "must contain ADMIN", "contains"))
         }
 
         @Test
@@ -398,14 +398,14 @@ class CollectionConstraintsTest {
                 contains("ADMIN") { element -> "has no $element among $size roles" }
             }
 
-            node.validate() shouldBe listOf(Violation("roles", "has no ADMIN among 1 roles"))
+            node.validate() shouldBe listOf(Violation("roles", "has no ADMIN among 1 roles", "contains"))
         }
 
         @Test
         fun `given a set of roles without the admin role should report it`() {
             val node = ValidationNode("roles", setOf("USER")).apply { contains("ADMIN") }
 
-            node.validate() shouldBe listOf(Violation("roles", "must contain ADMIN"))
+            node.validate() shouldBe listOf(Violation("roles", "must contain ADMIN", "contains"))
         }
 
         @Test
@@ -430,14 +430,14 @@ class CollectionConstraintsTest {
                 contains("ADMIN") { element -> "has no $element among $size roles" }
             }
 
-            node.validate() shouldBe listOf(Violation("roles", "has no ADMIN among 1 roles"))
+            node.validate() shouldBe listOf(Violation("roles", "has no ADMIN among 1 roles", "contains"))
         }
 
         @Test
         fun `given an array of roles without the admin role should report it`() {
             val node = ValidationNode("roles", arrayOf("USER")).apply { contains("ADMIN") }
 
-            node.validate() shouldBe listOf(Violation("roles", "must contain ADMIN"))
+            node.validate() shouldBe listOf(Violation("roles", "must contain ADMIN", "contains"))
         }
 
         @Test
@@ -462,7 +462,7 @@ class CollectionConstraintsTest {
                 contains("ADMIN") { element -> "has no $element among $size roles" }
             }
 
-            node.validate() shouldBe listOf(Violation("roles", "has no ADMIN among 1 roles"))
+            node.validate() shouldBe listOf(Violation("roles", "has no ADMIN among 1 roles", "contains"))
         }
     }
 
@@ -473,7 +473,7 @@ class CollectionConstraintsTest {
         fun `given a list of permissions missing one of the required ones should report it`() {
             val node = ValidationNode("permissions", listOf("READ")).apply { containsAll(listOf("READ", "WRITE")) }
 
-            node.validate() shouldBe listOf(Violation("permissions", "must contain all of READ, WRITE"))
+            node.validate() shouldBe listOf(Violation("permissions", "must contain all of READ, WRITE", "containsAll"))
         }
 
         @Test
@@ -500,14 +500,14 @@ class CollectionConstraintsTest {
                 containsAll(listOf("READ", "WRITE")) { elements -> "needs all of $elements" }
             }
 
-            node.validate() shouldBe listOf(Violation("permissions", "needs all of [READ, WRITE]"))
+            node.validate() shouldBe listOf(Violation("permissions", "needs all of [READ, WRITE]", "containsAll"))
         }
 
         @Test
         fun `given a set of permissions missing one of the required ones should report it`() {
             val node = ValidationNode("permissions", setOf("READ")).apply { containsAll(listOf("READ", "WRITE")) }
 
-            node.validate() shouldBe listOf(Violation("permissions", "must contain all of READ, WRITE"))
+            node.validate() shouldBe listOf(Violation("permissions", "must contain all of READ, WRITE", "containsAll"))
         }
 
         @Test
@@ -534,14 +534,14 @@ class CollectionConstraintsTest {
                 containsAll(listOf("READ", "WRITE")) { elements -> "needs all of $elements" }
             }
 
-            node.validate() shouldBe listOf(Violation("permissions", "needs all of [READ, WRITE]"))
+            node.validate() shouldBe listOf(Violation("permissions", "needs all of [READ, WRITE]", "containsAll"))
         }
 
         @Test
         fun `given an array of permissions missing one of the required ones should report it`() {
             val node = ValidationNode("permissions", arrayOf("READ")).apply { containsAll(listOf("READ", "WRITE")) }
 
-            node.validate() shouldBe listOf(Violation("permissions", "must contain all of READ, WRITE"))
+            node.validate() shouldBe listOf(Violation("permissions", "must contain all of READ, WRITE", "containsAll"))
         }
 
         @Test
@@ -568,7 +568,7 @@ class CollectionConstraintsTest {
                 containsAll(listOf("READ", "WRITE")) { elements -> "needs all of $elements" }
             }
 
-            node.validate() shouldBe listOf(Violation("permissions", "needs all of [READ, WRITE]"))
+            node.validate() shouldBe listOf(Violation("permissions", "needs all of [READ, WRITE]", "containsAll"))
         }
     }
 
@@ -579,7 +579,7 @@ class CollectionConstraintsTest {
         fun `given a list of payment methods without an instant one should report it`() {
             val node = ValidationNode("paymentMethods", listOf("BOLETO")).apply { containsAny(listOf("PIX", "TED")) }
 
-            node.validate() shouldBe listOf(Violation("paymentMethods", "must contain any of PIX, TED"))
+            node.validate() shouldBe listOf(Violation("paymentMethods", "must contain any of PIX, TED", "containsAny"))
         }
 
         @Test
@@ -606,14 +606,14 @@ class CollectionConstraintsTest {
                 containsAny(listOf("PIX", "TED")) { elements -> "needs any of $elements" }
             }
 
-            node.validate() shouldBe listOf(Violation("paymentMethods", "needs any of [PIX, TED]"))
+            node.validate() shouldBe listOf(Violation("paymentMethods", "needs any of [PIX, TED]", "containsAny"))
         }
 
         @Test
         fun `given a set of payment methods without an instant one should report it`() {
             val node = ValidationNode("paymentMethods", setOf("BOLETO")).apply { containsAny(listOf("PIX", "TED")) }
 
-            node.validate() shouldBe listOf(Violation("paymentMethods", "must contain any of PIX, TED"))
+            node.validate() shouldBe listOf(Violation("paymentMethods", "must contain any of PIX, TED", "containsAny"))
         }
 
         @Test
@@ -640,14 +640,14 @@ class CollectionConstraintsTest {
                 containsAny(listOf("PIX", "TED")) { elements -> "needs any of $elements" }
             }
 
-            node.validate() shouldBe listOf(Violation("paymentMethods", "needs any of [PIX, TED]"))
+            node.validate() shouldBe listOf(Violation("paymentMethods", "needs any of [PIX, TED]", "containsAny"))
         }
 
         @Test
         fun `given an array of payment methods without an instant one should report it`() {
             val node = ValidationNode("paymentMethods", arrayOf("BOLETO")).apply { containsAny(listOf("PIX", "TED")) }
 
-            node.validate() shouldBe listOf(Violation("paymentMethods", "must contain any of PIX, TED"))
+            node.validate() shouldBe listOf(Violation("paymentMethods", "must contain any of PIX, TED", "containsAny"))
         }
 
         @Test
@@ -674,7 +674,7 @@ class CollectionConstraintsTest {
                 containsAny(listOf("PIX", "TED")) { elements -> "needs any of $elements" }
             }
 
-            node.validate() shouldBe listOf(Violation("paymentMethods", "needs any of [PIX, TED]"))
+            node.validate() shouldBe listOf(Violation("paymentMethods", "needs any of [PIX, TED]", "containsAny"))
         }
     }
 }

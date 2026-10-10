@@ -25,7 +25,7 @@ class ColorConstraintsTest {
         fun `given an invalid hexadecimal color should report it`(color: String) {
             val node = ValidationNode("color", color).apply { hexColor() }
 
-            node.validate() shouldBe listOf(Violation("color", "must be a valid hexadecimal color"))
+            node.validate() shouldBe listOf(Violation("color", "must be a valid hexadecimal color", "hexColor"))
         }
     }
 
@@ -45,7 +45,7 @@ class ColorConstraintsTest {
         fun `given an invalid RGB color should report it`(color: String) {
             val node = ValidationNode("color", color).apply { rgbColor() }
 
-            node.validate() shouldBe listOf(Violation("color", "must be a valid RGB color"))
+            node.validate() shouldBe listOf(Violation("color", "must be a valid RGB color", "rgbColor"))
         }
     }
 
@@ -65,7 +65,7 @@ class ColorConstraintsTest {
         fun `given an invalid HSL color should report it`(color: String) {
             val node = ValidationNode("color", color).apply { hslColor() }
 
-            node.validate() shouldBe listOf(Violation("color", "must be a valid HSL color"))
+            node.validate() shouldBe listOf(Violation("color", "must be a valid HSL color", "hslColor"))
         }
     }
 }

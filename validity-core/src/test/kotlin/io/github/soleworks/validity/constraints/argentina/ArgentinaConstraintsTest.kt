@@ -25,7 +25,7 @@ class ArgentinaConstraintsTest {
         fun `given an invalid CUIT should report it`(value: String) {
             val node = ValidationNode("cuit", value).apply { cuit() }
 
-            node.validate() shouldBe listOf(Violation("cuit", "must be a valid CUIT"))
+            node.validate() shouldBe listOf(Violation("cuit", "must be a valid CUIT", "cuit"))
         }
     }
 
@@ -45,7 +45,7 @@ class ArgentinaConstraintsTest {
         fun `given an invalid CUIL should report it`(value: String) {
             val node = ValidationNode("cuil", value).apply { cuil() }
 
-            node.validate() shouldBe listOf(Violation("cuil", "must be a valid CUIL"))
+            node.validate() shouldBe listOf(Violation("cuil", "must be a valid CUIL", "cuil"))
         }
     }
 }

@@ -19,6 +19,7 @@ public fun ValidationNode<String>.steuerId(
     message: String = messages.germany.steuerId
 ): Unit = constraint(
     message = message,
+    code = "steuerId",
     predicate = {
         it.replace(SEPARATORS, "").let { number ->
             STEUER_ID_FORMAT.matches(number) && number.map(Char::digitToInt).isSteuerId()

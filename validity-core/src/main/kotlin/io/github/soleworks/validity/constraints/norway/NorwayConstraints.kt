@@ -18,6 +18,7 @@ public fun ValidationNode<String>.fodselsnummer(
     message: String = messages.norway.fodselsnummer
 ): Unit = constraint(
     message = message,
+    code = "fodselsnummer",
     predicate = {
         it.trim().let { number ->
             FODSELSNUMMER_FORMAT.matches(number) && number != EMPTY_NUMBER && number.map(Char::digitToInt).isFodselsnummer()

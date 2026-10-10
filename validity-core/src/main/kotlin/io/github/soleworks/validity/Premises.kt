@@ -1,6 +1,5 @@
 package io.github.soleworks.validity
 
-import io.github.soleworks.validity.constraints.notNull
 import kotlin.reflect.KProperty0
 
 context(validation: Validation)
@@ -19,7 +18,15 @@ public fun <V : Any> KProperty0<V?>.required(
     val value = get()
 
     if (value == null)
-        return validation.add(ValidationNode<V?>(name, null).apply { notNull(message) })
+        return validation.add(
+            ValidationNode<V?>(name, null).apply {
+                constraint(
+                    message = message,
+                    code = "required",
+                    predicate = { it != null }
+                )
+            }
+        )
 
     val node = ValidationNode(name, value)
 

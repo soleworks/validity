@@ -16,6 +16,7 @@ public fun ValidationNode<String>.codeMelli(
     message: String = messages.iran.codeMelli
 ): Unit = constraint(
     message = message,
+    code = "codeMelli",
     predicate = { CODE_FORMAT.matches(it) && it.isCodeMelli() }
 )
 

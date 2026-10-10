@@ -18,6 +18,7 @@ public fun ValidationNode<String>.dni(
     message: String = messages.spain.dni
 ): Unit = constraint(
     message = message,
+    code = "dni",
     predicate = { it.trim().uppercase().let { value -> DNI_FORMAT.matches(value) && value.hasControlLetter() } }
 )
 
@@ -25,6 +26,7 @@ public fun ValidationNode<String>.nie(
     message: String = messages.spain.nie
 ): Unit = constraint(
     message = message,
+    code = "nie",
     predicate = { it.trim().uppercase().let { value -> NIE_FORMAT.matches(value) && value.hasControlLetter() } }
 )
 
@@ -32,6 +34,7 @@ public fun ValidationNode<String>.nif(
     message: String = messages.spain.nif
 ): Unit = constraint(
     message = message,
+    code = "nif",
     predicate = { NIF_FORMAT.matches(it) && it.uppercase().hasNifControlLetter() }
 )
 

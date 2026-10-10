@@ -25,7 +25,7 @@ class AustriaConstraintsTest {
         fun `given an invalid Abgabenkontonummer should report it`(value: String) {
             val node = ValidationNode("abgabenkontonummer", value).apply { abgabenkontonummer() }
 
-            node.validate() shouldBe listOf(Violation("abgabenkontonummer", "must be a valid Abgabenkontonummer"))
+            node.validate() shouldBe listOf(Violation("abgabenkontonummer", "must be a valid Abgabenkontonummer", "abgabenkontonummer"))
         }
     }
 }

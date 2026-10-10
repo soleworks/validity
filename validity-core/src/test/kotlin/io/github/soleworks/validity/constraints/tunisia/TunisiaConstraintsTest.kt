@@ -25,7 +25,7 @@ class TunisiaConstraintsTest {
         fun `given an invalid national identity card number should report it`(value: String) {
             val node = ValidationNode("cin", value).apply { cin() }
 
-            node.validate() shouldBe listOf(Violation("cin", "must be a valid national identity card number"))
+            node.validate() shouldBe listOf(Violation("cin", "must be a valid national identity card number", "cin"))
         }
     }
 }

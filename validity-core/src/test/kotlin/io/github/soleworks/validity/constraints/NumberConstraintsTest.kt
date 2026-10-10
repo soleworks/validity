@@ -19,7 +19,7 @@ class NumberConstraintsTest {
         fun `given an Int below the minimum should report it`() {
             val node = ValidationNode("quantity", 9).apply { min(10) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be at least 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be at least 10", "min"))
         }
 
         @Test
@@ -42,14 +42,14 @@ class NumberConstraintsTest {
         fun `given a message function for an Int should build it from the value and the minimum`() {
             val node = ValidationNode("quantity", 9).apply { min(10) { min -> "$this is below $min" } }
 
-            node.validate() shouldBe listOf(Violation("quantity", "9 is below 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "9 is below 10", "min"))
         }
 
         @Test
         fun `given a Long below the minimum should report it`() {
             val node = ValidationNode("quantity", 9L).apply { min(10L) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be at least 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be at least 10", "min"))
         }
 
         @Test
@@ -72,14 +72,14 @@ class NumberConstraintsTest {
         fun `given a message function for a Long should build it from the value and the minimum`() {
             val node = ValidationNode("quantity", 9L).apply { min(10L) { min -> "$this is below $min" } }
 
-            node.validate() shouldBe listOf(Violation("quantity", "9 is below 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "9 is below 10", "min"))
         }
 
         @Test
         fun `given a Short below the minimum should report it`() {
             val node = ValidationNode("quantity", 9.toShort()).apply { min(10.toShort()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be at least 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be at least 10", "min"))
         }
 
         @Test
@@ -104,14 +104,14 @@ class NumberConstraintsTest {
                 min(10.toShort()) { min -> "$this is below $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "9 is below 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "9 is below 10", "min"))
         }
 
         @Test
         fun `given a Byte below the minimum should report it`() {
             val node = ValidationNode("quantity", 9.toByte()).apply { min(10.toByte()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be at least 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be at least 10", "min"))
         }
 
         @Test
@@ -136,14 +136,14 @@ class NumberConstraintsTest {
                 min(10.toByte()) { min -> "$this is below $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "9 is below 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "9 is below 10", "min"))
         }
 
         @Test
         fun `given a Double below the minimum should report it`() {
             val node = ValidationNode("rate", 9.0).apply { min(10.0) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be at least 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be at least 10.0", "min"))
         }
 
         @Test
@@ -166,14 +166,14 @@ class NumberConstraintsTest {
         fun `given a message function for a Double should build it from the value and the minimum`() {
             val node = ValidationNode("rate", 9.0).apply { min(10.0) { min -> "$this is below $min" } }
 
-            node.validate() shouldBe listOf(Violation("rate", "9.0 is below 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "9.0 is below 10.0", "min"))
         }
 
         @Test
         fun `given a Float below the minimum should report it`() {
             val node = ValidationNode("rate", 9f).apply { min(10f) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be at least 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be at least 10.0", "min"))
         }
 
         @Test
@@ -196,14 +196,14 @@ class NumberConstraintsTest {
         fun `given a message function for a Float should build it from the value and the minimum`() {
             val node = ValidationNode("rate", 9f).apply { min(10f) { min -> "$this is below $min" } }
 
-            node.validate() shouldBe listOf(Violation("rate", "9.0 is below 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "9.0 is below 10.0", "min"))
         }
 
         @Test
         fun `given a BigInteger below the minimum should report it`() {
             val node = ValidationNode("supply", BigInteger("9")).apply { min(BigInteger("10")) }
 
-            node.validate() shouldBe listOf(Violation("supply", "must be at least 10"))
+            node.validate() shouldBe listOf(Violation("supply", "must be at least 10", "min"))
         }
 
         @Test
@@ -228,14 +228,14 @@ class NumberConstraintsTest {
                 min(BigInteger("10")) { min -> "$this is below $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("supply", "9 is below 10"))
+            node.validate() shouldBe listOf(Violation("supply", "9 is below 10", "min"))
         }
 
         @Test
         fun `given a BigDecimal below the minimum should report it`() {
             val node = ValidationNode("amount", BigDecimal("9.00")).apply { min(BigDecimal("10.00")) }
 
-            node.validate() shouldBe listOf(Violation("amount", "must be at least 10.00"))
+            node.validate() shouldBe listOf(Violation("amount", "must be at least 10.00", "min"))
         }
 
         @Test
@@ -260,7 +260,7 @@ class NumberConstraintsTest {
                 min(BigDecimal("10.00")) { min -> "$this is below $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("amount", "9.00 is below 10.00"))
+            node.validate() shouldBe listOf(Violation("amount", "9.00 is below 10.00", "min"))
         }
     }
 
@@ -271,7 +271,7 @@ class NumberConstraintsTest {
         fun `given an Int above the maximum should report it`() {
             val node = ValidationNode("quantity", 11).apply { max(10) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be at most 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be at most 10", "max"))
         }
 
         @Test
@@ -294,14 +294,14 @@ class NumberConstraintsTest {
         fun `given a message function for an Int should build it from the value and the maximum`() {
             val node = ValidationNode("quantity", 11).apply { max(10) { max -> "$this is above $max" } }
 
-            node.validate() shouldBe listOf(Violation("quantity", "11 is above 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "11 is above 10", "max"))
         }
 
         @Test
         fun `given a Long above the maximum should report it`() {
             val node = ValidationNode("quantity", 11L).apply { max(10L) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be at most 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be at most 10", "max"))
         }
 
         @Test
@@ -324,14 +324,14 @@ class NumberConstraintsTest {
         fun `given a message function for a Long should build it from the value and the maximum`() {
             val node = ValidationNode("quantity", 11L).apply { max(10L) { max -> "$this is above $max" } }
 
-            node.validate() shouldBe listOf(Violation("quantity", "11 is above 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "11 is above 10", "max"))
         }
 
         @Test
         fun `given a Short above the maximum should report it`() {
             val node = ValidationNode("quantity", 11.toShort()).apply { max(10.toShort()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be at most 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be at most 10", "max"))
         }
 
         @Test
@@ -356,14 +356,14 @@ class NumberConstraintsTest {
                 max(10.toShort()) { max -> "$this is above $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "11 is above 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "11 is above 10", "max"))
         }
 
         @Test
         fun `given a Byte above the maximum should report it`() {
             val node = ValidationNode("quantity", 11.toByte()).apply { max(10.toByte()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be at most 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be at most 10", "max"))
         }
 
         @Test
@@ -388,14 +388,14 @@ class NumberConstraintsTest {
                 max(10.toByte()) { max -> "$this is above $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "11 is above 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "11 is above 10", "max"))
         }
 
         @Test
         fun `given a Double above the maximum should report it`() {
             val node = ValidationNode("rate", 11.0).apply { max(10.0) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be at most 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be at most 10.0", "max"))
         }
 
         @Test
@@ -418,14 +418,14 @@ class NumberConstraintsTest {
         fun `given a message function for a Double should build it from the value and the maximum`() {
             val node = ValidationNode("rate", 11.0).apply { max(10.0) { max -> "$this is above $max" } }
 
-            node.validate() shouldBe listOf(Violation("rate", "11.0 is above 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "11.0 is above 10.0", "max"))
         }
 
         @Test
         fun `given a Float above the maximum should report it`() {
             val node = ValidationNode("rate", 11f).apply { max(10f) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be at most 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be at most 10.0", "max"))
         }
 
         @Test
@@ -448,14 +448,14 @@ class NumberConstraintsTest {
         fun `given a message function for a Float should build it from the value and the maximum`() {
             val node = ValidationNode("rate", 11f).apply { max(10f) { max -> "$this is above $max" } }
 
-            node.validate() shouldBe listOf(Violation("rate", "11.0 is above 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "11.0 is above 10.0", "max"))
         }
 
         @Test
         fun `given a BigInteger above the maximum should report it`() {
             val node = ValidationNode("supply", BigInteger("11")).apply { max(BigInteger("10")) }
 
-            node.validate() shouldBe listOf(Violation("supply", "must be at most 10"))
+            node.validate() shouldBe listOf(Violation("supply", "must be at most 10", "max"))
         }
 
         @Test
@@ -480,14 +480,14 @@ class NumberConstraintsTest {
                 max(BigInteger("10")) { max -> "$this is above $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("supply", "11 is above 10"))
+            node.validate() shouldBe listOf(Violation("supply", "11 is above 10", "max"))
         }
 
         @Test
         fun `given a BigDecimal above the maximum should report it`() {
             val node = ValidationNode("amount", BigDecimal("11.00")).apply { max(BigDecimal("10.00")) }
 
-            node.validate() shouldBe listOf(Violation("amount", "must be at most 10.00"))
+            node.validate() shouldBe listOf(Violation("amount", "must be at most 10.00", "max"))
         }
 
         @Test
@@ -512,7 +512,7 @@ class NumberConstraintsTest {
                 max(BigDecimal("10.00")) { max -> "$this is above $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("amount", "11.00 is above 10.00"))
+            node.validate() shouldBe listOf(Violation("amount", "11.00 is above 10.00", "max"))
         }
     }
 
@@ -523,7 +523,7 @@ class NumberConstraintsTest {
         fun `given an Int equal to the reference should report it`() {
             val node = ValidationNode("quantity", 10).apply { greaterThan(10) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be greater than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be greater than 10", "greaterThan"))
         }
 
         @Test
@@ -548,14 +548,14 @@ class NumberConstraintsTest {
                 greaterThan(10) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "10 is not greater than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "10 is not greater than 10", "greaterThan"))
         }
 
         @Test
         fun `given a Long equal to the reference should report it`() {
             val node = ValidationNode("quantity", 10L).apply { greaterThan(10L) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be greater than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be greater than 10", "greaterThan"))
         }
 
         @Test
@@ -580,14 +580,14 @@ class NumberConstraintsTest {
                 greaterThan(10L) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "10 is not greater than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "10 is not greater than 10", "greaterThan"))
         }
 
         @Test
         fun `given a Short equal to the reference should report it`() {
             val node = ValidationNode("quantity", 10.toShort()).apply { greaterThan(10.toShort()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be greater than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be greater than 10", "greaterThan"))
         }
 
         @Test
@@ -612,14 +612,14 @@ class NumberConstraintsTest {
                 greaterThan(10.toShort()) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "10 is not greater than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "10 is not greater than 10", "greaterThan"))
         }
 
         @Test
         fun `given a Byte equal to the reference should report it`() {
             val node = ValidationNode("quantity", 10.toByte()).apply { greaterThan(10.toByte()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be greater than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be greater than 10", "greaterThan"))
         }
 
         @Test
@@ -644,14 +644,14 @@ class NumberConstraintsTest {
                 greaterThan(10.toByte()) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "10 is not greater than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "10 is not greater than 10", "greaterThan"))
         }
 
         @Test
         fun `given a Double equal to the reference should report it`() {
             val node = ValidationNode("rate", 10.0).apply { greaterThan(10.0) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be greater than 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be greater than 10.0", "greaterThan"))
         }
 
         @Test
@@ -676,14 +676,14 @@ class NumberConstraintsTest {
                 greaterThan(10.0) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("rate", "10.0 is not greater than 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "10.0 is not greater than 10.0", "greaterThan"))
         }
 
         @Test
         fun `given a Float equal to the reference should report it`() {
             val node = ValidationNode("rate", 10f).apply { greaterThan(10f) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be greater than 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be greater than 10.0", "greaterThan"))
         }
 
         @Test
@@ -708,14 +708,14 @@ class NumberConstraintsTest {
                 greaterThan(10f) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("rate", "10.0 is not greater than 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "10.0 is not greater than 10.0", "greaterThan"))
         }
 
         @Test
         fun `given a BigInteger equal to the reference should report it`() {
             val node = ValidationNode("supply", BigInteger("10")).apply { greaterThan(BigInteger("10")) }
 
-            node.validate() shouldBe listOf(Violation("supply", "must be greater than 10"))
+            node.validate() shouldBe listOf(Violation("supply", "must be greater than 10", "greaterThan"))
         }
 
         @Test
@@ -740,14 +740,14 @@ class NumberConstraintsTest {
                 greaterThan(BigInteger("10")) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("supply", "10 is not greater than 10"))
+            node.validate() shouldBe listOf(Violation("supply", "10 is not greater than 10", "greaterThan"))
         }
 
         @Test
         fun `given a BigDecimal equal to the reference should report it`() {
             val node = ValidationNode("amount", BigDecimal("10.00")).apply { greaterThan(BigDecimal("10.00")) }
 
-            node.validate() shouldBe listOf(Violation("amount", "must be greater than 10.00"))
+            node.validate() shouldBe listOf(Violation("amount", "must be greater than 10.00", "greaterThan"))
         }
 
         @Test
@@ -772,7 +772,7 @@ class NumberConstraintsTest {
                 greaterThan(BigDecimal("10.00")) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("amount", "10.00 is not greater than 10.00"))
+            node.validate() shouldBe listOf(Violation("amount", "10.00 is not greater than 10.00", "greaterThan"))
         }
     }
 
@@ -783,7 +783,7 @@ class NumberConstraintsTest {
         fun `given an Int equal to the reference should report it`() {
             val node = ValidationNode("quantity", 10).apply { lessThan(10) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be less than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be less than 10", "lessThan"))
         }
 
         @Test
@@ -808,14 +808,14 @@ class NumberConstraintsTest {
                 lessThan(10) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "10 is not less than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "10 is not less than 10", "lessThan"))
         }
 
         @Test
         fun `given a Long equal to the reference should report it`() {
             val node = ValidationNode("quantity", 10L).apply { lessThan(10L) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be less than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be less than 10", "lessThan"))
         }
 
         @Test
@@ -840,14 +840,14 @@ class NumberConstraintsTest {
                 lessThan(10L) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "10 is not less than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "10 is not less than 10", "lessThan"))
         }
 
         @Test
         fun `given a Short equal to the reference should report it`() {
             val node = ValidationNode("quantity", 10.toShort()).apply { lessThan(10.toShort()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be less than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be less than 10", "lessThan"))
         }
 
         @Test
@@ -872,14 +872,14 @@ class NumberConstraintsTest {
                 lessThan(10.toShort()) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "10 is not less than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "10 is not less than 10", "lessThan"))
         }
 
         @Test
         fun `given a Byte equal to the reference should report it`() {
             val node = ValidationNode("quantity", 10.toByte()).apply { lessThan(10.toByte()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be less than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be less than 10", "lessThan"))
         }
 
         @Test
@@ -904,14 +904,14 @@ class NumberConstraintsTest {
                 lessThan(10.toByte()) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "10 is not less than 10"))
+            node.validate() shouldBe listOf(Violation("quantity", "10 is not less than 10", "lessThan"))
         }
 
         @Test
         fun `given a Double equal to the reference should report it`() {
             val node = ValidationNode("rate", 10.0).apply { lessThan(10.0) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be less than 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be less than 10.0", "lessThan"))
         }
 
         @Test
@@ -936,14 +936,14 @@ class NumberConstraintsTest {
                 lessThan(10.0) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("rate", "10.0 is not less than 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "10.0 is not less than 10.0", "lessThan"))
         }
 
         @Test
         fun `given a Float equal to the reference should report it`() {
             val node = ValidationNode("rate", 10f).apply { lessThan(10f) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be less than 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be less than 10.0", "lessThan"))
         }
 
         @Test
@@ -966,14 +966,14 @@ class NumberConstraintsTest {
         fun `given a message function for a Float should build it from the value and the reference`() {
             val node = ValidationNode("rate", 10f).apply { lessThan(10f) { other -> "$this is not less than $other" } }
 
-            node.validate() shouldBe listOf(Violation("rate", "10.0 is not less than 10.0"))
+            node.validate() shouldBe listOf(Violation("rate", "10.0 is not less than 10.0", "lessThan"))
         }
 
         @Test
         fun `given a BigInteger equal to the reference should report it`() {
             val node = ValidationNode("supply", BigInteger("10")).apply { lessThan(BigInteger("10")) }
 
-            node.validate() shouldBe listOf(Violation("supply", "must be less than 10"))
+            node.validate() shouldBe listOf(Violation("supply", "must be less than 10", "lessThan"))
         }
 
         @Test
@@ -998,14 +998,14 @@ class NumberConstraintsTest {
                 lessThan(BigInteger("10")) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("supply", "10 is not less than 10"))
+            node.validate() shouldBe listOf(Violation("supply", "10 is not less than 10", "lessThan"))
         }
 
         @Test
         fun `given a BigDecimal equal to the reference should report it`() {
             val node = ValidationNode("amount", BigDecimal("10.00")).apply { lessThan(BigDecimal("10.00")) }
 
-            node.validate() shouldBe listOf(Violation("amount", "must be less than 10.00"))
+            node.validate() shouldBe listOf(Violation("amount", "must be less than 10.00", "lessThan"))
         }
 
         @Test
@@ -1030,7 +1030,7 @@ class NumberConstraintsTest {
                 lessThan(BigDecimal("10.00")) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("amount", "10.00 is not less than 10.00"))
+            node.validate() shouldBe listOf(Violation("amount", "10.00 is not less than 10.00", "lessThan"))
         }
     }
 
@@ -1041,14 +1041,14 @@ class NumberConstraintsTest {
         fun `given an Int below the range should report it`() {
             val node = ValidationNode("quantity", 8).apply { between(9, 11) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11", "between"))
         }
 
         @Test
         fun `given an Int above the range should report it`() {
             val node = ValidationNode("quantity", 12).apply { between(9, 11) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11", "between"))
         }
 
         @Test
@@ -1087,21 +1087,21 @@ class NumberConstraintsTest {
                 between(9, 11) { min, max -> "$this is not from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "12 is not from 9 to 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "12 is not from 9 to 11", "between"))
         }
 
         @Test
         fun `given a Long below the range should report it`() {
             val node = ValidationNode("quantity", 8L).apply { between(9L, 11L) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11", "between"))
         }
 
         @Test
         fun `given a Long above the range should report it`() {
             val node = ValidationNode("quantity", 12L).apply { between(9L, 11L) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11", "between"))
         }
 
         @Test
@@ -1140,21 +1140,21 @@ class NumberConstraintsTest {
                 between(9L, 11L) { min, max -> "$this is not from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "12 is not from 9 to 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "12 is not from 9 to 11", "between"))
         }
 
         @Test
         fun `given a Short below the range should report it`() {
             val node = ValidationNode("quantity", 8.toShort()).apply { between(9.toShort(), 11.toShort()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11", "between"))
         }
 
         @Test
         fun `given a Short above the range should report it`() {
             val node = ValidationNode("quantity", 12.toShort()).apply { between(9.toShort(), 11.toShort()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11", "between"))
         }
 
         @Test
@@ -1193,21 +1193,21 @@ class NumberConstraintsTest {
                 between(9.toShort(), 11.toShort()) { min, max -> "$this is not from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "12 is not from 9 to 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "12 is not from 9 to 11", "between"))
         }
 
         @Test
         fun `given a Byte below the range should report it`() {
             val node = ValidationNode("quantity", 8.toByte()).apply { between(9.toByte(), 11.toByte()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11", "between"))
         }
 
         @Test
         fun `given a Byte above the range should report it`() {
             val node = ValidationNode("quantity", 12.toByte()).apply { between(9.toByte(), 11.toByte()) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be between 9 and 11", "between"))
         }
 
         @Test
@@ -1246,21 +1246,21 @@ class NumberConstraintsTest {
                 between(9.toByte(), 11.toByte()) { min, max -> "$this is not from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "12 is not from 9 to 11"))
+            node.validate() shouldBe listOf(Violation("quantity", "12 is not from 9 to 11", "between"))
         }
 
         @Test
         fun `given a Double below the range should report it`() {
             val node = ValidationNode("rate", 8.0).apply { between(9.0, 11.0) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be between 9.0 and 11.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be between 9.0 and 11.0", "between"))
         }
 
         @Test
         fun `given a Double above the range should report it`() {
             val node = ValidationNode("rate", 12.0).apply { between(9.0, 11.0) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be between 9.0 and 11.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be between 9.0 and 11.0", "between"))
         }
 
         @Test
@@ -1299,21 +1299,21 @@ class NumberConstraintsTest {
                 between(9.0, 11.0) { min, max -> "$this is not from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("rate", "12.0 is not from 9.0 to 11.0"))
+            node.validate() shouldBe listOf(Violation("rate", "12.0 is not from 9.0 to 11.0", "between"))
         }
 
         @Test
         fun `given a Float below the range should report it`() {
             val node = ValidationNode("rate", 8f).apply { between(9f, 11f) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be between 9.0 and 11.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be between 9.0 and 11.0", "between"))
         }
 
         @Test
         fun `given a Float above the range should report it`() {
             val node = ValidationNode("rate", 12f).apply { between(9f, 11f) }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be between 9.0 and 11.0"))
+            node.validate() shouldBe listOf(Violation("rate", "must be between 9.0 and 11.0", "between"))
         }
 
         @Test
@@ -1352,21 +1352,21 @@ class NumberConstraintsTest {
                 between(9f, 11f) { min, max -> "$this is not from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("rate", "12.0 is not from 9.0 to 11.0"))
+            node.validate() shouldBe listOf(Violation("rate", "12.0 is not from 9.0 to 11.0", "between"))
         }
 
         @Test
         fun `given a BigInteger below the range should report it`() {
             val node = ValidationNode("supply", BigInteger("8")).apply { between(BigInteger("9"), BigInteger("11")) }
 
-            node.validate() shouldBe listOf(Violation("supply", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("supply", "must be between 9 and 11", "between"))
         }
 
         @Test
         fun `given a BigInteger above the range should report it`() {
             val node = ValidationNode("supply", BigInteger("12")).apply { between(BigInteger("9"), BigInteger("11")) }
 
-            node.validate() shouldBe listOf(Violation("supply", "must be between 9 and 11"))
+            node.validate() shouldBe listOf(Violation("supply", "must be between 9 and 11", "between"))
         }
 
         @Test
@@ -1405,7 +1405,7 @@ class NumberConstraintsTest {
                 between(BigInteger("9"), BigInteger("11")) { min, max -> "$this is not from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("supply", "12 is not from 9 to 11"))
+            node.validate() shouldBe listOf(Violation("supply", "12 is not from 9 to 11", "between"))
         }
 
         @Test
@@ -1414,7 +1414,7 @@ class NumberConstraintsTest {
                 between(BigDecimal("9.00"), BigDecimal("11.00"))
             }
 
-            node.validate() shouldBe listOf(Violation("amount", "must be between 9.00 and 11.00"))
+            node.validate() shouldBe listOf(Violation("amount", "must be between 9.00 and 11.00", "between"))
         }
 
         @Test
@@ -1423,7 +1423,7 @@ class NumberConstraintsTest {
                 between(BigDecimal("9.00"), BigDecimal("11.00"))
             }
 
-            node.validate() shouldBe listOf(Violation("amount", "must be between 9.00 and 11.00"))
+            node.validate() shouldBe listOf(Violation("amount", "must be between 9.00 and 11.00", "between"))
         }
 
         @Test
@@ -1468,7 +1468,7 @@ class NumberConstraintsTest {
                 between(BigDecimal("9.00"), BigDecimal("11.00")) { min, max -> "$this is not from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("amount", "12.00 is not from 9.00 to 11.00"))
+            node.validate() shouldBe listOf(Violation("amount", "12.00 is not from 9.00 to 11.00", "between"))
         }
     }
 
@@ -1480,7 +1480,7 @@ class NumberConstraintsTest {
         fun `given an Int quantity that is not positive should report it`(quantity: Int) {
             val node = ValidationNode("quantity", quantity).apply { positive() }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be positive"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be positive", "positive"))
         }
 
         @ParameterizedTest
@@ -1496,7 +1496,7 @@ class NumberConstraintsTest {
         fun `given a Long quantity that is not positive should report it`(quantity: Long) {
             val node = ValidationNode("quantity", quantity).apply { positive() }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be positive"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be positive", "positive"))
         }
 
         @ParameterizedTest
@@ -1512,7 +1512,7 @@ class NumberConstraintsTest {
         fun `given a Short quantity that is not positive should report it`(quantity: Short) {
             val node = ValidationNode("quantity", quantity).apply { positive() }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be positive"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be positive", "positive"))
         }
 
         @ParameterizedTest
@@ -1528,7 +1528,7 @@ class NumberConstraintsTest {
         fun `given a Byte quantity that is not positive should report it`(quantity: Byte) {
             val node = ValidationNode("quantity", quantity).apply { positive() }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be positive"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be positive", "positive"))
         }
 
         @ParameterizedTest
@@ -1544,7 +1544,7 @@ class NumberConstraintsTest {
         fun `given a Double quantity that is not positive should report it`(quantity: Double) {
             val node = ValidationNode("quantity", quantity).apply { positive() }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be positive"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be positive", "positive"))
         }
 
         @ParameterizedTest
@@ -1560,7 +1560,7 @@ class NumberConstraintsTest {
         fun `given a Float quantity that is not positive should report it`(quantity: Float) {
             val node = ValidationNode("quantity", quantity).apply { positive() }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be positive"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be positive", "positive"))
         }
 
         @ParameterizedTest
@@ -1576,7 +1576,7 @@ class NumberConstraintsTest {
         fun `given a BigInteger quantity that is not positive should report it`(quantity: String) {
             val node = ValidationNode("quantity", BigInteger(quantity)).apply { positive() }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be positive"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be positive", "positive"))
         }
 
         @ParameterizedTest
@@ -1592,7 +1592,7 @@ class NumberConstraintsTest {
         fun `given a BigDecimal quantity that is not positive should report it`(quantity: String) {
             val node = ValidationNode("quantity", BigDecimal(quantity)).apply { positive() }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be positive"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be positive", "positive"))
         }
 
         @ParameterizedTest
@@ -1612,7 +1612,7 @@ class NumberConstraintsTest {
         fun `given an Int adjustment that is not negative should report it`(adjustment: Int) {
             val node = ValidationNode("adjustment", adjustment).apply { negative() }
 
-            node.validate() shouldBe listOf(Violation("adjustment", "must be negative"))
+            node.validate() shouldBe listOf(Violation("adjustment", "must be negative", "negative"))
         }
 
         @ParameterizedTest
@@ -1628,7 +1628,7 @@ class NumberConstraintsTest {
         fun `given a Long adjustment that is not negative should report it`(adjustment: Long) {
             val node = ValidationNode("adjustment", adjustment).apply { negative() }
 
-            node.validate() shouldBe listOf(Violation("adjustment", "must be negative"))
+            node.validate() shouldBe listOf(Violation("adjustment", "must be negative", "negative"))
         }
 
         @ParameterizedTest
@@ -1644,7 +1644,7 @@ class NumberConstraintsTest {
         fun `given a Short adjustment that is not negative should report it`(adjustment: Short) {
             val node = ValidationNode("adjustment", adjustment).apply { negative() }
 
-            node.validate() shouldBe listOf(Violation("adjustment", "must be negative"))
+            node.validate() shouldBe listOf(Violation("adjustment", "must be negative", "negative"))
         }
 
         @ParameterizedTest
@@ -1660,7 +1660,7 @@ class NumberConstraintsTest {
         fun `given a Byte adjustment that is not negative should report it`(adjustment: Byte) {
             val node = ValidationNode("adjustment", adjustment).apply { negative() }
 
-            node.validate() shouldBe listOf(Violation("adjustment", "must be negative"))
+            node.validate() shouldBe listOf(Violation("adjustment", "must be negative", "negative"))
         }
 
         @ParameterizedTest
@@ -1676,7 +1676,7 @@ class NumberConstraintsTest {
         fun `given a Double adjustment that is not negative should report it`(adjustment: Double) {
             val node = ValidationNode("adjustment", adjustment).apply { negative() }
 
-            node.validate() shouldBe listOf(Violation("adjustment", "must be negative"))
+            node.validate() shouldBe listOf(Violation("adjustment", "must be negative", "negative"))
         }
 
         @ParameterizedTest
@@ -1692,7 +1692,7 @@ class NumberConstraintsTest {
         fun `given a Float adjustment that is not negative should report it`(adjustment: Float) {
             val node = ValidationNode("adjustment", adjustment).apply { negative() }
 
-            node.validate() shouldBe listOf(Violation("adjustment", "must be negative"))
+            node.validate() shouldBe listOf(Violation("adjustment", "must be negative", "negative"))
         }
 
         @ParameterizedTest
@@ -1708,7 +1708,7 @@ class NumberConstraintsTest {
         fun `given a BigInteger adjustment that is not negative should report it`(adjustment: String) {
             val node = ValidationNode("adjustment", BigInteger(adjustment)).apply { negative() }
 
-            node.validate() shouldBe listOf(Violation("adjustment", "must be negative"))
+            node.validate() shouldBe listOf(Violation("adjustment", "must be negative", "negative"))
         }
 
         @ParameterizedTest
@@ -1724,7 +1724,7 @@ class NumberConstraintsTest {
         fun `given a BigDecimal adjustment that is not negative should report it`(adjustment: String) {
             val node = ValidationNode("adjustment", BigDecimal(adjustment)).apply { negative() }
 
-            node.validate() shouldBe listOf(Violation("adjustment", "must be negative"))
+            node.validate() shouldBe listOf(Violation("adjustment", "must be negative", "negative"))
         }
 
         @ParameterizedTest
@@ -1744,7 +1744,7 @@ class NumberConstraintsTest {
         fun `given an Int balance below zero should report it`(balance: Int) {
             val node = ValidationNode("balance", balance).apply { positiveOrZero() }
 
-            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero"))
+            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero", "positiveOrZero"))
         }
 
         @ParameterizedTest
@@ -1760,7 +1760,7 @@ class NumberConstraintsTest {
         fun `given a Long balance below zero should report it`(balance: Long) {
             val node = ValidationNode("balance", balance).apply { positiveOrZero() }
 
-            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero"))
+            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero", "positiveOrZero"))
         }
 
         @ParameterizedTest
@@ -1776,7 +1776,7 @@ class NumberConstraintsTest {
         fun `given a Short balance below zero should report it`(balance: Short) {
             val node = ValidationNode("balance", balance).apply { positiveOrZero() }
 
-            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero"))
+            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero", "positiveOrZero"))
         }
 
         @ParameterizedTest
@@ -1792,7 +1792,7 @@ class NumberConstraintsTest {
         fun `given a Byte balance below zero should report it`(balance: Byte) {
             val node = ValidationNode("balance", balance).apply { positiveOrZero() }
 
-            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero"))
+            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero", "positiveOrZero"))
         }
 
         @ParameterizedTest
@@ -1808,7 +1808,7 @@ class NumberConstraintsTest {
         fun `given a Double balance below zero should report it`(balance: Double) {
             val node = ValidationNode("balance", balance).apply { positiveOrZero() }
 
-            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero"))
+            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero", "positiveOrZero"))
         }
 
         @ParameterizedTest
@@ -1824,7 +1824,7 @@ class NumberConstraintsTest {
         fun `given a Float balance below zero should report it`(balance: Float) {
             val node = ValidationNode("balance", balance).apply { positiveOrZero() }
 
-            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero"))
+            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero", "positiveOrZero"))
         }
 
         @ParameterizedTest
@@ -1840,7 +1840,7 @@ class NumberConstraintsTest {
         fun `given a BigInteger balance below zero should report it`(balance: String) {
             val node = ValidationNode("balance", BigInteger(balance)).apply { positiveOrZero() }
 
-            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero"))
+            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero", "positiveOrZero"))
         }
 
         @ParameterizedTest
@@ -1856,7 +1856,7 @@ class NumberConstraintsTest {
         fun `given a BigDecimal balance below zero should report it`(balance: String) {
             val node = ValidationNode("balance", BigDecimal(balance)).apply { positiveOrZero() }
 
-            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero"))
+            node.validate() shouldBe listOf(Violation("balance", "must be positive or zero", "positiveOrZero"))
         }
 
         @ParameterizedTest
@@ -1876,7 +1876,7 @@ class NumberConstraintsTest {
         fun `given an Int debit above zero should report it`(debit: Int) {
             val node = ValidationNode("debit", debit).apply { negativeOrZero() }
 
-            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero"))
+            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero", "negativeOrZero"))
         }
 
         @ParameterizedTest
@@ -1892,7 +1892,7 @@ class NumberConstraintsTest {
         fun `given a Long debit above zero should report it`(debit: Long) {
             val node = ValidationNode("debit", debit).apply { negativeOrZero() }
 
-            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero"))
+            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero", "negativeOrZero"))
         }
 
         @ParameterizedTest
@@ -1908,7 +1908,7 @@ class NumberConstraintsTest {
         fun `given a Short debit above zero should report it`(debit: Short) {
             val node = ValidationNode("debit", debit).apply { negativeOrZero() }
 
-            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero"))
+            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero", "negativeOrZero"))
         }
 
         @ParameterizedTest
@@ -1924,7 +1924,7 @@ class NumberConstraintsTest {
         fun `given a Byte debit above zero should report it`(debit: Byte) {
             val node = ValidationNode("debit", debit).apply { negativeOrZero() }
 
-            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero"))
+            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero", "negativeOrZero"))
         }
 
         @ParameterizedTest
@@ -1940,7 +1940,7 @@ class NumberConstraintsTest {
         fun `given a Double debit above zero should report it`(debit: Double) {
             val node = ValidationNode("debit", debit).apply { negativeOrZero() }
 
-            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero"))
+            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero", "negativeOrZero"))
         }
 
         @ParameterizedTest
@@ -1956,7 +1956,7 @@ class NumberConstraintsTest {
         fun `given a Float debit above zero should report it`(debit: Float) {
             val node = ValidationNode("debit", debit).apply { negativeOrZero() }
 
-            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero"))
+            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero", "negativeOrZero"))
         }
 
         @ParameterizedTest
@@ -1972,7 +1972,7 @@ class NumberConstraintsTest {
         fun `given a BigInteger debit above zero should report it`(debit: String) {
             val node = ValidationNode("debit", BigInteger(debit)).apply { negativeOrZero() }
 
-            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero"))
+            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero", "negativeOrZero"))
         }
 
         @ParameterizedTest
@@ -1988,7 +1988,7 @@ class NumberConstraintsTest {
         fun `given a BigDecimal debit above zero should report it`(debit: String) {
             val node = ValidationNode("debit", BigDecimal(debit)).apply { negativeOrZero() }
 
-            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero"))
+            node.validate() shouldBe listOf(Violation("debit", "must be negative or zero", "negativeOrZero"))
         }
 
         @ParameterizedTest
@@ -2008,7 +2008,7 @@ class NumberConstraintsTest {
         fun `given an Int quantity that is not a multiple of the factor should report it`(quantity: Int) {
             val node = ValidationNode("quantity", quantity).apply { multipleOf(6) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2025,7 +2025,7 @@ class NumberConstraintsTest {
                 multipleOf(6) { factor -> "$this is not a multiple of $factor" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2033,7 +2033,7 @@ class NumberConstraintsTest {
         fun `given a Long quantity that is not a multiple of the factor should report it`(quantity: Long) {
             val node = ValidationNode("quantity", quantity).apply { multipleOf(6L) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2050,7 +2050,7 @@ class NumberConstraintsTest {
                 multipleOf(6L) { factor -> "$this is not a multiple of $factor" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2058,7 +2058,7 @@ class NumberConstraintsTest {
         fun `given a Short quantity that is not a multiple of the factor should report it`(quantity: Short) {
             val node = ValidationNode("quantity", quantity).apply { multipleOf(6) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2075,7 +2075,7 @@ class NumberConstraintsTest {
                 multipleOf(6) { factor -> "$this is not a multiple of $factor" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2083,7 +2083,7 @@ class NumberConstraintsTest {
         fun `given a Byte quantity that is not a multiple of the factor should report it`(quantity: Byte) {
             val node = ValidationNode("quantity", quantity).apply { multipleOf(6) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2100,7 +2100,7 @@ class NumberConstraintsTest {
                 multipleOf(6) { factor -> "$this is not a multiple of $factor" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2108,7 +2108,7 @@ class NumberConstraintsTest {
         fun `given a BigInteger quantity that is not a multiple of the factor should report it`(quantity: String) {
             val node = ValidationNode("quantity", BigInteger(quantity)).apply { multipleOf(BigInteger("6")) }
 
-            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "must be a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2125,7 +2125,7 @@ class NumberConstraintsTest {
                 multipleOf(BigInteger("6")) { factor -> "$this is not a multiple of $factor" }
             }
 
-            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6"))
+            node.validate() shouldBe listOf(Violation("quantity", "7 is not a multiple of 6", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2133,7 +2133,7 @@ class NumberConstraintsTest {
         fun `given a BigDecimal amount that is not a multiple of the factor should report it`(amount: String) {
             val node = ValidationNode("amount", BigDecimal(amount)).apply { multipleOf(BigDecimal("0.05")) }
 
-            node.validate() shouldBe listOf(Violation("amount", "must be a multiple of 0.05"))
+            node.validate() shouldBe listOf(Violation("amount", "must be a multiple of 0.05", "multipleOf"))
         }
 
         @ParameterizedTest
@@ -2150,7 +2150,7 @@ class NumberConstraintsTest {
                 multipleOf(BigDecimal("0.05")) { factor -> "$this is not a multiple of $factor" }
             }
 
-            node.validate() shouldBe listOf(Violation("amount", "10.03 is not a multiple of 0.05"))
+            node.validate() shouldBe listOf(Violation("amount", "10.03 is not a multiple of 0.05", "multipleOf"))
         }
     }
 
@@ -2162,7 +2162,7 @@ class NumberConstraintsTest {
         fun `given a Double rate that is not finite should report it`(rate: Double) {
             val node = ValidationNode("rate", rate).apply { finite() }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be finite"))
+            node.validate() shouldBe listOf(Violation("rate", "must be finite", "finite"))
         }
 
         @ParameterizedTest
@@ -2178,7 +2178,7 @@ class NumberConstraintsTest {
         fun `given a Float rate that is not finite should report it`(rate: Float) {
             val node = ValidationNode("rate", rate).apply { finite() }
 
-            node.validate() shouldBe listOf(Violation("rate", "must be finite"))
+            node.validate() shouldBe listOf(Violation("rate", "must be finite", "finite"))
         }
 
         @ParameterizedTest
@@ -2198,7 +2198,7 @@ class NumberConstraintsTest {
         fun `given an amount with more decimal places than the maximum should report it`(amount: String) {
             val node = ValidationNode("amount", BigDecimal(amount)).apply { maxDecimalPlaces(2) }
 
-            node.validate() shouldBe listOf(Violation("amount", "must have at most 2 decimal places"))
+            node.validate() shouldBe listOf(Violation("amount", "must have at most 2 decimal places", "maxDecimalPlaces"))
         }
 
         @ParameterizedTest
@@ -2215,7 +2215,7 @@ class NumberConstraintsTest {
                 maxDecimalPlaces(2) { max -> "$this has more than $max decimal places" }
             }
 
-            node.validate() shouldBe listOf(Violation("amount", "10.001 has more than 2 decimal places"))
+            node.validate() shouldBe listOf(Violation("amount", "10.001 has more than 2 decimal places", "maxDecimalPlaces"))
         }
     }
 
@@ -2227,7 +2227,7 @@ class NumberConstraintsTest {
         fun `given a percentage with more integer digits than the maximum should report it`(percentage: String) {
             val node = ValidationNode("percentage", BigDecimal(percentage)).apply { maxIntegerDigits(3) }
 
-            node.validate() shouldBe listOf(Violation("percentage", "must have at most 3 integer digits"))
+            node.validate() shouldBe listOf(Violation("percentage", "must have at most 3 integer digits", "maxIntegerDigits"))
         }
 
         @ParameterizedTest
@@ -2244,7 +2244,7 @@ class NumberConstraintsTest {
                 maxIntegerDigits(3) { max -> "$this has more than $max integer digits" }
             }
 
-            node.validate() shouldBe listOf(Violation("percentage", "1000 has more than 3 integer digits"))
+            node.validate() shouldBe listOf(Violation("percentage", "1000 has more than 3 integer digits", "maxIntegerDigits"))
         }
     }
 }

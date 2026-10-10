@@ -13,6 +13,7 @@ public fun ValidationNode<String>.teudatZehut(
     message: String = messages.israel.teudatZehut
 ): Unit = constraint(
     message = message,
+    code = "teudatZehut",
     predicate = { it.trim().let { value -> TEUDAT_ZEHUT_FORMAT.matches(value) && value.isTeudatZehut() } }
 )
 

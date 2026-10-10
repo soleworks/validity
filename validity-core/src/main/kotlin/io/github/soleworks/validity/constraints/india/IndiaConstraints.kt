@@ -35,6 +35,7 @@ public fun ValidationNode<String>.aadhaar(
     message: String = messages.india.aadhaar
 ): Unit = constraint(
     message = message,
+    code = "aadhaar",
     predicate = { it.trim().let { value -> AADHAAR_FORMAT.matches(value) && value.isVerhoeff() } }
 )
 
@@ -42,6 +43,7 @@ public fun ValidationNode<String>.pan(
     message: String = messages.india.pan
 ): Unit = constraint(
     message = message,
+    code = "pan",
     predicate = { PAN_FORMAT.matches(it) }
 )
 

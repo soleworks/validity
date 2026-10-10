@@ -26,7 +26,7 @@ class DateFormatConstraintsTest {
         fun `given an invalid ISO date should report it`(birthDate: String) {
             val node = ValidationNode("birthDate", birthDate).apply { isoDate() }
 
-            node.validate() shouldBe listOf(Violation("birthDate", "must be an ISO 8601 date"))
+            node.validate() shouldBe listOf(Violation("birthDate", "must be an ISO 8601 date", "isoDate"))
         }
     }
 
@@ -46,7 +46,7 @@ class DateFormatConstraintsTest {
         fun `given an invalid ISO time should report it`(openingTime: String) {
             val node = ValidationNode("openingTime", openingTime).apply { isoTime() }
 
-            node.validate() shouldBe listOf(Violation("openingTime", "must be an ISO 8601 time"))
+            node.validate() shouldBe listOf(Violation("openingTime", "must be an ISO 8601 time", "isoTime"))
         }
     }
 
@@ -66,7 +66,7 @@ class DateFormatConstraintsTest {
         fun `given an invalid ISO date and time should report it`(createdAt: String) {
             val node = ValidationNode("createdAt", createdAt).apply { isoDateTime() }
 
-            node.validate() shouldBe listOf(Violation("createdAt", "must be an ISO 8601 date and time with offset"))
+            node.validate() shouldBe listOf(Violation("createdAt", "must be an ISO 8601 date and time with offset", "isoDateTime"))
         }
     }
 
@@ -86,7 +86,7 @@ class DateFormatConstraintsTest {
         fun `given an invalid ISO duration should report it`(timeout: String) {
             val node = ValidationNode("timeout", timeout).apply { isoDuration() }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be an ISO 8601 duration"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be an ISO 8601 duration", "isoDuration"))
         }
     }
 
@@ -106,7 +106,7 @@ class DateFormatConstraintsTest {
         fun `given an invalid date in the format should report it`(birthDate: String) {
             val node = ValidationNode("birthDate", birthDate).apply { dateFormat("dd/MM/yyyy") }
 
-            node.validate() shouldBe listOf(Violation("birthDate", "must match the date format dd/MM/yyyy"))
+            node.validate() shouldBe listOf(Violation("birthDate", "must match the date format dd/MM/yyyy", "dateFormat"))
         }
 
         @Test
@@ -115,7 +115,7 @@ class DateFormatConstraintsTest {
                 dateFormat("dd/MM/yyyy") { pattern -> "$this is not $pattern" }
             }
 
-            node.validate() shouldBe listOf(Violation("birthDate", "2026-01-10 is not dd/MM/yyyy"))
+            node.validate() shouldBe listOf(Violation("birthDate", "2026-01-10 is not dd/MM/yyyy", "dateFormat"))
         }
     }
 }

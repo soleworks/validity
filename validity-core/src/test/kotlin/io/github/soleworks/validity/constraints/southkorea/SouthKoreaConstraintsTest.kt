@@ -42,7 +42,7 @@ class SouthKoreaConstraintsTest {
         fun `given an invalid RRN should report it`(value: String) {
             val node = ValidationNode("rrn", value).apply { rrn() }
 
-            node.validate() shouldBe listOf(Violation("rrn", "must be a valid RRN"))
+            node.validate() shouldBe listOf(Violation("rrn", "must be a valid RRN", "rrn"))
         }
     }
 }

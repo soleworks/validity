@@ -25,7 +25,7 @@ class MaltaConstraintsTest {
         fun `given an invalid ID card number should report it`(value: String) {
             val node = ValidationNode("idCardNumber", value).apply { idCardNumber() }
 
-            node.validate() shouldBe listOf(Violation("idCardNumber", "must be a valid ID card number"))
+            node.validate() shouldBe listOf(Violation("idCardNumber", "must be a valid ID card number", "idCardNumber"))
         }
     }
 }

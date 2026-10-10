@@ -38,7 +38,7 @@ class UnitedKingdomConstraintsTest {
         fun `given an invalid NINO should report it`(value: String) {
             val node = ValidationNode("nino", value).apply { nino() }
 
-            node.validate() shouldBe listOf(Violation("nino", "must be a valid NINO"))
+            node.validate() shouldBe listOf(Violation("nino", "must be a valid NINO", "nino"))
         }
     }
 }

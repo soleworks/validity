@@ -36,7 +36,7 @@ class PhoneConstraintsTest {
         fun `given a text that fits no format in any country should report it`(phone: String) {
             val node = ValidationNode("phone", phone).apply { phone() }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number"))
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
         }
 
         @ParameterizedTest
@@ -51,7 +51,7 @@ class PhoneConstraintsTest {
         fun `given a number from another country when the country code is 55 should report it`() {
             val node = ValidationNode("phone", "+44 20 7946 0018").apply { phone(countryCode = "55") }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number"))
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
         }
 
         @Test
@@ -60,7 +60,7 @@ class PhoneConstraintsTest {
                 phone(countryCode = "55", format = PhoneFormat.AREA_CODE_AND_NUMBER)
             }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number"))
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
         }
 
         @Test
@@ -84,7 +84,7 @@ class PhoneConstraintsTest {
                 phone(countryCode = countryCode, areaCode = areaCode)
             }
 
-            node.validate() shouldBe listOf(Violation("phoneNumber", "must be a valid phone number"))
+            node.validate() shouldBe listOf(Violation("phoneNumber", "must be a valid phone number", "phone"))
         }
 
         @Test
@@ -93,14 +93,14 @@ class PhoneConstraintsTest {
                 phone(format = PhoneFormat.AREA_CODE_AND_NUMBER)
             }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number"))
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
         }
 
         @Test
         fun `given a number without country code when only complete numbers are allowed should report it`() {
             val node = ValidationNode("phone", "(11) 99712-3931").apply { phone(format = PhoneFormat.COMPLETE) }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number"))
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
         }
 
         @Test
@@ -109,7 +109,7 @@ class PhoneConstraintsTest {
                 phone(countryCode = "55") { countryCode, _, _ -> "$this is not a phone from +$countryCode" }
             }
 
-            node.validate() shouldBe listOf(Violation("phone", "+44 20 7946 0018 is not a phone from +55"))
+            node.validate() shouldBe listOf(Violation("phone", "+44 20 7946 0018 is not a phone from +55", "phone"))
         }
     }
 
@@ -129,7 +129,7 @@ class PhoneConstraintsTest {
         fun `given a complete landline number should report it`(phone: String) {
             val node = ValidationNode("phone", phone).apply { mobilePhone() }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid mobile phone number"))
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid mobile phone number", "mobilePhone"))
         }
 
         @Test
@@ -147,7 +147,7 @@ class PhoneConstraintsTest {
                 mobilePhone(countryCode = "55", format = PhoneFormat.AREA_CODE_AND_NUMBER)
             }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid mobile phone number"))
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid mobile phone number", "mobilePhone"))
         }
 
         @Test
@@ -171,7 +171,7 @@ class PhoneConstraintsTest {
                 mobilePhone(countryCode = countryCode, areaCode = areaCode)
             }
 
-            node.validate() shouldBe listOf(Violation("phoneNumber", "must be a valid mobile phone number"))
+            node.validate() shouldBe listOf(Violation("phoneNumber", "must be a valid mobile phone number", "mobilePhone"))
         }
 
         @Test
@@ -187,7 +187,7 @@ class PhoneConstraintsTest {
                 mobilePhone(countryCode = "55") { countryCode, _, _ -> "$this is not a mobile from +$countryCode" }
             }
 
-            node.validate() shouldBe listOf(Violation("phone", "+55 11 3333-4444 is not a mobile from +55"))
+            node.validate() shouldBe listOf(Violation("phone", "+55 11 3333-4444 is not a mobile from +55", "mobilePhone"))
         }
     }
 
@@ -207,7 +207,7 @@ class PhoneConstraintsTest {
         fun `given a country calling code that does not exist should report it`(countryCode: String) {
             val node = ValidationNode("countryCode", countryCode).apply { countryCode() }
 
-            node.validate() shouldBe listOf(Violation("countryCode", "must be a valid country calling code"))
+            node.validate() shouldBe listOf(Violation("countryCode", "must be a valid country calling code", "countryCode"))
         }
     }
 
@@ -227,7 +227,7 @@ class PhoneConstraintsTest {
         fun `given a Brazilian area code that does not exist should report it`(areaCode: String) {
             val node = ValidationNode("areaCode", areaCode).apply { areaCode(countryCode = "55") }
 
-            node.validate() shouldBe listOf(Violation("areaCode", "must be a valid area code"))
+            node.validate() shouldBe listOf(Violation("areaCode", "must be a valid area code", "areaCode"))
         }
 
         @ParameterizedTest
@@ -242,7 +242,7 @@ class PhoneConstraintsTest {
         fun `given a North American area code that does not exist should report it`() {
             val node = ValidationNode("areaCode", "999").apply { areaCode(countryCode = "1") }
 
-            node.validate() shouldBe listOf(Violation("areaCode", "must be a valid area code"))
+            node.validate() shouldBe listOf(Violation("areaCode", "must be a valid area code", "areaCode"))
         }
 
         @ParameterizedTest
@@ -260,7 +260,7 @@ class PhoneConstraintsTest {
         fun `given an area code that is not up to 5 digits should report it`(areaCode: String) {
             val node = ValidationNode("areaCode", areaCode).apply { areaCode(countryCode = "44") }
 
-            node.validate() shouldBe listOf(Violation("areaCode", "must be a valid area code"))
+            node.validate() shouldBe listOf(Violation("areaCode", "must be a valid area code", "areaCode"))
         }
 
         @ParameterizedTest
@@ -277,7 +277,7 @@ class PhoneConstraintsTest {
                 areaCode(countryCode = "55") { countryCode -> "$this is not an area code of +$countryCode" }
             }
 
-            node.validate() shouldBe listOf(Violation("areaCode", "10 is not an area code of +55"))
+            node.validate() shouldBe listOf(Violation("areaCode", "10 is not an area code of +55", "areaCode"))
         }
     }
 }

@@ -37,7 +37,7 @@ class GreeceConstraintsTest {
         ) {
             val node = ValidationNode("afm", value).apply { afm() }
 
-            node.validate() shouldBe listOf(Violation("afm", "must be a valid AFM"))
+            node.validate() shouldBe listOf(Violation("afm", "must be a valid AFM", "afm"))
         }
     }
 }

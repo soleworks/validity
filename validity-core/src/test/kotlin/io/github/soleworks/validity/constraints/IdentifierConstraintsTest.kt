@@ -26,7 +26,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid UUID should report it`(id: String) {
             val node = ValidationNode("id", id).apply { uuid() }
 
-            node.validate() shouldBe listOf(Violation("id", "must be a valid UUID"))
+            node.validate() shouldBe listOf(Violation("id", "must be a valid UUID", "uuid"))
         }
 
         @Test
@@ -40,7 +40,7 @@ class IdentifierConstraintsTest {
         fun `given a UUID of another version should report it`() {
             val node = ValidationNode("id", "123e4567-e89b-12d3-a456-426614174000").apply { uuid(4) }
 
-            node.validate() shouldBe listOf(Violation("id", "must be a valid UUID"))
+            node.validate() shouldBe listOf(Violation("id", "must be a valid UUID", "uuid"))
         }
 
         @Test
@@ -50,7 +50,7 @@ class IdentifierConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("id", "123e4567-e89b-12d3-a456-426614174000 is not a version 4 UUID")
+                Violation("id", "123e4567-e89b-12d3-a456-426614174000 is not a version 4 UUID", "uuid")
             )
         }
     }
@@ -77,7 +77,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid ULID should report it`(id: String) {
             val node = ValidationNode("id", id).apply { ulid() }
 
-            node.validate() shouldBe listOf(Violation("id", "must be a valid ULID"))
+            node.validate() shouldBe listOf(Violation("id", "must be a valid ULID", "ulid"))
         }
     }
 
@@ -97,7 +97,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid ObjectId should report it`(id: String) {
             val node = ValidationNode("id", id).apply { objectId() }
 
-            node.validate() shouldBe listOf(Violation("id", "must be a valid ObjectId"))
+            node.validate() shouldBe listOf(Violation("id", "must be a valid ObjectId", "objectId"))
         }
     }
 
@@ -117,7 +117,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid semantic version should report it`(version: String) {
             val node = ValidationNode("version", version).apply { semver() }
 
-            node.validate() shouldBe listOf(Violation("version", "must be a valid semantic version"))
+            node.validate() shouldBe listOf(Violation("version", "must be a valid semantic version", "semver"))
         }
     }
 
@@ -137,7 +137,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid ISBN should report it`(isbn: String) {
             val node = ValidationNode("isbn", isbn).apply { isbn() }
 
-            node.validate() shouldBe listOf(Violation("isbn", "must be a valid ISBN"))
+            node.validate() shouldBe listOf(Violation("isbn", "must be a valid ISBN", "isbn"))
         }
     }
 
@@ -157,7 +157,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid ISBN-10 should report it`(isbn: String) {
             val node = ValidationNode("isbn", isbn).apply { isbn10() }
 
-            node.validate() shouldBe listOf(Violation("isbn", "must be a valid ISBN-10"))
+            node.validate() shouldBe listOf(Violation("isbn", "must be a valid ISBN-10", "isbn10"))
         }
     }
 
@@ -177,7 +177,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid ISBN-13 should report it`(isbn: String) {
             val node = ValidationNode("isbn", isbn).apply { isbn13() }
 
-            node.validate() shouldBe listOf(Violation("isbn", "must be a valid ISBN-13"))
+            node.validate() shouldBe listOf(Violation("isbn", "must be a valid ISBN-13", "isbn13"))
         }
     }
 
@@ -197,7 +197,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid ISSN should report it`(issn: String) {
             val node = ValidationNode("issn", issn).apply { issn() }
 
-            node.validate() shouldBe listOf(Violation("issn", "must be a valid ISSN"))
+            node.validate() shouldBe listOf(Violation("issn", "must be a valid ISSN", "issn"))
         }
     }
 
@@ -217,7 +217,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid EAN should report it`(barcode: String) {
             val node = ValidationNode("barcode", barcode).apply { ean() }
 
-            node.validate() shouldBe listOf(Violation("barcode", "must be a valid EAN"))
+            node.validate() shouldBe listOf(Violation("barcode", "must be a valid EAN", "ean"))
         }
     }
 
@@ -237,7 +237,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid ISRC should report it`(isrc: String) {
             val node = ValidationNode("isrc", isrc).apply { isrc() }
 
-            node.validate() shouldBe listOf(Violation("isrc", "must be a valid ISRC"))
+            node.validate() shouldBe listOf(Violation("isrc", "must be a valid ISRC", "isrc"))
         }
     }
 
@@ -257,7 +257,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid IMEI should report it`(imei: String) {
             val node = ValidationNode("imei", imei).apply { imei() }
 
-            node.validate() shouldBe listOf(Violation("imei", "must be a valid IMEI"))
+            node.validate() shouldBe listOf(Violation("imei", "must be a valid IMEI", "imei"))
         }
     }
 
@@ -277,7 +277,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid Luhn number should report it`(number: String) {
             val node = ValidationNode("number", number).apply { luhn() }
 
-            node.validate() shouldBe listOf(Violation("number", "must have a valid Luhn check digit"))
+            node.validate() shouldBe listOf(Violation("number", "must have a valid Luhn check digit", "luhn"))
         }
     }
 
@@ -302,7 +302,7 @@ class IdentifierConstraintsTest {
         fun `given an invalid SHA-256 hash should report it`(checksum: String) {
             val node = ValidationNode("checksum", checksum).apply { hash(HashAlgorithm.SHA256) }
 
-            node.validate() shouldBe listOf(Violation("checksum", "must be a valid SHA256 hash"))
+            node.validate() shouldBe listOf(Violation("checksum", "must be a valid SHA256 hash", "hash"))
         }
 
         @Test
@@ -311,7 +311,7 @@ class IdentifierConstraintsTest {
                 hash(HashAlgorithm.MD5) { algorithm -> "$this is not $algorithm" }
             }
 
-            node.validate() shouldBe listOf(Violation("checksum", "abc is not MD5"))
+            node.validate() shouldBe listOf(Violation("checksum", "abc is not MD5", "hash"))
         }
     }
 }

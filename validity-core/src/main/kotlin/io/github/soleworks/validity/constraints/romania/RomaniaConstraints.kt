@@ -20,6 +20,7 @@ public fun ValidationNode<String>.cnp(
     message: String = messages.romania.cnp
 ): Unit = constraint(
     message = message,
+    code = "cnp",
     predicate = { CNP_FORMAT.matches(it) && (it.startsWith(UNCHECKED_PREFIX) || it.isCnp()) }
 )
 

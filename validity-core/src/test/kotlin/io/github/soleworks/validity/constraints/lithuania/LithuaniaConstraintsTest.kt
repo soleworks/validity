@@ -27,7 +27,7 @@ class LithuaniaConstraintsTest {
         ) {
             val node = ValidationNode("asmensKodas", value).apply { asmensKodas() }
 
-            node.validate() shouldBe listOf(Violation("asmensKodas", "must be a valid asmens kodas"))
+            node.validate() shouldBe listOf(Violation("asmensKodas", "must be a valid asmens kodas", "asmensKodas"))
         }
     }
 }

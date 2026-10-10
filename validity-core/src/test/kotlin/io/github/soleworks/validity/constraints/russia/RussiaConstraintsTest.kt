@@ -25,7 +25,7 @@ class RussiaConstraintsTest {
         fun `given an individual INN with wrong check digits or another length should report it`(value: String) {
             val node = ValidationNode("innIndividual", value).apply { innIndividual() }
 
-            node.validate() shouldBe listOf(Violation("innIndividual", "must be a valid individual INN"))
+            node.validate() shouldBe listOf(Violation("innIndividual", "must be a valid individual INN", "innIndividual"))
         }
     }
 
@@ -45,7 +45,7 @@ class RussiaConstraintsTest {
         fun `given a legal entity INN with a wrong check digit or another length should report it`(value: String) {
             val node = ValidationNode("innLegalEntity", value).apply { innLegalEntity() }
 
-            node.validate() shouldBe listOf(Violation("innLegalEntity", "must be a valid legal entity INN"))
+            node.validate() shouldBe listOf(Violation("innLegalEntity", "must be a valid legal entity INN", "innLegalEntity"))
         }
     }
 }

@@ -27,7 +27,7 @@ class SlovakiaConstraintsTest {
         ) {
             val node = ValidationNode("rodneCislo", value).apply { rodneCislo() }
 
-            node.validate() shouldBe listOf(Violation("rodneCislo", "must be a valid rodné číslo"))
+            node.validate() shouldBe listOf(Violation("rodneCislo", "must be a valid rodné číslo", "rodneCislo"))
         }
     }
 }

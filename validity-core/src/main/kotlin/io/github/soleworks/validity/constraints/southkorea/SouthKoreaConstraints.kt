@@ -24,6 +24,7 @@ public fun ValidationNode<String>.rrn(
     message: String = messages.southKorea.rrn
 ): Unit = constraint(
     message = message,
+    code = "rrn",
     predicate = { it.replace("-", "").let { value -> RRN_FORMAT.matches(value) && value.isRrn() } }
 )
 

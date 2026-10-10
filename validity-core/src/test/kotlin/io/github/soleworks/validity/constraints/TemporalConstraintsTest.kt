@@ -29,7 +29,7 @@ class TemporalConstraintsTest {
         fun `given a LocalDate in the future should report it`() {
             val node = ValidationNode("occurredAt", LocalDate.now().plusDays(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
@@ -43,14 +43,14 @@ class TemporalConstraintsTest {
         fun `given today as a LocalDate should report it`() {
             val node = ValidationNode("occurredAt", LocalDate.now()).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
         fun `given a LocalDateTime in the future should report it`() {
             val node = ValidationNode("occurredAt", LocalDateTime.now().plusHours(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
@@ -64,7 +64,7 @@ class TemporalConstraintsTest {
         fun `given a ZonedDateTime in the future should report it`() {
             val node = ValidationNode("occurredAt", ZonedDateTime.now().plusHours(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
@@ -78,7 +78,7 @@ class TemporalConstraintsTest {
         fun `given an OffsetDateTime in the future should report it`() {
             val node = ValidationNode("occurredAt", OffsetDateTime.now().plusHours(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
@@ -92,7 +92,7 @@ class TemporalConstraintsTest {
         fun `given an Instant in the future should report it`() {
             val node = ValidationNode("occurredAt", Instant.now().plusSeconds(3600)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
@@ -106,7 +106,7 @@ class TemporalConstraintsTest {
         fun `given a YearMonth in the future should report it`() {
             val node = ValidationNode("occurredAt", YearMonth.now().plusMonths(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
@@ -120,14 +120,14 @@ class TemporalConstraintsTest {
         fun `given the current month as a YearMonth should report it`() {
             val node = ValidationNode("occurredAt", YearMonth.now()).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
         fun `given a Year in the future should report it`() {
             val node = ValidationNode("occurredAt", Year.now().plusYears(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
@@ -141,14 +141,14 @@ class TemporalConstraintsTest {
         fun `given the current year as a Year should report it`() {
             val node = ValidationNode("occurredAt", Year.now()).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
         fun `given a Date in the future should report it`() {
             val node = ValidationNode("occurredAt", Date.from(Instant.now().plusSeconds(3600))).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past"))
+            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
 
         @Test
@@ -166,7 +166,7 @@ class TemporalConstraintsTest {
         fun `given a LocalDate in the past should report it`() {
             val node = ValidationNode("expiresAt", LocalDate.now().minusDays(1)).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
@@ -180,14 +180,14 @@ class TemporalConstraintsTest {
         fun `given today as a LocalDate should report it`() {
             val node = ValidationNode("expiresAt", LocalDate.now()).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
         fun `given a LocalDateTime in the past should report it`() {
             val node = ValidationNode("expiresAt", LocalDateTime.now().minusHours(1)).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
@@ -201,7 +201,7 @@ class TemporalConstraintsTest {
         fun `given a ZonedDateTime in the past should report it`() {
             val node = ValidationNode("expiresAt", ZonedDateTime.now().minusHours(1)).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
@@ -215,7 +215,7 @@ class TemporalConstraintsTest {
         fun `given an OffsetDateTime in the past should report it`() {
             val node = ValidationNode("expiresAt", OffsetDateTime.now().minusHours(1)).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
@@ -229,7 +229,7 @@ class TemporalConstraintsTest {
         fun `given an Instant in the past should report it`() {
             val node = ValidationNode("expiresAt", Instant.now().minusSeconds(3600)).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
@@ -243,7 +243,7 @@ class TemporalConstraintsTest {
         fun `given a YearMonth in the past should report it`() {
             val node = ValidationNode("expiresAt", YearMonth.now().minusMonths(1)).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
@@ -257,14 +257,14 @@ class TemporalConstraintsTest {
         fun `given the current month as a YearMonth should report it`() {
             val node = ValidationNode("expiresAt", YearMonth.now()).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
         fun `given a Year in the past should report it`() {
             val node = ValidationNode("expiresAt", Year.now().minusYears(1)).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
@@ -278,14 +278,14 @@ class TemporalConstraintsTest {
         fun `given the current year as a Year should report it`() {
             val node = ValidationNode("expiresAt", Year.now()).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
         fun `given a Date in the past should report it`() {
             val node = ValidationNode("expiresAt", Date.from(Instant.now().minusSeconds(3600))).apply { future() }
 
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future"))
+            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
         }
 
         @Test
@@ -303,7 +303,7 @@ class TemporalConstraintsTest {
         fun `given a LocalDate in the future should report it`() {
             val node = ValidationNode("issuedAt", LocalDate.now().plusDays(1)).apply { pastOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present"))
+            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
         }
 
         @Test
@@ -324,7 +324,7 @@ class TemporalConstraintsTest {
         fun `given a LocalDateTime in the future should report it`() {
             val node = ValidationNode("issuedAt", LocalDateTime.now().plusHours(1)).apply { pastOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present"))
+            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
         }
 
         @Test
@@ -338,7 +338,7 @@ class TemporalConstraintsTest {
         fun `given a ZonedDateTime in the future should report it`() {
             val node = ValidationNode("issuedAt", ZonedDateTime.now().plusHours(1)).apply { pastOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present"))
+            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
         }
 
         @Test
@@ -352,7 +352,7 @@ class TemporalConstraintsTest {
         fun `given an OffsetDateTime in the future should report it`() {
             val node = ValidationNode("issuedAt", OffsetDateTime.now().plusHours(1)).apply { pastOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present"))
+            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
         }
 
         @Test
@@ -366,7 +366,7 @@ class TemporalConstraintsTest {
         fun `given an Instant in the future should report it`() {
             val node = ValidationNode("issuedAt", Instant.now().plusSeconds(3600)).apply { pastOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present"))
+            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
         }
 
         @Test
@@ -380,7 +380,7 @@ class TemporalConstraintsTest {
         fun `given a YearMonth in the future should report it`() {
             val node = ValidationNode("issuedAt", YearMonth.now().plusMonths(1)).apply { pastOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present"))
+            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
         }
 
         @Test
@@ -401,7 +401,7 @@ class TemporalConstraintsTest {
         fun `given a Year in the future should report it`() {
             val node = ValidationNode("issuedAt", Year.now().plusYears(1)).apply { pastOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present"))
+            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
         }
 
         @Test
@@ -422,7 +422,7 @@ class TemporalConstraintsTest {
         fun `given a Date in the future should report it`() {
             val node = ValidationNode("issuedAt", Date.from(Instant.now().plusSeconds(3600))).apply { pastOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present"))
+            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
         }
 
         @Test
@@ -440,7 +440,7 @@ class TemporalConstraintsTest {
         fun `given a LocalDate in the past should report it`() {
             val node = ValidationNode("scheduledAt", LocalDate.now().minusDays(1)).apply { futureOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present"))
+            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
         }
 
         @Test
@@ -461,7 +461,7 @@ class TemporalConstraintsTest {
         fun `given a LocalDateTime in the past should report it`() {
             val node = ValidationNode("scheduledAt", LocalDateTime.now().minusHours(1)).apply { futureOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present"))
+            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
         }
 
         @Test
@@ -475,7 +475,7 @@ class TemporalConstraintsTest {
         fun `given a ZonedDateTime in the past should report it`() {
             val node = ValidationNode("scheduledAt", ZonedDateTime.now().minusHours(1)).apply { futureOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present"))
+            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
         }
 
         @Test
@@ -489,7 +489,7 @@ class TemporalConstraintsTest {
         fun `given an OffsetDateTime in the past should report it`() {
             val node = ValidationNode("scheduledAt", OffsetDateTime.now().minusHours(1)).apply { futureOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present"))
+            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
         }
 
         @Test
@@ -503,7 +503,7 @@ class TemporalConstraintsTest {
         fun `given an Instant in the past should report it`() {
             val node = ValidationNode("scheduledAt", Instant.now().minusSeconds(3600)).apply { futureOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present"))
+            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
         }
 
         @Test
@@ -517,7 +517,7 @@ class TemporalConstraintsTest {
         fun `given a YearMonth in the past should report it`() {
             val node = ValidationNode("scheduledAt", YearMonth.now().minusMonths(1)).apply { futureOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present"))
+            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
         }
 
         @Test
@@ -538,7 +538,7 @@ class TemporalConstraintsTest {
         fun `given a Year in the past should report it`() {
             val node = ValidationNode("scheduledAt", Year.now().minusYears(1)).apply { futureOrPresent() }
 
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present"))
+            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
         }
 
         @Test
@@ -561,7 +561,7 @@ class TemporalConstraintsTest {
                 futureOrPresent()
             }
 
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present"))
+            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
         }
 
         @Test
@@ -583,7 +583,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("endsAt", LocalDate.of(2026, 1, 10)).apply { after(reference) }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10", "after"))
         }
 
         @Test
@@ -612,7 +612,7 @@ class TemporalConstraintsTest {
                 after(reference) { other -> "$this is not after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10 is not after 2026-01-10"))
+            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10 is not after 2026-01-10", "after"))
         }
 
         @Test
@@ -621,7 +621,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("endsAt", LocalDateTime.of(2026, 1, 10, 10, 0)).apply { after(reference) }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00", "after"))
         }
 
         @Test
@@ -650,7 +650,7 @@ class TemporalConstraintsTest {
                 after(reference) { other -> "$this is not after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10T10:00 is not after 2026-01-10T10:00"))
+            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10T10:00 is not after 2026-01-10T10:00", "after"))
         }
 
         @Test
@@ -659,7 +659,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("endsAt", LocalTime.of(10, 0)).apply { after(reference) }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 10:00"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 10:00", "after"))
         }
 
         @Test
@@ -688,7 +688,7 @@ class TemporalConstraintsTest {
                 after(reference) { other -> "$this is not after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "10:00 is not after 10:00"))
+            node.validate() shouldBe listOf(Violation("endsAt", "10:00 is not after 10:00", "after"))
         }
 
         @Test
@@ -697,7 +697,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("endsAt", OffsetTime.of(10, 0, 0, 0, UTC)).apply { after(reference) }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 10:00Z"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 10:00Z", "after"))
         }
 
         @Test
@@ -726,7 +726,7 @@ class TemporalConstraintsTest {
                 after(reference) { other -> "$this is not after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "10:00Z is not after 10:00Z"))
+            node.validate() shouldBe listOf(Violation("endsAt", "10:00Z is not after 10:00Z", "after"))
         }
 
         @Test
@@ -737,7 +737,7 @@ class TemporalConstraintsTest {
                 after(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00Z", "after"))
         }
 
         @Test
@@ -770,7 +770,7 @@ class TemporalConstraintsTest {
                 after(reference) { other -> "$this is not after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10T10:00Z is not after 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10T10:00Z is not after 2026-01-10T10:00Z", "after"))
         }
 
         @Test
@@ -781,7 +781,7 @@ class TemporalConstraintsTest {
                 after(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00Z", "after"))
         }
 
         @Test
@@ -814,7 +814,7 @@ class TemporalConstraintsTest {
                 after(reference) { other -> "$this is not after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10T10:00Z is not after 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10T10:00Z is not after 2026-01-10T10:00Z", "after"))
         }
 
         @Test
@@ -823,7 +823,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("endsAt", Instant.parse("2026-01-10T10:00:00Z")).apply { after(reference) }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00:00Z"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00:00Z", "after"))
         }
 
         @Test
@@ -853,7 +853,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("endsAt", "2026-01-10T10:00:00Z is not after 2026-01-10T10:00:00Z")
+                Violation("endsAt", "2026-01-10T10:00:00Z is not after 2026-01-10T10:00:00Z", "after")
             )
         }
 
@@ -863,7 +863,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("endsAt", YearMonth.of(2026, 10)).apply { after(reference) }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-10"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-10", "after"))
         }
 
         @Test
@@ -892,7 +892,7 @@ class TemporalConstraintsTest {
                 after(reference) { other -> "$this is not after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-10 is not after 2026-10"))
+            node.validate() shouldBe listOf(Violation("endsAt", "2026-10 is not after 2026-10", "after"))
         }
 
         @Test
@@ -901,7 +901,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("endsAt", Year.of(2024)).apply { after(reference) }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2024"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2024", "after"))
         }
 
         @Test
@@ -930,7 +930,7 @@ class TemporalConstraintsTest {
                 after(reference) { other -> "$this is not after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "2024 is not after 2024"))
+            node.validate() shouldBe listOf(Violation("endsAt", "2024 is not after 2024", "after"))
         }
 
         @Test
@@ -941,7 +941,7 @@ class TemporalConstraintsTest {
                 after(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after $reference"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after $reference", "after"))
         }
 
         @Test
@@ -975,7 +975,7 @@ class TemporalConstraintsTest {
                 after(reference) { other -> "$this is not after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "$value is not after $reference"))
+            node.validate() shouldBe listOf(Violation("endsAt", "$value is not after $reference", "after"))
         }
 
         @Test
@@ -985,7 +985,7 @@ class TemporalConstraintsTest {
             val node = ValidationNode("endsAt", reference.withZoneSameInstant(UTC)).apply { after(reference) }
 
             node.validate() shouldBe listOf(
-                Violation("endsAt", "must be after 2026-01-10T07:00-03:00[America/Sao_Paulo]")
+                Violation("endsAt", "must be after 2026-01-10T07:00-03:00[America/Sao_Paulo]", "after")
             )
         }
 
@@ -995,7 +995,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("endsAt", reference.withOffsetSameInstant(UTC)).apply { after(reference) }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T07:00-03:00"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T07:00-03:00", "after"))
         }
 
         @Test
@@ -1004,7 +1004,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("endsAt", reference.withOffsetSameInstant(UTC)).apply { after(reference) }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 07:00-03:00"))
+            node.validate() shouldBe listOf(Violation("endsAt", "must be after 07:00-03:00", "after"))
         }
     }
 
@@ -1017,7 +1017,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("startsAt", LocalDate.of(2026, 1, 10)).apply { before(reference) }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10", "before"))
         }
 
         @Test
@@ -1046,7 +1046,7 @@ class TemporalConstraintsTest {
                 before(reference) { other -> "$this is not before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10 is not before 2026-01-10"))
+            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10 is not before 2026-01-10", "before"))
         }
 
         @Test
@@ -1055,7 +1055,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("startsAt", LocalDateTime.of(2026, 1, 10, 10, 0)).apply { before(reference) }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00", "before"))
         }
 
         @Test
@@ -1084,7 +1084,7 @@ class TemporalConstraintsTest {
                 before(reference) { other -> "$this is not before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10T10:00 is not before 2026-01-10T10:00"))
+            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10T10:00 is not before 2026-01-10T10:00", "before"))
         }
 
         @Test
@@ -1093,7 +1093,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("startsAt", LocalTime.of(10, 0)).apply { before(reference) }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 10:00"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 10:00", "before"))
         }
 
         @Test
@@ -1122,7 +1122,7 @@ class TemporalConstraintsTest {
                 before(reference) { other -> "$this is not before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "10:00 is not before 10:00"))
+            node.validate() shouldBe listOf(Violation("startsAt", "10:00 is not before 10:00", "before"))
         }
 
         @Test
@@ -1131,7 +1131,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("startsAt", OffsetTime.of(10, 0, 0, 0, UTC)).apply { before(reference) }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 10:00Z"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 10:00Z", "before"))
         }
 
         @Test
@@ -1160,7 +1160,7 @@ class TemporalConstraintsTest {
                 before(reference) { other -> "$this is not before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "10:00Z is not before 10:00Z"))
+            node.validate() shouldBe listOf(Violation("startsAt", "10:00Z is not before 10:00Z", "before"))
         }
 
         @Test
@@ -1171,7 +1171,7 @@ class TemporalConstraintsTest {
                 before(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00Z", "before"))
         }
 
         @Test
@@ -1204,7 +1204,7 @@ class TemporalConstraintsTest {
                 before(reference) { other -> "$this is not before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10T10:00Z is not before 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10T10:00Z is not before 2026-01-10T10:00Z", "before"))
         }
 
         @Test
@@ -1215,7 +1215,7 @@ class TemporalConstraintsTest {
                 before(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00Z", "before"))
         }
 
         @Test
@@ -1248,7 +1248,7 @@ class TemporalConstraintsTest {
                 before(reference) { other -> "$this is not before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10T10:00Z is not before 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10T10:00Z is not before 2026-01-10T10:00Z", "before"))
         }
 
         @Test
@@ -1257,7 +1257,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("startsAt", Instant.parse("2026-01-10T10:00:00Z")).apply { before(reference) }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00:00Z"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00:00Z", "before"))
         }
 
         @Test
@@ -1287,7 +1287,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("startsAt", "2026-01-10T10:00:00Z is not before 2026-01-10T10:00:00Z")
+                Violation("startsAt", "2026-01-10T10:00:00Z is not before 2026-01-10T10:00:00Z", "before")
             )
         }
 
@@ -1297,7 +1297,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("startsAt", YearMonth.of(2026, 10)).apply { before(reference) }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-10"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-10", "before"))
         }
 
         @Test
@@ -1326,7 +1326,7 @@ class TemporalConstraintsTest {
                 before(reference) { other -> "$this is not before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-10 is not before 2026-10"))
+            node.validate() shouldBe listOf(Violation("startsAt", "2026-10 is not before 2026-10", "before"))
         }
 
         @Test
@@ -1335,7 +1335,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("startsAt", Year.of(2024)).apply { before(reference) }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2024"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2024", "before"))
         }
 
         @Test
@@ -1364,7 +1364,7 @@ class TemporalConstraintsTest {
                 before(reference) { other -> "$this is not before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "2024 is not before 2024"))
+            node.validate() shouldBe listOf(Violation("startsAt", "2024 is not before 2024", "before"))
         }
 
         @Test
@@ -1375,7 +1375,7 @@ class TemporalConstraintsTest {
                 before(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before $reference"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before $reference", "before"))
         }
 
         @Test
@@ -1409,7 +1409,7 @@ class TemporalConstraintsTest {
                 before(reference) { other -> "$this is not before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "$value is not before $reference"))
+            node.validate() shouldBe listOf(Violation("startsAt", "$value is not before $reference", "before"))
         }
 
         @Test
@@ -1419,7 +1419,7 @@ class TemporalConstraintsTest {
             val node = ValidationNode("startsAt", reference.withZoneSameInstant(UTC)).apply { before(reference) }
 
             node.validate() shouldBe listOf(
-                Violation("startsAt", "must be before 2026-01-10T07:00-03:00[America/Sao_Paulo]")
+                Violation("startsAt", "must be before 2026-01-10T07:00-03:00[America/Sao_Paulo]", "before")
             )
         }
 
@@ -1429,7 +1429,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("startsAt", reference.withOffsetSameInstant(UTC)).apply { before(reference) }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T07:00-03:00"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T07:00-03:00", "before"))
         }
 
         @Test
@@ -1438,7 +1438,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("startsAt", reference.withOffsetSameInstant(UTC)).apply { before(reference) }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 07:00-03:00"))
+            node.validate() shouldBe listOf(Violation("startsAt", "must be before 07:00-03:00", "before"))
         }
     }
 
@@ -1451,7 +1451,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkOut", LocalDate.of(2026, 1, 9)).apply { afterOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10", "afterOrEqual"))
         }
 
         @Test
@@ -1480,7 +1480,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-09 is before 2026-01-10"))
+            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-09 is before 2026-01-10", "afterOrEqual"))
         }
 
         @Test
@@ -1489,7 +1489,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkOut", LocalDateTime.of(2026, 1, 10, 9, 0)).apply { afterOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00", "afterOrEqual"))
         }
 
         @Test
@@ -1520,7 +1520,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-10T09:00 is before 2026-01-10T10:00"))
+            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-10T09:00 is before 2026-01-10T10:00", "afterOrEqual"))
         }
 
         @Test
@@ -1529,7 +1529,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkOut", LocalTime.of(9, 0)).apply { afterOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 10:00"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 10:00", "afterOrEqual"))
         }
 
         @Test
@@ -1558,7 +1558,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "09:00 is before 10:00"))
+            node.validate() shouldBe listOf(Violation("checkOut", "09:00 is before 10:00", "afterOrEqual"))
         }
 
         @Test
@@ -1567,7 +1567,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkOut", OffsetTime.of(9, 0, 0, 0, UTC)).apply { afterOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 10:00Z", "afterOrEqual"))
         }
 
         @Test
@@ -1596,7 +1596,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "09:00Z is before 10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkOut", "09:00Z is before 10:00Z", "afterOrEqual"))
         }
 
         @Test
@@ -1607,7 +1607,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00Z", "afterOrEqual"))
         }
 
         @Test
@@ -1640,7 +1640,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-10T09:00Z is before 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-10T09:00Z is before 2026-01-10T10:00Z", "afterOrEqual"))
         }
 
         @Test
@@ -1651,7 +1651,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00Z", "afterOrEqual"))
         }
 
         @Test
@@ -1684,7 +1684,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-10T09:00Z is before 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-10T09:00Z is before 2026-01-10T10:00Z", "afterOrEqual"))
         }
 
         @Test
@@ -1695,7 +1695,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00:00Z"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00:00Z", "afterOrEqual"))
         }
 
         @Test
@@ -1729,7 +1729,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("checkOut", "2026-01-10T09:00:00Z is before 2026-01-10T10:00:00Z")
+                Violation("checkOut", "2026-01-10T09:00:00Z is before 2026-01-10T10:00:00Z", "afterOrEqual")
             )
         }
 
@@ -1739,7 +1739,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkOut", YearMonth.of(2026, 9)).apply { afterOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-10"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-10", "afterOrEqual"))
         }
 
         @Test
@@ -1768,7 +1768,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-09 is before 2026-10"))
+            node.validate() shouldBe listOf(Violation("checkOut", "2026-09 is before 2026-10", "afterOrEqual"))
         }
 
         @Test
@@ -1777,7 +1777,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkOut", Year.of(2023)).apply { afterOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2024"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2024", "afterOrEqual"))
         }
 
         @Test
@@ -1806,7 +1806,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "2023 is before 2024"))
+            node.validate() shouldBe listOf(Violation("checkOut", "2023 is before 2024", "afterOrEqual"))
         }
 
         @Test
@@ -1817,7 +1817,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to $reference"))
+            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to $reference", "afterOrEqual"))
         }
 
         @Test
@@ -1851,7 +1851,7 @@ class TemporalConstraintsTest {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "$value is before $reference"))
+            node.validate() shouldBe listOf(Violation("checkOut", "$value is before $reference", "afterOrEqual"))
         }
     }
 
@@ -1864,7 +1864,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkIn", LocalDate.of(2026, 1, 11)).apply { beforeOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10", "beforeOrEqual"))
         }
 
         @Test
@@ -1893,7 +1893,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-11 is after 2026-01-10"))
+            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-11 is after 2026-01-10", "beforeOrEqual"))
         }
 
         @Test
@@ -1904,7 +1904,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00", "beforeOrEqual"))
         }
 
         @Test
@@ -1937,7 +1937,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00 is after 2026-01-10T10:00"))
+            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00 is after 2026-01-10T10:00", "beforeOrEqual"))
         }
 
         @Test
@@ -1946,7 +1946,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkIn", LocalTime.of(11, 0)).apply { beforeOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 10:00"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 10:00", "beforeOrEqual"))
         }
 
         @Test
@@ -1975,7 +1975,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "11:00 is after 10:00"))
+            node.validate() shouldBe listOf(Violation("checkIn", "11:00 is after 10:00", "beforeOrEqual"))
         }
 
         @Test
@@ -1984,7 +1984,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkIn", OffsetTime.of(11, 0, 0, 0, UTC)).apply { beforeOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 10:00Z", "beforeOrEqual"))
         }
 
         @Test
@@ -2013,7 +2013,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "11:00Z is after 10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkIn", "11:00Z is after 10:00Z", "beforeOrEqual"))
         }
 
         @Test
@@ -2024,7 +2024,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00Z", "beforeOrEqual"))
         }
 
         @Test
@@ -2057,7 +2057,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00Z is after 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00Z is after 2026-01-10T10:00Z", "beforeOrEqual"))
         }
 
         @Test
@@ -2068,7 +2068,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00Z", "beforeOrEqual"))
         }
 
         @Test
@@ -2101,7 +2101,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00Z is after 2026-01-10T10:00Z"))
+            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00Z is after 2026-01-10T10:00Z", "beforeOrEqual"))
         }
 
         @Test
@@ -2112,7 +2112,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00:00Z"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00:00Z", "beforeOrEqual"))
         }
 
         @Test
@@ -2145,7 +2145,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00:00Z is after 2026-01-10T10:00:00Z"))
+            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00:00Z is after 2026-01-10T10:00:00Z", "beforeOrEqual"))
         }
 
         @Test
@@ -2154,7 +2154,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkIn", YearMonth.of(2026, 11)).apply { beforeOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-10"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-10", "beforeOrEqual"))
         }
 
         @Test
@@ -2183,7 +2183,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-11 is after 2026-10"))
+            node.validate() shouldBe listOf(Violation("checkIn", "2026-11 is after 2026-10", "beforeOrEqual"))
         }
 
         @Test
@@ -2192,7 +2192,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("checkIn", Year.of(2025)).apply { beforeOrEqual(reference) }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2024"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2024", "beforeOrEqual"))
         }
 
         @Test
@@ -2221,7 +2221,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "2025 is after 2024"))
+            node.validate() shouldBe listOf(Violation("checkIn", "2025 is after 2024", "beforeOrEqual"))
         }
 
         @Test
@@ -2232,7 +2232,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to $reference"))
+            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to $reference", "beforeOrEqual"))
         }
 
         @Test
@@ -2266,7 +2266,7 @@ class TemporalConstraintsTest {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "$value is after $reference"))
+            node.validate() shouldBe listOf(Violation("checkIn", "$value is after $reference", "beforeOrEqual"))
         }
     }
 
@@ -2279,7 +2279,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("timeout", Duration.ofMinutes(9)).apply { min(minimum) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be at least PT10M"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be at least PT10M", "min"))
         }
 
         @Test
@@ -2308,7 +2308,7 @@ class TemporalConstraintsTest {
                 min(minimum) { min -> "$this is below $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT9M is below PT10M"))
+            node.validate() shouldBe listOf(Violation("timeout", "PT9M is below PT10M", "min"))
         }
     }
 
@@ -2321,7 +2321,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("timeout", Duration.ofMinutes(11)).apply { max(maximum) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be at most PT10M"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be at most PT10M", "max"))
         }
 
         @Test
@@ -2350,7 +2350,7 @@ class TemporalConstraintsTest {
                 max(maximum) { max -> "$this is above $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT11M is above PT10M"))
+            node.validate() shouldBe listOf(Violation("timeout", "PT11M is above PT10M", "max"))
         }
     }
 
@@ -2363,7 +2363,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply { greaterThan(reference) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be greater than PT10M"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be greater than PT10M", "greaterThan"))
         }
 
         @Test
@@ -2392,7 +2392,7 @@ class TemporalConstraintsTest {
                 greaterThan(reference) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT10M is not greater than PT10M"))
+            node.validate() shouldBe listOf(Violation("timeout", "PT10M is not greater than PT10M", "greaterThan"))
         }
     }
 
@@ -2405,7 +2405,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply { lessThan(reference) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be less than PT10M"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be less than PT10M", "lessThan"))
         }
 
         @Test
@@ -2434,7 +2434,7 @@ class TemporalConstraintsTest {
                 lessThan(reference) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT10M is not less than PT10M"))
+            node.validate() shouldBe listOf(Violation("timeout", "PT10M is not less than PT10M", "lessThan"))
         }
     }
 
@@ -2448,7 +2448,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", LocalDate.of(2026, 1, 8)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-01-09 and 2026-01-11"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-01-09 and 2026-01-11", "between"))
         }
 
         @Test
@@ -2458,7 +2458,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", LocalDate.of(2026, 1, 12)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-01-09 and 2026-01-11"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-01-09 and 2026-01-11", "between"))
         }
 
         @Test
@@ -2510,7 +2510,7 @@ class TemporalConstraintsTest {
                 between(start, end) { from, to -> "$this is not from $from to $to" }
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "2026-01-12 is not from 2026-01-09 to 2026-01-11"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "2026-01-12 is not from 2026-01-09 to 2026-01-11", "between"))
         }
 
         @Test
@@ -2521,7 +2521,7 @@ class TemporalConstraintsTest {
             val node = ValidationNode("arrivedAt", LocalDateTime.of(2026, 1, 10, 8, 0)).apply { between(start, end) }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00 and 2026-01-10T11:00")
+                Violation("arrivedAt", "must be between 2026-01-10T09:00 and 2026-01-10T11:00", "between")
             )
         }
 
@@ -2533,7 +2533,7 @@ class TemporalConstraintsTest {
             val node = ValidationNode("arrivedAt", LocalDateTime.of(2026, 1, 10, 12, 0)).apply { between(start, end) }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00 and 2026-01-10T11:00")
+                Violation("arrivedAt", "must be between 2026-01-10T09:00 and 2026-01-10T11:00", "between")
             )
         }
 
@@ -2587,7 +2587,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "2026-01-10T12:00 is not from 2026-01-10T09:00 to 2026-01-10T11:00")
+                Violation("arrivedAt", "2026-01-10T12:00 is not from 2026-01-10T09:00 to 2026-01-10T11:00", "between")
             )
         }
 
@@ -2598,7 +2598,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", LocalTime.of(8, 0)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00 and 11:00"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00 and 11:00", "between"))
         }
 
         @Test
@@ -2608,7 +2608,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", LocalTime.of(12, 0)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00 and 11:00"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00 and 11:00", "between"))
         }
 
         @Test
@@ -2660,7 +2660,7 @@ class TemporalConstraintsTest {
                 between(start, end) { from, to -> "$this is not from $from to $to" }
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "12:00 is not from 09:00 to 11:00"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "12:00 is not from 09:00 to 11:00", "between"))
         }
 
         @Test
@@ -2670,7 +2670,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", OffsetTime.of(8, 0, 0, 0, UTC)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00Z and 11:00Z"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00Z and 11:00Z", "between"))
         }
 
         @Test
@@ -2680,7 +2680,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", OffsetTime.of(12, 0, 0, 0, UTC)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00Z and 11:00Z"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00Z and 11:00Z", "between"))
         }
 
         @Test
@@ -2732,7 +2732,7 @@ class TemporalConstraintsTest {
                 between(start, end) { from, to -> "$this is not from $from to $to" }
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "12:00Z is not from 09:00Z to 11:00Z"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "12:00Z is not from 09:00Z to 11:00Z", "between"))
         }
 
         @Test
@@ -2745,7 +2745,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z")
+                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z", "between")
             )
         }
 
@@ -2759,7 +2759,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z")
+                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z", "between")
             )
         }
 
@@ -2821,7 +2821,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "2026-01-10T12:00Z is not from 2026-01-10T09:00Z to 2026-01-10T11:00Z")
+                Violation("arrivedAt", "2026-01-10T12:00Z is not from 2026-01-10T09:00Z to 2026-01-10T11:00Z", "between")
             )
         }
 
@@ -2835,7 +2835,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z")
+                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z", "between")
             )
         }
 
@@ -2849,7 +2849,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z")
+                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z", "between")
             )
         }
 
@@ -2911,7 +2911,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "2026-01-10T12:00Z is not from 2026-01-10T09:00Z to 2026-01-10T11:00Z")
+                Violation("arrivedAt", "2026-01-10T12:00Z is not from 2026-01-10T09:00Z to 2026-01-10T11:00Z", "between")
             )
         }
 
@@ -2923,7 +2923,7 @@ class TemporalConstraintsTest {
             val node = ValidationNode("arrivedAt", Instant.parse("2026-01-10T08:00:00Z")).apply { between(start, end) }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00:00Z and 2026-01-10T11:00:00Z")
+                Violation("arrivedAt", "must be between 2026-01-10T09:00:00Z and 2026-01-10T11:00:00Z", "between")
             )
         }
 
@@ -2935,7 +2935,7 @@ class TemporalConstraintsTest {
             val node = ValidationNode("arrivedAt", Instant.parse("2026-01-10T12:00:00Z")).apply { between(start, end) }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00:00Z and 2026-01-10T11:00:00Z")
+                Violation("arrivedAt", "must be between 2026-01-10T09:00:00Z and 2026-01-10T11:00:00Z", "between")
             )
         }
 
@@ -2989,7 +2989,7 @@ class TemporalConstraintsTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("arrivedAt", "2026-01-10T12:00:00Z is not from 2026-01-10T09:00:00Z to 2026-01-10T11:00:00Z")
+                Violation("arrivedAt", "2026-01-10T12:00:00Z is not from 2026-01-10T09:00:00Z to 2026-01-10T11:00:00Z", "between")
             )
         }
 
@@ -3000,7 +3000,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", YearMonth.of(2026, 8)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-09 and 2026-11"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-09 and 2026-11", "between"))
         }
 
         @Test
@@ -3010,7 +3010,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", YearMonth.of(2026, 12)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-09 and 2026-11"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-09 and 2026-11", "between"))
         }
 
         @Test
@@ -3062,7 +3062,7 @@ class TemporalConstraintsTest {
                 between(start, end) { from, to -> "$this is not from $from to $to" }
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "2026-12 is not from 2026-09 to 2026-11"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "2026-12 is not from 2026-09 to 2026-11", "between"))
         }
 
         @Test
@@ -3072,7 +3072,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", Year.of(2022)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2023 and 2025"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2023 and 2025", "between"))
         }
 
         @Test
@@ -3082,7 +3082,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("arrivedAt", Year.of(2026)).apply { between(start, end) }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2023 and 2025"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2023 and 2025", "between"))
         }
 
         @Test
@@ -3134,7 +3134,7 @@ class TemporalConstraintsTest {
                 between(start, end) { from, to -> "$this is not from $from to $to" }
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "2026 is not from 2023 to 2025"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "2026 is not from 2023 to 2025", "between"))
         }
 
         @Test
@@ -3146,7 +3146,7 @@ class TemporalConstraintsTest {
                 between(start, end)
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between $start and $end"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between $start and $end", "between"))
         }
 
         @Test
@@ -3158,7 +3158,7 @@ class TemporalConstraintsTest {
                 between(start, end)
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between $start and $end"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between $start and $end", "between"))
         }
 
         @Test
@@ -3219,7 +3219,7 @@ class TemporalConstraintsTest {
                 between(start, end) { from, to -> "$this is not from $from to $to" }
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "$value is not from $start to $end"))
+            node.validate() shouldBe listOf(Violation("arrivedAt", "$value is not from $start to $end", "between"))
         }
 
         @Test
@@ -3229,7 +3229,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("timeout", Duration.ofMinutes(8)).apply { between(min, max) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be between PT9M and PT11M"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be between PT9M and PT11M", "between"))
         }
 
         @Test
@@ -3239,7 +3239,7 @@ class TemporalConstraintsTest {
 
             val node = ValidationNode("timeout", Duration.ofMinutes(12)).apply { between(min, max) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be between PT9M and PT11M"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be between PT9M and PT11M", "between"))
         }
 
         @Test
@@ -3291,7 +3291,7 @@ class TemporalConstraintsTest {
                 between(min, max) { from, to -> "$this is not from $from to $to" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT12M is not from PT9M to PT11M"))
+            node.validate() shouldBe listOf(Violation("timeout", "PT12M is not from PT9M to PT11M", "between"))
         }
     }
 }

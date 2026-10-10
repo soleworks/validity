@@ -25,7 +25,7 @@ class UnitedStatesConstraintsTest {
         fun `given an invalid EIN should report it`(value: String) {
             val node = ValidationNode("ein", value).apply { ein() }
 
-            node.validate() shouldBe listOf(Violation("ein", "must be a valid EIN"))
+            node.validate() shouldBe listOf(Violation("ein", "must be a valid EIN", "ein"))
         }
     }
 }

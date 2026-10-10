@@ -39,7 +39,7 @@ class SwedenConstraintsTest {
         fun `given an invalid personnummer should report it`(value: String) {
             val node = ValidationNode("personnummer", value).apply { personnummer() }
 
-            node.validate() shouldBe listOf(Violation("personnummer", "must be a valid personnummer"))
+            node.validate() shouldBe listOf(Violation("personnummer", "must be a valid personnummer", "personnummer"))
         }
     }
 
@@ -59,7 +59,7 @@ class SwedenConstraintsTest {
         fun `given an invalid samordningsnummer should report it`(value: String) {
             val node = ValidationNode("samordningsnummer", value).apply { samordningsnummer() }
 
-            node.validate() shouldBe listOf(Violation("samordningsnummer", "must be a valid samordningsnummer"))
+            node.validate() shouldBe listOf(Violation("samordningsnummer", "must be a valid samordningsnummer", "samordningsnummer"))
         }
     }
 }

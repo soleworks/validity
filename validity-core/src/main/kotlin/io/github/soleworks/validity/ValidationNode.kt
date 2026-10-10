@@ -8,13 +8,22 @@ public class ValidationNode<V>(
     private val constraints = mutableListOf<Constraint<V>>()
     private val nodes = mutableListOf<ValidationNode<*>>()
 
-    public fun constraint(message: String, predicate: (V) -> Boolean): Unit = constraint(
+    public fun constraint(
+        message: String,
+        code: String = "",
+        predicate: (V) -> Boolean
+    ): Unit = constraint(
         message = { message },
+        code = code,
         predicate = predicate
     )
 
-    public fun constraint(message: (V) -> String, predicate: (V) -> Boolean) {
-        constraints += Constraint(message, predicate)
+    public fun constraint(
+        message: (V) -> String,
+        code: String = "",
+        predicate: (V) -> Boolean
+    ) {
+        constraints += Constraint(message, code, predicate)
     }
 
     internal fun add(node: ValidationNode<*>) {

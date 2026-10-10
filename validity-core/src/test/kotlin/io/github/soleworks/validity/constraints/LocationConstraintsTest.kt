@@ -26,7 +26,7 @@ class LocationConstraintsTest {
         fun `given an invalid country code should report it`(country: String) {
             val node = ValidationNode("country", country).apply { isoCountryCode() }
 
-            node.validate() shouldBe listOf(Violation("country", "must be a valid ISO 3166-1 alpha-2 country code"))
+            node.validate() shouldBe listOf(Violation("country", "must be a valid ISO 3166-1 alpha-2 country code", "isoCountryCode"))
         }
     }
 
@@ -46,7 +46,7 @@ class LocationConstraintsTest {
         fun `given an invalid country code should report it`(country: String) {
             val node = ValidationNode("country", country).apply { isoCountryCodeAlpha3() }
 
-            node.validate() shouldBe listOf(Violation("country", "must be a valid ISO 3166-1 alpha-3 country code"))
+            node.validate() shouldBe listOf(Violation("country", "must be a valid ISO 3166-1 alpha-3 country code", "isoCountryCodeAlpha3"))
         }
     }
 
@@ -66,7 +66,7 @@ class LocationConstraintsTest {
         fun `given an invalid language code should report it`(language: String) {
             val node = ValidationNode("language", language).apply { languageCode() }
 
-            node.validate() shouldBe listOf(Violation("language", "must be a valid ISO 639-1 language code"))
+            node.validate() shouldBe listOf(Violation("language", "must be a valid ISO 639-1 language code", "languageCode"))
         }
     }
 
@@ -86,7 +86,7 @@ class LocationConstraintsTest {
         fun `given an invalid locale should report it`(locale: String) {
             val node = ValidationNode("locale", locale).apply { locale() }
 
-            node.validate() shouldBe listOf(Violation("locale", "must be a valid locale"))
+            node.validate() shouldBe listOf(Violation("locale", "must be a valid locale", "locale"))
         }
     }
 
@@ -106,7 +106,7 @@ class LocationConstraintsTest {
         fun `given an invalid time zone should report it`(timeZone: String) {
             val node = ValidationNode("timeZone", timeZone).apply { timeZone() }
 
-            node.validate() shouldBe listOf(Violation("timeZone", "must be a valid time zone"))
+            node.validate() shouldBe listOf(Violation("timeZone", "must be a valid time zone", "timeZone"))
         }
     }
 
@@ -126,7 +126,7 @@ class LocationConstraintsTest {
         fun `given an invalid latitude as Double should report it`(latitude: Double) {
             val node = ValidationNode("latitude", latitude).apply { latitude() }
 
-            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude"))
+            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude", "latitude"))
         }
 
         @ParameterizedTest
@@ -142,7 +142,7 @@ class LocationConstraintsTest {
         fun `given an invalid latitude as Float should report it`(latitude: Float) {
             val node = ValidationNode("latitude", latitude).apply { latitude() }
 
-            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude"))
+            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude", "latitude"))
         }
 
         @ParameterizedTest
@@ -158,7 +158,7 @@ class LocationConstraintsTest {
         fun `given an invalid latitude as BigDecimal should report it`(latitude: String) {
             val node = ValidationNode("latitude", BigDecimal(latitude)).apply { latitude() }
 
-            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude"))
+            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude", "latitude"))
         }
 
         @ParameterizedTest
@@ -174,7 +174,7 @@ class LocationConstraintsTest {
         fun `given an invalid latitude as String should report it`(latitude: String) {
             val node = ValidationNode("latitude", latitude).apply { latitude() }
 
-            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude"))
+            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude", "latitude"))
         }
     }
 
@@ -194,7 +194,7 @@ class LocationConstraintsTest {
         fun `given an invalid longitude as Double should report it`(longitude: Double) {
             val node = ValidationNode("longitude", longitude).apply { longitude() }
 
-            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude"))
+            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude", "longitude"))
         }
 
         @ParameterizedTest
@@ -210,7 +210,7 @@ class LocationConstraintsTest {
         fun `given an invalid longitude as Float should report it`(longitude: Float) {
             val node = ValidationNode("longitude", longitude).apply { longitude() }
 
-            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude"))
+            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude", "longitude"))
         }
 
         @ParameterizedTest
@@ -226,7 +226,7 @@ class LocationConstraintsTest {
         fun `given an invalid longitude as BigDecimal should report it`(longitude: String) {
             val node = ValidationNode("longitude", BigDecimal(longitude)).apply { longitude() }
 
-            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude"))
+            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude", "longitude"))
         }
 
         @ParameterizedTest
@@ -242,7 +242,7 @@ class LocationConstraintsTest {
         fun `given an invalid longitude as String should report it`(longitude: String) {
             val node = ValidationNode("longitude", longitude).apply { longitude() }
 
-            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude"))
+            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude", "longitude"))
         }
     }
 }

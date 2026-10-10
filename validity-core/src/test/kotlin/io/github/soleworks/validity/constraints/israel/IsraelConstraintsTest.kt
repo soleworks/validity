@@ -25,7 +25,7 @@ class IsraelConstraintsTest {
         fun `given an invalid teudat zehut should report it`(value: String) {
             val node = ValidationNode("teudatZehut", value).apply { teudatZehut() }
 
-            node.validate() shouldBe listOf(Violation("teudatZehut", "must be a valid teudat zehut"))
+            node.validate() shouldBe listOf(Violation("teudatZehut", "must be a valid teudat zehut", "teudatZehut"))
         }
     }
 }

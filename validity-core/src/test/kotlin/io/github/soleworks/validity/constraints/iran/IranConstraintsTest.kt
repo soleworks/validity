@@ -25,7 +25,7 @@ class IranConstraintsTest {
         fun `given an invalid national identity code should report it`(value: String) {
             val node = ValidationNode("codeMelli", value).apply { codeMelli() }
 
-            node.validate() shouldBe listOf(Violation("codeMelli", "must be a valid national identity code"))
+            node.validate() shouldBe listOf(Violation("codeMelli", "must be a valid national identity code", "codeMelli"))
         }
     }
 }
