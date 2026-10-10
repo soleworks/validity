@@ -219,5 +219,6 @@ public fun ValidationNode<String>.postalCode(
 ): Unit = constraint(
     message = { it.message(country) },
     code = "postalCode",
+    skipped = POSTAL_CODES[country?.uppercase()] == null,
     predicate = { POSTAL_CODES[country?.uppercase()]?.matches(it) ?: true }
 )

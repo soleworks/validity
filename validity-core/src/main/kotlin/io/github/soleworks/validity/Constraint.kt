@@ -1,20 +1,16 @@
 package io.github.soleworks.validity
 
+private val MESSAGE_PLACEHOLDERS = Regex("\\{path}|\\{value}")
+
 internal class Constraint<V>(
-    private val message: (V) -> String,
-    private val code: String,
-    private val predicate: (V) -> Boolean
+    private val check: (path: String, value: V) -> Violation?
 ) {
-    fun validate(path: String, value: V): List<Violation> = if (predicate(value))
-        emptyList()
-    else
-        listOf(
-            Violation(
-                path = path,
-                message = message(value)
-                    .replace("{path}", path)
-                    .replace("{value}", "$value"),
-                code = code
-            )
-        )
+    fun validate(path: String, value: V): List<Violation> = listOfNotNull(
+        check(path, value)?.let { it.copy(message = it.message.filled(path, value)) }
+    )
 }
+
+private fun String.filled(
+    path: String,
+    value: Any?
+): String = MESSAGE_PLACEHOLDERS.replace(this) { if (it.value == "{path}") path else "$value" }

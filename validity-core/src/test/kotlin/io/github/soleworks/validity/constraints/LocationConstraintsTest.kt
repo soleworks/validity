@@ -684,6 +684,15 @@ class LocationConstraintsTest {
         }
 
         @Test
+        fun `given a country without a known format inside not should not count as a rule`() {
+            val node = ValidationNode("postalCode", "1234").apply {
+                not { postalCode("PE") }
+            }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
         fun `given a message function should build it from the value and the country`() {
             val node = ValidationNode("postalCode", "1234").apply {
                 postalCode("BR") { country -> "$this is not a postal code of $country" }
