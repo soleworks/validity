@@ -53,5 +53,14 @@ class ValidationNodeTest {
 
             node.validate() shouldBe listOf(Violation("amount", "amount: -1 is not positive", "positive"))
         }
+
+        @Test
+        fun `given a path with a placeholder text should not fill it again`() {
+            val node = ValidationNode("prices[{value}]", -1).apply {
+                constraint("{path} must be positive") { it > 0 }
+            }
+
+            node.validate() shouldBe listOf(Violation("prices[{value}]", "prices[{value}] must be positive", ""))
+        }
     }
 }

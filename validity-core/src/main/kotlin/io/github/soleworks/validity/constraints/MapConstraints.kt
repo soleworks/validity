@@ -96,6 +96,7 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKey(
 ): Unit = constraint(
     message = { it.message(key) },
     code = "containsKey",
+    skipped = key == null,
     predicate = { key == null || key in it }
 )
 
@@ -113,5 +114,6 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
 ): Unit = constraint(
     message = { it.message(keys) },
     code = "containsKeys",
+    skipped = keys == null,
     predicate = { keys == null || keys.all { key -> key in it } }
 )
