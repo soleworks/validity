@@ -6,4 +6,9 @@ public class ValidationResult(
     public val isValid: Boolean get() = violations.isEmpty()
 
     public val isInvalid: Boolean get() = violations.isNotEmpty()
+
+    public fun orThrow() {
+        if (isInvalid)
+            throw ValidationException(violations)
+    }
 }
