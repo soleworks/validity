@@ -14,6 +14,7 @@ public object Validity {
     }
 }
 
+@PublishedApi
 internal val messages: Messages
     get() = Validity.configuration.messages
 

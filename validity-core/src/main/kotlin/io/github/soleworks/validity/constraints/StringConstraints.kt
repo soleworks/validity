@@ -324,3 +324,17 @@ public fun ValidationNode<String>.containsSymbol(
     code = "containsSymbol",
     predicate = { it.any { char -> !char.isLetterOrDigit() && !char.isWhitespace() } }
 )
+
+public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(
+    message: String = messages.enum
+): Unit = enum<E>(
+    message = { values -> message.replace("{values}", values.joinToString()) }
+)
+
+public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(
+    noinline message: String.(List<E>) -> String
+): Unit = constraint(
+    message = { it.message(enumValues<E>().toList()) },
+    code = "enum",
+    predicate = { value -> enumValues<E>().any { it.name == value } }
+)

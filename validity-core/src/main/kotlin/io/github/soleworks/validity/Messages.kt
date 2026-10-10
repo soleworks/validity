@@ -11,6 +11,7 @@ public class Messages internal constructor() {
     public var equalTo: String = "must be equal to {other}"
     public var notEqualTo: String = "must not be equal to {other}"
     public var oneOf: String = "must be one of {values}"
+    public var enum: String = "must be one of {values}"
     public var noneOf: String = "must not be one of {values}"
     public var or: String = "{left} or {right}"
     public var and: String = "{left} and {right}"
