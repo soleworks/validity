@@ -231,5 +231,25 @@ class ValidityTest {
                 Violation("residentId", "must be a valid resident identity card number", "residentId")
             )
         }
+
+        @Test
+        fun `given the at most and exactly one messages should report them with the fields`() {
+            Validity.configure {
+                messages {
+                    atMostOneOf = "no máximo um de {fields}"
+                    exactlyOneOf = "exatamente um de {fields}"
+                }
+            }
+
+            val recipient = Recipient(pixKey = null, cnpj = "11222333000181")
+
+            recipient.validate().violations shouldBe listOf(
+                Violation("pixKey", "exatamente um de pixKey, bankAccount, boleto", "exactlyOneOf"),
+                Violation("bankAccount", "exatamente um de pixKey, bankAccount, boleto", "exactlyOneOf"),
+                Violation("boleto", "exatamente um de pixKey, bankAccount, boleto", "exactlyOneOf"),
+                Violation("cpf", "no máximo um de cpf, cnpj, passport", "atMostOneOf"),
+                Violation("cnpj", "no máximo um de cpf, cnpj, passport", "atMostOneOf")
+            )
+        }
     }
 }
