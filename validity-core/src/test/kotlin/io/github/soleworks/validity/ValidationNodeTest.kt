@@ -1,5 +1,6 @@
 package io.github.soleworks.validity
 
+import io.github.soleworks.validity.samples.Company
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -61,6 +62,15 @@ class ValidationNodeTest {
             }
 
             node.validate() shouldBe listOf(Violation("prices[{value}]", "prices[{value}] must be positive", ""))
+        }
+
+        @Test
+        fun `given a path placeholder inside a logical operator of a nested object should fill the full path`() {
+            val node = ValidationNode("company", Company(document = "123")).apply { valid() }
+
+            node.validate() shouldBe listOf(
+                Violation("company.document", "company.document is not a CPF or company.document is not a CNPJ", "or")
+            )
         }
     }
 }
