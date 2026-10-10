@@ -26,7 +26,7 @@ class PhoneMessagesTest {
         fun `given no configuration should report the default message in English`() {
             val node = ValidationNode("phone", "1").apply { phone() }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number"))
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
         }
 
         @Test
@@ -46,8 +46,8 @@ class PhoneMessagesTest {
             }
 
             node.validate() shouldBe listOf(
-                Violation("phone", "telefone inválido"),
-                Violation("phone", "celular inválido")
+                Violation("phone", "telefone inválido", "phone"),
+                Violation("phone", "celular inválido", "mobilePhone")
             )
         }
 
@@ -70,7 +70,7 @@ class PhoneMessagesTest {
 
             val node = ValidationNode("phone", "1").apply { phone() }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number"))
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
         }
     }
 }
