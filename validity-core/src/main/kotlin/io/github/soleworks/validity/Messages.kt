@@ -130,6 +130,7 @@ public class Messages internal constructor() {
     public var timeZone: String = "must be a valid time zone"
     public var latitude: String = "must be a valid latitude"
     public var longitude: String = "must be a valid longitude"
+    public var postalCode: String = "must be a valid postal code for {country}"
 
     public var numeric: String = "must be numeric"
     public var integer: String = "must be an integer"
