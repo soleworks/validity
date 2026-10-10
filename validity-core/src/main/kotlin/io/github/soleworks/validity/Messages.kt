@@ -7,6 +7,9 @@ public class Messages internal constructor() {
     public var notEqualTo: String = "must not be equal to {other}"
     public var oneOf: String = "must be one of {values}"
     public var noneOf: String = "must not be one of {values}"
+    public var or: String = "{left} or {right}"
+    public var and: String = "{left} and {right}"
+    public var not: String = "is not allowed"
 
     public var min: String = "must be at least {min}"
     public var max: String = "must be at most {max}"
