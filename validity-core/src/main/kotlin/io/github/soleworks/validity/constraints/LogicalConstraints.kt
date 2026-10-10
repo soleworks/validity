@@ -78,7 +78,7 @@ private fun <V> ValidationNode<V>.combine(
 
     add(
         Constraint { path, _ ->
-            val branches = rules.branches()
+            val branches = rules.relocated(path).branches()
 
             if (passes(branches))
                 null
