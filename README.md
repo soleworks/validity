@@ -260,6 +260,10 @@ The constraints of a block must all pass. `or`, `and` and `not` combine them dif
 Each reports one violation, with the code `or`, `and` or `not`. They nest (`or { cpf(); and { ... } }`) and take a
 message of their own: `or("must be a CPF or a CNPJ") { ... }`.
 
+- Each call inside the block is one rule: `each { }` or `valid()` counts as one rule, with all its items.
+- A rule whose reference is `null` (`equalTo(null)`, `oneOf(null)`, `postalCode(null)`) does not count.
+- A block with no rules accepts everything.
+
 ## Messages
 
 Every constraint has a default message in English. Pass your own where you need it, as text with the
