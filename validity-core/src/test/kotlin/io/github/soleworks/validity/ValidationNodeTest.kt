@@ -35,5 +35,23 @@ class ValidationNodeTest {
 
             node.validate() shouldBe listOf(Violation("amount", "must be positive", ""))
         }
+
+        @Test
+        fun `given the path and value placeholders should replace them in the message`() {
+            val node = ValidationNode("amount", -1).apply {
+                constraint("{path} must be positive, got {value}", "positive") { it > 0 }
+            }
+
+            node.validate() shouldBe listOf(Violation("amount", "amount must be positive, got -1", "positive"))
+        }
+
+        @Test
+        fun `given the placeholders in a message function should replace them too`() {
+            val node = ValidationNode("amount", -1).apply {
+                constraint({ "{path}: $it is not positive" }, "positive") { it > 0 }
+            }
+
+            node.validate() shouldBe listOf(Violation("amount", "amount: -1 is not positive", "positive"))
+        }
     }
 }

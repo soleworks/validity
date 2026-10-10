@@ -6,6 +6,7 @@ import io.github.soleworks.validity.constraints.future
 import io.github.soleworks.validity.constraints.futureOrPresent
 import io.github.soleworks.validity.constraints.past
 import io.github.soleworks.validity.constraints.pastOrPresent
+import io.github.soleworks.validity.samples.Address
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Recipient
 import io.kotest.matchers.shouldBe
@@ -229,6 +230,23 @@ class ValidityTest {
 
             node.validate() shouldBe listOf(
                 Violation("residentId", "must be a valid resident identity card number", "residentId")
+            )
+        }
+
+        @Test
+        fun `given the path and value placeholders should fill them in the configured messages`() {
+            Validity.configure {
+                messages {
+                    minLength = "{path} precisa de pelo menos {min} caracteres, recebeu '{value}'"
+                    required = "{path} é obrigatório"
+                }
+            }
+
+            val customer = Customer(name = "A", address = Address(street = null))
+
+            customer.validate().violations shouldBe listOf(
+                Violation("name", "name precisa de pelo menos 2 caracteres, recebeu 'A'", "minLength"),
+                Violation("address.street", "address.street é obrigatório", "required")
             )
         }
     }

@@ -8,5 +8,13 @@ internal class Constraint<V>(
     fun validate(path: String, value: V): List<Violation> = if (predicate(value))
         emptyList()
     else
-        listOf(Violation(path, message(value), code))
+        listOf(
+            Violation(
+                path = path,
+                message = message(value)
+                    .replace("{path}", path)
+                    .replace("{value}", "$value"),
+                code = code
+            )
+        )
 }
