@@ -1,5 +1,7 @@
 package io.github.soleworks.validity
 
+import java.time.Clock
+
 public object Validity {
     @Volatile
     internal var configuration: ValidityConfiguration = ValidityConfiguration()
@@ -14,3 +16,6 @@ public object Validity {
 
 internal val messages: Messages
     get() = Validity.configuration.messages
+
+internal val clock: Clock
+    get() = Validity.configuration.clock

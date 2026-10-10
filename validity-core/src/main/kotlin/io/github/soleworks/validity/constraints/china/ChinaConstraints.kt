@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.constraints.china
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.clock
 import io.github.soleworks.validity.messages
 import java.time.LocalDate
 import java.time.YearMonth
@@ -41,7 +42,7 @@ private fun String.isPastDate(): Boolean {
     val yearMonth = YearMonth.of(take(YEAR_END).toInt(), substring(YEAR_END, MONTH_END).toInt())
     val day = substring(MONTH_END).toInt()
 
-    return yearMonth.isValidDay(day) && !yearMonth.atDay(day).isAfter(LocalDate.now())
+    return yearMonth.isValidDay(day) && !yearMonth.atDay(day).isAfter(LocalDate.now(clock))
 }
 
 private fun String.hasParityBit(): Boolean {
