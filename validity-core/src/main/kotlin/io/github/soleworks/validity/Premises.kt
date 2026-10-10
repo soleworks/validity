@@ -130,6 +130,17 @@ public fun exactlyOneOf(
 )
 
 context(validation: Validation)
+public fun allOrNoneOf(
+    vararg properties: KProperty0<*>,
+    message: String = messages.allOrNoneOf
+): Unit = presence(
+    properties = properties,
+    message = message,
+    code = "allOrNoneOf",
+    accepts = { filled, value -> filled == 0 || value != null }
+)
+
+context(validation: Validation)
 private fun presence(
     properties: Array<out KProperty0<*>>,
     message: String,

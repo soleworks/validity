@@ -2,6 +2,7 @@ package io.github.soleworks.validity
 
 import io.github.soleworks.validity.constraints.brazil.cpf
 import io.github.soleworks.validity.constraints.min
+import io.github.soleworks.validity.samples.BankAccount
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Login
 import io.github.soleworks.validity.samples.Recipient
@@ -181,6 +182,34 @@ class PremisesTest {
             val recipient = Recipient(pixKey = null, bankAccount = "0001-12345")
 
             recipient.validate().violations shouldBe emptyList()
+        }
+    }
+
+    @Nested
+    @DisplayName("When allOrNoneOf is called")
+    inner class AllOrNoneOf {
+        @Test
+        fun `given only an agency should report the empty fields`() {
+            val account = BankAccount(agency = "0001")
+
+            account.validate().violations shouldBe listOf(
+                Violation("bank", "bank, agency, account must be filled together", "allOrNoneOf"),
+                Violation("account", "bank, agency, account must be filled together", "allOrNoneOf")
+            )
+        }
+
+        @Test
+        fun `given every field should accept them`() {
+            val account = BankAccount(bank = "341", agency = "0001", account = "12345-6")
+
+            account.validate().violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no field should accept it`() {
+            val account = BankAccount()
+
+            account.validate().violations shouldBe emptyList()
         }
     }
 
