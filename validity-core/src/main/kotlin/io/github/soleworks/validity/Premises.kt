@@ -101,15 +101,18 @@ private fun presence(
     code: String,
     accepts: (filled: Int, value: Any?) -> Boolean
 ) {
-    val values = properties.map { it.get() }
-    val filled = values.count { it != null }
-    val fields = properties.joinToString { it.name }
+    require(properties.isNotEmpty()) { "$code needs at least one property" }
 
-    properties.zip(values).forEach { (property, value) ->
+    val distinct = properties.distinct()
+    val values = distinct.map { it.get() }
+    val filled = values.count { it != null }
+    val text = message.replace("{fields}", distinct.joinToString { it.name })
+
+    distinct.zip(values).forEach { (property, value) ->
         validation.add(
             ValidationNode(property.name, value).apply {
                 constraint(
-                    message = message.replace("{fields}", fields),
+                    message = text,
                     code = code,
                     predicate = { accepts(filled, it) }
                 )
