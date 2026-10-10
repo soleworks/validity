@@ -27,7 +27,7 @@ class PolandConstraintsTest {
         ) {
             val node = ValidationNode("pesel", value).apply { pesel() }
 
-            node.validate() shouldBe listOf(Violation("pesel", "must be a valid PESEL"))
+            node.validate() shouldBe listOf(Violation("pesel", "must be a valid PESEL", "pesel"))
         }
     }
 
@@ -47,7 +47,7 @@ class PolandConstraintsTest {
         fun `given a NIP with a wrong check digit or another format should report it`(value: String) {
             val node = ValidationNode("nip", value).apply { nip() }
 
-            node.validate() shouldBe listOf(Violation("nip", "must be a valid NIP"))
+            node.validate() shouldBe listOf(Violation("nip", "must be a valid NIP", "nip"))
         }
     }
 
@@ -67,7 +67,7 @@ class PolandConstraintsTest {
         fun `given a REGON with a wrong check digit or another format should report it`(value: String) {
             val node = ValidationNode("regon", value).apply { regon() }
 
-            node.validate() shouldBe listOf(Violation("regon", "must be a valid REGON"))
+            node.validate() shouldBe listOf(Violation("regon", "must be a valid REGON", "regon"))
         }
     }
 
@@ -89,7 +89,7 @@ class PolandConstraintsTest {
         ) {
             val node = ValidationNode("dowodOsobisty", value).apply { dowodOsobisty() }
 
-            node.validate() shouldBe listOf(Violation("dowodOsobisty", "must be a valid dowód osobisty number"))
+            node.validate() shouldBe listOf(Violation("dowodOsobisty", "must be a valid dowód osobisty number", "dowodOsobisty"))
         }
     }
 }

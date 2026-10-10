@@ -17,6 +17,7 @@ public fun ValidationNode<String>.pps(
     message: String = messages.ireland.pps
 ): Unit = constraint(
     message = message,
+    code = "pps",
     predicate = { PPS_FORMAT.matches(it) && it.isPps() }
 )
 

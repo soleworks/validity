@@ -12,6 +12,7 @@ public fun ValidationNode<String>.spi(
     message: String = messages.france.spi
 ): Unit = constraint(
     message = message,
+    code = "spi",
     predicate = { SPI_FORMAT.matches(it) && it.filterNot(Char::isWhitespace).isSpi() }
 )
 

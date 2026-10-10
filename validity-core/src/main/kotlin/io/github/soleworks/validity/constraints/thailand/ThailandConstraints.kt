@@ -14,6 +14,7 @@ public fun ValidationNode<String>.nationalId(
     message: String = messages.thailand.nationalId
 ): Unit = constraint(
     message = message,
+    code = "nationalId",
     predicate = { NATIONAL_ID_FORMAT.matches(it) && it.isNationalId() }
 )
 

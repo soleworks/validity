@@ -24,6 +24,7 @@ public fun ValidationNode<String>.cpf(
     message: String = messages.brazil.cpf
 ): Unit = constraint(
     message = message,
+    code = "cpf",
     predicate = { CPF_FORMAT.matches(it) && it.digits().isCpf() }
 )
 
@@ -31,6 +32,7 @@ public fun ValidationNode<String>.cnpj(
     message: String = messages.brazil.cnpj
 ): Unit = constraint(
     message = message,
+    code = "cnpj",
     predicate = { CNPJ_FORMAT.matches(it) && it.cnpjValues().isCnpj() }
 )
 
@@ -38,6 +40,7 @@ public fun ValidationNode<String>.cnh(
     message: String = messages.brazil.cnh
 ): Unit = constraint(
     message = message,
+    code = "cnh",
     predicate = { CNH_FORMAT.matches(it) && it.digits().isCnh() }
 )
 
@@ -45,6 +48,7 @@ public fun ValidationNode<String>.pis(
     message: String = messages.brazil.pis
 ): Unit = constraint(
     message = message,
+    code = "pis",
     predicate = { PIS_FORMAT.matches(it) && it.digits().isPis() }
 )
 
@@ -52,6 +56,7 @@ public fun ValidationNode<String>.tituloEleitoral(
     message: String = messages.brazil.tituloEleitoral
 ): Unit = constraint(
     message = message,
+    code = "tituloEleitoral",
     predicate = { TITULO_ELEITORAL_FORMAT.matches(it) && it.digits().isTituloEleitoral() }
 )
 
@@ -59,6 +64,7 @@ public fun ValidationNode<String>.chaveNfe(
     message: String = messages.brazil.chaveNfe
 ): Unit = constraint(
     message = message,
+    code = "chaveNfe",
     predicate = { CHAVE_NFE_FORMAT.matches(it) && it.digits().isChaveNfe() }
 )
 
@@ -66,6 +72,7 @@ public fun ValidationNode<String>.cep(
     message: String = messages.brazil.cep
 ): Unit = constraint(
     message = message,
+    code = "cep",
     predicate = { CEP_FORMAT.matches(it) }
 )
 
@@ -73,6 +80,7 @@ public fun ValidationNode<String>.placa(
     message: String = messages.brazil.placa
 ): Unit = constraint(
     message = message,
+    code = "placa",
     predicate = { PLACA_FORMAT.matches(it) }
 )
 

@@ -13,6 +13,7 @@ public fun ValidationNode<String>.rnokpp(
     message: String = messages.ukraine.rnokpp
 ): Unit = constraint(
     message = message,
+    code = "rnokpp",
     predicate = { RNOKPP_FORMAT.matches(it) && it.isRnokpp() }
 )
 

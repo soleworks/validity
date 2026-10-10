@@ -16,6 +16,7 @@ public fun ValidationNode<out Map<*, *>>.minSize(
     message: Map<*, *>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
+    code = "minSize",
     predicate = { it.size >= min }
 )
 
@@ -32,6 +33,7 @@ public fun ValidationNode<out Map<*, *>>.maxSize(
     message: Map<*, *>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
+    code = "maxSize",
     predicate = { it.size <= max }
 )
 
@@ -48,6 +50,7 @@ public fun ValidationNode<out Map<*, *>>.size(
     message: Map<*, *>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(size) },
+    code = "size",
     predicate = { it.size == size }
 )
 
@@ -67,6 +70,7 @@ public fun ValidationNode<out Map<*, *>>.sizeBetween(
     message: Map<*, *>.(Int, Int) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
+    code = "sizeBetween",
     predicate = { it.size in min..max }
 )
 
@@ -74,6 +78,7 @@ public fun ValidationNode<out Map<*, *>>.notEmpty(
     message: String = messages.notEmpty
 ): Unit = constraint(
     message = message,
+    code = "notEmpty",
     predicate = { it.isNotEmpty() }
 )
 
@@ -90,6 +95,7 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKey(
     message: Map<K, *>.(K?) -> String
 ): Unit = constraint(
     message = { it.message(key) },
+    code = "containsKey",
     predicate = { key == null || key in it }
 )
 
@@ -106,5 +112,6 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
     message: Map<K, *>.(Iterable<K>?) -> String
 ): Unit = constraint(
     message = { it.message(keys) },
+    code = "containsKeys",
     predicate = { keys == null || keys.all { key -> key in it } }
 )

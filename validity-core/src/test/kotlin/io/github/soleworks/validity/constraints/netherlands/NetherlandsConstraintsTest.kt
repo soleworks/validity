@@ -36,7 +36,7 @@ class NetherlandsConstraintsTest {
         fun `given an invalid BSN should report it`(value: String) {
             val node = ValidationNode("bsn", value).apply { bsn() }
 
-            node.validate() shouldBe listOf(Violation("bsn", "must be a valid BSN"))
+            node.validate() shouldBe listOf(Violation("bsn", "must be a valid BSN", "bsn"))
         }
     }
 }

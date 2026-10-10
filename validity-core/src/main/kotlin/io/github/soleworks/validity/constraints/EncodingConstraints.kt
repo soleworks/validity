@@ -20,6 +20,7 @@ public fun ValidationNode<String>.base64(
     message: String = messages.base64
 ): Unit = constraint(
     message = message,
+    code = "base64",
     predicate = { BASE64_FORMAT.matches(it) }
 )
 
@@ -27,6 +28,7 @@ public fun ValidationNode<String>.base64Url(
     message: String = messages.base64Url
 ): Unit = constraint(
     message = message,
+    code = "base64Url",
     predicate = { BASE64_URL_FORMAT.matches(it) }
 )
 
@@ -34,6 +36,7 @@ public fun ValidationNode<String>.base32(
     message: String = messages.base32
 ): Unit = constraint(
     message = message,
+    code = "base32",
     predicate = { BASE32_FORMAT.matches(it) }
 )
 
@@ -41,6 +44,7 @@ public fun ValidationNode<String>.base58(
     message: String = messages.base58
 ): Unit = constraint(
     message = message,
+    code = "base58",
     predicate = { BASE58_FORMAT.matches(it) }
 )
 
@@ -48,6 +52,7 @@ public fun ValidationNode<String>.hexadecimal(
     message: String = messages.hexadecimal
 ): Unit = constraint(
     message = message,
+    code = "hexadecimal",
     predicate = { HEXADECIMAL_FORMAT.matches(it) }
 )
 
@@ -55,6 +60,7 @@ public fun ValidationNode<String>.json(
     message: String = messages.json
 ): Unit = constraint(
     message = message,
+    code = "json",
     predicate = { JsonReader(it).isValid() }
 )
 

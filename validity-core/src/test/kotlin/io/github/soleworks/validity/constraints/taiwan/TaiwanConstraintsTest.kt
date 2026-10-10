@@ -25,7 +25,7 @@ class TaiwanConstraintsTest {
         fun `given an invalid national identification number should report it`(value: String) {
             val node = ValidationNode("nationalId", value).apply { nationalId() }
 
-            node.validate() shouldBe listOf(Violation("nationalId", "must be a valid national identification number"))
+            node.validate() shouldBe listOf(Violation("nationalId", "must be a valid national identification number", "nationalId"))
         }
     }
 }

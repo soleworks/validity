@@ -25,7 +25,7 @@ class PortugalConstraintsTest {
         fun `given an invalid NIF should report it`(value: String) {
             val node = ValidationNode("nif", value).apply { nif() }
 
-            node.validate() shouldBe listOf(Violation("nif", "must be a valid NIF"))
+            node.validate() shouldBe listOf(Violation("nif", "must be a valid NIF", "nif"))
         }
     }
 }

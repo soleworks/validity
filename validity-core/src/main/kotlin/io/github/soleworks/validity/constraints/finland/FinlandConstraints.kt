@@ -19,6 +19,7 @@ public fun ValidationNode<String>.hetu(
     message: String = messages.finland.hetu
 ): Unit = constraint(
     message = message,
+    code = "hetu",
     predicate = { HETU_FORMAT.matches(it) && it.hasValidBirthDate() && it.hasValidCheckCharacter() }
 )
 

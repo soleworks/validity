@@ -22,6 +22,7 @@ public fun ValidationNode<String>.isikukood(
     message: String = messages.estonia.isikukood
 ): Unit = constraint(
     message = message,
+    code = "isikukood",
     predicate = { it.isPersonalCode() }
 )
 

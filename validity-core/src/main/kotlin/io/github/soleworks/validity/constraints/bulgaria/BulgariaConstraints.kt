@@ -19,6 +19,7 @@ public fun ValidationNode<String>.egn(
     message: String = messages.bulgaria.egn
 ): Unit = constraint(
     message = message,
+    code = "egn",
     predicate = { it.isEgn() }
 )
 

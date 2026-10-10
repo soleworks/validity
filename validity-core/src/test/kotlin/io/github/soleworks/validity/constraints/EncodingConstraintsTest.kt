@@ -25,7 +25,7 @@ class EncodingConstraintsTest {
         fun `given an invalid Base64 text should report it`(content: String) {
             val node = ValidationNode("content", content).apply { base64() }
 
-            node.validate() shouldBe listOf(Violation("content", "must be valid Base64"))
+            node.validate() shouldBe listOf(Violation("content", "must be valid Base64", "base64"))
         }
     }
 
@@ -45,7 +45,7 @@ class EncodingConstraintsTest {
         fun `given an invalid URL-safe Base64 text should report it`(content: String) {
             val node = ValidationNode("content", content).apply { base64Url() }
 
-            node.validate() shouldBe listOf(Violation("content", "must be valid URL-safe Base64"))
+            node.validate() shouldBe listOf(Violation("content", "must be valid URL-safe Base64", "base64Url"))
         }
     }
 
@@ -65,7 +65,7 @@ class EncodingConstraintsTest {
         fun `given an invalid Base32 text should report it`(secret: String) {
             val node = ValidationNode("secret", secret).apply { base32() }
 
-            node.validate() shouldBe listOf(Violation("secret", "must be valid Base32"))
+            node.validate() shouldBe listOf(Violation("secret", "must be valid Base32", "base32"))
         }
     }
 
@@ -85,7 +85,7 @@ class EncodingConstraintsTest {
         fun `given an invalid Base58 text should report it`(address: String) {
             val node = ValidationNode("address", address).apply { base58() }
 
-            node.validate() shouldBe listOf(Violation("address", "must be valid Base58"))
+            node.validate() shouldBe listOf(Violation("address", "must be valid Base58", "base58"))
         }
     }
 
@@ -105,7 +105,7 @@ class EncodingConstraintsTest {
         fun `given an invalid hexadecimal text should report it`(fingerprint: String) {
             val node = ValidationNode("fingerprint", fingerprint).apply { hexadecimal() }
 
-            node.validate() shouldBe listOf(Violation("fingerprint", "must be hexadecimal"))
+            node.validate() shouldBe listOf(Violation("fingerprint", "must be hexadecimal", "hexadecimal"))
         }
     }
 
@@ -147,7 +147,7 @@ class EncodingConstraintsTest {
         fun `given an invalid JSON should report it`(payload: String) {
             val node = ValidationNode("payload", payload).apply { json() }
 
-            node.validate() shouldBe listOf(Violation("payload", "must be valid JSON"))
+            node.validate() shouldBe listOf(Violation("payload", "must be valid JSON", "json"))
         }
     }
 }

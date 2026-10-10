@@ -22,6 +22,7 @@ public fun ValidationNode<String>.asmensKodas(
     message: String = messages.lithuania.asmensKodas
 ): Unit = constraint(
     message = message,
+    code = "asmensKodas",
     predicate = { it.isPersonalCode() }
 )
 

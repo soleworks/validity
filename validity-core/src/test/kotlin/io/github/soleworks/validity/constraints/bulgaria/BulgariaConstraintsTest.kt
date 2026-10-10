@@ -27,7 +27,7 @@ class BulgariaConstraintsTest {
         ) {
             val node = ValidationNode("egn", value).apply { egn() }
 
-            node.validate() shouldBe listOf(Violation("egn", "must be a valid EGN"))
+            node.validate() shouldBe listOf(Violation("egn", "must be a valid EGN", "egn"))
         }
     }
 }

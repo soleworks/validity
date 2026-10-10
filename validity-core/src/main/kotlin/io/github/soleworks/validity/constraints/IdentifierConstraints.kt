@@ -37,6 +37,7 @@ public fun ValidationNode<String>.uuid(
     message: String.(Int?) -> String
 ): Unit = constraint(
     message = { it.message(version) },
+    code = "uuid",
     predicate = { it.isUuid(version) }
 )
 
@@ -44,6 +45,7 @@ public fun ValidationNode<String>.ulid(
     message: String = messages.ulid
 ): Unit = constraint(
     message = message,
+    code = "ulid",
     predicate = { ULID_FORMAT.matches(it) }
 )
 
@@ -51,6 +53,7 @@ public fun ValidationNode<String>.objectId(
     message: String = messages.objectId
 ): Unit = constraint(
     message = message,
+    code = "objectId",
     predicate = { OBJECT_ID_FORMAT.matches(it) }
 )
 
@@ -58,6 +61,7 @@ public fun ValidationNode<String>.semver(
     message: String = messages.semver
 ): Unit = constraint(
     message = message,
+    code = "semver",
     predicate = { SEMVER_FORMAT.matches(it) }
 )
 
@@ -65,6 +69,7 @@ public fun ValidationNode<String>.isbn(
     message: String = messages.isbn
 ): Unit = constraint(
     message = message,
+    code = "isbn",
     predicate = { it.withoutSeparators().let { isbn -> isbn.isIsbn10() || isbn.isIsbn13() } }
 )
 
@@ -72,6 +77,7 @@ public fun ValidationNode<String>.isbn10(
     message: String = messages.isbn10
 ): Unit = constraint(
     message = message,
+    code = "isbn10",
     predicate = { it.withoutSeparators().isIsbn10() }
 )
 
@@ -79,6 +85,7 @@ public fun ValidationNode<String>.isbn13(
     message: String = messages.isbn13
 ): Unit = constraint(
     message = message,
+    code = "isbn13",
     predicate = { it.withoutSeparators().isIsbn13() }
 )
 
@@ -86,6 +93,7 @@ public fun ValidationNode<String>.issn(
     message: String = messages.issn
 ): Unit = constraint(
     message = message,
+    code = "issn",
     predicate = { ISSN_FORMAT.matches(it) && it.replace("-", "").isIssn() }
 )
 
@@ -93,6 +101,7 @@ public fun ValidationNode<String>.ean(
     message: String = messages.ean
 ): Unit = constraint(
     message = message,
+    code = "ean",
     predicate = { EAN_FORMAT.matches(it) && it.hasGtinCheckDigit() }
 )
 
@@ -100,6 +109,7 @@ public fun ValidationNode<String>.isrc(
     message: String = messages.isrc
 ): Unit = constraint(
     message = message,
+    code = "isrc",
     predicate = { ISRC_FORMAT.matches(it) }
 )
 
@@ -107,6 +117,7 @@ public fun ValidationNode<String>.imei(
     message: String = messages.imei
 ): Unit = constraint(
     message = message,
+    code = "imei",
     predicate = { IMEI_FORMAT.matches(it) && it.hasLuhnCheckDigit() }
 )
 
@@ -114,6 +125,7 @@ public fun ValidationNode<String>.luhn(
     message: String = messages.luhn
 ): Unit = constraint(
     message = message,
+    code = "luhn",
     predicate = { LUHN_FORMAT.matches(it) && it.hasLuhnCheckDigit() }
 )
 
@@ -130,6 +142,7 @@ public fun ValidationNode<String>.hash(
     message: String.(HashAlgorithm) -> String
 ): Unit = constraint(
     message = { it.message(algorithm) },
+    code = "hash",
     predicate = { it.length == algorithm.length && HEX_FORMAT.matches(it) }
 )
 

@@ -23,6 +23,7 @@ public fun ValidationNode<String>.personnummer(
     message: String = messages.sweden.personnummer
 ): Unit = constraint(
     message = message,
+    code = "personnummer",
     predicate = { PERSONAL_NUMBER_FORMAT.matches(it) && it.isValid() && !it.isCoordination() }
 )
 
@@ -30,6 +31,7 @@ public fun ValidationNode<String>.samordningsnummer(
     message: String = messages.sweden.samordningsnummer
 ): Unit = constraint(
     message = message,
+    code = "samordningsnummer",
     predicate = { PERSONAL_NUMBER_FORMAT.matches(it) && it.isValid() && it.isCoordination() }
 )
 

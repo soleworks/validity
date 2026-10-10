@@ -13,6 +13,7 @@ public fun ValidationNode<String>.bsn(
     message: String = messages.netherlands.bsn
 ): Unit = constraint(
     message = message,
+    code = "bsn",
     predicate = { BSN_FORMAT.matches(it) && it.map(Char::digitToInt).isBsn() }
 )
 

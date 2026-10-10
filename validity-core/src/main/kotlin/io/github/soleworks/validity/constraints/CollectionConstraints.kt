@@ -16,6 +16,7 @@ public fun ValidationNode<out Collection<*>>.minSize(
     message: Collection<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
+    code = "minSize",
     predicate = { it.size >= min }
 )
 
@@ -34,6 +35,7 @@ public fun ValidationNode<out Array<*>>.minSize(
     message: Array<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
+    code = "minSize",
     predicate = { it.size >= min }
 )
 
@@ -50,6 +52,7 @@ public fun ValidationNode<out Collection<*>>.maxSize(
     message: Collection<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
+    code = "maxSize",
     predicate = { it.size <= max }
 )
 
@@ -68,6 +71,7 @@ public fun ValidationNode<out Array<*>>.maxSize(
     message: Array<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
+    code = "maxSize",
     predicate = { it.size <= max }
 )
 
@@ -84,6 +88,7 @@ public fun ValidationNode<out Collection<*>>.size(
     message: Collection<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(size) },
+    code = "size",
     predicate = { it.size == size }
 )
 
@@ -102,6 +107,7 @@ public fun ValidationNode<out Array<*>>.size(
     message: Array<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(size) },
+    code = "size",
     predicate = { it.size == size }
 )
 
@@ -121,6 +127,7 @@ public fun ValidationNode<out Collection<*>>.sizeBetween(
     message: Collection<*>.(Int, Int) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
+    code = "sizeBetween",
     predicate = { it.size in min..max }
 )
 
@@ -142,6 +149,7 @@ public fun ValidationNode<out Array<*>>.sizeBetween(
     message: Array<*>.(Int, Int) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
+    code = "sizeBetween",
     predicate = { it.size in min..max }
 )
 
@@ -149,6 +157,7 @@ public fun ValidationNode<out Collection<*>>.notEmpty(
     message: String = messages.notEmpty
 ): Unit = constraint(
     message = message,
+    code = "notEmpty",
     predicate = { it.isNotEmpty() }
 )
 
@@ -157,6 +166,7 @@ public fun ValidationNode<out Array<*>>.notEmpty(
     message: String = messages.notEmpty
 ): Unit = constraint(
     message = message,
+    code = "notEmpty",
     predicate = { it.isNotEmpty() }
 )
 
@@ -164,6 +174,7 @@ public fun ValidationNode<out Collection<*>>.distinct(
     message: String = messages.distinct
 ): Unit = constraint(
     message = message,
+    code = "distinct",
     predicate = { it.distinct().size == it.size }
 )
 
@@ -172,6 +183,7 @@ public fun ValidationNode<out Array<*>>.distinct(
     message: String = messages.distinct
 ): Unit = constraint(
     message = message,
+    code = "distinct",
     predicate = { it.distinct().size == it.size }
 )
 
@@ -180,6 +192,7 @@ public fun <E, K> ValidationNode<List<E>>.distinctBy(
     message: String = messages.distinct
 ): Unit = constraint(
     message = message,
+    code = "distinctBy",
     predicate = { it.distinctBy(selector).size == it.size }
 )
 
@@ -189,6 +202,7 @@ public fun <E, K> ValidationNode<Set<E>>.distinctBy(
     message: String = messages.distinct
 ): Unit = constraint(
     message = message,
+    code = "distinctBy",
     predicate = { it.distinctBy(selector).size == it.size }
 )
 
@@ -198,6 +212,7 @@ public fun <E, K> ValidationNode<Array<E>>.distinctBy(
     message: String = messages.distinct
 ): Unit = constraint(
     message = message,
+    code = "distinctBy",
     predicate = { it.distinctBy(selector).size == it.size }
 )
 
@@ -214,6 +229,7 @@ public fun <E> ValidationNode<List<E>>.contains(
     message: List<E>.(E?) -> String
 ): Unit = constraint(
     message = { it.message(element) },
+    code = "contains",
     predicate = { element == null || element in it }
 )
 
@@ -232,6 +248,7 @@ public fun <E> ValidationNode<Set<E>>.contains(
     message: Set<E>.(E?) -> String
 ): Unit = constraint(
     message = { it.message(element) },
+    code = "contains",
     predicate = { element == null || element in it }
 )
 
@@ -250,6 +267,7 @@ public fun <E> ValidationNode<Array<E>>.contains(
     message: Array<E>.(E?) -> String
 ): Unit = constraint(
     message = { it.message(element) },
+    code = "contains",
     predicate = { element == null || element in it }
 )
 
@@ -266,6 +284,7 @@ public fun <E> ValidationNode<List<E>>.containsAll(
     message: List<E>.(Iterable<E>?) -> String
 ): Unit = constraint(
     message = { it.message(elements) },
+    code = "containsAll",
     predicate = { elements == null || elements.all { element -> element in it } }
 )
 
@@ -284,6 +303,7 @@ public fun <E> ValidationNode<Set<E>>.containsAll(
     message: Set<E>.(Iterable<E>?) -> String
 ): Unit = constraint(
     message = { it.message(elements) },
+    code = "containsAll",
     predicate = { elements == null || elements.all { element -> element in it } }
 )
 
@@ -302,6 +322,7 @@ public fun <E> ValidationNode<Array<E>>.containsAll(
     message: Array<E>.(Iterable<E>?) -> String
 ): Unit = constraint(
     message = { it.message(elements) },
+    code = "containsAll",
     predicate = { elements == null || elements.all { element -> element in it } }
 )
 
@@ -318,6 +339,7 @@ public fun <E> ValidationNode<List<E>>.containsAny(
     message: List<E>.(Iterable<E>?) -> String
 ): Unit = constraint(
     message = { it.message(elements) },
+    code = "containsAny",
     predicate = { elements == null || elements.any { element -> element in it } }
 )
 
@@ -336,6 +358,7 @@ public fun <E> ValidationNode<Set<E>>.containsAny(
     message: Set<E>.(Iterable<E>?) -> String
 ): Unit = constraint(
     message = { it.message(elements) },
+    code = "containsAny",
     predicate = { elements == null || elements.any { element -> element in it } }
 )
 
@@ -354,5 +377,6 @@ public fun <E> ValidationNode<Array<E>>.containsAny(
     message: Array<E>.(Iterable<E>?) -> String
 ): Unit = constraint(
     message = { it.message(elements) },
+    code = "containsAny",
     predicate = { elements == null || elements.any { element -> element in it } }
 )

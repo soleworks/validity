@@ -21,7 +21,7 @@ class ValidityTest {
         fun `given no configuration should report the default message in English`() {
             val customer = Customer(name = "A")
 
-            customer.validate().violations shouldBe listOf(Violation("name", "must have at least 2 characters"))
+            customer.validate().violations shouldBe listOf(Violation("name", "must have at least 2 characters", "minLength"))
         }
 
         @Test
@@ -34,7 +34,7 @@ class ValidityTest {
 
             val customer = Customer(name = "A")
 
-            customer.validate().violations shouldBe listOf(Violation("name", "deve ter pelo menos 2 caracteres"))
+            customer.validate().violations shouldBe listOf(Violation("name", "deve ter pelo menos 2 caracteres", "minLength"))
         }
 
         @Test
@@ -47,7 +47,7 @@ class ValidityTest {
 
             val customer = Customer(name = null)
 
-            customer.validate().violations shouldBe listOf(Violation("name", "é obrigatório"))
+            customer.validate().violations shouldBe listOf(Violation("name", "é obrigatório", "required"))
         }
 
         @Test
@@ -60,7 +60,7 @@ class ValidityTest {
 
             val customer = Customer(email = null)
 
-            customer.validate().violations shouldBe listOf(Violation("email", "email is mandatory"))
+            customer.validate().violations shouldBe listOf(Violation("email", "email is mandatory", "required"))
         }
 
         @Test
@@ -75,7 +75,7 @@ class ValidityTest {
 
             val node = ValidationNode("cpf", "123").apply { cpf() }
 
-            node.validate() shouldBe listOf(Violation("cpf", "CPF inválido"))
+            node.validate() shouldBe listOf(Violation("cpf", "CPF inválido", "cpf"))
         }
 
         @Test
@@ -93,7 +93,7 @@ class ValidityTest {
 
             val customer = Customer(name = "A")
 
-            customer.validate().violations shouldBe listOf(Violation("name", "must have at least 2 characters"))
+            customer.validate().violations shouldBe listOf(Violation("name", "must have at least 2 characters", "minLength"))
         }
     }
 }

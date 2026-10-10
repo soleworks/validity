@@ -37,7 +37,7 @@ class RomaniaConstraintsTest {
         ) {
             val node = ValidationNode("cnp", value).apply { cnp() }
 
-            node.validate() shouldBe listOf(Violation("cnp", "must be a valid CNP"))
+            node.validate() shouldBe listOf(Violation("cnp", "must be a valid CNP", "cnp"))
         }
     }
 }

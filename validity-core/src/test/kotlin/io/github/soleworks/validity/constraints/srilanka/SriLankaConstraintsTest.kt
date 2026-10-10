@@ -25,7 +25,7 @@ class SriLankaConstraintsTest {
         fun `given an invalid NIC should report it`(value: String) {
             val node = ValidationNode("nic", value).apply { nic() }
 
-            node.validate() shouldBe listOf(Violation("nic", "must be a valid NIC"))
+            node.validate() shouldBe listOf(Violation("nic", "must be a valid NIC", "nic"))
         }
     }
 }

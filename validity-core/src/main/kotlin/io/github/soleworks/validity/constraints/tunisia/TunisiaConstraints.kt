@@ -9,5 +9,6 @@ public fun ValidationNode<String>.cin(
     message: String = messages.tunisia.cin
 ): Unit = constraint(
     message = message,
+    code = "cin",
     predicate = { CIN_FORMAT.matches(it.trim()) }
 )

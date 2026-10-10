@@ -25,7 +25,7 @@ class PakistanConstraintsTest {
         fun `given an invalid CNIC should report it`(value: String) {
             val node = ValidationNode("cnic", value).apply { cnic() }
 
-            node.validate() shouldBe listOf(Violation("cnic", "must be a valid CNIC"))
+            node.validate() shouldBe listOf(Violation("cnic", "must be a valid CNIC", "cnic"))
         }
     }
 }

@@ -13,6 +13,7 @@ public fun ValidationNode<String>.sin(
     message: String = messages.canada.sin
 ): Unit = constraint(
     message = message,
+    code = "sin",
     predicate = { SIN_FORMAT.matches(it) && it.isSin() }
 )
 

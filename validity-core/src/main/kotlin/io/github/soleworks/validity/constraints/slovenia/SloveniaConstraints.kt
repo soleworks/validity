@@ -13,6 +13,7 @@ public fun ValidationNode<String>.davcnaStevilka(
     message: String = messages.slovenia.davcnaStevilka
 ): Unit = constraint(
     message = message,
+    code = "davcnaStevilka",
     predicate = { DAVCNA_STEVILKA_FORMAT.matches(it) && it.isDavcnaStevilka() }
 )
 

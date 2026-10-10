@@ -14,6 +14,7 @@ public fun ValidationNode<String>.nif(
     message: String = messages.portugal.nif
 ): Unit = constraint(
     message = message,
+    code = "nif",
     predicate = { NIF_FORMAT.matches(it) && it.map(Char::digitToInt).isNif() }
 )
 

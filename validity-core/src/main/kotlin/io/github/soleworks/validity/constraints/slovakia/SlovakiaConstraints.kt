@@ -16,6 +16,7 @@ public fun ValidationNode<String>.rodneCislo(
     message: String = messages.slovakia.rodneCislo
 ): Unit = constraint(
     message = message,
+    code = "rodneCislo",
     predicate = { RODNE_CISLO_FORMAT.matches(it) && (it.length != PRE_1954_LENGTH || it.isPre1954RodneCislo()) }
 )
 

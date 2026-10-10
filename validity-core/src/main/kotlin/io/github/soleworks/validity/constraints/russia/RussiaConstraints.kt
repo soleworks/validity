@@ -16,6 +16,7 @@ public fun ValidationNode<String>.innIndividual(
     message: String = messages.russia.innIndividual
 ): Unit = constraint(
     message = message,
+    code = "innIndividual",
     predicate = { INN_INDIVIDUAL_FORMAT.matches(it) && it.map(Char::digitToInt).isIndividual() }
 )
 
@@ -23,6 +24,7 @@ public fun ValidationNode<String>.innLegalEntity(
     message: String = messages.russia.innLegalEntity
 ): Unit = constraint(
     message = message,
+    code = "innLegalEntity",
     predicate = { INN_LEGAL_ENTITY_FORMAT.matches(it) && it.map(Char::digitToInt).isLegalEntity() }
 )
 

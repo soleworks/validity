@@ -46,7 +46,7 @@ class LatviaConstraintsTest {
         ) {
             val node = ValidationNode("personasKods", value).apply { personasKods() }
 
-            node.validate() shouldBe listOf(Violation("personasKods", "must be a valid personas kods"))
+            node.validate() shouldBe listOf(Violation("personasKods", "must be a valid personas kods", "personasKods"))
         }
     }
 }

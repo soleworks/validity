@@ -12,5 +12,6 @@ public fun ValidationNode<String>.nino(
     message: String = messages.unitedKingdom.nino
 ): Unit = constraint(
     message = message,
+    code = "nino",
     predicate = { NINO_FORMAT.matches(it) }
 )

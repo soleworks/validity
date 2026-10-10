@@ -18,6 +18,7 @@ public fun ValidationNode<LocalDate>.past(
     message: String = messages.past
 ): Unit = constraint(
     message = message,
+    code = "past",
     predicate = { it.isBefore(LocalDate.now()) }
 )
 
@@ -26,6 +27,7 @@ public fun ValidationNode<LocalDateTime>.past(
     message: String = messages.past
 ): Unit = constraint(
     message = message,
+    code = "past",
     predicate = { it.isBefore(LocalDateTime.now()) }
 )
 
@@ -34,6 +36,7 @@ public fun ValidationNode<ZonedDateTime>.past(
     message: String = messages.past
 ): Unit = constraint(
     message = message,
+    code = "past",
     predicate = { it.isBefore(ZonedDateTime.now()) }
 )
 
@@ -42,6 +45,7 @@ public fun ValidationNode<OffsetDateTime>.past(
     message: String = messages.past
 ): Unit = constraint(
     message = message,
+    code = "past",
     predicate = { it.isBefore(OffsetDateTime.now()) }
 )
 
@@ -50,6 +54,7 @@ public fun ValidationNode<Instant>.past(
     message: String = messages.past
 ): Unit = constraint(
     message = message,
+    code = "past",
     predicate = { it.isBefore(Instant.now()) }
 )
 
@@ -58,6 +63,7 @@ public fun ValidationNode<YearMonth>.past(
     message: String = messages.past
 ): Unit = constraint(
     message = message,
+    code = "past",
     predicate = { it.isBefore(YearMonth.now()) }
 )
 
@@ -66,6 +72,7 @@ public fun ValidationNode<Year>.past(
     message: String = messages.past
 ): Unit = constraint(
     message = message,
+    code = "past",
     predicate = { it.isBefore(Year.now()) }
 )
 
@@ -74,6 +81,7 @@ public fun ValidationNode<Date>.past(
     message: String = messages.past
 ): Unit = constraint(
     message = message,
+    code = "past",
     predicate = { it.before(Date()) }
 )
 
@@ -81,6 +89,7 @@ public fun ValidationNode<LocalDate>.future(
     message: String = messages.future
 ): Unit = constraint(
     message = message,
+    code = "future",
     predicate = { it.isAfter(LocalDate.now()) }
 )
 
@@ -89,6 +98,7 @@ public fun ValidationNode<LocalDateTime>.future(
     message: String = messages.future
 ): Unit = constraint(
     message = message,
+    code = "future",
     predicate = { it.isAfter(LocalDateTime.now()) }
 )
 
@@ -97,6 +107,7 @@ public fun ValidationNode<ZonedDateTime>.future(
     message: String = messages.future
 ): Unit = constraint(
     message = message,
+    code = "future",
     predicate = { it.isAfter(ZonedDateTime.now()) }
 )
 
@@ -105,6 +116,7 @@ public fun ValidationNode<OffsetDateTime>.future(
     message: String = messages.future
 ): Unit = constraint(
     message = message,
+    code = "future",
     predicate = { it.isAfter(OffsetDateTime.now()) }
 )
 
@@ -113,6 +125,7 @@ public fun ValidationNode<Instant>.future(
     message: String = messages.future
 ): Unit = constraint(
     message = message,
+    code = "future",
     predicate = { it.isAfter(Instant.now()) }
 )
 
@@ -121,6 +134,7 @@ public fun ValidationNode<YearMonth>.future(
     message: String = messages.future
 ): Unit = constraint(
     message = message,
+    code = "future",
     predicate = { it.isAfter(YearMonth.now()) }
 )
 
@@ -129,6 +143,7 @@ public fun ValidationNode<Year>.future(
     message: String = messages.future
 ): Unit = constraint(
     message = message,
+    code = "future",
     predicate = { it.isAfter(Year.now()) }
 )
 
@@ -137,6 +152,7 @@ public fun ValidationNode<Date>.future(
     message: String = messages.future
 ): Unit = constraint(
     message = message,
+    code = "future",
     predicate = { it.after(Date()) }
 )
 
@@ -144,6 +160,7 @@ public fun ValidationNode<LocalDate>.pastOrPresent(
     message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
+    code = "pastOrPresent",
     predicate = { !it.isAfter(LocalDate.now()) }
 )
 
@@ -152,6 +169,7 @@ public fun ValidationNode<LocalDateTime>.pastOrPresent(
     message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
+    code = "pastOrPresent",
     predicate = { !it.isAfter(LocalDateTime.now()) }
 )
 
@@ -160,6 +178,7 @@ public fun ValidationNode<ZonedDateTime>.pastOrPresent(
     message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
+    code = "pastOrPresent",
     predicate = { !it.isAfter(ZonedDateTime.now()) }
 )
 
@@ -168,6 +187,7 @@ public fun ValidationNode<OffsetDateTime>.pastOrPresent(
     message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
+    code = "pastOrPresent",
     predicate = { !it.isAfter(OffsetDateTime.now()) }
 )
 
@@ -176,6 +196,7 @@ public fun ValidationNode<Instant>.pastOrPresent(
     message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
+    code = "pastOrPresent",
     predicate = { !it.isAfter(Instant.now()) }
 )
 
@@ -184,6 +205,7 @@ public fun ValidationNode<YearMonth>.pastOrPresent(
     message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
+    code = "pastOrPresent",
     predicate = { !it.isAfter(YearMonth.now()) }
 )
 
@@ -192,6 +214,7 @@ public fun ValidationNode<Year>.pastOrPresent(
     message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
+    code = "pastOrPresent",
     predicate = { !it.isAfter(Year.now()) }
 )
 
@@ -200,6 +223,7 @@ public fun ValidationNode<Date>.pastOrPresent(
     message: String = messages.pastOrPresent
 ): Unit = constraint(
     message = message,
+    code = "pastOrPresent",
     predicate = { !it.after(Date()) }
 )
 
@@ -207,6 +231,7 @@ public fun ValidationNode<LocalDate>.futureOrPresent(
     message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
+    code = "futureOrPresent",
     predicate = { !it.isBefore(LocalDate.now()) }
 )
 
@@ -215,6 +240,7 @@ public fun ValidationNode<LocalDateTime>.futureOrPresent(
     message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
+    code = "futureOrPresent",
     predicate = { !it.isBefore(LocalDateTime.now()) }
 )
 
@@ -223,6 +249,7 @@ public fun ValidationNode<ZonedDateTime>.futureOrPresent(
     message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
+    code = "futureOrPresent",
     predicate = { !it.isBefore(ZonedDateTime.now()) }
 )
 
@@ -231,6 +258,7 @@ public fun ValidationNode<OffsetDateTime>.futureOrPresent(
     message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
+    code = "futureOrPresent",
     predicate = { !it.isBefore(OffsetDateTime.now()) }
 )
 
@@ -239,6 +267,7 @@ public fun ValidationNode<Instant>.futureOrPresent(
     message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
+    code = "futureOrPresent",
     predicate = { !it.isBefore(Instant.now()) }
 )
 
@@ -247,6 +276,7 @@ public fun ValidationNode<YearMonth>.futureOrPresent(
     message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
+    code = "futureOrPresent",
     predicate = { !it.isBefore(YearMonth.now()) }
 )
 
@@ -255,6 +285,7 @@ public fun ValidationNode<Year>.futureOrPresent(
     message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
+    code = "futureOrPresent",
     predicate = { !it.isBefore(Year.now()) }
 )
 
@@ -263,6 +294,7 @@ public fun ValidationNode<Date>.futureOrPresent(
     message: String = messages.futureOrPresent
 ): Unit = constraint(
     message = message,
+    code = "futureOrPresent",
     predicate = { !it.before(Date()) }
 )
 
@@ -279,6 +311,7 @@ public fun ValidationNode<LocalDate>.after(
     message: LocalDate.(LocalDate?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.isAfter(other) }
 )
 
@@ -295,6 +328,7 @@ public fun ValidationNode<LocalDateTime>.after(
     message: LocalDateTime.(LocalDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.isAfter(other) }
 )
 
@@ -311,6 +345,7 @@ public fun ValidationNode<LocalTime>.after(
     message: LocalTime.(LocalTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.isAfter(other) }
 )
 
@@ -327,6 +362,7 @@ public fun ValidationNode<OffsetTime>.after(
     message: OffsetTime.(OffsetTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.isAfter(other) }
 )
 
@@ -343,6 +379,7 @@ public fun ValidationNode<ZonedDateTime>.after(
     message: ZonedDateTime.(ZonedDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.isAfter(other) }
 )
 
@@ -359,6 +396,7 @@ public fun ValidationNode<OffsetDateTime>.after(
     message: OffsetDateTime.(OffsetDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.isAfter(other) }
 )
 
@@ -375,6 +413,7 @@ public fun ValidationNode<Instant>.after(
     message: Instant.(Instant?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.isAfter(other) }
 )
 
@@ -391,6 +430,7 @@ public fun ValidationNode<YearMonth>.after(
     message: YearMonth.(YearMonth?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.isAfter(other) }
 )
 
@@ -407,6 +447,7 @@ public fun ValidationNode<Year>.after(
     message: Year.(Year?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.isAfter(other) }
 )
 
@@ -423,6 +464,7 @@ public fun ValidationNode<Date>.after(
     message: Date.(Date?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "after",
     predicate = { other == null || it.after(other) }
 )
 
@@ -439,6 +481,7 @@ public fun ValidationNode<LocalDate>.before(
     message: LocalDate.(LocalDate?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.isBefore(other) }
 )
 
@@ -455,6 +498,7 @@ public fun ValidationNode<LocalDateTime>.before(
     message: LocalDateTime.(LocalDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.isBefore(other) }
 )
 
@@ -471,6 +515,7 @@ public fun ValidationNode<LocalTime>.before(
     message: LocalTime.(LocalTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.isBefore(other) }
 )
 
@@ -487,6 +532,7 @@ public fun ValidationNode<OffsetTime>.before(
     message: OffsetTime.(OffsetTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.isBefore(other) }
 )
 
@@ -503,6 +549,7 @@ public fun ValidationNode<ZonedDateTime>.before(
     message: ZonedDateTime.(ZonedDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.isBefore(other) }
 )
 
@@ -519,6 +566,7 @@ public fun ValidationNode<OffsetDateTime>.before(
     message: OffsetDateTime.(OffsetDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.isBefore(other) }
 )
 
@@ -535,6 +583,7 @@ public fun ValidationNode<Instant>.before(
     message: Instant.(Instant?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.isBefore(other) }
 )
 
@@ -551,6 +600,7 @@ public fun ValidationNode<YearMonth>.before(
     message: YearMonth.(YearMonth?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.isBefore(other) }
 )
 
@@ -567,6 +617,7 @@ public fun ValidationNode<Year>.before(
     message: Year.(Year?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.isBefore(other) }
 )
 
@@ -583,6 +634,7 @@ public fun ValidationNode<Date>.before(
     message: Date.(Date?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "before",
     predicate = { other == null || it.before(other) }
 )
 
@@ -599,6 +651,7 @@ public fun ValidationNode<LocalDate>.afterOrEqual(
     message: LocalDate.(LocalDate?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.isBefore(other) }
 )
 
@@ -615,6 +668,7 @@ public fun ValidationNode<LocalDateTime>.afterOrEqual(
     message: LocalDateTime.(LocalDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.isBefore(other) }
 )
 
@@ -631,6 +685,7 @@ public fun ValidationNode<LocalTime>.afterOrEqual(
     message: LocalTime.(LocalTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.isBefore(other) }
 )
 
@@ -647,6 +702,7 @@ public fun ValidationNode<OffsetTime>.afterOrEqual(
     message: OffsetTime.(OffsetTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.isBefore(other) }
 )
 
@@ -663,6 +719,7 @@ public fun ValidationNode<ZonedDateTime>.afterOrEqual(
     message: ZonedDateTime.(ZonedDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.isBefore(other) }
 )
 
@@ -679,6 +736,7 @@ public fun ValidationNode<OffsetDateTime>.afterOrEqual(
     message: OffsetDateTime.(OffsetDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.isBefore(other) }
 )
 
@@ -695,6 +753,7 @@ public fun ValidationNode<Instant>.afterOrEqual(
     message: Instant.(Instant?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.isBefore(other) }
 )
 
@@ -711,6 +770,7 @@ public fun ValidationNode<YearMonth>.afterOrEqual(
     message: YearMonth.(YearMonth?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.isBefore(other) }
 )
 
@@ -727,6 +787,7 @@ public fun ValidationNode<Year>.afterOrEqual(
     message: Year.(Year?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.isBefore(other) }
 )
 
@@ -743,6 +804,7 @@ public fun ValidationNode<Date>.afterOrEqual(
     message: Date.(Date?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "afterOrEqual",
     predicate = { other == null || !it.before(other) }
 )
 
@@ -759,6 +821,7 @@ public fun ValidationNode<LocalDate>.beforeOrEqual(
     message: LocalDate.(LocalDate?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.isAfter(other) }
 )
 
@@ -775,6 +838,7 @@ public fun ValidationNode<LocalDateTime>.beforeOrEqual(
     message: LocalDateTime.(LocalDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.isAfter(other) }
 )
 
@@ -791,6 +855,7 @@ public fun ValidationNode<LocalTime>.beforeOrEqual(
     message: LocalTime.(LocalTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.isAfter(other) }
 )
 
@@ -807,6 +872,7 @@ public fun ValidationNode<OffsetTime>.beforeOrEqual(
     message: OffsetTime.(OffsetTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.isAfter(other) }
 )
 
@@ -823,6 +889,7 @@ public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
     message: ZonedDateTime.(ZonedDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.isAfter(other) }
 )
 
@@ -839,6 +906,7 @@ public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
     message: OffsetDateTime.(OffsetDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.isAfter(other) }
 )
 
@@ -855,6 +923,7 @@ public fun ValidationNode<Instant>.beforeOrEqual(
     message: Instant.(Instant?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.isAfter(other) }
 )
 
@@ -871,6 +940,7 @@ public fun ValidationNode<YearMonth>.beforeOrEqual(
     message: YearMonth.(YearMonth?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.isAfter(other) }
 )
 
@@ -887,6 +957,7 @@ public fun ValidationNode<Year>.beforeOrEqual(
     message: Year.(Year?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.isAfter(other) }
 )
 
@@ -903,6 +974,7 @@ public fun ValidationNode<Date>.beforeOrEqual(
     message: Date.(Date?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "beforeOrEqual",
     predicate = { other == null || !it.after(other) }
 )
 
@@ -922,6 +994,7 @@ public fun ValidationNode<LocalDate>.between(
     message: LocalDate.(LocalDate?, LocalDate?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.isBefore(start) && !it.isAfter(end) }
 )
 
@@ -941,6 +1014,7 @@ public fun ValidationNode<LocalDateTime>.between(
     message: LocalDateTime.(LocalDateTime?, LocalDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.isBefore(start) && !it.isAfter(end) }
 )
 
@@ -960,6 +1034,7 @@ public fun ValidationNode<LocalTime>.between(
     message: LocalTime.(LocalTime?, LocalTime?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.isBefore(start) && !it.isAfter(end) }
 )
 
@@ -979,6 +1054,7 @@ public fun ValidationNode<OffsetTime>.between(
     message: OffsetTime.(OffsetTime?, OffsetTime?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.isBefore(start) && !it.isAfter(end) }
 )
 
@@ -998,6 +1074,7 @@ public fun ValidationNode<ZonedDateTime>.between(
     message: ZonedDateTime.(ZonedDateTime?, ZonedDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.isBefore(start) && !it.isAfter(end) }
 )
 
@@ -1017,6 +1094,7 @@ public fun ValidationNode<OffsetDateTime>.between(
     message: OffsetDateTime.(OffsetDateTime?, OffsetDateTime?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.isBefore(start) && !it.isAfter(end) }
 )
 
@@ -1036,6 +1114,7 @@ public fun ValidationNode<Instant>.between(
     message: Instant.(Instant?, Instant?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.isBefore(start) && !it.isAfter(end) }
 )
 
@@ -1055,6 +1134,7 @@ public fun ValidationNode<YearMonth>.between(
     message: YearMonth.(YearMonth?, YearMonth?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.isBefore(start) && !it.isAfter(end) }
 )
 
@@ -1074,6 +1154,7 @@ public fun ValidationNode<Year>.between(
     message: Year.(Year?, Year?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.isBefore(start) && !it.isAfter(end) }
 )
 
@@ -1093,6 +1174,7 @@ public fun ValidationNode<Date>.between(
     message: Date.(Date?, Date?) -> String
 ): Unit = constraint(
     message = { it.message(start, end) },
+    code = "between",
     predicate = { start == null || end == null || !it.before(start) && !it.after(end) }
 )
 
@@ -1109,6 +1191,7 @@ public fun ValidationNode<Duration>.min(
     message: Duration.(Duration?) -> String
 ): Unit = constraint(
     message = { it.message(min) },
+    code = "min",
     predicate = { min == null || it >= min }
 )
 
@@ -1125,6 +1208,7 @@ public fun ValidationNode<Duration>.max(
     message: Duration.(Duration?) -> String
 ): Unit = constraint(
     message = { it.message(max) },
+    code = "max",
     predicate = { max == null || it <= max }
 )
 
@@ -1141,6 +1225,7 @@ public fun ValidationNode<Duration>.greaterThan(
     message: Duration.(Duration?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "greaterThan",
     predicate = { other == null || it > other }
 )
 
@@ -1157,6 +1242,7 @@ public fun ValidationNode<Duration>.lessThan(
     message: Duration.(Duration?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "lessThan",
     predicate = { other == null || it < other }
 )
 
@@ -1176,5 +1262,6 @@ public fun ValidationNode<Duration>.between(
     message: Duration.(Duration?, Duration?) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
+    code = "between",
     predicate = { min == null || max == null || it in min..max }
 )

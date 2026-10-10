@@ -9,5 +9,6 @@ public fun ValidationNode<String>.nin(
     message: String = messages.libya.nin
 ): Unit = constraint(
     message = message,
+    code = "nin",
     predicate = { NIN_FORMAT.matches(it.trim()) }
 )

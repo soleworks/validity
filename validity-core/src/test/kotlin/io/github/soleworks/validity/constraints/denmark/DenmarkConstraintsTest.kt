@@ -35,7 +35,7 @@ class DenmarkConstraintsTest {
         fun `given an invalid CPR number should report it`(value: String) {
             val node = ValidationNode("cpr", value).apply { cpr() }
 
-            node.validate() shouldBe listOf(Violation("cpr", "must be a valid CPR number"))
+            node.validate() shouldBe listOf(Violation("cpr", "must be a valid CPR number", "cpr"))
         }
     }
 }

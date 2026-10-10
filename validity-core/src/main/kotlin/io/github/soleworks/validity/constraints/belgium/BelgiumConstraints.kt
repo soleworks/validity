@@ -19,6 +19,7 @@ public fun ValidationNode<String>.rijksregisternummer(
     message: String = messages.belgium.rijksregisternummer
 ): Unit = constraint(
     message = message,
+    code = "rijksregisternummer",
     predicate = {
         it.replace(SYMBOLS, "").let { number -> RIJKSREGISTERNUMMER_FORMAT.matches(number) && number.isRijksregisternummer() }
     }

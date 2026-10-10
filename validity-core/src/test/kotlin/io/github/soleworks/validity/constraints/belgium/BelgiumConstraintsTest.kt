@@ -34,7 +34,7 @@ class BelgiumConstraintsTest {
         fun `given an invalid rijksregisternummer should report it`(value: String) {
             val node = ValidationNode("rijksregisternummer", value).apply { rijksregisternummer() }
 
-            node.validate() shouldBe listOf(Violation("rijksregisternummer", "must be a valid rijksregisternummer"))
+            node.validate() shouldBe listOf(Violation("rijksregisternummer", "must be a valid rijksregisternummer", "rijksregisternummer"))
         }
     }
 }

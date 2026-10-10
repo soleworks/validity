@@ -18,6 +18,7 @@ public fun ValidationNode<String>.hexColor(
     message: String = messages.hexColor
 ): Unit = constraint(
     message = message,
+    code = "hexColor",
     predicate = { HEX_COLOR_FORMAT.matches(it) }
 )
 
@@ -25,6 +26,7 @@ public fun ValidationNode<String>.rgbColor(
     message: String = messages.rgbColor
 ): Unit = constraint(
     message = message,
+    code = "rgbColor",
     predicate = { it.isRgbColor() }
 )
 
@@ -32,6 +34,7 @@ public fun ValidationNode<String>.hslColor(
     message: String = messages.hslColor
 ): Unit = constraint(
     message = message,
+    code = "hslColor",
     predicate = { it.isHslColor() }
 )
 

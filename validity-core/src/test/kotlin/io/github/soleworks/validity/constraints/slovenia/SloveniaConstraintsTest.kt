@@ -25,7 +25,7 @@ class SloveniaConstraintsTest {
         fun `given a davčna številka with a wrong check digit or another format should report it`(value: String) {
             val node = ValidationNode("davcnaStevilka", value).apply { davcnaStevilka() }
 
-            node.validate() shouldBe listOf(Violation("davcnaStevilka", "must be a valid davčna številka"))
+            node.validate() shouldBe listOf(Violation("davcnaStevilka", "must be a valid davčna številka", "davcnaStevilka"))
         }
     }
 }

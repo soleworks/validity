@@ -25,7 +25,7 @@ class FinanceConstraintsTest {
         fun `given an invalid card number should report it`(cardNumber: String) {
             val node = ValidationNode("cardNumber", cardNumber).apply { creditCard() }
 
-            node.validate() shouldBe listOf(Violation("cardNumber", "must be a valid credit card number"))
+            node.validate() shouldBe listOf(Violation("cardNumber", "must be a valid credit card number", "creditCard"))
         }
     }
 
@@ -52,7 +52,7 @@ class FinanceConstraintsTest {
         fun `given an invalid IBAN should report it`(iban: String) {
             val node = ValidationNode("iban", iban).apply { iban() }
 
-            node.validate() shouldBe listOf(Violation("iban", "must be a valid IBAN"))
+            node.validate() shouldBe listOf(Violation("iban", "must be a valid IBAN", "iban"))
         }
     }
 
@@ -72,7 +72,7 @@ class FinanceConstraintsTest {
         fun `given an invalid BIC should report it`(bic: String) {
             val node = ValidationNode("bic", bic).apply { bic() }
 
-            node.validate() shouldBe listOf(Violation("bic", "must be a valid BIC"))
+            node.validate() shouldBe listOf(Violation("bic", "must be a valid BIC", "bic"))
         }
     }
 
@@ -92,7 +92,7 @@ class FinanceConstraintsTest {
         fun `given an invalid ISIN should report it`(isin: String) {
             val node = ValidationNode("isin", isin).apply { isin() }
 
-            node.validate() shouldBe listOf(Violation("isin", "must be a valid ISIN"))
+            node.validate() shouldBe listOf(Violation("isin", "must be a valid ISIN", "isin"))
         }
     }
 
@@ -112,7 +112,7 @@ class FinanceConstraintsTest {
         fun `given an invalid currency code should report it`(currency: String) {
             val node = ValidationNode("currency", currency).apply { currencyCode() }
 
-            node.validate() shouldBe listOf(Violation("currency", "must be a valid ISO 4217 currency code"))
+            node.validate() shouldBe listOf(Violation("currency", "must be a valid ISO 4217 currency code", "currencyCode"))
         }
     }
 
@@ -138,7 +138,7 @@ class FinanceConstraintsTest {
         fun `given an invalid Bitcoin address should report it`(wallet: String) {
             val node = ValidationNode("wallet", wallet).apply { bitcoinAddress() }
 
-            node.validate() shouldBe listOf(Violation("wallet", "must be a valid Bitcoin address"))
+            node.validate() shouldBe listOf(Violation("wallet", "must be a valid Bitcoin address", "bitcoinAddress"))
         }
     }
 
@@ -163,7 +163,7 @@ class FinanceConstraintsTest {
         fun `given an invalid Ethereum address should report it`(wallet: String) {
             val node = ValidationNode("wallet", wallet).apply { ethereumAddress() }
 
-            node.validate() shouldBe listOf(Violation("wallet", "must be a valid Ethereum address"))
+            node.validate() shouldBe listOf(Violation("wallet", "must be a valid Ethereum address", "ethereumAddress"))
         }
     }
 }

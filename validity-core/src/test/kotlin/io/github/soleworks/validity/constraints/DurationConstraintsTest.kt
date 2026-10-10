@@ -17,7 +17,7 @@ class DurationConstraintsTest {
         fun `given a Duration below the minimum should report it`() {
             val node = ValidationNode("timeout", 9.minutes).apply { min(10.minutes) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be at least 10m"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be at least 10m", "min"))
         }
 
         @Test
@@ -40,7 +40,7 @@ class DurationConstraintsTest {
         fun `given a message function for a Duration should build it from the value and the minimum`() {
             val node = ValidationNode("timeout", 9.minutes).apply { min(10.minutes) { min -> "$this is below $min" } }
 
-            node.validate() shouldBe listOf(Violation("timeout", "9m is below 10m"))
+            node.validate() shouldBe listOf(Violation("timeout", "9m is below 10m", "min"))
         }
     }
 
@@ -51,7 +51,7 @@ class DurationConstraintsTest {
         fun `given a Duration above the maximum should report it`() {
             val node = ValidationNode("timeout", 11.minutes).apply { max(10.minutes) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be at most 10m"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be at most 10m", "max"))
         }
 
         @Test
@@ -74,7 +74,7 @@ class DurationConstraintsTest {
         fun `given a message function for a Duration should build it from the value and the maximum`() {
             val node = ValidationNode("timeout", 11.minutes).apply { max(10.minutes) { max -> "$this is above $max" } }
 
-            node.validate() shouldBe listOf(Violation("timeout", "11m is above 10m"))
+            node.validate() shouldBe listOf(Violation("timeout", "11m is above 10m", "max"))
         }
     }
 
@@ -85,7 +85,7 @@ class DurationConstraintsTest {
         fun `given a Duration equal to the reference should report it`() {
             val node = ValidationNode("timeout", 10.minutes).apply { greaterThan(10.minutes) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be greater than 10m"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be greater than 10m", "greaterThan"))
         }
 
         @Test
@@ -110,7 +110,7 @@ class DurationConstraintsTest {
                 greaterThan(10.minutes) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "10m is not greater than 10m"))
+            node.validate() shouldBe listOf(Violation("timeout", "10m is not greater than 10m", "greaterThan"))
         }
     }
 
@@ -121,7 +121,7 @@ class DurationConstraintsTest {
         fun `given a Duration equal to the reference should report it`() {
             val node = ValidationNode("timeout", 10.minutes).apply { lessThan(10.minutes) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be less than 10m"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be less than 10m", "lessThan"))
         }
 
         @Test
@@ -146,7 +146,7 @@ class DurationConstraintsTest {
                 lessThan(10.minutes) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "10m is not less than 10m"))
+            node.validate() shouldBe listOf(Violation("timeout", "10m is not less than 10m", "lessThan"))
         }
     }
 
@@ -157,14 +157,14 @@ class DurationConstraintsTest {
         fun `given a Duration below the range should report it`() {
             val node = ValidationNode("timeout", 8.minutes).apply { between(9.minutes, 11.minutes) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be between 9m and 11m"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be between 9m and 11m", "between"))
         }
 
         @Test
         fun `given a Duration above the range should report it`() {
             val node = ValidationNode("timeout", 12.minutes).apply { between(9.minutes, 11.minutes) }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be between 9m and 11m"))
+            node.validate() shouldBe listOf(Violation("timeout", "must be between 9m and 11m", "between"))
         }
 
         @Test
@@ -203,7 +203,7 @@ class DurationConstraintsTest {
                 between(9.minutes, 11.minutes) { min, max -> "$this is not from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "12m is not from 9m to 11m"))
+            node.validate() shouldBe listOf(Violation("timeout", "12m is not from 9m to 11m", "between"))
         }
     }
 }

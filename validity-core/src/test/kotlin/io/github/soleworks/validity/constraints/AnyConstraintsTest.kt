@@ -17,14 +17,14 @@ class AnyConstraintsTest {
         fun `given a missing comment should report it as required`() {
             val survey = Survey(comments = listOf("great service", null))
 
-            survey.validate().violations shouldBe listOf(Violation("comments[1]", "is required"))
+            survey.validate().violations shouldBe listOf(Violation("comments[1]", "is required", "notNull"))
         }
 
         @Test
         fun `given an unanswered question should report the custom message`() {
             val survey = Survey(answers = listOf("yes", null))
 
-            survey.validate().violations shouldBe listOf(Violation("answers[1]", "must be answered"))
+            survey.validate().violations shouldBe listOf(Violation("answers[1]", "must be answered", "notNull"))
         }
     }
 
@@ -35,7 +35,7 @@ class AnyConstraintsTest {
         fun `given a currency different from the account currency should report it`() {
             val node = ValidationNode("currency", "USD").apply { equalTo("BRL") }
 
-            node.validate() shouldBe listOf(Violation("currency", "must be equal to BRL"))
+            node.validate() shouldBe listOf(Violation("currency", "must be equal to BRL", "equalTo"))
         }
 
         @Test
@@ -58,7 +58,7 @@ class AnyConstraintsTest {
         fun `given a message function should build it from the value and the expected value`() {
             val node = ValidationNode("currency", "USD").apply { equalTo("BRL") { other -> "$this is not $other" } }
 
-            node.validate() shouldBe listOf(Violation("currency", "USD is not BRL"))
+            node.validate() shouldBe listOf(Violation("currency", "USD is not BRL", "equalTo"))
         }
     }
 
@@ -69,7 +69,7 @@ class AnyConstraintsTest {
         fun `given a destination equal to the source account should report it`() {
             val node = ValidationNode("destinationAccount", "0001-1").apply { notEqualTo("0001-1") }
 
-            node.validate() shouldBe listOf(Violation("destinationAccount", "must not be equal to 0001-1"))
+            node.validate() shouldBe listOf(Violation("destinationAccount", "must not be equal to 0001-1", "notEqualTo"))
         }
 
         @Test
@@ -94,7 +94,7 @@ class AnyConstraintsTest {
                 notEqualTo("0001-1") { other -> "$this is the source account $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("destinationAccount", "0001-1 is the source account 0001-1"))
+            node.validate() shouldBe listOf(Violation("destinationAccount", "0001-1 is the source account 0001-1", "notEqualTo"))
         }
     }
 
@@ -105,7 +105,7 @@ class AnyConstraintsTest {
         fun `given a status outside the allowed ones should report it`() {
             val node = ValidationNode("status", "CANCELLED").apply { oneOf(listOf("PENDING", "PAID")) }
 
-            node.validate() shouldBe listOf(Violation("status", "must be one of PENDING, PAID"))
+            node.validate() shouldBe listOf(Violation("status", "must be one of PENDING, PAID", "oneOf"))
         }
 
         @Test
@@ -130,7 +130,7 @@ class AnyConstraintsTest {
                 oneOf(listOf("PENDING", "PAID")) { values -> "$this is not in $values" }
             }
 
-            node.validate() shouldBe listOf(Violation("status", "CANCELLED is not in [PENDING, PAID]"))
+            node.validate() shouldBe listOf(Violation("status", "CANCELLED is not in [PENDING, PAID]", "oneOf"))
         }
     }
 
@@ -141,7 +141,7 @@ class AnyConstraintsTest {
         fun `given a reserved username should report it`() {
             val node = ValidationNode("username", "admin").apply { noneOf(listOf("admin", "root")) }
 
-            node.validate() shouldBe listOf(Violation("username", "must not be one of admin, root"))
+            node.validate() shouldBe listOf(Violation("username", "must not be one of admin, root", "noneOf"))
         }
 
         @Test
@@ -166,7 +166,7 @@ class AnyConstraintsTest {
                 noneOf(listOf("admin", "root")) { values -> "$this is reserved, avoid $values" }
             }
 
-            node.validate() shouldBe listOf(Violation("username", "admin is reserved, avoid [admin, root]"))
+            node.validate() shouldBe listOf(Violation("username", "admin is reserved, avoid [admin, root]", "noneOf"))
         }
     }
 }

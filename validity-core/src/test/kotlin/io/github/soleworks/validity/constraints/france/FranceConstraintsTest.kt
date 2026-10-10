@@ -34,7 +34,7 @@ class FranceConstraintsTest {
         fun `given an invalid SPI should report it`(value: String) {
             val node = ValidationNode("spi", value).apply { spi() }
 
-            node.validate() shouldBe listOf(Violation("spi", "must be a valid SPI"))
+            node.validate() shouldBe listOf(Violation("spi", "must be a valid SPI", "spi"))
         }
     }
 }

@@ -22,6 +22,7 @@ public fun ValidationNode<String>.rodneCislo(
     message: String = messages.czechRepublic.rodneCislo
 ): Unit = constraint(
     message = message,
+    code = "rodneCislo",
     predicate = { it.isRodneCislo() }
 )
 

@@ -27,7 +27,7 @@ class EstoniaConstraintsTest {
         ) {
             val node = ValidationNode("isikukood", value).apply { isikukood() }
 
-            node.validate() shouldBe listOf(Violation("isikukood", "must be a valid isikukood"))
+            node.validate() shouldBe listOf(Violation("isikukood", "must be a valid isikukood", "isikukood"))
         }
     }
 }

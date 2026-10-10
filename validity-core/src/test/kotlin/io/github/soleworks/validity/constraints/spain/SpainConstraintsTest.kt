@@ -25,7 +25,7 @@ class SpainConstraintsTest {
         fun `given an invalid DNI should report it`(value: String) {
             val node = ValidationNode("dni", value).apply { dni() }
 
-            node.validate() shouldBe listOf(Violation("dni", "must be a valid DNI"))
+            node.validate() shouldBe listOf(Violation("dni", "must be a valid DNI", "dni"))
         }
     }
 
@@ -45,7 +45,7 @@ class SpainConstraintsTest {
         fun `given an invalid NIE should report it`(value: String) {
             val node = ValidationNode("nie", value).apply { nie() }
 
-            node.validate() shouldBe listOf(Violation("nie", "must be a valid NIE"))
+            node.validate() shouldBe listOf(Violation("nie", "must be a valid NIE", "nie"))
         }
     }
 
@@ -65,7 +65,7 @@ class SpainConstraintsTest {
         fun `given an invalid NIF should report it`(value: String) {
             val node = ValidationNode("nif", value).apply { nif() }
 
-            node.validate() shouldBe listOf(Violation("nif", "must be a valid NIF"))
+            node.validate() shouldBe listOf(Violation("nif", "must be a valid NIF", "nif"))
         }
     }
 }

@@ -7,6 +7,7 @@ public fun <V : Any> ValidationNode<V?>.notNull(
     message: String = messages.required
 ): Unit = constraint(
     message = message,
+    code = "notNull",
     predicate = { it != null }
 )
 
@@ -23,6 +24,7 @@ public fun <V> ValidationNode<V>.equalTo(
     message: V.(V?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "equalTo",
     predicate = { other == null || it == other }
 )
 
@@ -39,6 +41,7 @@ public fun <V> ValidationNode<V>.notEqualTo(
     message: V.(V?) -> String
 ): Unit = constraint(
     message = { it.message(other) },
+    code = "notEqualTo",
     predicate = { other == null || it != other }
 )
 
@@ -55,6 +58,7 @@ public fun <V> ValidationNode<V>.oneOf(
     message: V.(Iterable<V>?) -> String
 ): Unit = constraint(
     message = { it.message(values) },
+    code = "oneOf",
     predicate = { values == null || it in values }
 )
 
@@ -71,5 +75,6 @@ public fun <V> ValidationNode<V>.noneOf(
     message: V.(Iterable<V>?) -> String
 ): Unit = constraint(
     message = { it.message(values) },
+    code = "noneOf",
     predicate = { values == null || it !in values }
 )
