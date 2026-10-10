@@ -14,9 +14,32 @@ context(validation: Validation)
 public fun <V : Any> KProperty0<V?>.required(
     message: String,
     block: ValidationNode<V>.() -> Unit
-) {
-    val value = get()
+): Unit = required(
+    name = name,
+    value = get(),
+    message = message,
+    block = block
+)
 
+context(validation: Validation)
+public fun <V : Any> required(
+    name: String,
+    value: V?,
+    block: ValidationNode<V>.() -> Unit
+): Unit = required(
+    name = name,
+    value = value,
+    message = messages.required,
+    block = block
+)
+
+context(validation: Validation)
+public fun <V : Any> required(
+    name: String,
+    value: V?,
+    message: String,
+    block: ValidationNode<V>.() -> Unit
+) {
     if (value == null)
         return validation.add(
             ValidationNode<V?>(name, null).apply {
@@ -38,8 +61,20 @@ public fun <V : Any> KProperty0<V?>.required(
 context(validation: Validation)
 public infix fun <V : Any> KProperty0<V?>.ifPresent(
     block: ValidationNode<V>.() -> Unit
+): Unit = ifPresent(
+    name = name,
+    value = get(),
+    block = block
+)
+
+context(validation: Validation)
+public fun <V : Any> ifPresent(
+    name: String,
+    value: V?,
+    block: ValidationNode<V>.() -> Unit
 ) {
-    val value = get() ?: return
+    if (value == null)
+        return
 
     val node = ValidationNode(name, value)
 

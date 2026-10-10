@@ -1,5 +1,7 @@
 package io.github.soleworks.validity
 
+import io.github.soleworks.validity.constraints.brazil.cpf
+import io.github.soleworks.validity.constraints.min
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Login
 import io.github.soleworks.validity.samples.Recipient
@@ -179,6 +181,78 @@ class PremisesTest {
             val recipient = Recipient(pixKey = null, bankAccount = "0001-12345")
 
             recipient.validate().violations shouldBe emptyList()
+        }
+    }
+
+    @Nested
+    @DisplayName("When required is called with a value")
+    inner class RequiredValue {
+        @Test
+        fun `given a missing value should report only that it is required`() {
+            val cpf: String? = null
+
+            val result = validation { required("cpf", cpf) { cpf() } }.validate()
+
+            result.violations shouldBe listOf(Violation("cpf", "is required", "required"))
+        }
+
+        @Test
+        fun `given an invalid value should run its rules under the name`() {
+            val result = validation { required("cpf", "123") { cpf() } }.validate()
+
+            result.violations shouldBe listOf(Violation("cpf", "must be a valid CPF", "cpf"))
+        }
+
+        @Test
+        fun `given a valid value should accept it`() {
+            val result = validation { required("cpf", "52998224725") { cpf() } }.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a custom message should report it when the value is missing`() {
+            val cpf: String? = null
+
+            val result = validation { required("cpf", cpf, "informe o CPF") { cpf() } }.validate()
+
+            result.violations shouldBe listOf(Violation("cpf", "informe o CPF", "required"))
+        }
+
+        @Test
+        fun `given several values should report each one under its own name`() {
+            val cpf: String? = null
+            val page = 0
+
+            val result = validation {
+                required("cpf", cpf) { cpf() }
+                required("page", page) { min(1) }
+            }.validate()
+
+            result.violations shouldBe listOf(
+                Violation("cpf", "is required", "required"),
+                Violation("page", "must be at least 1", "min")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When ifPresent is called with a value")
+    inner class IfPresentValue {
+        @Test
+        fun `given a missing value should accept it`() {
+            val page: Int? = null
+
+            val result = validation { ifPresent("page", page) { min(1) } }.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a present value should run its rules under the name`() {
+            val result = validation { ifPresent("page", 0) { min(1) } }.validate()
+
+            result.violations shouldBe listOf(Violation("page", "must be at least 1", "min"))
         }
     }
 }
