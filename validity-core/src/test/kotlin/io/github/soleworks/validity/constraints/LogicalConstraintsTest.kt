@@ -6,6 +6,8 @@ import io.github.soleworks.validity.Violation
 import io.github.soleworks.validity.constraints.brazil.cnpj
 import io.github.soleworks.validity.constraints.brazil.cpf
 import io.github.soleworks.validity.each
+import io.github.soleworks.validity.samples.Address
+import io.github.soleworks.validity.valid
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -146,14 +148,109 @@ class LogicalConstraintsTest {
         }
 
         @Test
-        fun `given rules on the items inside should count each item as one of the rules`() {
+        fun `given rules on the items inside should treat all the items as one rule`() {
             val node = ValidationNode("tags", listOf("ab", "gift")).apply {
                 or {
                     each { minLength(3) }
                 }
             }
 
+            node.validate() shouldBe listOf(Violation("tags", "must have at least 3 characters", "or"))
+        }
+
+        @Test
+        fun `given rules on the items of an empty list should accept it`() {
+            val node = ValidationNode("tags", emptyList<String>()).apply {
+                or {
+                    each { minLength(3) }
+                }
+            }
+
             node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a nested object with one invalid property should treat the whole object as one rule`() {
+            val node = ValidationNode("address", Address(street = null)).apply {
+                or {
+                    valid()
+                }
+            }
+
+            node.validate() shouldBe listOf(Violation("address", "is required", "or"))
+        }
+
+        @Test
+        fun `given no rules should accept the value`() {
+            val node = ValidationNode("document", "123").apply { or { } }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a rule skipped by a null reference should decide with the other rules`() {
+            val reserved: String? = null
+
+            val node = ValidationNode("document", "123").apply {
+                or {
+                    equalTo(reserved)
+                    cpf()
+                }
+            }
+
+            node.validate() shouldBe listOf(Violation("document", "must be a valid CPF", "or"))
+        }
+
+        @Test
+        fun `given nested operators should run each rule once`() {
+            var runs = 0
+
+            val node = ValidationNode("document", "123").apply {
+                or {
+                    or {
+                        or {
+                            constraint("never passes") { runs++; false }
+                        }
+                    }
+                }
+            }
+
+            node.validate()
+
+            runs shouldBe 1
+        }
+
+        @Test
+        fun `given a message with a template placeholder should keep it as text`() {
+            val node = ValidationNode("token", "x").apply {
+                or {
+                    constraint("has {right} inside") { false }
+                    constraint("is another rule") { false }
+                }
+            }
+
+            node.validate() shouldBe listOf(Violation("token", "has {right} inside or is another rule", "or"))
+        }
+
+        @Test
+        fun `given an and of two failing rules inside should group its messages`() {
+            val node = ValidationNode("document", "X").apply {
+                or {
+                    cpf()
+                    and {
+                        startsWith("ID-")
+                        length(8)
+                    }
+                }
+            }
+
+            node.validate() shouldBe listOf(
+                Violation(
+                    "document",
+                    "must be a valid CPF or (must start with ID- and must have exactly 8 characters)",
+                    "or"
+                )
+            )
         }
     }
 
@@ -218,6 +315,45 @@ class LogicalConstraintsTest {
                 Violation("code", "must have exactly 5 characters e must contain only digits", "and")
             )
         }
+
+        @Test
+        fun `given no rules should accept the value`() {
+            val node = ValidationNode("code", "abc").apply { and { } }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given the same message from several items should report it once`() {
+            val node = ValidationNode("tags", listOf("ab", "c")).apply {
+                and {
+                    each { minLength(3) }
+                }
+            }
+
+            node.validate() shouldBe listOf(Violation("tags", "must have at least 3 characters", "and"))
+        }
+
+        @Test
+        fun `given an or of two failing rules inside should group its messages`() {
+            val node = ValidationNode("document", "123").apply {
+                and {
+                    or {
+                        cpf()
+                        cnpj()
+                    }
+                    minLength(20)
+                }
+            }
+
+            node.validate() shouldBe listOf(
+                Violation(
+                    "document",
+                    "(must be a valid CPF or must be a valid CNPJ) and must have at least 20 characters",
+                    "and"
+                )
+            )
+        }
     }
 
     @Nested
@@ -262,6 +398,24 @@ class LogicalConstraintsTest {
                     equalTo("root")
                 }
             }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a rule skipped by a null reference should accept the value`() {
+            val reserved: String? = null
+
+            val node = ValidationNode("username", "ana").apply {
+                not { equalTo(reserved) }
+            }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no rules should accept the value`() {
+            val node = ValidationNode("username", "admin").apply { not { } }
 
             node.validate() shouldBe emptyList()
         }
