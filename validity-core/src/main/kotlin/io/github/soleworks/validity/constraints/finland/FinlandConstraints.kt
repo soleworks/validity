@@ -12,15 +12,16 @@ private const val TWENTY_FIRST_CENTURY = 2000
 private const val CENTURY_SIGN_INDEX = 6
 private const val INDIVIDUAL_START = 7
 private const val INDIVIDUAL_END = 10
+private const val TWENTY_FIRST_CENTURY_SIGNS = "ABCDEF"
 
-private val HETU_FORMAT = Regex("\\d{6}[-+A]\\d{3}[0-9A-FHJ-NPR-Y]", RegexOption.IGNORE_CASE)
+private val HETU_FORMAT = Regex("\\d{6}[-+A-FU-Y]\\d{3}[0-9A-FHJ-NPR-Y]", RegexOption.IGNORE_CASE)
 
 public fun ValidationNode<String>.hetu(
     message: String = messages.finland.hetu
 ): Unit = constraint(
     message = message,
     code = "hetu",
-    predicate = { HETU_FORMAT.matches(it) && it.hasValidBirthDate() && it.hasValidCheckCharacter() }
+    predicate = { HETU_FORMAT.matches(it) && it.uppercase().let { hetu -> hetu.hasValidBirthDate() && hetu.hasValidCheckCharacter() } }
 )
 
 private fun String.birthYear(): Int {
@@ -28,8 +29,8 @@ private fun String.birthYear(): Int {
 
     return when (this[CENTURY_SIGN_INDEX]) {
         '+' -> NINETEENTH_CENTURY + shortYear
-        '-' -> TWENTIETH_CENTURY + shortYear
-        else -> TWENTY_FIRST_CENTURY + shortYear
+        in TWENTY_FIRST_CENTURY_SIGNS -> TWENTY_FIRST_CENTURY + shortYear
+        else -> TWENTIETH_CENTURY + shortYear
     }
 }
 

@@ -18,18 +18,17 @@ public fun ValidationNode<String>.pps(
 ): Unit = constraint(
     message = message,
     code = "pps",
-    predicate = { PPS_FORMAT.matches(it) && it.isPps() }
+    predicate = { PPS_FORMAT.matches(it) && it.uppercase().isPps() }
 )
 
 private fun String.isPps(): Boolean {
     val numberSum = take(NUMBER_LENGTH).withIndex().sumOf { (index, char) -> char.digitToInt() * (NUMBER_WEIGHT_BASE - index) }
-    val secondLetterSum = if (length > SECOND_LETTER_INDEX && this[SECOND_LETTER_INDEX] != ZERO_REMAINDER_LETTER) {
+    val secondLetterSum = if (length > SECOND_LETTER_INDEX && this[SECOND_LETTER_INDEX] != ZERO_REMAINDER_LETTER)
         (this[SECOND_LETTER_INDEX].code - LETTER_OFFSET) * SECOND_LETTER_WEIGHT
-    } else {
+    else
         0
-    }
     val remainder = (numberSum + secondLetterSum) % MODULUS
     val expected = if (remainder == 0) ZERO_REMAINDER_LETTER else (LETTER_OFFSET + remainder).toChar()
 
-    return this[NUMBER_LENGTH].uppercaseChar() == expected
+    return this[NUMBER_LENGTH] == expected
 }

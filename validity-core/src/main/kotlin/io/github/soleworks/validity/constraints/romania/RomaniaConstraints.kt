@@ -21,13 +21,16 @@ public fun ValidationNode<String>.cnp(
 ): Unit = constraint(
     message = message,
     code = "cnp",
-    predicate = { CNP_FORMAT.matches(it) && (it.startsWith(UNCHECKED_PREFIX) || it.isCnp()) }
+    predicate = { it.isCnp() }
 )
 
 private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
 
 private fun String.isCnp(): Boolean {
     val (_, yearPart, monthPart, dayPart) = CNP_FORMAT.matchEntire(this)?.destructured ?: return false
+
+    if (startsWith(UNCHECKED_PREFIX)) return true
+
     val century = when (first()) {
         in TWENTIETH_CENTURY_DIGITS -> TWENTIETH_CENTURY
         in NINETEENTH_CENTURY_DIGITS -> NINETEENTH_CENTURY

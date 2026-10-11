@@ -21,7 +21,7 @@ class IndiaConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["99999999R", "12345678Z", "01234567L", "X1234567L"])
+        @ValueSource(strings = ["99999999R", "12345678Z", "01234567L", "X1234567L", "182244494332"])
         fun `given an invalid Aadhaar should report it`(value: String) {
             val node = ValidationNode("aadhaar", value).apply { aadhaar() }
 

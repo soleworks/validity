@@ -28,7 +28,7 @@ public fun ValidationNode<String>.rodneCislo(
 
 private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
 
-private fun String.isRodneCislo(): Boolean {
+internal fun String.isRodneCislo(): Boolean {
     val (yearPart, monthPart, dayPart, serial) = RODNE_CISLO_FORMAT.matchEntire(this)?.destructured ?: return false
     val shortYear = yearPart.toInt()
     val isLong = serial.length == LONG_SERIAL_LENGTH

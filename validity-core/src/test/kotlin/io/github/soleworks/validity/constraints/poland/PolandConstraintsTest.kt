@@ -63,7 +63,7 @@ class PolandConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["1234567845", "12345673", "123-456-785", "6-9-1-6-5-7-1-8-2"])
+        @ValueSource(strings = ["1234567845", "12345673", "123-456-785", "6-9-1-6-5-7-1-8-2", "12345678600015"])
         fun `given a REGON with a wrong check digit or another format should report it`(value: String) {
             val node = ValidationNode("regon", value).apply { regon() }
 

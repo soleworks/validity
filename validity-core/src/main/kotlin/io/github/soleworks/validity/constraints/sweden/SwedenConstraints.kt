@@ -81,4 +81,4 @@ private fun String.isLuhnValid(): Boolean = reversed().map(Char::digitToInt).wit
     if (index % DOUBLING == 1) (digit * DOUBLING).let { if (it > DOUBLE_DIGIT_LIMIT) it - DOUBLE_DIGIT_LIMIT else it } else digit
 } % LUHN_MODULUS == 0
 
-private fun String.isValid(): Boolean = hasValidBirthDate() && replaceFirst(NON_WORD, "").isLuhnValid()
+private fun String.isValid(): Boolean = hasValidBirthDate() && shortForm().replaceFirst(NON_WORD, "").isLuhnValid()

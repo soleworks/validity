@@ -23,7 +23,7 @@ public fun ValidationNode<String>.idCardNumber(
 private fun String.isIdCardNumber(): Boolean {
     val padded = uppercase().padStart(ID_CARD_LENGTH, '0')
 
-    return when (getOrNull(LETTER_INDEX)) {
+    return when (padded[LETTER_INDEX]) {
         'A', 'P' -> padded[LAST_DIGIT_INDEX] != '0'
         else -> {
             val firstPart = padded.take(FIRST_PART_END).toInt()

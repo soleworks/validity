@@ -80,8 +80,9 @@ private fun List<Int>.isNip(): Boolean {
 
 private fun List<Int>.isRegon(): Boolean {
     val weights = if (size == REGON_SHORT_LENGTH) REGON_SHORT_WEIGHTS else REGON_LONG_WEIGHTS
+    val hasCheckDigit = last() == dropLast(1).weightedSum(weights) % MODULUS % DECIMAL_MODULUS
 
-    return last() == dropLast(1).weightedSum(weights) % MODULUS % DECIMAL_MODULUS
+    return hasCheckDigit && (size == REGON_SHORT_LENGTH || take(REGON_SHORT_LENGTH).isRegon())
 }
 
 private fun String.isDowodOsobisty(): Boolean {

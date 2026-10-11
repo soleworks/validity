@@ -10,7 +10,6 @@ private const val TWENTIETH_CENTURY = 1900
 private const val TWENTY_FIRST_CENTURY = 2000
 private const val FEMALE_DAY_OFFSET = 40
 private const val ALPHABET_SIZE = 26
-private const val CIE_LENGTH = 9
 private const val CIE_PLACEHOLDER = "CA00000AA"
 private const val VOWELS = "AEIOU"
 private const val PADDING = 'X'
@@ -47,7 +46,7 @@ public fun ValidationNode<String>.cie(
 ): Unit = constraint(
     message = message,
     code = "cie",
-    predicate = { it.length == CIE_LENGTH && it != CIE_PLACEHOLDER && CIE_FORMAT.matches(it) }
+    predicate = { CIE_FORMAT.matches(it) && !it.equals(CIE_PLACEHOLDER, ignoreCase = true) }
 )
 
 private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
@@ -88,10 +87,10 @@ private fun String.isCodiceFiscale(): Boolean {
 
     if (!isShortYearDate("${chars[6]}${chars[7]}".toInt(), month, day)) return false
 
-    val even = (1 until chars.size - 1 step 2).sumOf { chars[it].evenValue() }
-    val odd = (0 until chars.size - 1 step 2).sumOf { chars[it].oddValue() }
+    val even = (1 until lastIndex step 2).sumOf { this[it].evenValue() }
+    val odd = (0 until lastIndex step 2).sumOf { this[it].oddValue() }
 
-    return 'A' + (even + odd) % ALPHABET_SIZE == chars.last()
+    return 'A' + (even + odd) % ALPHABET_SIZE == last()
 }
 
 private fun Char.evenValue(): Int = if (isDigit()) digitToInt() else code - LETTER_OFFSET

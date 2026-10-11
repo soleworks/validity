@@ -113,11 +113,7 @@ private fun List<Int>.isCnh(): Boolean {
     val second = take(9).zip(1..9) { digit, weight -> digit * weight }.sum() % MODULUS - if (first > 9) 2 else 0
 
     val firstDigit = if (first > 9) 0 else first
-    val secondDigit = when {
-        second < 0 -> second + MODULUS
-        second > 9 -> 0
-        else -> second
-    }
+    val secondDigit = (if (second < 0) second + MODULUS else second).let { if (it > 9) 0 else it }
 
     return !isRepeated() && this[9] == firstDigit && this[10] == secondDigit
 }
