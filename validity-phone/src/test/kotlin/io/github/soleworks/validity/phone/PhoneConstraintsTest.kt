@@ -111,6 +111,15 @@ class PhoneConstraintsTest {
 
             node.validate() shouldBe listOf(Violation("phone", "+44 20 7946 0018 is not a phone from +55", "phone"))
         }
+
+        @Test
+        fun `given a message with the parameter placeholders should replace them`() {
+            val node = ValidationNode("phone", "1").apply {
+                phone(countryCode = "55", format = PhoneFormat.COMPLETE, message = "not a +{countryCode} {format} number")
+            }
+
+            node.validate() shouldBe listOf(Violation("phone", "not a +55 COMPLETE number", "phone"))
+        }
     }
 
     @Nested
@@ -203,7 +212,7 @@ class PhoneConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["999", "0", "BR", ""])
+        @ValueSource(strings = ["999", "0", "BR", "", "++55", "+055", "055", "٥٥"])
         fun `given a country calling code that does not exist should report it`(countryCode: String) {
             val node = ValidationNode("countryCode", countryCode).apply { countryCode() }
 

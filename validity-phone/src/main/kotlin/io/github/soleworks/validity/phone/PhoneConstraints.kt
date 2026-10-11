@@ -11,7 +11,7 @@ public fun ValidationNode<String>.phone(
     countryCode = countryCode,
     areaCode = areaCode,
     format = format,
-    message = { _, _, _ -> message }
+    message = { _, _, _ -> message.withPhonePlaceholders(countryCode, areaCode, format) }
 )
 
 public fun ValidationNode<String>.phone(
@@ -34,7 +34,7 @@ public fun ValidationNode<String>.mobilePhone(
     countryCode = countryCode,
     areaCode = areaCode,
     format = format,
-    message = { _, _, _ -> message }
+    message = { _, _, _ -> message.withPhonePlaceholders(countryCode, areaCode, format) }
 )
 
 public fun ValidationNode<String>.mobilePhone(
@@ -61,7 +61,7 @@ public fun ValidationNode<String>.areaCode(
     message: String = phoneMessages.areaCode
 ): Unit = areaCode(
     countryCode = countryCode,
-    message = { message.replace("{countryCode}", "$countryCode") }
+    message = { message.replace("{countryCode}", countryCode.orEmpty()) }
 )
 
 public fun ValidationNode<String>.areaCode(
@@ -72,3 +72,11 @@ public fun ValidationNode<String>.areaCode(
     code = "areaCode",
     predicate = { PhoneNumbers.isAreaCode(it, countryCode) }
 )
+
+private fun String.withPhonePlaceholders(
+    countryCode: String?,
+    areaCode: String?,
+    format: PhoneFormat?
+): String = replace("{countryCode}", countryCode.orEmpty())
+    .replace("{areaCode}", areaCode.orEmpty())
+    .replace("{format}", format?.name.orEmpty())

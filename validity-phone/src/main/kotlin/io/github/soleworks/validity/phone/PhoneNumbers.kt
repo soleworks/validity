@@ -12,6 +12,7 @@ internal object PhoneNumbers {
     private const val MAX_AREA_CODE_LENGTH = 5
 
     private val util = PhoneNumberUtil.getInstance()
+    private val callingCodeFormat = Regex("[1-9]\\d{0,2}")
     private val possible = setOf(ValidationResult.IS_POSSIBLE, ValidationResult.IS_POSSIBLE_LOCAL_ONLY)
     private val geographicTypes = listOf(PhoneNumberType.FIXED_LINE, PhoneNumberType.MOBILE)
     private val mobileTypes = setOf(PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBILE)
@@ -140,5 +141,5 @@ internal object PhoneNumbers {
     else
         types.any { type -> util.isPossibleNumberForTypeWithReason(this, type) in possible }
 
-    private fun String.toCallingCode(): Int? = trim().removePrefix(PLUS).toIntOrNull()
+    private fun String.toCallingCode(): Int? = trim().removePrefix(PLUS).takeIf(callingCodeFormat::matches)?.toInt()
 }
