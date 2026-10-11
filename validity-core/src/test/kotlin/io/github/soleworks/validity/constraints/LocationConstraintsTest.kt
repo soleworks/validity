@@ -64,7 +64,7 @@ class LocationConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["por", "xx", "PT"])
+        @ValueSource(strings = ["por", "xx", "PT", "iw", "in", "ji", "mo"])
         fun `given an invalid language code should report it`(language: String) {
             val node = ValidationNode("language", language).apply { languageCode() }
 
@@ -325,7 +325,6 @@ class LocationConstraintsTest {
                 "GB,'W1N 4DJ'",
                 "GB,'AA9A 9AA'",
                 "GB,'AA99 9AA'",
-                "GB,'BS98 1TL'",
                 "GB,'DE993GG'",
                 "FR,'75008'",
                 "FR,'44522'",

@@ -33,7 +33,7 @@ class EncodingConstraintsTest {
     @DisplayName("When base64Url is called")
     inner class Base64Url {
         @ParameterizedTest
-        @ValueSource(strings = ["SGVsbG8_LQ", "abc-_"])
+        @ValueSource(strings = ["SGVsbG8_LQ", "abc-_w"])
         fun `given a valid URL-safe Base64 text should accept it`(content: String) {
             val node = ValidationNode("content", content).apply { base64Url() }
 
@@ -41,7 +41,7 @@ class EncodingConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["SGVsbG8+", "SGVsbG8/"])
+        @ValueSource(strings = ["SGVsbG8+", "SGVsbG8/", "A", "AAAAA"])
         fun `given an invalid URL-safe Base64 text should report it`(content: String) {
             val node = ValidationNode("content", content).apply { base64Url() }
 
@@ -141,7 +141,9 @@ class EncodingConstraintsTest {
                 "tru",
                 "{\"a\":1}}",
                 "\"bad \\x escape\"",
-                "\"tab\there\""
+                "\"tab\there\"",
+                "\"\\u٠٠٤١\"",
+                "\"\\uＡＡＡＡ\""
             ]
         )
         fun `given an invalid JSON should report it`(payload: String) {

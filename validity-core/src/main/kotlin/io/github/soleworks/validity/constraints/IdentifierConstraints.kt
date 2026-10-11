@@ -22,14 +22,13 @@ private val EAN_FORMAT = Regex("\\d{8}|\\d{13}|\\d{14}")
 private val ISRC_FORMAT = Regex("[A-Z]{2}[A-Z0-9]{3}\\d{7}")
 private val IMEI_FORMAT = Regex("\\d{15}")
 private val LUHN_FORMAT = Regex("\\d{2,}")
-private val HEX_FORMAT = Regex("[0-9a-fA-F]+")
 
 public fun ValidationNode<String>.uuid(
     version: Int? = null,
     message: String = messages.uuid
 ): Unit = uuid(
     version = version,
-    message = { message.replace("{version}", "$version") }
+    message = { message.replace("{version}", version?.toString().orEmpty()) }
 )
 
 public fun ValidationNode<String>.uuid(
@@ -143,7 +142,7 @@ public fun ValidationNode<String>.hash(
 ): Unit = constraint(
     message = { it.message(algorithm) },
     code = "hash",
-    predicate = { it.length == algorithm.length && HEX_FORMAT.matches(it) }
+    predicate = { it.length == algorithm.length && HEXADECIMAL_FORMAT.matches(it) }
 )
 
 internal fun String.hasLuhnCheckDigit(): Boolean = reversed()

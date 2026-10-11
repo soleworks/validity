@@ -11,7 +11,8 @@ private const val MAX_LONGITUDE = 180.0
 
 internal val COUNTRY_CODES: Set<String> = Locale.getISOCountries().toSet()
 private val COUNTRY_CODES_ALPHA3 = Locale.getISOCountries(Locale.IsoCountryCode.PART1_ALPHA3)
-private val LANGUAGE_CODES = Locale.getISOLanguages().toSet()
+private val WITHDRAWN_LANGUAGE_CODES = setOf("in", "iw", "ji", "mo")
+private val LANGUAGE_CODES = Locale.getISOLanguages().toSet() - WITHDRAWN_LANGUAGE_CODES
 private val TIME_ZONES = ZoneId.getAvailableZoneIds()
 private val LATITUDES = BigDecimal.valueOf(-MAX_LATITUDE)..BigDecimal.valueOf(MAX_LATITUDE)
 private val LONGITUDES = BigDecimal.valueOf(-MAX_LONGITUDE)..BigDecimal.valueOf(MAX_LONGITUDE)
