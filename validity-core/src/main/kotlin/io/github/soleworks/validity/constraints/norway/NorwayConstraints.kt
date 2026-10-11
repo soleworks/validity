@@ -26,7 +26,10 @@ public fun ValidationNode<String>.fodselsnummer(
     }
 )
 
-private fun List<Int>.checkDigit(weights: List<Int>, extra: Int): Int =
+private fun List<Int>.checkDigit(
+    weights: List<Int>,
+    extra: Int
+): Int =
     (MODULUS - (zip(weights) { digit, weight -> digit * weight }.sum() + extra) % MODULUS) % MODULUS
 
 private fun List<Int>.isFodselsnummer(): Boolean {

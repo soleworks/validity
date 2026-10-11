@@ -136,7 +136,9 @@ public fun ValidationNode<String>.mimeType(
     predicate = { MIME_TYPE_FORMAT.matches(it) }
 )
 
-private fun String.isUrl(schemes: Set<String>): Boolean {
+private fun String.isUrl(
+    schemes: Set<String>
+): Boolean {
     val uri = runCatching { URI(this) }.getOrNull()
 
     return uri != null && schemes.any { it.equals(uri.scheme, ignoreCase = true) } && !uri.host.isNullOrBlank()

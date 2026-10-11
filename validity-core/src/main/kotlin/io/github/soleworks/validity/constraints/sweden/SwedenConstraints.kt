@@ -2,20 +2,18 @@ package io.github.soleworks.validity.constraints.sweden
 
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.clock
+import io.github.soleworks.validity.constraints.hasLuhnCheckDigit
+import io.github.soleworks.validity.constraints.isDate
+import io.github.soleworks.validity.constraints.isShortYearDate
 import io.github.soleworks.validity.messages
 import java.time.LocalDate
 
 private const val CENTURY = 100
-private const val TWENTIETH_CENTURY = 1900
-private const val TWENTY_FIRST_CENTURY = 2000
 private const val COORDINATION_OFFSET = 60
 private const val MAX_SHORT_LENGTH = 11
 private const val CENTENARIAN_YEARS = 100
 private const val SEPARATOR_INDEX = 6
 private const val CENTURY_DIGITS = 2
-private const val DOUBLE_DIGIT_LIMIT = 9
-private const val DOUBLING = 2
-private const val LUHN_MODULUS = 10
 
 private val PERSONAL_NUMBER_FORMAT = Regex("(\\d{6}[-+]?\\d{4}|(18|19|20)\\d{6}[-+]?\\d{4})")
 private val NON_WORD = Regex("\\W")
@@ -42,14 +40,6 @@ private fun String.rawDay(): Int = shortForm().substring(4, 6).toInt()
 
 private fun String.isCoordination(): Boolean = rawDay() > COORDINATION_OFFSET
 
-private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
-
-private fun isShortYearDate(shortYear: Int, month: Int, day: Int): Boolean {
-    val century = if (shortYear < LocalDate.now(clock).year % CENTURY) TWENTY_FIRST_CENTURY else TWENTIETH_CENTURY
-
-    return isDate(century + shortYear, month, day)
-}
-
 private fun String.centenarianYear(): Int? {
     val currentYear = LocalDate.now(clock).year
     val currentCentury = currentYear / CENTURY
@@ -57,11 +47,10 @@ private fun String.centenarianYear(): Int? {
     val sameCentury = currentCentury * CENTURY + shortYear
     val previousCentury = (currentCentury - 1) * CENTURY + shortYear
 
-    return if (this[SEPARATOR_INDEX] == '-') {
+    return if (this[SEPARATOR_INDEX] == '-')
         if (sameCentury > currentYear) previousCentury else sameCentury
-    } else {
+    else
         previousCentury.takeIf { currentYear - it >= CENTENARIAN_YEARS }
-    }
 }
 
 private fun String.hasValidBirthDate(): Boolean {
@@ -77,8 +66,4 @@ private fun String.hasValidBirthDate(): Boolean {
     }
 }
 
-private fun String.isLuhnValid(): Boolean = reversed().map(Char::digitToInt).withIndex().sumOf { (index, digit) ->
-    if (index % DOUBLING == 1) (digit * DOUBLING).let { if (it > DOUBLE_DIGIT_LIMIT) it - DOUBLE_DIGIT_LIMIT else it } else digit
-} % LUHN_MODULUS == 0
-
-private fun String.isValid(): Boolean = hasValidBirthDate() && shortForm().replaceFirst(NON_WORD, "").isLuhnValid()
+private fun String.isValid(): Boolean = hasValidBirthDate() && shortForm().replaceFirst(NON_WORD, "").hasLuhnCheckDigit()

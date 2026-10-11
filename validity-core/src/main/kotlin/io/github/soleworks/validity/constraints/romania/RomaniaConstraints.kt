@@ -1,8 +1,8 @@
 package io.github.soleworks.validity.constraints.romania
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.constraints.isDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
 private const val MODULUS = 11
 private const val UNCHECKED_PREFIX = "9000"
@@ -23,8 +23,6 @@ public fun ValidationNode<String>.cnp(
     code = "cnp",
     predicate = { it.isCnp() }
 )
-
-private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
 
 private fun String.isCnp(): Boolean {
     val (_, yearPart, monthPart, dayPart) = CNP_FORMAT.matchEntire(this)?.destructured ?: return false

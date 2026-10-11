@@ -31,7 +31,9 @@ internal object PhoneNumbers {
         format: PhoneFormat?
     ): Boolean = matches(text, countryCode, areaCode, format, mobileTypes)
 
-    fun isCountryCode(text: String): Boolean = text.toCallingCode() in util.supportedCallingCodes
+    fun isCountryCode(
+        text: String
+    ): Boolean = text.toCallingCode() in util.supportedCallingCodes
 
     fun isAreaCode(
         text: String,
@@ -121,7 +123,9 @@ internal object PhoneNumbers {
         return areaCode.length == length && areaCode.all(Char::isDigit) && isValidIn(areaCode + subscriber, region)
     }
 
-    private fun regions(countryCode: String?): Collection<String> = if (countryCode == null)
+    private fun regions(
+        countryCode: String?
+    ): Collection<String> = if (countryCode == null)
         util.supportedRegions
     else
         countryCode.toCallingCode()?.let(util::getRegionCodesForCountryCode).orEmpty()
@@ -133,10 +137,14 @@ internal object PhoneNumbers {
 
     private fun PhoneNumber.isFromRegion(): Boolean = countryCodeSource == CountryCodeSource.FROM_DEFAULT_COUNTRY
 
-    private fun PhoneNumber.hasType(types: Set<PhoneNumberType>?): Boolean =
+    private fun PhoneNumber.hasType(
+        types: Set<PhoneNumberType>?
+    ): Boolean =
         types == null || util.getNumberType(this) in types
 
-    private fun PhoneNumber.isPossible(types: Set<PhoneNumberType>?): Boolean = if (types == null)
+    private fun PhoneNumber.isPossible(
+        types: Set<PhoneNumberType>?
+    ): Boolean = if (types == null)
         util.isPossibleNumberWithReason(this) in possible
     else
         types.any { type -> util.isPossibleNumberForTypeWithReason(this, type) in possible }

@@ -1,14 +1,10 @@
 package io.github.soleworks.validity.constraints.belgium
 
 import io.github.soleworks.validity.ValidationNode
-import io.github.soleworks.validity.clock
+import io.github.soleworks.validity.constraints.isShortYearDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
 private const val MODULUS = 97L
-private const val CENTURY = 100
-private const val TWENTIETH_CENTURY = 1900
-private const val TWENTY_FIRST_CENTURY = 2000
 private const val BASE_LENGTH = 9
 private const val UNKNOWN_DATE_PART = "00"
 private const val POST_2000_PREFIX = 2_000_000_000L
@@ -25,12 +21,6 @@ public fun ValidationNode<String>.rijksregisternummer(
         it.replace(SYMBOLS, "").let { number -> RIJKSREGISTERNUMMER_FORMAT.matches(number) && number.isRijksregisternummer() }
     }
 )
-
-private fun isShortYearDate(shortYear: Int, month: Int, day: Int): Boolean {
-    val century = if (shortYear < LocalDate.now(clock).year % CENTURY) TWENTY_FIRST_CENTURY else TWENTIETH_CENTURY
-
-    return runCatching { LocalDate.of(century + shortYear, month, day) }.isSuccess
-}
 
 private fun String.hasValidBirthDate(): Boolean {
     val month = substring(2, 4)

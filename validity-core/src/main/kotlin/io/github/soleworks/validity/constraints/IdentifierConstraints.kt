@@ -151,7 +151,9 @@ internal fun String.hasLuhnCheckDigit(): Boolean = reversed()
 
 private fun Int.luhnDoubled(): Int = (this * 2).let { doubled -> if (doubled > 9) doubled - 9 else doubled }
 
-private fun String.isUuid(version: Int?): Boolean =
+private fun String.isUuid(
+    version: Int?
+): Boolean =
     UUID_FORMAT.matches(this) && (version == null || this[UUID_VERSION_INDEX].digitToInt(HEX_RADIX) == version)
 
 private fun String.withoutSeparators(): String = filterNot { it == '-' || it == ' ' }

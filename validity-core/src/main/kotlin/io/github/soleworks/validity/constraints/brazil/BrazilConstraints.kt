@@ -90,7 +90,9 @@ private fun String.cnpjValues(): List<Int> = filter(Char::isLetterOrDigit).map {
 
 private fun List<Int>.isRepeated(): Boolean = all { it == first() }
 
-private fun List<Int>.checkDigit(weights: List<Int>): Int {
+private fun List<Int>.checkDigit(
+    weights: List<Int>
+): Int {
     val remainder = zip(weights) { value, weight -> value * weight }.sum() % MODULUS
 
     return if (remainder < 2) 0 else MODULUS - remainder
@@ -126,7 +128,10 @@ private fun List<Int>.isTituloEleitoral(): Boolean {
     return state in TITULO_ELEITORAL_STATES && this[10] == first && this[11] == second
 }
 
-private fun tituloEleitoralCheckDigit(sum: Int, state: Int): Int = when (val remainder = sum % MODULUS) {
+private fun tituloEleitoralCheckDigit(
+    sum: Int,
+    state: Int
+): Int = when (val remainder = sum % MODULUS) {
     10 -> 0
     0 -> if (state in SAO_PAULO_AND_MINAS_GERAIS) 1 else 0
     else -> remainder

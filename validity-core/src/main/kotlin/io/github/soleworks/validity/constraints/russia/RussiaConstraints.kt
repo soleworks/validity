@@ -28,7 +28,9 @@ public fun ValidationNode<String>.innLegalEntity(
     predicate = { INN_LEGAL_ENTITY_FORMAT.matches(it) && it.map(Char::digitToInt).isLegalEntity() }
 )
 
-private fun List<Int>.checkDigit(weights: List<Int>): Int =
+private fun List<Int>.checkDigit(
+    weights: List<Int>
+): Int =
     zip(weights) { digit, weight -> digit * weight }.sum() % MODULUS % DECIMAL_MODULUS
 
 private fun List<Int>.isIndividual(): Boolean =

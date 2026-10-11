@@ -1,8 +1,8 @@
 package io.github.soleworks.validity.constraints.poland
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.constraints.isDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
 private const val DECIMAL_MODULUS = 10
 private const val MODULUS = 11
@@ -58,9 +58,9 @@ public fun ValidationNode<String>.dowodOsobisty(
 
 private fun String.digits(): List<Int> = filter(Char::isDigit).map(Char::digitToInt)
 
-private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
-
-private fun List<Int>.weightedSum(weights: List<Int>): Int = zip(weights) { digit, weight -> digit * weight }.sum()
+private fun List<Int>.weightedSum(
+    weights: List<Int>
+): Int = zip(weights) { digit, weight -> digit * weight }.sum()
 
 private fun String.isPesel(): Boolean {
     val (year, month, day) = PESEL_FORMAT.matchEntire(this)?.destructured?.toList()?.map(String::toInt) ?: return false

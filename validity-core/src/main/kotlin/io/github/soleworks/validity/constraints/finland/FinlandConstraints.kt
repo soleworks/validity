@@ -1,8 +1,8 @@
 package io.github.soleworks.validity.constraints.finland
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.constraints.isDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
 private const val MODULUS = 31
 private const val CHECK_CHARACTERS = "0123456789ABCDEFHJKLMNPRSTUVWXY"
@@ -34,8 +34,7 @@ private fun String.birthYear(): Int {
     }
 }
 
-private fun String.hasValidBirthDate(): Boolean =
-    runCatching { LocalDate.of(birthYear(), substring(2, 4).toInt(), take(2).toInt()) }.isSuccess
+private fun String.hasValidBirthDate(): Boolean = isDate(birthYear(), substring(2, 4).toInt(), take(2).toInt())
 
 private fun String.hasValidCheckCharacter(): Boolean {
     val number = (take(CENTURY_SIGN_INDEX) + substring(INDIVIDUAL_START, INDIVIDUAL_END)).toInt()

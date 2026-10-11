@@ -154,7 +154,9 @@ private class JsonReader(
         position = match.range.last + 1
     }
 
-    private fun readLiteral(literal: String) {
+    private fun readLiteral(
+        literal: String
+    ) {
         require(text.startsWith(literal, position))
 
         position += literal.length
@@ -169,9 +171,13 @@ private class JsonReader(
 
     private fun next(): Char = peek().also { position++ }
 
-    private fun expect(char: Char) = require(next() == char)
+    private fun expect(
+        char: Char
+    ) = require(next() == char)
 
-    private fun consume(char: Char): Boolean {
+    private fun consume(
+        char: Char
+    ): Boolean {
         val found = position < text.length && text[position] == char
 
         if (found)

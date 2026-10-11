@@ -61,5 +61,7 @@ public fun ValidationNode<String>.dateFormat(
     predicate = { it.matchesDateFormat(DateTimeFormatter.ofPattern(pattern)) }
 )
 
-private fun String.matchesDateFormat(formatter: DateTimeFormatter): Boolean =
+private fun String.matchesDateFormat(
+    formatter: DateTimeFormatter
+): Boolean =
     runCatching { formatter.format(formatter.parse(this)) == this }.getOrDefault(false)

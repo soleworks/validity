@@ -1,13 +1,9 @@
 package io.github.soleworks.validity.constraints.italy
 
 import io.github.soleworks.validity.ValidationNode
-import io.github.soleworks.validity.clock
+import io.github.soleworks.validity.constraints.isShortYearDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
-private const val CENTURY = 100
-private const val TWENTIETH_CENTURY = 1900
-private const val TWENTY_FIRST_CENTURY = 2000
 private const val FEMALE_DAY_OFFSET = 40
 private const val ALPHABET_SIZE = 26
 private const val CIE_PLACEHOLDER = "CA00000AA"
@@ -49,26 +45,16 @@ public fun ValidationNode<String>.cie(
     predicate = { CIE_FORMAT.matches(it) && !it.equals(CIE_PLACEHOLDER, ignoreCase = true) }
 )
 
-private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
-
-private fun isShortYearDate(shortYear: Int, month: Int, day: Int): Boolean {
-    val century = if (shortYear < LocalDate.now(clock).year % CENTURY) TWENTY_FIRST_CENTURY else TWENTIETH_CENTURY
-
-    return isDate(century + shortYear, month, day)
-}
-
 private fun List<Char>.isNameCode(): Boolean {
     var vowelFound = false
     var paddingFound = false
 
     forEachIndexed { index, char ->
-        if (!vowelFound && char in VOWELS) {
-            vowelFound = true
-        } else if (!paddingFound && vowelFound && char == PADDING) {
-            paddingFound = true
-        } else if (index > 0) {
-            if (vowelFound && !paddingFound && char !in VOWELS) return false
-            if (paddingFound && char != PADDING) return false
+        when {
+            !vowelFound && char in VOWELS -> vowelFound = true
+            !paddingFound && vowelFound && char == PADDING -> paddingFound = true
+            index > 0 && vowelFound && !paddingFound && char !in VOWELS -> return false
+            index > 0 && paddingFound && char != PADDING -> return false
         }
     }
 

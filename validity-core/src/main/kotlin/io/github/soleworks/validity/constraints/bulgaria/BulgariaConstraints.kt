@@ -1,8 +1,8 @@
 package io.github.soleworks.validity.constraints.bulgaria
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.constraints.isDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
 private const val MODULUS = 11
 private const val INVALID_REMAINDER = 10
@@ -22,8 +22,6 @@ public fun ValidationNode<String>.egn(
     code = "egn",
     predicate = { it.isEgn() }
 )
-
-private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
 
 private fun String.isEgn(): Boolean {
     val (year, rawMonth, day) = EGN_FORMAT.matchEntire(this)?.destructured?.toList()?.map(String::toInt) ?: return false

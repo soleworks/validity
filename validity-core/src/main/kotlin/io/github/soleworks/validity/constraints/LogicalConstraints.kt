@@ -60,11 +60,17 @@ public fun <V> ValidationNode<V>.not(
     block = block
 )
 
-private fun anyPasses(branches: List<List<Violation>>): Boolean = branches.isEmpty() || branches.any { it.isEmpty() }
+private fun anyPasses(
+    branches: List<List<Violation>>
+): Boolean = branches.isEmpty() || branches.any { it.isEmpty() }
 
-private fun allPass(branches: List<List<Violation>>): Boolean = branches.all { it.isEmpty() }
+private fun allPass(
+    branches: List<List<Violation>>
+): Boolean = branches.all { it.isEmpty() }
 
-private fun nonePasses(branches: List<List<Violation>>): Boolean = branches.all { it.isNotEmpty() }
+private fun nonePasses(
+    branches: List<List<Violation>>
+): Boolean = branches.all { it.isNotEmpty() }
 
 private fun <V> ValidationNode<V>.combine(
     operator: String,
@@ -124,6 +130,8 @@ private fun List<Violation>.described(
         text
 }
 
-private fun List<String>.joined(template: String): String = reduceOrNull { left, right ->
+private fun List<String>.joined(
+    template: String
+): String = reduceOrNull { left, right ->
     TEMPLATE_PLACEHOLDERS.replace(template) { if (it.value == "{left}") left else right }
 }.orEmpty()

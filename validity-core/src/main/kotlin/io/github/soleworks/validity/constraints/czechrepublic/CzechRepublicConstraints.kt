@@ -1,8 +1,8 @@
 package io.github.soleworks.validity.constraints.czechrepublic
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.constraints.isDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
 private const val MODULUS = 11L
 private const val LEGACY_REMAINDER = 10L
@@ -26,8 +26,6 @@ public fun ValidationNode<String>.rodneCislo(
     predicate = { it.isRodneCislo() }
 )
 
-private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
-
 internal fun String.isRodneCislo(): Boolean {
     val (yearPart, monthPart, dayPart, serial) = RODNE_CISLO_FORMAT.matchEntire(this)?.destructured ?: return false
     val shortYear = yearPart.toInt()
@@ -48,7 +46,10 @@ internal fun String.isRodneCislo(): Boolean {
     return isDate(year, month, dayPart.toInt()) && (!isLong || hasValidRemainder(yearPart + monthPart + dayPart + serial, year))
 }
 
-private fun hasValidRemainder(number: String, year: Int): Boolean {
+private fun hasValidRemainder(
+    number: String,
+    year: Int
+): Boolean {
     if (number.toLong() % MODULUS == 0L) return true
 
     return year < LEGACY_LAST_YEAR && number.dropLast(1).toLong() % MODULUS == LEGACY_REMAINDER && number.last() == '0'
