@@ -1044,11 +1044,15 @@ public fun ValidationNode<Int>.multipleOf(
 public fun ValidationNode<Int>.multipleOf(
     factor: Int,
     message: Int.(Int) -> String
-): Unit = constraint(
-    message = { it.message(factor) },
-    code = "multipleOf",
-    predicate = { it % factor == 0 }
-)
+) {
+    require(factor != 0) { "multipleOf needs a factor other than 0" }
+
+    constraint(
+        message = { it.message(factor) },
+        code = "multipleOf",
+        predicate = { it % factor == 0 }
+    )
+}
 
 public fun ValidationNode<Long>.multipleOf(
     factor: Long,
@@ -1061,11 +1065,15 @@ public fun ValidationNode<Long>.multipleOf(
 public fun ValidationNode<Long>.multipleOf(
     factor: Long,
     message: Long.(Long) -> String
-): Unit = constraint(
-    message = { it.message(factor) },
-    code = "multipleOf",
-    predicate = { it % factor == 0L }
-)
+) {
+    require(factor != 0L) { "multipleOf needs a factor other than 0" }
+
+    constraint(
+        message = { it.message(factor) },
+        code = "multipleOf",
+        predicate = { it % factor == 0L }
+    )
+}
 
 public fun ValidationNode<Short>.multipleOf(
     factor: Short,
@@ -1078,11 +1086,15 @@ public fun ValidationNode<Short>.multipleOf(
 public fun ValidationNode<Short>.multipleOf(
     factor: Short,
     message: Short.(Short) -> String
-): Unit = constraint(
-    message = { it.message(factor) },
-    code = "multipleOf",
-    predicate = { it % factor == 0 }
-)
+) {
+    require(factor.toInt() != 0) { "multipleOf needs a factor other than 0" }
+
+    constraint(
+        message = { it.message(factor) },
+        code = "multipleOf",
+        predicate = { it % factor == 0 }
+    )
+}
 
 public fun ValidationNode<Byte>.multipleOf(
     factor: Byte,
@@ -1095,11 +1107,15 @@ public fun ValidationNode<Byte>.multipleOf(
 public fun ValidationNode<Byte>.multipleOf(
     factor: Byte,
     message: Byte.(Byte) -> String
-): Unit = constraint(
-    message = { it.message(factor) },
-    code = "multipleOf",
-    predicate = { it % factor == 0 }
-)
+) {
+    require(factor.toInt() != 0) { "multipleOf needs a factor other than 0" }
+
+    constraint(
+        message = { it.message(factor) },
+        code = "multipleOf",
+        predicate = { it % factor == 0 }
+    )
+}
 
 public fun ValidationNode<BigInteger>.multipleOf(
     factor: BigInteger,
@@ -1112,11 +1128,15 @@ public fun ValidationNode<BigInteger>.multipleOf(
 public fun ValidationNode<BigInteger>.multipleOf(
     factor: BigInteger,
     message: BigInteger.(BigInteger) -> String
-): Unit = constraint(
-    message = { it.message(factor) },
-    code = "multipleOf",
-    predicate = { it.remainder(factor).signum() == 0 }
-)
+) {
+    require(factor.signum() != 0) { "multipleOf needs a factor other than 0" }
+
+    constraint(
+        message = { it.message(factor) },
+        code = "multipleOf",
+        predicate = { it.remainder(factor).signum() == 0 }
+    )
+}
 
 public fun ValidationNode<BigDecimal>.multipleOf(
     factor: BigDecimal,
@@ -1129,11 +1149,15 @@ public fun ValidationNode<BigDecimal>.multipleOf(
 public fun ValidationNode<BigDecimal>.multipleOf(
     factor: BigDecimal,
     message: BigDecimal.(BigDecimal) -> String
-): Unit = constraint(
-    message = { it.message(factor) },
-    code = "multipleOf",
-    predicate = { it.remainder(factor).signum() == 0 }
-)
+) {
+    require(factor.signum() != 0) { "multipleOf needs a factor other than 0" }
+
+    constraint(
+        message = { it.message(factor) },
+        code = "multipleOf",
+        predicate = { it.remainder(factor).signum() == 0 }
+    )
+}
 
 public fun ValidationNode<Double>.finite(
     message: String = messages.finite
