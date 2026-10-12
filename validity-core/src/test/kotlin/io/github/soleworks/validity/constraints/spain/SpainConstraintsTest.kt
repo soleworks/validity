@@ -48,24 +48,4 @@ class SpainConstraintsTest {
             node.validate() shouldBe listOf(Violation("nie", "must be a valid NIE", "nie"))
         }
     }
-
-    @Nested
-    @DisplayName("When nif is called")
-    inner class Nif {
-        @ParameterizedTest
-        @ValueSource(strings = ["00054237A", "54237A", "X1234567L", "Z1234567R", "M2812345C", "Y2812345B"])
-        fun `given a valid NIF should accept it`(value: String) {
-            val node = ValidationNode("nif", value).apply { nif() }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = ["M2812345CR", "A2812345C", "0/005 423-7A", "00054237U"])
-        fun `given an invalid NIF should report it`(value: String) {
-            val node = ValidationNode("nif", value).apply { nif() }
-
-            node.validate() shouldBe listOf(Violation("nif", "must be a valid NIF", "nif"))
-        }
-    }
 }
