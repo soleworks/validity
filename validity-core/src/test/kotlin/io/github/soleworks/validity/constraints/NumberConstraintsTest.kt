@@ -2,6 +2,7 @@ package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Violation
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -2151,6 +2152,48 @@ class NumberConstraintsTest {
             }
 
             node.validate() shouldBe listOf(Violation("amount", "10.03 is not a multiple of 0.05", "multipleOf"))
+        }
+
+        @Test
+        fun `given a zero Int factor should fail when the rule is declared`() {
+            val error = shouldThrow<IllegalArgumentException> { ValidationNode("quantity", 6).apply { multipleOf(0) } }
+
+            error.message shouldBe "multipleOf needs a factor other than 0"
+        }
+
+        @Test
+        fun `given a zero Long factor should fail when the rule is declared`() {
+            val error = shouldThrow<IllegalArgumentException> { ValidationNode("quantity", 6L).apply { multipleOf(0L) } }
+
+            error.message shouldBe "multipleOf needs a factor other than 0"
+        }
+
+        @Test
+        fun `given a zero Short factor should fail when the rule is declared`() {
+            val error = shouldThrow<IllegalArgumentException> { ValidationNode<Short>("quantity", 6).apply { multipleOf(0) } }
+
+            error.message shouldBe "multipleOf needs a factor other than 0"
+        }
+
+        @Test
+        fun `given a zero Byte factor should fail when the rule is declared`() {
+            val error = shouldThrow<IllegalArgumentException> { ValidationNode<Byte>("quantity", 6).apply { multipleOf(0) } }
+
+            error.message shouldBe "multipleOf needs a factor other than 0"
+        }
+
+        @Test
+        fun `given a zero BigInteger factor should fail when the rule is declared`() {
+            val error = shouldThrow<IllegalArgumentException> { ValidationNode("quantity", BigInteger("6")).apply { multipleOf(BigInteger.ZERO) } }
+
+            error.message shouldBe "multipleOf needs a factor other than 0"
+        }
+
+        @Test
+        fun `given a zero BigDecimal factor should fail when the rule is declared`() {
+            val error = shouldThrow<IllegalArgumentException> { ValidationNode("amount", BigDecimal("6")).apply { multipleOf(BigDecimal("0.00")) } }
+
+            error.message shouldBe "multipleOf needs a factor other than 0"
         }
     }
 

@@ -214,6 +214,9 @@ Constraints are functions on the type of the value, so the autocomplete shows on
 | `Duration` | `min`, `max`, `between` |
 | collections and maps | `minSize`, `maxSize`, `notEmpty`, `distinct`, `contains`, `containsKey` |
 
+`equalTo`, `notEqualTo`, `oneOf` and `noneOf` compare the way `min` and `after` do: a `BigDecimal` by value (`10.0`
+equals `10.00`) and a `ZonedDateTime`, `OffsetDateTime` or `OffsetTime` by instant.
+
 Text formats: `email`, `url`, `uuid`, `ipv4`, `ipv6`, `hostname`, `json`, `base64`, `jwt`, `hexColor`, `iban`,
 `bic`, `creditCard`, `isbn`, `isoDate`, `dateFormat`, `isoCountryCode`, `currencyCode`, `postalCode(country)` (72
 countries) and more.

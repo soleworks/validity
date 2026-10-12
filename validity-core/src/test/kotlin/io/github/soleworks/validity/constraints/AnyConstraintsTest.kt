@@ -5,6 +5,10 @@ import io.github.soleworks.validity.Violation
 import io.github.soleworks.validity.samples.Survey
 import io.github.soleworks.validity.validate
 import io.kotest.matchers.shouldBe
+import java.math.BigDecimal
+import java.time.OffsetDateTime
+import java.time.OffsetTime
+import java.time.ZonedDateTime
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -60,6 +64,58 @@ class AnyConstraintsTest {
 
             node.validate() shouldBe listOf(Violation("currency", "USD is not BRL", "equalTo"))
         }
+
+        @Test
+        fun `given an amount with another scale should compare it by value`() {
+            val node = ValidationNode("amount", BigDecimal("10.00")).apply { equalTo(BigDecimal("10.0")) }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a different amount should report it`() {
+            val node = ValidationNode("amount", BigDecimal("10.01")).apply { equalTo(BigDecimal("10.0")) }
+
+            node.validate() shouldBe listOf(Violation("amount", "must be equal to 10.0", "equalTo"))
+        }
+
+        @Test
+        fun `given the same instant in another zone should accept it`() {
+            val node = ValidationNode("startsAt", ZonedDateTime.parse("2026-10-12T10:00-03:00[America/Sao_Paulo]")).apply {
+                equalTo(ZonedDateTime.parse("2026-10-12T13:00Z[UTC]"))
+            }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given the same instant with another offset should accept it`() {
+            val node = ValidationNode("startsAt", OffsetDateTime.parse("2026-10-12T10:00-03:00")).apply {
+                equalTo(OffsetDateTime.parse("2026-10-12T13:00Z"))
+            }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given the same time with another offset should accept it`() {
+            val node = ValidationNode("opensAt", OffsetTime.parse("10:00-03:00")).apply {
+                equalTo(OffsetTime.parse("13:00Z"))
+            }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given another instant should report it`() {
+            val node = ValidationNode("startsAt", ZonedDateTime.parse("2026-10-12T10:00Z[UTC]")).apply {
+                equalTo(ZonedDateTime.parse("2026-10-12T10:00-03:00[America/Sao_Paulo]"))
+            }
+
+            node.validate() shouldBe listOf(
+                Violation("startsAt", "must be equal to 2026-10-12T10:00-03:00[America/Sao_Paulo]", "equalTo")
+            )
+        }
     }
 
     @Nested
@@ -95,6 +151,22 @@ class AnyConstraintsTest {
             }
 
             node.validate() shouldBe listOf(Violation("destinationAccount", "0001-1 is the source account 0001-1", "notEqualTo"))
+        }
+
+        @Test
+        fun `given an amount with another scale should compare it by value`() {
+            val node = ValidationNode("amount", BigDecimal("10.00")).apply { notEqualTo(BigDecimal("10.0")) }
+
+            node.validate() shouldBe listOf(Violation("amount", "must not be equal to 10.0", "notEqualTo"))
+        }
+
+        @Test
+        fun `given the same instant in another zone should report it`() {
+            val node = ValidationNode("startsAt", ZonedDateTime.parse("2026-10-12T10:00-03:00[America/Sao_Paulo]")).apply {
+                notEqualTo(ZonedDateTime.parse("2026-10-12T13:00Z[UTC]"))
+            }
+
+            node.validate() shouldBe listOf(Violation("startsAt", "must not be equal to 2026-10-12T13:00Z[UTC]", "notEqualTo"))
         }
     }
 
@@ -132,6 +204,20 @@ class AnyConstraintsTest {
 
             node.validate() shouldBe listOf(Violation("status", "CANCELLED is not in [PENDING, PAID]", "oneOf"))
         }
+
+        @Test
+        fun `given an amount with another scale should compare it by value`() {
+            val node = ValidationNode("amount", BigDecimal("10.00")).apply { oneOf(listOf(BigDecimal("10.0"), BigDecimal("20"))) }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a set with its own comparison should use it`() {
+            val node = ValidationNode("role", "ADMIN").apply { oneOf(sortedSetOf(String.CASE_INSENSITIVE_ORDER, "admin", "user")) }
+
+            node.validate() shouldBe emptyList()
+        }
     }
 
     @Nested
@@ -167,6 +253,13 @@ class AnyConstraintsTest {
             }
 
             node.validate() shouldBe listOf(Violation("username", "admin is reserved, avoid [admin, root]", "noneOf"))
+        }
+
+        @Test
+        fun `given an amount with another scale should compare it by value`() {
+            val node = ValidationNode("amount", BigDecimal("10.00")).apply { noneOf(listOf(BigDecimal("10.0"))) }
+
+            node.validate() shouldBe listOf(Violation("amount", "must not be one of 10.0", "noneOf"))
         }
     }
 }

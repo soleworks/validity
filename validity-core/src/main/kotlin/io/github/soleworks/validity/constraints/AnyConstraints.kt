@@ -2,6 +2,10 @@ package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.messages
+import java.math.BigDecimal
+import java.time.OffsetDateTime
+import java.time.OffsetTime
+import java.time.ZonedDateTime
 
 public fun <V : Any> ValidationNode<V?>.notNull(
     message: String = messages.required
@@ -26,7 +30,7 @@ public fun <V> ValidationNode<V>.equalTo(
     message = { it.message(other) },
     code = "equalTo",
     skipped = other == null,
-    predicate = { other == null || it == other }
+    predicate = { other == null || it.isSameValue(other) }
 )
 
 public fun <V> ValidationNode<V>.notEqualTo(
@@ -44,7 +48,7 @@ public fun <V> ValidationNode<V>.notEqualTo(
     message = { it.message(other) },
     code = "notEqualTo",
     skipped = other == null,
-    predicate = { other == null || it != other }
+    predicate = { other == null || !it.isSameValue(other) }
 )
 
 public fun <V> ValidationNode<V>.oneOf(
@@ -62,7 +66,7 @@ public fun <V> ValidationNode<V>.oneOf(
     message = { it.message(values) },
     code = "oneOf",
     skipped = values == null,
-    predicate = { values == null || it in values }
+    predicate = { values == null || values.hasValue(it) }
 )
 
 public fun <V> ValidationNode<V>.noneOf(
@@ -80,5 +84,19 @@ public fun <V> ValidationNode<V>.noneOf(
     message = { it.message(values) },
     code = "noneOf",
     skipped = values == null,
-    predicate = { values == null || it !in values }
+    predicate = { values == null || !values.hasValue(it) }
 )
+
+private fun Any?.isSameValue(
+    other: Any?
+): Boolean = when {
+    this is BigDecimal && other is BigDecimal -> compareTo(other) == 0
+    this is ZonedDateTime && other is ZonedDateTime -> isEqual(other)
+    this is OffsetDateTime && other is OffsetDateTime -> isEqual(other)
+    this is OffsetTime && other is OffsetTime -> isEqual(other)
+    else -> this == other
+}
+
+private fun <V> Iterable<V>.hasValue(
+    value: V
+): Boolean = value in this || any { it.isSameValue(value) }

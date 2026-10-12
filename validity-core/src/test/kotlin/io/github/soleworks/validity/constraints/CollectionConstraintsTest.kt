@@ -364,6 +364,33 @@ class CollectionConstraintsTest {
 
             node.validate() shouldBe emptyList()
         }
+
+        @Test
+        fun `given the selector as a trailing lambda should use it`() {
+            val emails = listOf("ana@mail.com", "ANA@mail.com")
+
+            val node = ValidationNode("emails", emails).apply { distinctBy { it.lowercase() } }
+
+            node.validate() shouldBe listOf(Violation("emails", "must not contain duplicates", "distinctBy"))
+        }
+
+        @Test
+        fun `given a message and the selector as a trailing lambda should report the message`() {
+            val emails = setOf("ana@mail.com", "ANA@mail.com")
+
+            val node = ValidationNode("emails", emails).apply { distinctBy("emails must be unique") { it.lowercase() } }
+
+            node.validate() shouldBe listOf(Violation("emails", "emails must be unique", "distinctBy"))
+        }
+
+        @Test
+        fun `given a message for an array should report it`() {
+            val emails = arrayOf("ana@mail.com", "ANA@mail.com")
+
+            val node = ValidationNode("emails", emails).apply { distinctBy("emails must be unique", String::lowercase) }
+
+            node.validate() shouldBe listOf(Violation("emails", "emails must be unique", "distinctBy"))
+        }
     }
 
     @Nested

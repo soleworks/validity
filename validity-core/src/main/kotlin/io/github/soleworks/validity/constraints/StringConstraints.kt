@@ -261,7 +261,7 @@ public fun ValidationNode<String>.letters(
 ): Unit = constraint(
     message = message,
     code = "letters",
-    predicate = { it.all(Char::isLetter) }
+    predicate = { it.isNotEmpty() && it.all(Char::isLetter) }
 )
 
 public fun ValidationNode<String>.digits(
@@ -269,7 +269,7 @@ public fun ValidationNode<String>.digits(
 ): Unit = constraint(
     message = message,
     code = "digits",
-    predicate = { it.all { char -> char in ASCII_DIGITS } }
+    predicate = { it.isNotEmpty() && it.all { char -> char in ASCII_DIGITS } }
 )
 
 public fun ValidationNode<String>.lettersOrDigits(
@@ -277,7 +277,7 @@ public fun ValidationNode<String>.lettersOrDigits(
 ): Unit = constraint(
     message = message,
     code = "lettersOrDigits",
-    predicate = { it.all { char -> char.isLetter() || char in ASCII_DIGITS } }
+    predicate = { it.isNotEmpty() && it.all { char -> char.isLetter() || char in ASCII_DIGITS } }
 )
 
 public fun ValidationNode<String>.ascii(
@@ -285,7 +285,7 @@ public fun ValidationNode<String>.ascii(
 ): Unit = constraint(
     message = message,
     code = "ascii",
-    predicate = { it.all { char -> char.code < ASCII_LIMIT } }
+    predicate = { it.isNotEmpty() && it.all { char -> char.code < ASCII_LIMIT } }
 )
 
 public fun ValidationNode<String>.numeric(
