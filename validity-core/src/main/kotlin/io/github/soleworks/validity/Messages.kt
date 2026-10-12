@@ -147,62 +147,20 @@ public class Messages internal constructor() {
     public var isoDuration: String = "must be an ISO 8601 duration"
     public var dateFormat: String = "must match the date format {pattern}"
 
-    internal val argentina: ArgentinaMessages = ArgentinaMessages()
-    internal val austria: AustriaMessages = AustriaMessages()
-    internal val belgium: BelgiumMessages = BelgiumMessages()
     internal val brazil: BrazilMessages = BrazilMessages()
     internal val bulgaria: BulgariaMessages = BulgariaMessages()
     internal val canada: CanadaMessages = CanadaMessages()
-    internal val china: ChinaMessages = ChinaMessages()
-    internal val cyprus: CyprusMessages = CyprusMessages()
-    internal val czechRepublic: CzechRepublicMessages = CzechRepublicMessages()
-    internal val denmark: DenmarkMessages = DenmarkMessages()
-    internal val estonia: EstoniaMessages = EstoniaMessages()
-    internal val finland: FinlandMessages = FinlandMessages()
     internal val france: FranceMessages = FranceMessages()
-    internal val germany: GermanyMessages = GermanyMessages()
-    internal val greece: GreeceMessages = GreeceMessages()
-    internal val hongKong: HongKongMessages = HongKongMessages()
-    internal val india: IndiaMessages = IndiaMessages()
-    internal val iran: IranMessages = IranMessages()
-    internal val ireland: IrelandMessages = IrelandMessages()
     internal val israel: IsraelMessages = IsraelMessages()
-    internal val italy: ItalyMessages = ItalyMessages()
-    internal val latvia: LatviaMessages = LatviaMessages()
-    internal val libya: LibyaMessages = LibyaMessages()
-    internal val lithuania: LithuaniaMessages = LithuaniaMessages()
-    internal val malta: MaltaMessages = MaltaMessages()
     internal val netherlands: NetherlandsMessages = NetherlandsMessages()
-    internal val norway: NorwayMessages = NorwayMessages()
     internal val pakistan: PakistanMessages = PakistanMessages()
     internal val poland: PolandMessages = PolandMessages()
-    internal val portugal: PortugalMessages = PortugalMessages()
-    internal val romania: RomaniaMessages = RomaniaMessages()
     internal val russia: RussiaMessages = RussiaMessages()
-    internal val slovakia: SlovakiaMessages = SlovakiaMessages()
     internal val slovenia: SloveniaMessages = SloveniaMessages()
-    internal val southKorea: SouthKoreaMessages = SouthKoreaMessages()
     internal val spain: SpainMessages = SpainMessages()
-    internal val sriLanka: SriLankaMessages = SriLankaMessages()
-    internal val sweden: SwedenMessages = SwedenMessages()
-    internal val taiwan: TaiwanMessages = TaiwanMessages()
     internal val thailand: ThailandMessages = ThailandMessages()
-    internal val tunisia: TunisiaMessages = TunisiaMessages()
     internal val ukraine: UkraineMessages = UkraineMessages()
-    internal val unitedKingdom: UnitedKingdomMessages = UnitedKingdomMessages()
     internal val unitedStates: UnitedStatesMessages = UnitedStatesMessages()
-
-    public fun argentina(
-        block: ArgentinaMessages.() -> Unit
-    ): Unit = argentina.block()
-
-    public fun austria(
-        block: AustriaMessages.() -> Unit
-    ): Unit = austria.block()
-
-    public fun belgium(
-        block: BelgiumMessages.() -> Unit
-    ): Unit = belgium.block()
 
     public fun brazil(
         block: BrazilMessages.() -> Unit
@@ -216,89 +174,17 @@ public class Messages internal constructor() {
         block: CanadaMessages.() -> Unit
     ): Unit = canada.block()
 
-    public fun china(
-        block: ChinaMessages.() -> Unit
-    ): Unit = china.block()
-
-    public fun cyprus(
-        block: CyprusMessages.() -> Unit
-    ): Unit = cyprus.block()
-
-    public fun czechRepublic(
-        block: CzechRepublicMessages.() -> Unit
-    ): Unit = czechRepublic.block()
-
-    public fun denmark(
-        block: DenmarkMessages.() -> Unit
-    ): Unit = denmark.block()
-
-    public fun estonia(
-        block: EstoniaMessages.() -> Unit
-    ): Unit = estonia.block()
-
-    public fun finland(
-        block: FinlandMessages.() -> Unit
-    ): Unit = finland.block()
-
     public fun france(
         block: FranceMessages.() -> Unit
     ): Unit = france.block()
-
-    public fun germany(
-        block: GermanyMessages.() -> Unit
-    ): Unit = germany.block()
-
-    public fun greece(
-        block: GreeceMessages.() -> Unit
-    ): Unit = greece.block()
-
-    public fun hongKong(
-        block: HongKongMessages.() -> Unit
-    ): Unit = hongKong.block()
-
-    public fun india(
-        block: IndiaMessages.() -> Unit
-    ): Unit = india.block()
-
-    public fun iran(
-        block: IranMessages.() -> Unit
-    ): Unit = iran.block()
-
-    public fun ireland(
-        block: IrelandMessages.() -> Unit
-    ): Unit = ireland.block()
 
     public fun israel(
         block: IsraelMessages.() -> Unit
     ): Unit = israel.block()
 
-    public fun italy(
-        block: ItalyMessages.() -> Unit
-    ): Unit = italy.block()
-
-    public fun latvia(
-        block: LatviaMessages.() -> Unit
-    ): Unit = latvia.block()
-
-    public fun libya(
-        block: LibyaMessages.() -> Unit
-    ): Unit = libya.block()
-
-    public fun lithuania(
-        block: LithuaniaMessages.() -> Unit
-    ): Unit = lithuania.block()
-
-    public fun malta(
-        block: MaltaMessages.() -> Unit
-    ): Unit = malta.block()
-
     public fun netherlands(
         block: NetherlandsMessages.() -> Unit
     ): Unit = netherlands.block()
-
-    public fun norway(
-        block: NorwayMessages.() -> Unit
-    ): Unit = norway.block()
 
     public fun pakistan(
         block: PakistanMessages.() -> Unit
@@ -308,81 +194,29 @@ public class Messages internal constructor() {
         block: PolandMessages.() -> Unit
     ): Unit = poland.block()
 
-    public fun portugal(
-        block: PortugalMessages.() -> Unit
-    ): Unit = portugal.block()
-
-    public fun romania(
-        block: RomaniaMessages.() -> Unit
-    ): Unit = romania.block()
-
     public fun russia(
         block: RussiaMessages.() -> Unit
     ): Unit = russia.block()
-
-    public fun slovakia(
-        block: SlovakiaMessages.() -> Unit
-    ): Unit = slovakia.block()
 
     public fun slovenia(
         block: SloveniaMessages.() -> Unit
     ): Unit = slovenia.block()
 
-    public fun southKorea(
-        block: SouthKoreaMessages.() -> Unit
-    ): Unit = southKorea.block()
-
     public fun spain(
         block: SpainMessages.() -> Unit
     ): Unit = spain.block()
-
-    public fun sriLanka(
-        block: SriLankaMessages.() -> Unit
-    ): Unit = sriLanka.block()
-
-    public fun sweden(
-        block: SwedenMessages.() -> Unit
-    ): Unit = sweden.block()
-
-    public fun taiwan(
-        block: TaiwanMessages.() -> Unit
-    ): Unit = taiwan.block()
 
     public fun thailand(
         block: ThailandMessages.() -> Unit
     ): Unit = thailand.block()
 
-    public fun tunisia(
-        block: TunisiaMessages.() -> Unit
-    ): Unit = tunisia.block()
-
     public fun ukraine(
         block: UkraineMessages.() -> Unit
     ): Unit = ukraine.block()
 
-    public fun unitedKingdom(
-        block: UnitedKingdomMessages.() -> Unit
-    ): Unit = unitedKingdom.block()
-
     public fun unitedStates(
         block: UnitedStatesMessages.() -> Unit
     ): Unit = unitedStates.block()
-}
-
-@ValidityDsl
-public class ArgentinaMessages internal constructor() {
-    public var cuit: String = "must be a valid CUIT"
-    public var cuil: String = "must be a valid CUIL"
-}
-
-@ValidityDsl
-public class AustriaMessages internal constructor() {
-    public var abgabenkontonummer: String = "must be a valid Abgabenkontonummer"
-}
-
-@ValidityDsl
-public class BelgiumMessages internal constructor() {
-    public var rijksregisternummer: String = "must be a valid rijksregisternummer"
 }
 
 @ValidityDsl
@@ -391,8 +225,6 @@ public class BrazilMessages internal constructor() {
     public var cnpj: String = "must be a valid CNPJ"
     public var cnh: String = "must be a valid CNH"
     public var pis: String = "must be a valid PIS"
-    public var tituloEleitoral: String = "must be a valid título eleitoral"
-    public var chaveNfe: String = "must be a valid NF-e access key"
     public var cep: String = "must be a valid CEP"
     public var placa: String = "must be a valid license plate"
 }
@@ -408,69 +240,8 @@ public class CanadaMessages internal constructor() {
 }
 
 @ValidityDsl
-public class ChinaMessages internal constructor() {
-    public var residentId: String = "must be a valid resident identity card number"
-}
-
-@ValidityDsl
-public class CyprusMessages internal constructor() {
-    public var afm: String = "must be a valid AFM"
-}
-
-@ValidityDsl
-public class CzechRepublicMessages internal constructor() {
-    public var rodneCislo: String = "must be a valid rodné číslo"
-}
-
-@ValidityDsl
-public class DenmarkMessages internal constructor() {
-    public var cpr: String = "must be a valid CPR number"
-}
-
-@ValidityDsl
-public class EstoniaMessages internal constructor() {
-    public var isikukood: String = "must be a valid isikukood"
-}
-
-@ValidityDsl
-public class FinlandMessages internal constructor() {
-    public var hetu: String = "must be a valid HETU"
-}
-
-@ValidityDsl
 public class FranceMessages internal constructor() {
     public var spi: String = "must be a valid SPI"
-}
-
-@ValidityDsl
-public class GermanyMessages internal constructor() {
-    public var steuerId: String = "must be a valid Steuer-IdNr"
-}
-
-@ValidityDsl
-public class GreeceMessages internal constructor() {
-    public var afm: String = "must be a valid AFM"
-}
-
-@ValidityDsl
-public class HongKongMessages internal constructor() {
-    public var hkid: String = "must be a valid HKID"
-}
-
-@ValidityDsl
-public class IndiaMessages internal constructor() {
-    public var aadhaar: String = "must be a valid Aadhaar"
-    public var pan: String = "must be a valid PAN"
-}
-
-@ValidityDsl
-public class IranMessages internal constructor() {
-    public var codeMelli: String = "must be a valid national identity code"
-}
-
-@ValidityDsl
-public class IrelandMessages internal constructor() {
-    public var pps: String = "must be a valid PPS number"
 }
 
 @ValidityDsl
@@ -479,39 +250,8 @@ public class IsraelMessages internal constructor() {
 }
 
 @ValidityDsl
-public class ItalyMessages internal constructor() {
-    public var codiceFiscale: String = "must be a valid codice fiscale"
-    public var cie: String = "must be a valid CIE number"
-}
-
-@ValidityDsl
-public class LatviaMessages internal constructor() {
-    public var personasKods: String = "must be a valid personas kods"
-}
-
-@ValidityDsl
-public class LibyaMessages internal constructor() {
-    public var nin: String = "must be a valid NIN"
-}
-
-@ValidityDsl
-public class LithuaniaMessages internal constructor() {
-    public var asmensKodas: String = "must be a valid asmens kodas"
-}
-
-@ValidityDsl
-public class MaltaMessages internal constructor() {
-    public var idCardNumber: String = "must be a valid ID card number"
-}
-
-@ValidityDsl
 public class NetherlandsMessages internal constructor() {
     public var bsn: String = "must be a valid BSN"
-}
-
-@ValidityDsl
-public class NorwayMessages internal constructor() {
-    public var fodselsnummer: String = "must be a valid fødselsnummer"
 }
 
 @ValidityDsl
@@ -523,18 +263,6 @@ public class PakistanMessages internal constructor() {
 public class PolandMessages internal constructor() {
     public var pesel: String = "must be a valid PESEL"
     public var nip: String = "must be a valid NIP"
-    public var regon: String = "must be a valid REGON"
-    public var dowodOsobisty: String = "must be a valid dowód osobisty number"
-}
-
-@ValidityDsl
-public class PortugalMessages internal constructor() {
-    public var nif: String = "must be a valid NIF"
-}
-
-@ValidityDsl
-public class RomaniaMessages internal constructor() {
-    public var cnp: String = "must be a valid CNP"
 }
 
 @ValidityDsl
@@ -544,41 +272,14 @@ public class RussiaMessages internal constructor() {
 }
 
 @ValidityDsl
-public class SlovakiaMessages internal constructor() {
-    public var rodneCislo: String = "must be a valid rodné číslo"
-}
-
-@ValidityDsl
 public class SloveniaMessages internal constructor() {
     public var davcnaStevilka: String = "must be a valid davčna številka"
-}
-
-@ValidityDsl
-public class SouthKoreaMessages internal constructor() {
-    public var rrn: String = "must be a valid RRN"
 }
 
 @ValidityDsl
 public class SpainMessages internal constructor() {
     public var dni: String = "must be a valid DNI"
     public var nie: String = "must be a valid NIE"
-    public var nif: String = "must be a valid NIF"
-}
-
-@ValidityDsl
-public class SriLankaMessages internal constructor() {
-    public var nic: String = "must be a valid NIC"
-}
-
-@ValidityDsl
-public class SwedenMessages internal constructor() {
-    public var personnummer: String = "must be a valid personnummer"
-    public var samordningsnummer: String = "must be a valid samordningsnummer"
-}
-
-@ValidityDsl
-public class TaiwanMessages internal constructor() {
-    public var nationalId: String = "must be a valid national identification number"
 }
 
 @ValidityDsl
@@ -587,18 +288,8 @@ public class ThailandMessages internal constructor() {
 }
 
 @ValidityDsl
-public class TunisiaMessages internal constructor() {
-    public var cin: String = "must be a valid national identity card number"
-}
-
-@ValidityDsl
 public class UkraineMessages internal constructor() {
     public var rnokpp: String = "must be a valid RNOKPP"
-}
-
-@ValidityDsl
-public class UnitedKingdomMessages internal constructor() {
-    public var nino: String = "must be a valid NINO"
 }
 
 @ValidityDsl

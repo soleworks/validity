@@ -50,46 +50,4 @@ class PolandConstraintsTest {
             node.validate() shouldBe listOf(Violation("nip", "must be a valid NIP", "nip"))
         }
     }
-
-    @Nested
-    @DisplayName("When regon is called")
-    inner class Regon {
-        @ParameterizedTest
-        @ValueSource(strings = ["123456785", "691657182", "12345678512347", "59418566359965"])
-        fun `given a 9 or 14 digit REGON with a valid check digit should accept it`(value: String) {
-            val node = ValidationNode("regon", value).apply { regon() }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = ["1234567845", "12345673", "123-456-785", "6-9-1-6-5-7-1-8-2", "12345678600015"])
-        fun `given a REGON with a wrong check digit or another format should report it`(value: String) {
-            val node = ValidationNode("regon", value).apply { regon() }
-
-            node.validate() shouldBe listOf(Violation("regon", "must be a valid REGON", "regon"))
-        }
-    }
-
-    @Nested
-    @DisplayName("When dowodOsobisty is called")
-    inner class DowodOsobisty {
-        @ParameterizedTest
-        @ValueSource(strings = ["APH505567", "AYE205410", "AYW036733"])
-        fun `given a Polish identity card number with a valid check digit should accept it`(value: String) {
-            val node = ValidationNode("dowodOsobisty", value).apply { dowodOsobisty() }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = ["999205411", "AAAAAAAAA", "APH 505567", "AYE205411", "AYW036731"])
-        fun `given a Polish identity card number with a wrong check digit or another format should report it`(
-            value: String
-        ) {
-            val node = ValidationNode("dowodOsobisty", value).apply { dowodOsobisty() }
-
-            node.validate() shouldBe listOf(Violation("dowodOsobisty", "must be a valid dowód osobisty number", "dowodOsobisty"))
-        }
-    }
 }

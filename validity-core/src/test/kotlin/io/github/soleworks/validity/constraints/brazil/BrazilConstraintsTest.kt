@@ -98,53 +98,6 @@ class BrazilConstraintsTest {
     }
 
     @Nested
-    @DisplayName("When tituloEleitoral is called")
-    inner class TituloEleitoral {
-        @ParameterizedTest
-        @ValueSource(strings = ["102385010671", "004356870906", "100000010116", "100000010302"])
-        fun `given a título eleitoral with valid check digits should accept it`(tituloEleitoral: String) {
-            val node = ValidationNode("tituloEleitoral", tituloEleitoral).apply { tituloEleitoral() }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = ["102385010672", "100000010016", "100000012906", "1023 8501 0671", "10238501067"])
-        fun `given a título eleitoral with wrong check digits, an unknown state or another format should report it`(
-            tituloEleitoral: String
-        ) {
-            val node = ValidationNode("tituloEleitoral", tituloEleitoral).apply { tituloEleitoral() }
-
-            node.validate() shouldBe listOf(Violation("tituloEleitoral", "must be a valid título eleitoral", "tituloEleitoral"))
-        }
-    }
-
-    @Nested
-    @DisplayName("When chaveNfe is called")
-    inner class ChaveNfe {
-        @ParameterizedTest
-        @ValueSource(strings = ["35230612345678000190550010000000011000000008"])
-        fun `given an NF-e access key with a valid check digit should accept it`(chaveNfe: String) {
-            val node = ValidationNode("chaveNfe", chaveNfe).apply { chaveNfe() }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @ParameterizedTest
-        @ValueSource(
-            strings = [
-                "35230612345678000190550010000000011000000009",
-                "3523061234567800019055001000000001100000000"
-            ]
-        )
-        fun `given an NF-e access key with a wrong check digit or length should report it`(chaveNfe: String) {
-            val node = ValidationNode("chaveNfe", chaveNfe).apply { chaveNfe() }
-
-            node.validate() shouldBe listOf(Violation("chaveNfe", "must be a valid NF-e access key", "chaveNfe"))
-        }
-    }
-
-    @Nested
     @DisplayName("When cep is called")
     inner class Cep {
         @ParameterizedTest

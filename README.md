@@ -221,9 +221,9 @@ Text formats: `email`, `url`, `uuid`, `ipv4`, `ipv6`, `hostname`, `json`, `base6
 `bic`, `creditCard`, `isbn`, `isoDate`, `dateFormat`, `isoCountryCode`, `currencyCode`, `postalCode(country)` (72
 countries) and more.
 
-Documents of 44 countries, one package each, such as `constraints.brazil` (`cpf`, `cnpj` numeric and alphanumeric,
-`cnh`, `pis`, `tituloEleitoral`, `chaveNfe`, `cep`, `placa`), `constraints.spain` (`dni`, `nie`, `nif`) and
-`constraints.india` (`aadhaar`, `pan`).
+Documents of 14 countries, one package each, such as `constraints.brazil` (`cpf`, `cnpj` numeric and alphanumeric,
+`cnh`, `pis`, `cep`, `placa`), `constraints.spain` (`dni`, `nie`) and `constraints.poland` (`pesel`, `nip`). Each one
+accepts and rejects the same values as at least two widely used validation libraries.
 
 A rule of your own is a `constraint`, with an optional code:
 

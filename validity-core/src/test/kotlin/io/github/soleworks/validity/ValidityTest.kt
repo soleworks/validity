@@ -1,7 +1,6 @@
 package io.github.soleworks.validity
 
 import io.github.soleworks.validity.constraints.brazil.cpf
-import io.github.soleworks.validity.constraints.china.residentId
 import io.github.soleworks.validity.constraints.future
 import io.github.soleworks.validity.constraints.futureOrPresent
 import io.github.soleworks.validity.constraints.past
@@ -217,19 +216,6 @@ class ValidityTest {
             node.validate() shouldBe listOf(
                 Violation("date", "must be in the past", "past"),
                 Violation("date", "must be in the future", "future")
-            )
-        }
-
-        @Test
-        fun `given a clock before a birth date should reject the document born after it`() {
-            Validity.configure {
-                clock = Clock.fixed(Instant.parse("1970-01-01T00:00:00Z"), UTC)
-            }
-
-            val node = ValidationNode("residentId", "520323197806058856").apply { residentId() }
-
-            node.validate() shouldBe listOf(
-                Violation("residentId", "must be a valid resident identity card number", "residentId")
             )
         }
 
