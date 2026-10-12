@@ -21,12 +21,14 @@ private val IPV6_GROUP_FORMAT = Regex("[0-9A-Fa-f]{1,4}")
 private val MAC_ADDRESS_FORMAT = Regex("[0-9A-Fa-f]{2}([:-])(?:[0-9A-Fa-f]{2}\\1){4}[0-9A-Fa-f]{2}")
 private val SLUG_FORMAT = Regex("[a-z0-9]+(?:-[a-z0-9]+)*")
 private val JWT_FORMAT = Regex("[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]*")
+private val CIDR_PREFIX_FORMAT = Regex("0|[1-9]\\d{0,2}")
 private val DATA_URI_FORMAT = Regex(
-    "data:(?:[a-z]+/[a-z0-9.+-]+(?:;[a-z0-9-]+=[a-z0-9.-]+)*)?(?:;base64)?,\\S*",
+    "data:(?:[a-z]+/[a-z0-9.+-]+)?(?:;[a-z0-9-]+=[a-z0-9.-]+)*(?:;base64)?,\\S*",
     RegexOption.IGNORE_CASE
 )
 private val MIME_TYPE_FORMAT = Regex(
-    "(?:application|audio|font|image|message|model|multipart|text|video)/[A-Za-z0-9!#\$&^_.+-]+"
+    "(?:application|audio|font|haptics|image|message|model|multipart|text|video)/[A-Za-z0-9!#\$&^_.+-]+",
+    RegexOption.IGNORE_CASE
 )
 
 public fun ValidationNode<String>.email(
@@ -134,10 +136,12 @@ public fun ValidationNode<String>.mimeType(
     predicate = { MIME_TYPE_FORMAT.matches(it) }
 )
 
-private fun String.isUrl(schemes: Set<String>): Boolean {
+private fun String.isUrl(
+    schemes: Set<String>
+): Boolean {
     val uri = runCatching { URI(this) }.getOrNull()
 
-    return uri != null && uri.scheme?.lowercase() in schemes && !uri.host.isNullOrBlank()
+    return uri != null && schemes.any { it.equals(uri.scheme, ignoreCase = true) } && !uri.host.isNullOrBlank()
 }
 
 private fun String.isIpv6(): Boolean {
@@ -156,7 +160,7 @@ private fun String.isIpv6(): Boolean {
 
 private fun String.isCidr(): Boolean {
     val address = substringBefore('/')
-    val prefix = substringAfter('/', "").takeIf { it.all(Char::isDigit) }?.toIntOrNull()
+    val prefix = substringAfter('/', "").takeIf(CIDR_PREFIX_FORMAT::matches)?.toInt()
 
     return when {
         prefix == null -> false

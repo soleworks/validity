@@ -1,8 +1,8 @@
 package io.github.soleworks.validity.constraints.estonia
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.constraints.isDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
 private const val MODULUS = 11
 private const val INVALID_REMAINDER = 10
@@ -26,11 +26,11 @@ public fun ValidationNode<String>.isikukood(
     predicate = { it.isPersonalCode() }
 )
 
-private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
+private fun List<Int>.remainder(
+    weights: List<Int>
+): Int = zip(weights) { digit, weight -> digit * weight }.sum() % MODULUS
 
-private fun List<Int>.remainder(weights: List<Int>): Int = zip(weights) { digit, weight -> digit * weight }.sum() % MODULUS
-
-private fun String.isPersonalCode(): Boolean {
+internal fun String.isPersonalCode(): Boolean {
     val (_, year, month, day) = FORMAT.matchEntire(this)?.destructured ?: return false
     val century = when (first()) {
         in NINETEENTH_CENTURY_DIGITS -> NINETEENTH_CENTURY

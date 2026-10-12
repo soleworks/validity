@@ -24,6 +24,9 @@ class UnitedKingdomConstraintsTest {
         @ValueSource(
             strings = [
                 "GB123456A",
+                "BG123456A",
+                "KN123456A",
+                "NT123456A",
                 "NK123456A",
                 "TN123456A",
                 "ZZ123456A",

@@ -38,7 +38,10 @@ private fun String.isRrn(): Boolean {
         (MODULUS - sum % MODULUS) % CHECK_DIGIT_MODULUS == last().digitToInt()
 }
 
-private fun isValidDate(month: Int, day: Int): Boolean = month in MONTHS &&
+private fun isValidDate(
+    month: Int,
+    day: Int
+): Boolean = month in MONTHS &&
     day in DAYS &&
     (day <= MAX_SHORT_MONTH_DAY || month !in SHORT_MONTHS) &&
     (day <= MAX_FEBRUARY_DAY || month != FEBRUARY)

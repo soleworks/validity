@@ -6,7 +6,7 @@ import io.github.soleworks.validity.messages
 private const val MAX_CHANNEL = 255
 private const val MAX_HUE = 360.0
 private const val MAX_PERCENTAGE = 100.0
-private const val ALPHA = "(?:\\s*,\\s*(?:0|1|0?\\.\\d+))?"
+private const val ALPHA = "(?:\\s*,\\s*(?:0?\\.\\d+|[01](?:\\.0+)?))?"
 
 private val HEX_COLOR_FORMAT = Regex("#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})")
 private val RGB_COLOR_FORMAT = Regex("rgba?\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})$ALPHA\\s*\\)")

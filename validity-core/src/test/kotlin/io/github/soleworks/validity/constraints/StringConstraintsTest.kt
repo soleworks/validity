@@ -502,6 +502,13 @@ class StringConstraintsTest {
             node.validate() shouldBe listOf(Violation("firstName", "must contain only letters", "letters"))
         }
 
+        @Test
+        fun `given an empty first name should report it`() {
+            val node = ValidationNode("firstName", "").apply { letters() }
+
+            node.validate() shouldBe listOf(Violation("firstName", "must contain only letters", "letters"))
+        }
+
         @ParameterizedTest
         @ValueSource(strings = ["Ana", "José"])
         fun `given a first name with only letters should accept it`(firstName: String) {
@@ -518,6 +525,21 @@ class StringConstraintsTest {
         @ValueSource(strings = ["01310-100", "0131010A"])
         fun `given a zip code with something other than digits should report it`(zipCode: String) {
             val node = ValidationNode("zipCode", zipCode).apply { digits() }
+
+            node.validate() shouldBe listOf(Violation("zipCode", "must contain only digits", "digits"))
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["０１３１０１００", "٠١٣١٠١٠٠"])
+        fun `given a zip code with non-ASCII digits should report it`(zipCode: String) {
+            val node = ValidationNode("zipCode", zipCode).apply { digits() }
+
+            node.validate() shouldBe listOf(Violation("zipCode", "must contain only digits", "digits"))
+        }
+
+        @Test
+        fun `given an empty zip code should report it`() {
+            val node = ValidationNode("zipCode", "").apply { digits() }
 
             node.validate() shouldBe listOf(Violation("zipCode", "must contain only digits", "digits"))
         }
@@ -542,6 +564,21 @@ class StringConstraintsTest {
         }
 
         @ParameterizedTest
+        @ValueSource(strings = ["ana１", "ana١"])
+        fun `given a username with a non-ASCII digit should report it`(username: String) {
+            val node = ValidationNode("username", username).apply { lettersOrDigits() }
+
+            node.validate() shouldBe listOf(Violation("username", "must contain only letters or digits", "lettersOrDigits"))
+        }
+
+        @Test
+        fun `given an empty username should report it`() {
+            val node = ValidationNode("username", "").apply { lettersOrDigits() }
+
+            node.validate() shouldBe listOf(Violation("username", "must contain only letters or digits", "lettersOrDigits"))
+        }
+
+        @ParameterizedTest
         @ValueSource(strings = ["ana1", "joão2"])
         fun `given a username with only letters and digits should accept it`(username: String) {
             val node = ValidationNode("username", username).apply { lettersOrDigits() }
@@ -557,6 +594,13 @@ class StringConstraintsTest {
         @ValueSource(strings = ["joão", "ana™"])
         fun `given a username with characters outside ASCII should report it`(username: String) {
             val node = ValidationNode("username", username).apply { ascii() }
+
+            node.validate() shouldBe listOf(Violation("username", "must contain only ASCII characters", "ascii"))
+        }
+
+        @Test
+        fun `given an empty username should report it`() {
+            val node = ValidationNode("username", "").apply { ascii() }
 
             node.validate() shouldBe listOf(Violation("username", "must contain only ASCII characters", "ascii"))
         }
@@ -662,7 +706,7 @@ class StringConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["pass"])
+        @ValueSource(strings = ["pass", "pass１", "pass١"])
         fun `given text without it should report it`(password: String) {
             val node = ValidationNode("password", password).apply { containsDigit() }
 

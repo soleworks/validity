@@ -60,7 +60,7 @@ class FinanceConstraintsTest {
     @DisplayName("When bic is called")
     inner class Bic {
         @ParameterizedTest
-        @ValueSource(strings = ["DEUTDEFF", "DEUTDEFF500", "NEDSZAJJXXX"])
+        @ValueSource(strings = ["DEUTDEFF", "DEUTDEFF500", "NEDSZAJJXXX", "RBKOXKPR"])
         fun `given a valid BIC should accept it`(bic: String) {
             val node = ValidationNode("bic", bic).apply { bic() }
 
@@ -124,7 +124,8 @@ class FinanceConstraintsTest {
             strings = [
                 "1BoatSLRHtKNngkdXEeobR76b53LETtpyT",
                 "3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy",
-                "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"
+                "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
+                "bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3"
             ]
         )
         fun `given a valid Bitcoin address should accept it`(wallet: String) {
@@ -134,7 +135,7 @@ class FinanceConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["0BoatSLRHtKNngkdXEeobR76b53LETtpyT", "1Boat"])
+        @ValueSource(strings = ["0BoatSLRHtKNngkdXEeobR76b53LETtpyT", "1Boat", "bc1bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"])
         fun `given an invalid Bitcoin address should report it`(wallet: String) {
             val node = ValidationNode("wallet", wallet).apply { bitcoinAddress() }
 

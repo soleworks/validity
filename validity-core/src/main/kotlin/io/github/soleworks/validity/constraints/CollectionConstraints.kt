@@ -188,8 +188,15 @@ public fun ValidationNode<out Array<*>>.distinct(
 )
 
 public fun <E, K> ValidationNode<List<E>>.distinctBy(
-    selector: (E) -> K,
-    message: String = messages.distinct
+    selector: (E) -> K
+): Unit = distinctBy(
+    message = messages.distinct,
+    selector = selector
+)
+
+public fun <E, K> ValidationNode<List<E>>.distinctBy(
+    message: String,
+    selector: (E) -> K
 ): Unit = constraint(
     message = message,
     code = "distinctBy",
@@ -198,8 +205,16 @@ public fun <E, K> ValidationNode<List<E>>.distinctBy(
 
 @JvmName("distinctBySet")
 public fun <E, K> ValidationNode<Set<E>>.distinctBy(
-    selector: (E) -> K,
-    message: String = messages.distinct
+    selector: (E) -> K
+): Unit = distinctBy(
+    message = messages.distinct,
+    selector = selector
+)
+
+@JvmName("distinctBySet")
+public fun <E, K> ValidationNode<Set<E>>.distinctBy(
+    message: String,
+    selector: (E) -> K
 ): Unit = constraint(
     message = message,
     code = "distinctBy",
@@ -208,8 +223,16 @@ public fun <E, K> ValidationNode<Set<E>>.distinctBy(
 
 @JvmName("distinctByArray")
 public fun <E, K> ValidationNode<Array<E>>.distinctBy(
-    selector: (E) -> K,
-    message: String = messages.distinct
+    selector: (E) -> K
+): Unit = distinctBy(
+    message = messages.distinct,
+    selector = selector
+)
+
+@JvmName("distinctByArray")
+public fun <E, K> ValidationNode<Array<E>>.distinctBy(
+    message: String,
+    selector: (E) -> K
 ): Unit = constraint(
     message = message,
     code = "distinctBy",

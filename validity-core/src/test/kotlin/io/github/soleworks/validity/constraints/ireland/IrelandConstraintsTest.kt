@@ -13,7 +13,7 @@ class IrelandConstraintsTest {
     @DisplayName("When pps is called")
     inner class Pps {
         @ParameterizedTest
-        @ValueSource(strings = ["1234567T", "1234567TW", "1234577W", "1234577WW", "1234577IA"])
+        @ValueSource(strings = ["1234567T", "1234567TW", "1234577W", "1234577WW", "1234577IA", "1234577ia", "1234567FA", "1234567Fa"])
         fun `given a valid PPS number should accept it`(value: String) {
             val node = ValidationNode("pps", value).apply { pps() }
 

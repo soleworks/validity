@@ -1,8 +1,8 @@
 package io.github.soleworks.validity.constraints.latvia
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.constraints.isDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
 private const val MODULUS = 11
 private const val DECIMAL_MODULUS = 10
@@ -23,8 +23,6 @@ public fun ValidationNode<String>.personasKods(
     code = "personasKods",
     predicate = { it.isPersonasKods() }
 )
-
-private fun isDate(year: Int, month: Int, day: Int): Boolean = runCatching { LocalDate.of(year, month, day) }.isSuccess
 
 private fun String.isPersonasKods(): Boolean {
     val (day, month, year, centuryDigit) = PERSONAS_KODS_FORMAT.matchEntire(this)?.destructured ?: return false

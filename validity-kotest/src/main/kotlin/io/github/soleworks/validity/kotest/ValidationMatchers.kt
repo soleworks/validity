@@ -9,9 +9,9 @@ import io.kotest.matchers.shouldNot
 
 public fun beValid(): Matcher<ValidationResult> = Matcher { result ->
     MatcherResult(
-        result.isValid,
-        { "Expected a valid result, but it has ${result.violations.described()}" },
-        { "Expected an invalid result, but it has no violations" }
+        passed = result.isValid,
+        failureMessageFn = { "Expected a valid result, but it has ${result.violations.described()}" },
+        negatedFailureMessageFn = { "Expected an invalid result, but it has no violations" }
     )
 }
 
@@ -23,9 +23,9 @@ public fun haveViolation(
     val expected = describe(path, code, message)
 
     MatcherResult(
-        result.violations.any { it.matches(path, code, message) },
-        { "Expected a violation $expected, but the result has ${result.violations.described()}" },
-        { "Expected no violation $expected, but the result has ${result.violations.described()}" }
+        passed = result.violations.any { it.matches(path, code, message) },
+        failureMessageFn = { "Expected a violation $expected, but the result has ${result.violations.described()}" },
+        negatedFailureMessageFn = { "Expected no violation $expected, but the result has ${result.violations.described()}" }
     )
 }
 

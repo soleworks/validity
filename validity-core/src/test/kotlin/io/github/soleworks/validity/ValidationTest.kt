@@ -1,6 +1,6 @@
 package io.github.soleworks.validity
 
-import io.github.soleworks.validity.samples.Coupon
+import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.validation
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
@@ -12,19 +12,19 @@ class ValidationTest {
     @DisplayName("When validate is called")
     inner class Validate {
         @Test
-        fun `given a coupon with a short code should report it at the root`() {
-            val coupon = Coupon(code = "OFF")
+        fun `given a contact with a short phone should report it at the root`() {
+            val contact = Contact(phone = "123")
 
-            coupon.validation().validate().violations shouldBe listOf(
-                Violation("code", "must have at least 5 characters", "minLength")
+            contact.validation().validate().violations shouldBe listOf(
+                Violation("phone", "must have at least 8 characters", "minLength")
             )
         }
 
         @Test
-        fun `given a valid coupon should be valid`() {
-            val coupon = Coupon()
+        fun `given a valid contact should be valid`() {
+            val contact = Contact()
 
-            coupon.validation().validate().isValid shouldBe true
+            contact.validation().validate().isValid shouldBe true
         }
     }
 }

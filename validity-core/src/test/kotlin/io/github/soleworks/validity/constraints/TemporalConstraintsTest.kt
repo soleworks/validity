@@ -1,8 +1,10 @@
 package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.Validity
 import io.github.soleworks.validity.Violation
 import io.kotest.matchers.shouldBe
+import java.time.Clock
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -17,11 +19,19 @@ import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.util.Date
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class TemporalConstraintsTest {
+    private val today = Clock.fixed(Instant.parse("2026-10-10T12:00:00Z"), UTC)
+
+    @AfterEach
+    fun restoreClock() {
+        Validity.configure { }
+    }
+
     @Nested
     @DisplayName("When past is called")
     inner class Past {
@@ -41,7 +51,9 @@ class TemporalConstraintsTest {
 
         @Test
         fun `given today as a LocalDate should report it`() {
-            val node = ValidationNode("occurredAt", LocalDate.now()).apply { past() }
+            Validity.configure { clock = today }
+
+            val node = ValidationNode("occurredAt", LocalDate.of(2026, 10, 10)).apply { past() }
 
             node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
@@ -118,7 +130,9 @@ class TemporalConstraintsTest {
 
         @Test
         fun `given the current month as a YearMonth should report it`() {
-            val node = ValidationNode("occurredAt", YearMonth.now()).apply { past() }
+            Validity.configure { clock = today }
+
+            val node = ValidationNode("occurredAt", YearMonth.of(2026, 10)).apply { past() }
 
             node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
@@ -139,7 +153,9 @@ class TemporalConstraintsTest {
 
         @Test
         fun `given the current year as a Year should report it`() {
-            val node = ValidationNode("occurredAt", Year.now()).apply { past() }
+            Validity.configure { clock = today }
+
+            val node = ValidationNode("occurredAt", Year.of(2026)).apply { past() }
 
             node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
         }
@@ -452,7 +468,9 @@ class TemporalConstraintsTest {
 
         @Test
         fun `given today as a LocalDate should accept it`() {
-            val node = ValidationNode("scheduledAt", LocalDate.now()).apply { futureOrPresent() }
+            Validity.configure { clock = today }
+
+            val node = ValidationNode("scheduledAt", LocalDate.of(2026, 10, 10)).apply { futureOrPresent() }
 
             node.validate() shouldBe emptyList()
         }
@@ -529,7 +547,9 @@ class TemporalConstraintsTest {
 
         @Test
         fun `given the current month as a YearMonth should accept it`() {
-            val node = ValidationNode("scheduledAt", YearMonth.now()).apply { futureOrPresent() }
+            Validity.configure { clock = today }
+
+            val node = ValidationNode("scheduledAt", YearMonth.of(2026, 10)).apply { futureOrPresent() }
 
             node.validate() shouldBe emptyList()
         }
@@ -550,7 +570,9 @@ class TemporalConstraintsTest {
 
         @Test
         fun `given the current year as a Year should accept it`() {
-            val node = ValidationNode("scheduledAt", Year.now()).apply { futureOrPresent() }
+            Validity.configure { clock = today }
+
+            val node = ValidationNode("scheduledAt", Year.of(2026)).apply { futureOrPresent() }
 
             node.validate() shouldBe emptyList()
         }

@@ -5,7 +5,7 @@ import io.github.soleworks.validity.messages
 
 private const val PERMUTATION_PERIOD = 8
 
-private val AADHAAR_FORMAT = Regex("[1-9]\\d{3}\\s?\\d{4}\\s?\\d{4}")
+private val AADHAAR_FORMAT = Regex("[2-9]\\d{3}\\s?\\d{4}\\s?\\d{4}")
 private val PAN_FORMAT = Regex("[A-Z]{3}[ABCFGHLJPT][A-Z](?!0000)[0-9]{4}[A-Z]")
 
 private val VERHOEFF_MULTIPLICATION = listOf(

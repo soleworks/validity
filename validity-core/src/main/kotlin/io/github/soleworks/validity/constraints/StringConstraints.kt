@@ -2,6 +2,11 @@ package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.messages
+import kotlin.enums.enumEntries
+
+private const val ASCII_LIMIT = 128
+
+private val ASCII_DIGITS = '0'..'9'
 
 private val NUMERIC_FORMAT = Regex("[+-]?\\d+(?:\\.\\d+)?")
 private val INTEGER_FORMAT = Regex("[+-]?\\d+")
@@ -256,7 +261,7 @@ public fun ValidationNode<String>.letters(
 ): Unit = constraint(
     message = message,
     code = "letters",
-    predicate = { it.all(Char::isLetter) }
+    predicate = { it.isNotEmpty() && it.all(Char::isLetter) }
 )
 
 public fun ValidationNode<String>.digits(
@@ -264,7 +269,7 @@ public fun ValidationNode<String>.digits(
 ): Unit = constraint(
     message = message,
     code = "digits",
-    predicate = { it.all(Char::isDigit) }
+    predicate = { it.isNotEmpty() && it.all { char -> char in ASCII_DIGITS } }
 )
 
 public fun ValidationNode<String>.lettersOrDigits(
@@ -272,7 +277,7 @@ public fun ValidationNode<String>.lettersOrDigits(
 ): Unit = constraint(
     message = message,
     code = "lettersOrDigits",
-    predicate = { it.all(Char::isLetterOrDigit) }
+    predicate = { it.isNotEmpty() && it.all { char -> char.isLetter() || char in ASCII_DIGITS } }
 )
 
 public fun ValidationNode<String>.ascii(
@@ -280,7 +285,7 @@ public fun ValidationNode<String>.ascii(
 ): Unit = constraint(
     message = message,
     code = "ascii",
-    predicate = { Charsets.US_ASCII.newEncoder().canEncode(it) }
+    predicate = { it.isNotEmpty() && it.all { char -> char.code < ASCII_LIMIT } }
 )
 
 public fun ValidationNode<String>.numeric(
@@ -320,7 +325,7 @@ public fun ValidationNode<String>.containsDigit(
 ): Unit = constraint(
     message = message,
     code = "containsDigit",
-    predicate = { it.any(Char::isDigit) }
+    predicate = { it.any { char -> char in ASCII_DIGITS } }
 )
 
 public fun ValidationNode<String>.containsSymbol(
@@ -334,13 +339,13 @@ public fun ValidationNode<String>.containsSymbol(
 public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(
     message: String = messages.enum
 ): Unit = enum<E>(
-    message = { values -> message.replace("{values}", values.joinToString()) }
+    message = { values -> message.replace("{values}", values.joinToString { it.name }) }
 )
 
 public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(
     noinline message: String.(List<E>) -> String
 ): Unit = constraint(
-    message = { it.message(enumValues<E>().toList()) },
+    message = { it.message(enumEntries<E>()) },
     code = "enum",
-    predicate = { value -> enumValues<E>().any { it.name == value } }
+    predicate = { value -> enumEntries<E>().any { it.name == value } }
 )

@@ -61,7 +61,7 @@ class BrazilConstraintsTest {
     @DisplayName("When cnh is called")
     inner class Cnh {
         @ParameterizedTest
-        @ValueSource(strings = ["12345678900", "98765432109", "10000000108"])
+        @ValueSource(strings = ["12345678900", "98765432109", "10000000108", "22571182500", "09746039600"])
         fun `given a CNH with valid check digits should accept it`(cnh: String) {
             val node = ValidationNode("cnh", cnh).apply { cnh() }
 
@@ -69,7 +69,7 @@ class BrazilConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["12345678901", "11111111111", "1234567890", "123456789-00"])
+        @ValueSource(strings = ["12345678901", "11111111111", "1234567890", "123456789-00", "22571182510"])
         fun `given a CNH with wrong check digits, repeated digits or another format should report it`(cnh: String) {
             val node = ValidationNode("cnh", cnh).apply { cnh() }
 

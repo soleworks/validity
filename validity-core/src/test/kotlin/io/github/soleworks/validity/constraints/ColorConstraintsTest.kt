@@ -33,7 +33,7 @@ class ColorConstraintsTest {
     @DisplayName("When rgbColor is called")
     inner class RgbColor {
         @ParameterizedTest
-        @ValueSource(strings = ["rgb(255, 0, 0)", "rgba(0,0,0,0.5)", "rgb(10,20,30)"])
+        @ValueSource(strings = ["rgb(255, 0, 0)", "rgba(0,0,0,0.5)", "rgb(10,20,30)", "rgba(0,0,0,1.0)"])
         fun `given a valid RGB color should accept it`(color: String) {
             val node = ValidationNode("color", color).apply { rgbColor() }
 
@@ -41,7 +41,7 @@ class ColorConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["rgb(256, 0, 0)", "rgb(255, 0)", "rgba(0,0,0,2)", "#ff0000"])
+        @ValueSource(strings = ["rgb(256, 0, 0)", "rgb(255, 0)", "rgba(0,0,0,2)", "#ff0000", "rgba(0,0,0,1.5)"])
         fun `given an invalid RGB color should report it`(color: String) {
             val node = ValidationNode("color", color).apply { rgbColor() }
 
@@ -53,7 +53,7 @@ class ColorConstraintsTest {
     @DisplayName("When hslColor is called")
     inner class HslColor {
         @ParameterizedTest
-        @ValueSource(strings = ["hsl(120, 100%, 50%)", "hsla(240,50%,50%,0.3)"])
+        @ValueSource(strings = ["hsl(120, 100%, 50%)", "hsla(240,50%,50%,0.3)", "hsla(0,0%,0%,1.0)"])
         fun `given a valid HSL color should accept it`(color: String) {
             val node = ValidationNode("color", color).apply { hslColor() }
 

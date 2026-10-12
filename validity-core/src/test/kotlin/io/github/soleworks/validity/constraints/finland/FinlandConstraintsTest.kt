@@ -13,7 +13,7 @@ class FinlandConstraintsTest {
     @DisplayName("When hetu is called")
     inner class Hetu {
         @ParameterizedTest
-        @ValueSource(strings = ["131052-308T", "131002+308W", "131019A3089"])
+        @ValueSource(strings = ["131052-308T", "131002+308W", "131019A3089", "010594Y9021", "020502E902X", "131052-308t"])
         fun `given a valid HETU should accept it`(value: String) {
             val node = ValidationNode("hetu", value).apply { hetu() }
 

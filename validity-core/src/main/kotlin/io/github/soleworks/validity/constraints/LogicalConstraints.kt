@@ -3,6 +3,7 @@ package io.github.soleworks.validity.constraints
 import io.github.soleworks.validity.Constraint
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Violation
+import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
 
 private const val OR = "or"
@@ -59,11 +60,17 @@ public fun <V> ValidationNode<V>.not(
     block = block
 )
 
-private fun anyPasses(branches: List<List<Violation>>): Boolean = branches.isEmpty() || branches.any { it.isEmpty() }
+private fun anyPasses(
+    branches: List<List<Violation>>
+): Boolean = branches.isEmpty() || branches.any { it.isEmpty() }
 
-private fun allPass(branches: List<List<Violation>>): Boolean = branches.all { it.isEmpty() }
+private fun allPass(
+    branches: List<List<Violation>>
+): Boolean = branches.all { it.isEmpty() }
 
-private fun nonePasses(branches: List<List<Violation>>): Boolean = branches.all { it.isNotEmpty() }
+private fun nonePasses(
+    branches: List<List<Violation>>
+): Boolean = branches.all { it.isNotEmpty() }
 
 private fun <V> ValidationNode<V>.combine(
     operator: String,
@@ -77,13 +84,18 @@ private fun <V> ValidationNode<V>.combine(
     val and = messages.and
 
     add(
-        Constraint { path, _ ->
+        Constraint { path, value ->
             val branches = rules.relocated(path).branches()
 
             if (passes(branches))
                 null
             else
-                Violation(path, message ?: branches.described(operator, outer, template, and), operator)
+                Violation(
+                    path = path,
+                    message = message?.filled(path, value)
+                        ?: branches.described(operator, outer, template.filled(path, value), and.filled(path, value)),
+                    code = operator
+                )
         }
     )
 }
@@ -118,6 +130,8 @@ private fun List<Violation>.described(
         text
 }
 
-private fun List<String>.joined(template: String): String = reduceOrNull { left, right ->
+private fun List<String>.joined(
+    template: String
+): String = reduceOrNull { left, right ->
     TEMPLATE_PLACEHOLDERS.replace(template) { if (it.value == "{left}") left else right }
 }.orEmpty()

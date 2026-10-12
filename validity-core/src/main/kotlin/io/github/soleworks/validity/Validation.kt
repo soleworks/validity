@@ -4,7 +4,9 @@ package io.github.soleworks.validity
 public class Validation internal constructor() {
     internal val nodes = mutableListOf<ValidationNode<*>>()
 
-    public fun add(node: ValidationNode<*>) {
+    public fun add(
+        node: ValidationNode<*>
+    ) {
         nodes += node
     }
 
@@ -13,4 +15,6 @@ public class Validation internal constructor() {
     )
 }
 
-public fun validation(block: Validation.() -> Unit): Validation = Validation().apply(block)
+public fun validation(
+    block: Validation.() -> Unit
+): Validation = Validation().apply(block)

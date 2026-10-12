@@ -233,6 +233,57 @@ class LogicalConstraintsTest {
         }
 
         @Test
+        fun `given a value with a placeholder text should not fill it again`() {
+            val node = ValidationNode("token", "{path}").apply {
+                or {
+                    constraint("got {value}") { false }
+                    constraint("is another rule") { false }
+                }
+            }
+
+            node.validate() shouldBe listOf(Violation("token", "got {path} or is another rule", "or"))
+        }
+
+        @Test
+        fun `given the path placeholder in the configured or message should fill it`() {
+            Validity.configure {
+                messages {
+                    or = "{path}: {left} ou {right}"
+                }
+            }
+
+            val node = ValidationNode("document", "123").apply {
+                or {
+                    cpf()
+                    cnpj()
+                }
+            }
+
+            node.validate() shouldBe listOf(
+                Violation("document", "document: must be a valid CPF ou must be a valid CNPJ", "or")
+            )
+        }
+
+        @Test
+        fun `given an and of two failing rules on the items should group its messages`() {
+            val node = ValidationNode("tags", listOf("x")).apply {
+                or {
+                    constraint("must be empty") { false }
+                    each {
+                        and {
+                            minLength(3)
+                            startsWith("#")
+                        }
+                    }
+                }
+            }
+
+            node.validate() shouldBe listOf(
+                Violation("tags", "must be empty or (must have at least 3 characters and must start with #)", "or")
+            )
+        }
+
+        @Test
         fun `given an and of two failing rules inside should group its messages`() {
             val node = ValidationNode("document", "X").apply {
                 or {

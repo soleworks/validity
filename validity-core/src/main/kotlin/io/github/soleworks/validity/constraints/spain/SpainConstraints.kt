@@ -12,7 +12,6 @@ private val NIE_FORMAT = Regex("[X-Z]\\d{7}[$CONTROL_LETTERS]")
 private val NIF_FORMAT = Regex("(\\d{0,8}|[XYZKLM]\\d{7})[A-HJ-NP-TV-Z]", RegexOption.IGNORE_CASE)
 
 private val NIE_PREFIX_VALUES = mapOf('X' to '0', 'Y' to '1', 'Z' to '2')
-private val NIF_PREFIX_VALUES = mapOf('Y' to '1', 'Z' to '2')
 
 public fun ValidationNode<String>.dni(
     message: String = messages.spain.dni
@@ -45,11 +44,10 @@ private fun String.hasControlLetter(): Boolean {
 }
 
 private fun String.hasNifControlLetter(): Boolean {
-    val padded = if (!first().isDigit() && length > 1) {
-        (NIF_PREFIX_VALUES[first()] ?: '0') + drop(1)
-    } else {
+    val padded = if (!first().isDigit() && length > 1)
+        (NIE_PREFIX_VALUES[first()] ?: '0') + drop(1)
+    else
         padStart(NIF_LENGTH, '0')
-    }
 
     return padded.last() == CONTROL_LETTERS[padded.dropLast(1).toInt() % MODULUS]
 }

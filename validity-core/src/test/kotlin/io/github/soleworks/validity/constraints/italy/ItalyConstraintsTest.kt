@@ -13,7 +13,7 @@ class ItalyConstraintsTest {
     @DisplayName("When codiceFiscale is called")
     inner class CodiceFiscale {
         @ParameterizedTest
-        @ValueSource(strings = ["DMLPRY77D15H501F", "AXXFAXTTD41H501D"])
+        @ValueSource(strings = ["DMLPRY77D15H501F", "AXXFAXTTD41H501M", "DMLPRY77D15H50MX", "DMLPRYTTD15H501O"])
         fun `given a valid codice fiscale should accept it`(value: String) {
             val node = ValidationNode("codiceFiscale", value).apply { codiceFiscale() }
 
@@ -30,7 +30,9 @@ class ItalyConstraintsTest {
                 "DMLAXA77D15H501F",
                 "AXXFAX90A01Z001F",
                 "DMLPRY77B29H501F",
-                "AXXFAX3TD41H501E"
+                "AXXFAX3TD41H501E",
+                "AXXFAXTTD41H501D",
+                "DMLPRYTTD15H501F"
             ]
         )
         fun `given an invalid codice fiscale should report it`(value: String) {
@@ -52,7 +54,7 @@ class ItalyConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["CA00000AA", "CB2342TG", "CS123456A", "C1236EC"])
+        @ValueSource(strings = ["CA00000AA", "ca00000aa", "CB2342TG", "CS123456A", "C1236EC"])
         fun `given an invalid CIE should report it`(value: String) {
             val node = ValidationNode("cie", value).apply { cie() }
 

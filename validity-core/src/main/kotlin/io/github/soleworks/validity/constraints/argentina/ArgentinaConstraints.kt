@@ -27,7 +27,9 @@ public fun ValidationNode<String>.cuil(
     predicate = { TAX_ID_FORMAT.matches(it) && it.isTaxId(CUIL_PREFIXES) }
 )
 
-private fun String.isTaxId(prefixes: Set<String>): Boolean {
+private fun String.isTaxId(
+    prefixes: Set<String>
+): Boolean {
     val digits = filter(Char::isDigit).map(Char::digitToInt)
     val sum = digits.zip(WEIGHTS) { digit, weight -> digit * weight }.sum()
 

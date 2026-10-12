@@ -7,15 +7,16 @@ import java.util.Currency
 
 private const val IBAN_MODULUS = 97L
 private const val IBAN_REMAINDER = 1
-private const val LETTER_OFFSET = 10
+private const val ALPHANUMERIC_RADIX = 36
 
 private val CREDIT_CARD_FORMAT = Regex("\\d{12,19}")
 private val BIC_FORMAT = Regex("[A-Z]{4}([A-Z]{2})[A-Z0-9]{2}(?:[A-Z0-9]{3})?")
 private val ISIN_FORMAT = Regex("[A-Z]{2}[A-Z0-9]{9}\\d")
-private val BITCOIN_ADDRESS_FORMAT = Regex("[13][A-HJ-NP-Za-km-z1-9]{25,39}|bc1[a-z0-9]{25,39}")
+private val BITCOIN_ADDRESS_FORMAT = Regex("[13][A-HJ-NP-Za-km-z1-9]{25,39}|bc1[ac-hj-np-z02-9]{39,59}")
 private val ETHEREUM_ADDRESS_FORMAT = Regex("0x[0-9a-fA-F]{40}")
 
 private val CURRENCY_CODES = Currency.getAvailableCurrencies().map { it.currencyCode }.toSet()
+private val BIC_COUNTRY_CODES = COUNTRY_CODES + "XK"
 
 private val IBAN_FORMATS: Map<String, Regex> = mapOf(
     "AD" to Regex("AD\\d{10}[A-Z0-9]{12}"),
@@ -146,7 +147,7 @@ public fun ValidationNode<String>.bic(
 ): Unit = constraint(
     message = message,
     code = "bic",
-    predicate = { BIC_FORMAT.matchEntire(it)?.groupValues?.get(1) in COUNTRY_CODES }
+    predicate = { BIC_FORMAT.matchEntire(it)?.groupValues?.get(1) in BIC_COUNTRY_CODES }
 )
 
 public fun ValidationNode<String>.isin(
@@ -181,9 +182,7 @@ public fun ValidationNode<String>.ethereumAddress(
     predicate = { ETHEREUM_ADDRESS_FORMAT.matches(it) }
 )
 
-private fun String.toDigitString(): String = map(Char::toDigitValue).joinToString("")
-
-private fun Char.toDigitValue(): Int = if (isLetter()) this - 'A' + LETTER_OFFSET else digitToInt()
+private fun String.toDigitString(): String = map { it.digitToInt(ALPHANUMERIC_RADIX) }.joinToString("")
 
 private fun String.hasIbanCheckDigits(): Boolean = BigInteger((drop(4) + take(4)).toDigitString())
     .mod(BigInteger.valueOf(IBAN_MODULUS))

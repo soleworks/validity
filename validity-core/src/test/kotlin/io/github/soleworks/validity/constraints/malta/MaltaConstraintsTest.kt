@@ -21,7 +21,7 @@ class MaltaConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["11234567A", "12/34-567 A", "1234560A", "0000000M", "3200100G"])
+        @ValueSource(strings = ["11234567A", "12/34-567 A", "1234560A", "1234560a", "100A", "0000000M", "3200100G"])
         fun `given an invalid ID card number should report it`(value: String) {
             val node = ValidationNode("idCardNumber", value).apply { idCardNumber() }
 

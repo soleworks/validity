@@ -4,7 +4,7 @@ import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.messages
 
 private val NINO_FORMAT = Regex(
-    "(?!GB|NK|TN|ZZ)(?![DFIQUV])[A-Z](?![DFIQUVO])[A-Z]\\d{6}[ABCD ]",
+    "(?!BG|GB|KN|NK|NT|TN|ZZ)(?![DFIQUV])[A-Z](?![DFIQUVO])[A-Z]\\d{6}[ABCD ]",
     RegexOption.IGNORE_CASE
 )
 

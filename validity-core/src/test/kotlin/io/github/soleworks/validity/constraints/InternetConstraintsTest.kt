@@ -57,6 +57,13 @@ class InternetConstraintsTest {
         }
 
         @Test
+        fun `given an allowed scheme in uppercase should accept it`() {
+            val node = ValidationNode("website", "https://example.com").apply { url(setOf("HTTPS")) }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
         fun `given a custom message with the schemes placeholder should replace it`() {
             val node = ValidationNode("website", "ftp://example.com").apply { url(message = "must use {schemes}") }
 
@@ -190,7 +197,7 @@ class InternetConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["10.0.0.0/33", "2001:db8::/129", "10.0.0.0", "10.0.0.0/", "10.0.0.0/+8"])
+        @ValueSource(strings = ["10.0.0.0/33", "2001:db8::/129", "10.0.0.0", "10.0.0.0/", "10.0.0.0/+8", "10.0.0.0/08", "10.0.0.0/٨"])
         fun `given an invalid CIDR block should report it`(network: String) {
             val node = ValidationNode("network", network).apply { cidr() }
 
@@ -262,7 +269,7 @@ class InternetConstraintsTest {
     @DisplayName("When dataUri is called")
     inner class DataUri {
         @ParameterizedTest
-        @ValueSource(strings = ["data:text/plain;base64,SGVsbG8=", "data:,Hello"])
+        @ValueSource(strings = ["data:text/plain;base64,SGVsbG8=", "data:,Hello", "data:;charset=US-ASCII,Hello"])
         fun `given a valid data URI should accept it`(avatar: String) {
             val node = ValidationNode("avatar", avatar).apply { dataUri() }
 
@@ -282,7 +289,7 @@ class InternetConstraintsTest {
     @DisplayName("When mimeType is called")
     inner class MimeType {
         @ParameterizedTest
-        @ValueSource(strings = ["image/png", "application/vnd.api+json"])
+        @ValueSource(strings = ["image/png", "application/vnd.api+json", "Image/PNG", "haptics/ivs"])
         fun `given a valid MIME type should accept it`(contentType: String) {
             val node = ValidationNode("contentType", contentType).apply { mimeType() }
 

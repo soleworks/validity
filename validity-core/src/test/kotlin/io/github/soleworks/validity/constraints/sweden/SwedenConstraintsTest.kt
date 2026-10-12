@@ -13,7 +13,7 @@ class SwedenConstraintsTest {
     @DisplayName("When personnummer is called")
     inner class Personnummer {
         @ParameterizedTest
-        @ValueSource(strings = ["640823-3234", "19640823-3233", "196408233233", "200228+5266", "20180101-5581"])
+        @ValueSource(strings = ["640823-3234", "19640823-3234", "196408233234", "200228+5266", "20180101-5585", "19121212-1212"])
         fun `given a valid personnummer should accept it`(value: String) {
             val node = ValidationNode("personnummer", value).apply { personnummer() }
 
@@ -33,7 +33,8 @@ class SwedenConstraintsTest {
                 "640823+32344",
                 "64082332344",
                 "19640823-32333",
-                "1964082332333"
+                "1964082332333",
+                "19640823-3233"
             ]
         )
         fun `given an invalid personnummer should report it`(value: String) {
@@ -47,7 +48,7 @@ class SwedenConstraintsTest {
     @DisplayName("When samordningsnummer is called")
     inner class Samordningsnummer {
         @ParameterizedTest
-        @ValueSource(strings = ["640883-3231", "6408833231", "19640883-3230"])
+        @ValueSource(strings = ["640883-3231", "6408833231", "19640883-3231"])
         fun `given a valid samordningsnummer should accept it`(value: String) {
             val node = ValidationNode("samordningsnummer", value).apply { samordningsnummer() }
 

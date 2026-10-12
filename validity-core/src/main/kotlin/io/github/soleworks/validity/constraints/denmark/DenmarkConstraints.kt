@@ -1,8 +1,8 @@
 package io.github.soleworks.validity.constraints.denmark
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.constraints.isDate
 import io.github.soleworks.validity.messages
-import java.time.LocalDate
 
 private const val MODULUS = 11
 private const val NINETEENTH_CENTURY = 1800
@@ -38,8 +38,7 @@ private fun String.birthYear(): Int {
     }
 }
 
-private fun String.hasValidBirthDate(): Boolean =
-    runCatching { LocalDate.of(birthYear(), substring(2, 4).toInt(), take(2).toInt()) }.isSuccess
+private fun String.hasValidBirthDate(): Boolean = isDate(birthYear(), substring(2, 4).toInt(), take(2).toInt())
 
 private fun String.isCpr(): Boolean {
     val digits = map(Char::digitToInt)
