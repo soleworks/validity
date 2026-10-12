@@ -6,6 +6,8 @@ import kotlin.enums.enumEntries
 
 private const val ASCII_LIMIT = 128
 
+private val ASCII_DIGITS = '0'..'9'
+
 private val NUMERIC_FORMAT = Regex("[+-]?\\d+(?:\\.\\d+)?")
 private val INTEGER_FORMAT = Regex("[+-]?\\d+")
 
@@ -267,7 +269,7 @@ public fun ValidationNode<String>.digits(
 ): Unit = constraint(
     message = message,
     code = "digits",
-    predicate = { it.all(Char::isDigit) }
+    predicate = { it.all { char -> char in ASCII_DIGITS } }
 )
 
 public fun ValidationNode<String>.lettersOrDigits(
@@ -275,7 +277,7 @@ public fun ValidationNode<String>.lettersOrDigits(
 ): Unit = constraint(
     message = message,
     code = "lettersOrDigits",
-    predicate = { it.all(Char::isLetterOrDigit) }
+    predicate = { it.all { char -> char.isLetter() || char in ASCII_DIGITS } }
 )
 
 public fun ValidationNode<String>.ascii(
@@ -323,7 +325,7 @@ public fun ValidationNode<String>.containsDigit(
 ): Unit = constraint(
     message = message,
     code = "containsDigit",
-    predicate = { it.any(Char::isDigit) }
+    predicate = { it.any { char -> char in ASCII_DIGITS } }
 )
 
 public fun ValidationNode<String>.containsSymbol(

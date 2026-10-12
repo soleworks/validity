@@ -522,6 +522,14 @@ class StringConstraintsTest {
             node.validate() shouldBe listOf(Violation("zipCode", "must contain only digits", "digits"))
         }
 
+        @ParameterizedTest
+        @ValueSource(strings = ["０１３１０１００", "٠١٣١٠١٠٠"])
+        fun `given a zip code with non-ASCII digits should report it`(zipCode: String) {
+            val node = ValidationNode("zipCode", zipCode).apply { digits() }
+
+            node.validate() shouldBe listOf(Violation("zipCode", "must contain only digits", "digits"))
+        }
+
         @Test
         fun `given a zip code with only digits should accept it`() {
             val node = ValidationNode("zipCode", "01310100").apply { digits() }
@@ -536,6 +544,14 @@ class StringConstraintsTest {
         @ParameterizedTest
         @ValueSource(strings = ["ana_1", "ana 1"])
         fun `given a username with symbols or spaces should report it`(username: String) {
+            val node = ValidationNode("username", username).apply { lettersOrDigits() }
+
+            node.validate() shouldBe listOf(Violation("username", "must contain only letters or digits", "lettersOrDigits"))
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["ana１", "ana١"])
+        fun `given a username with a non-ASCII digit should report it`(username: String) {
             val node = ValidationNode("username", username).apply { lettersOrDigits() }
 
             node.validate() shouldBe listOf(Violation("username", "must contain only letters or digits", "lettersOrDigits"))
@@ -662,7 +678,7 @@ class StringConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["pass"])
+        @ValueSource(strings = ["pass", "pass１", "pass١"])
         fun `given text without it should report it`(password: String) {
             val node = ValidationNode("password", password).apply { containsDigit() }
 
