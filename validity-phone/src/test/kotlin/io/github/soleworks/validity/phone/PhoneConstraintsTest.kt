@@ -87,6 +87,29 @@ class PhoneConstraintsTest {
             node.validate() shouldBe listOf(Violation("phoneNumber", "must be a valid phone number", "phone"))
         }
 
+        @ParameterizedTest
+        @ValueSource(strings = ["+55 21 98765-4321", "(21) 98765-4321"])
+        fun `given a number from another area than the area code from another field should report it`(phone: String) {
+            val node = ValidationNode("phone", phone).apply { phone(countryCode = "55", areaCode = "11") }
+
+            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["+55 11 99712-3931", "(11) 99712-3931"])
+        fun `given a number from the area code of another field should accept it`(phone: String) {
+            val node = ValidationNode("phone", phone).apply { phone(countryCode = "55", areaCode = "11") }
+
+            node.validate() shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an area code from another field with the trunk prefix should accept the number from it`() {
+            val node = ValidationNode("phone", "+44 20 7946 0018").apply { phone(countryCode = "44", areaCode = "020") }
+
+            node.validate() shouldBe emptyList()
+        }
+
         @Test
         fun `given a number with country code when only area code and number are allowed should report it`() {
             val node = ValidationNode("phone", "+55 11 99712-3931").apply {
@@ -268,6 +291,14 @@ class PhoneConstraintsTest {
         @ValueSource(strings = ["123456", "2a"])
         fun `given an area code that is not up to 5 digits should report it`(areaCode: String) {
             val node = ValidationNode("areaCode", areaCode).apply { areaCode(countryCode = "44") }
+
+            node.validate() shouldBe listOf(Violation("areaCode", "must be a valid area code", "areaCode"))
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["44", "1"])
+        fun `given an area code in non-ASCII digits should report it`(countryCode: String) {
+            val node = ValidationNode("areaCode", "٢١٢").apply { areaCode(countryCode = countryCode) }
 
             node.validate() shouldBe listOf(Violation("areaCode", "must be a valid area code", "areaCode"))
         }
