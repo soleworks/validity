@@ -9,6 +9,12 @@ internal class Constraint<V>(
         path: String,
         value: V
     ): List<Violation> = listOfNotNull(check(path, value))
+
+    fun inheriting(
+        metadata: Any?
+    ): Constraint<V> = Constraint { path, value ->
+        check(path, value)?.let { violation -> violation.copy(metadata = violation.metadata ?: metadata) }
+    }
 }
 
 internal fun String.filled(

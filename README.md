@@ -54,6 +54,7 @@ Transfer(method = "DOC", amount = BigDecimal("10.001"), document = "123").valida
 - [Constraints](#constraints)
 - [Combining constraints](#combining-constraints)
 - [Messages](#messages)
+- [Metadata](#metadata)
 - [Configuration](#configuration)
 - [Modules](#modules)
 
@@ -302,6 +303,30 @@ Validity.configure {
 
 A message passed to a function wins over the configured one. The messages of each country live in its own section
 (`brazil { }`, `spain { }`...), and the phone module adds `phone { }`.
+
+## Metadata
+
+A `metadata` block attaches any object to the violations of the rules inside it, such as a severity. A block in
+`validation { }` also covers the premises (`required`, `forbidden`, `atLeastOneOf`...), nested objects and
+collections inherit it, and the innermost block wins:
+
+```kotlin
+enum class Severity { ERROR, WARNING }
+
+override fun validation() = validation {
+    metadata(Severity.ERROR) {
+        atLeastOneOf(::email, ::phone)
+    }
+    ::password required {
+        minLength(8)
+        metadata(Severity.WARNING) { minLength(12) }
+    }
+}
+// Signup(email = "ana@mail.com", password = "abc1234567").validate().violations
+// [Violation(path=password, message=must have at least 12 characters, code=minLength, metadata=WARNING)]
+```
+
+A logical operator reports one violation, with the metadata of the block it is in.
 
 ## Configuration
 
