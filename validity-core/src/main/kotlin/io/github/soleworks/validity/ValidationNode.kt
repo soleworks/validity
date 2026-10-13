@@ -10,6 +10,8 @@ public class ValidationNode<V>(
 
     internal var operator: String? = null
 
+    internal var metadata: Map<String, Any?> = emptyMap()
+
     public fun constraint(
         message: String,
         code: String = "",
@@ -24,14 +26,33 @@ public class ValidationNode<V>(
         message: (V) -> String,
         code: String = "",
         predicate: (V) -> Boolean
-    ): Unit = add(
-        Constraint { path, value ->
-            if (predicate(value))
-                null
-            else
-                Violation(path, message(value).filled(path, value), code)
+    ) {
+        val metadata = metadata
+
+        add(
+            Constraint { path, value ->
+                if (predicate(value))
+                    null
+                else
+                    Violation(path, message(value).filled(path, value), code, metadata)
+            }
+        )
+    }
+
+    public fun metadata(
+        vararg entries: Pair<String, Any?>,
+        block: ValidationNode<V>.() -> Unit
+    ) {
+        val outer = metadata
+
+        metadata = outer + entries
+
+        try {
+            block()
+        } finally {
+            metadata = outer
         }
-    )
+    }
 
     internal fun constraint(
         message: (V) -> String,
@@ -67,12 +88,15 @@ public class ValidationNode<V>(
         constraints.map { it.validate(path, value) } + groups.map { nodes -> nodes.flatMap { it.validate() } }
 
     internal fun relocated(
-        path: String
-    ): ValidationNode<V> = if (path == this.path)
+        path: String,
+        metadata: Map<String, Any?> = emptyMap()
+    ): ValidationNode<V> = if (path == this.path && metadata.isEmpty())
         this
     else
         ValidationNode(path, value).also {
-            it.constraints += constraints
-            it.groups += groups.map { nodes -> nodes.map { node -> node.relocated(path + node.path.removePrefix(this.path)) } }
+            it.constraints += if (metadata.isEmpty()) constraints else constraints.map { constraint -> constraint.inheriting(metadata) }
+            it.groups += groups.map { nodes ->
+                nodes.map { node -> node.relocated(path + node.path.removePrefix(this.path), metadata) }
+            }
         }
 }

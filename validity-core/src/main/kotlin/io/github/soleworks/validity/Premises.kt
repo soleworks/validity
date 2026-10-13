@@ -30,7 +30,7 @@ public fun <V : Any> required(
 ) {
     if (value == null)
         return validation.add(
-            ValidationNode<V?>(name, null).apply {
+            node<V?>(name, null).apply {
                 constraint(
                     message = message,
                     code = "required",
@@ -39,7 +39,7 @@ public fun <V : Any> required(
             }
         )
 
-    val node = ValidationNode(name, value)
+    val node = node(name, value)
 
     validation.add(node)
 
@@ -64,7 +64,7 @@ public fun <V : Any> ifPresent(
     if (value == null)
         return
 
-    val node = ValidationNode(name, value)
+    val node = node(name, value)
 
     validation.add(node)
 
@@ -75,7 +75,7 @@ context(validation: Validation)
 public fun KProperty0<*>.forbidden(
     message: String = messages.forbidden
 ): Unit = validation.add(
-    ValidationNode(name, get()).apply {
+    node(name, get()).apply {
         constraint(
             message = message,
             code = "forbidden",
@@ -144,7 +144,7 @@ private fun presence(
 
     distinct.zip(values).forEach { (property, value) ->
         validation.add(
-            ValidationNode(property.name, value).apply {
+            node(property.name, value).apply {
                 constraint(
                     message = text,
                     code = code,
@@ -154,3 +154,9 @@ private fun presence(
         )
     }
 }
+
+context(validation: Validation)
+private fun <V> node(
+    name: String,
+    value: V
+): ValidationNode<V> = ValidationNode(name, value).also { it.metadata = validation.metadata }

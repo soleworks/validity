@@ -54,6 +54,7 @@ Transfer(method = "DOC", amount = BigDecimal("10.001"), document = "123").valida
 - [Constraints](#constraints)
 - [Combining constraints](#combining-constraints)
 - [Messages](#messages)
+- [Metadata](#metadata)
 - [Configuration](#configuration)
 - [Modules](#modules)
 
@@ -302,6 +303,36 @@ Validity.configure {
 
 A message passed to a function wins over the configured one. The messages of each country live in its own section
 (`brazil { }`, `spain { }`...), and the phone module adds `phone { }`.
+
+## Metadata
+
+A `metadata` block attaches entries to the violations of the rules inside it, such as the ids of the operation
+being validated. A block in `validation { }` also covers the premises (`required`, `forbidden`, `atLeastOneOf`...),
+nested objects and collections inherit the entries, and an inner block adds to the outer one, winning on the same
+key:
+
+```kotlin
+data class Operation(val id: String, val amount: BigDecimal?) : Validatable {
+    override fun validation() = validation {
+        metadata("operationId" to id) {
+            ::amount required { positive() }
+        }
+    }
+}
+
+data class Batch(val clientId: String, val operations: List<Operation>) : Validatable {
+    override fun validation() = validation {
+        metadata("clientId" to clientId) {
+            ::operations required { each { valid() } }
+        }
+    }
+}
+// [Violation(path=operations[0].amount, message=must be positive, code=positive,
+//            metadata={clientId=c-9, operationId=op-7})]
+```
+
+Read an entry with `violation.metadata["operationId"]`. A logical operator reports one violation, with the
+entries of the block it is in.
 
 ## Configuration
 
