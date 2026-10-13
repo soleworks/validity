@@ -4,7 +4,7 @@ package io.github.soleworks.validity
 public class Validation internal constructor() {
     internal val nodes = mutableListOf<ValidationNode<*>>()
 
-    internal var metadata: Any? = null
+    internal var metadata: Map<String, Any?> = emptyMap()
 
     public fun add(
         node: ValidationNode<*>
@@ -13,17 +13,17 @@ public class Validation internal constructor() {
     }
 
     public fun metadata(
-        metadata: Any?,
+        vararg entries: Pair<String, Any?>,
         block: Validation.() -> Unit
     ) {
-        val outer = this.metadata
+        val outer = metadata
 
-        this.metadata = metadata
+        metadata = outer + entries
 
         try {
             block()
         } finally {
-            this.metadata = outer
+            metadata = outer
         }
     }
 

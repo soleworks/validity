@@ -2,11 +2,12 @@ package io.github.soleworks.validity
 
 import io.github.soleworks.validity.constraints.brazil.cnpj
 import io.github.soleworks.validity.constraints.brazil.cpf
+import io.github.soleworks.validity.constraints.min
 import io.github.soleworks.validity.constraints.minLength
 import io.github.soleworks.validity.constraints.or
+import io.github.soleworks.validity.constraints.positive
 import io.github.soleworks.validity.samples.Company
-import io.github.soleworks.validity.samples.Severity
-import io.github.soleworks.validity.samples.Signup
+import io.github.soleworks.validity.samples.Operation
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -84,77 +85,81 @@ class ValidationNodeTest {
     @DisplayName("When metadata is called")
     inner class Metadata {
         @Test
-        fun `given rules inside the block should attach the metadata to their violations`() {
-            val node = ValidationNode("password", "abc1234").apply {
-                minLength(8)
-                metadata(Severity.WARNING) { minLength(12) }
+        fun `given rules inside the block should attach the entries to their violations`() {
+            val node = ValidationNode("amount", 0).apply {
+                positive()
+                metadata("operationId" to "op-1") { min(10) }
             }
 
             node.validate() shouldBe listOf(
-                Violation("password", "must have at least 8 characters", "minLength"),
-                Violation("password", "must have at least 12 characters", "minLength", Severity.WARNING)
+                Violation("amount", "must be positive", "positive"),
+                Violation("amount", "must be at least 10", "min", mapOf("operationId" to "op-1"))
             )
         }
 
         @Test
-        fun `given nested blocks should attach the innermost metadata and restore the outer one after them`() {
-            val node = ValidationNode("password", "abc").apply {
-                metadata(Severity.ERROR) {
-                    minLength(4)
-                    metadata(Severity.WARNING) { minLength(8) }
-                    minLength(12)
+        fun `given nested blocks should merge the entries and restore the outer ones after them`() {
+            val node = ValidationNode("amount", 0).apply {
+                metadata("operationId" to "op-1", "step" to "outer") {
+                    min(1)
+                    metadata("step" to "inner") { min(2) }
+                    min(3)
                 }
-                minLength(16)
+                min(4)
             }
 
             node.validate() shouldBe listOf(
-                Violation("password", "must have at least 4 characters", "minLength", Severity.ERROR),
-                Violation("password", "must have at least 8 characters", "minLength", Severity.WARNING),
-                Violation("password", "must have at least 12 characters", "minLength", Severity.ERROR),
-                Violation("password", "must have at least 16 characters", "minLength")
+                Violation("amount", "must be at least 1", "min", mapOf("operationId" to "op-1", "step" to "outer")),
+                Violation("amount", "must be at least 2", "min", mapOf("operationId" to "op-1", "step" to "inner")),
+                Violation("amount", "must be at least 3", "min", mapOf("operationId" to "op-1", "step" to "outer")),
+                Violation("amount", "must be at least 4", "min")
             )
         }
 
         @Test
-        fun `given each inside the block should attach the metadata to every element`() {
-            val node = ValidationNode("phones", listOf("123", "456")).apply {
-                metadata(Severity.WARNING) { each { minLength(8) } }
+        fun `given each inside the block should attach the entries to every element`() {
+            val node = ValidationNode("tags", listOf("a", "b")).apply {
+                metadata("operationId" to "op-1") { each { minLength(3) } }
             }
 
             node.validate() shouldBe listOf(
-                Violation("phones[0]", "must have at least 8 characters", "minLength", Severity.WARNING),
-                Violation("phones[1]", "must have at least 8 characters", "minLength", Severity.WARNING)
+                Violation("tags[0]", "must have at least 3 characters", "minLength", mapOf("operationId" to "op-1")),
+                Violation("tags[1]", "must have at least 3 characters", "minLength", mapOf("operationId" to "op-1"))
             )
         }
 
         @Test
-        fun `given a nested object inside the block should attach the metadata to the violations without their own`() {
-            val node = ValidationNode("signup", Signup(email = "ana", password = "abc")).apply {
-                metadata("outer") { valid() }
+        fun `given a nested object inside the block should merge the entries with its own`() {
+            val node = ValidationNode("operation", Operation(amount = 0, currency = "BR")).apply {
+                metadata("clientId" to "c-9", "operationId" to "outer") { valid() }
             }
 
             node.validate() shouldBe listOf(
-                Violation("signup.email", "must be a valid email", "email", Severity.ERROR),
-                Violation("signup.password", "must have at least 8 characters", "minLength", "outer"),
-                Violation("signup.password", "must have at least 12 characters", "minLength", Severity.WARNING)
+                Violation("operation.amount", "must be positive", "positive", mapOf("clientId" to "c-9", "operationId" to "op-1")),
+                Violation(
+                    "operation.currency",
+                    "must have exactly 3 characters",
+                    "length",
+                    mapOf("clientId" to "c-9", "operationId" to "op-1", "field" to "currency")
+                )
             )
         }
 
         @Test
-        fun `given a logical operator inside the block should attach the metadata to its violation`() {
+        fun `given a logical operator inside the block should attach the entries to its violation`() {
             val node = ValidationNode("document", "123").apply {
-                metadata(Severity.ERROR) { or { cpf(); cnpj() } }
+                metadata("operationId" to "op-1") { or { cpf(); cnpj() } }
             }
 
             node.validate() shouldBe listOf(
-                Violation("document", "must be a valid CPF or must be a valid CNPJ", "or", Severity.ERROR)
+                Violation("document", "must be a valid CPF or must be a valid CNPJ", "or", mapOf("operationId" to "op-1"))
             )
         }
 
         @Test
         fun `given the block inside a logical operator should keep each rule as an alternative`() {
             val node = ValidationNode("document", "52998224725").apply {
-                or { metadata(Severity.WARNING) { cpf(); cnpj() } }
+                or { metadata("operationId" to "op-1") { cpf(); cnpj() } }
             }
 
             node.validate() shouldBe emptyList()

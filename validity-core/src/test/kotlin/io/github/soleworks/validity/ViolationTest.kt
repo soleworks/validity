@@ -1,6 +1,5 @@
 package io.github.soleworks.validity
 
-import io.github.soleworks.validity.samples.Severity
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -19,9 +18,9 @@ class ViolationTest {
 
         @Test
         fun `given metadata should show it in the text`() {
-            val violation = Violation("amount", "must be positive", "positive", Severity.WARNING)
+            val violation = Violation("amount", "must be positive", "positive", mapOf("operationId" to "op-1"))
 
-            violation.toString() shouldBe "Violation(path=amount, message=must be positive, code=positive, metadata=WARNING)"
+            violation.toString() shouldBe "Violation(path=amount, message=must be positive, code=positive, metadata={operationId=op-1})"
         }
     }
 }

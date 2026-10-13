@@ -306,27 +306,33 @@ A message passed to a function wins over the configured one. The messages of eac
 
 ## Metadata
 
-A `metadata` block attaches any object to the violations of the rules inside it, such as a severity. A block in
-`validation { }` also covers the premises (`required`, `forbidden`, `atLeastOneOf`...), nested objects and
-collections inherit it, and the innermost block wins:
+A `metadata` block attaches entries to the violations of the rules inside it, such as the ids of the operation
+being validated. A block in `validation { }` also covers the premises (`required`, `forbidden`, `atLeastOneOf`...),
+nested objects and collections inherit the entries, and an inner block adds to the outer one, winning on the same
+key:
 
 ```kotlin
-enum class Severity { ERROR, WARNING }
-
-override fun validation() = validation {
-    metadata(Severity.ERROR) {
-        atLeastOneOf(::email, ::phone)
-    }
-    ::password required {
-        minLength(8)
-        metadata(Severity.WARNING) { minLength(12) }
+data class Operation(val id: String, val amount: BigDecimal?) : Validatable {
+    override fun validation() = validation {
+        metadata("operationId" to id) {
+            ::amount required { positive() }
+        }
     }
 }
-// Signup(email = "ana@mail.com", password = "abc1234567").validate().violations
-// [Violation(path=password, message=must have at least 12 characters, code=minLength, metadata=WARNING)]
+
+data class Batch(val clientId: String, val operations: List<Operation>) : Validatable {
+    override fun validation() = validation {
+        metadata("clientId" to clientId) {
+            ::operations required { each { valid() } }
+        }
+    }
+}
+// [Violation(path=operations[0].amount, message=must be positive, code=positive,
+//            metadata={clientId=c-9, operationId=op-7})]
 ```
 
-A logical operator reports one violation, with the metadata of the block it is in.
+Read an entry with `violation.metadata["operationId"]`. A logical operator reports one violation, with the
+entries of the block it is in.
 
 ## Configuration
 

@@ -4,9 +4,9 @@ public data class Violation(
     val path: String,
     val message: String,
     val code: String,
-    val metadata: Any? = null
+    val metadata: Map<String, Any?> = emptyMap()
 ) {
-    override fun toString(): String = if (metadata == null)
+    override fun toString(): String = if (metadata.isEmpty())
         "Violation(path=$path, message=$message, code=$code)"
     else
         "Violation(path=$path, message=$message, code=$code, metadata=$metadata)"

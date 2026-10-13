@@ -10,7 +10,7 @@ public class ValidationNode<V>(
 
     internal var operator: String? = null
 
-    internal var metadata: Any? = null
+    internal var metadata: Map<String, Any?> = emptyMap()
 
     public fun constraint(
         message: String,
@@ -40,17 +40,17 @@ public class ValidationNode<V>(
     }
 
     public fun metadata(
-        metadata: Any?,
+        vararg entries: Pair<String, Any?>,
         block: ValidationNode<V>.() -> Unit
     ) {
-        val outer = this.metadata
+        val outer = metadata
 
-        this.metadata = metadata
+        metadata = outer + entries
 
         try {
             block()
         } finally {
-            this.metadata = outer
+            metadata = outer
         }
     }
 
@@ -89,12 +89,12 @@ public class ValidationNode<V>(
 
     internal fun relocated(
         path: String,
-        metadata: Any? = null
-    ): ValidationNode<V> = if (path == this.path && metadata == null)
+        metadata: Map<String, Any?> = emptyMap()
+    ): ValidationNode<V> = if (path == this.path && metadata.isEmpty())
         this
     else
         ValidationNode(path, value).also {
-            it.constraints += if (metadata == null) constraints else constraints.map { constraint -> constraint.inheriting(metadata) }
+            it.constraints += if (metadata.isEmpty()) constraints else constraints.map { constraint -> constraint.inheriting(metadata) }
             it.groups += groups.map { nodes ->
                 nodes.map { node -> node.relocated(path + node.path.removePrefix(this.path), metadata) }
             }
