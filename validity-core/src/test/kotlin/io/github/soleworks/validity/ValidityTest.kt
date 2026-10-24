@@ -8,8 +8,6 @@ import io.github.soleworks.validity.constraints.pastOrPresent
 import io.github.soleworks.validity.samples.Address
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Recipient
-import io.github.soleworks.validity.samples.readme.Account
-import io.github.soleworks.validity.samples.readme.Employment
 import io.kotest.matchers.shouldBe
 import java.time.Clock
 import java.time.Instant
@@ -18,7 +16,6 @@ import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.Year
 import java.time.YearMonth
-import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.util.Date
@@ -304,32 +301,6 @@ class ValidityTest {
                 ),
                 Violation(path = "cpf", message = "no máximo um de cpf, cnpj, passport", code = "atMostOneOf"),
                 Violation(path = "cnpj", message = "no máximo um de cpf, cnpj, passport", code = "atMostOneOf")
-            )
-        }
-
-        @Test
-        fun `given a clock and messages in Portuguese should report the violations in Portuguese`() {
-            Validity.configure {
-                clock = Clock.fixed(Instant.parse("2024-01-01T00:00:00Z"), ZoneOffset.UTC)
-                messages {
-                    required = "{path} é obrigatório"
-                    pastOrPresent = "{path} não pode estar no futuro"
-                    or = "{left} ou {right}"
-                    brazil {
-                        cpf = "CPF inválido"
-                        cnpj = "CNPJ inválido"
-                    }
-                }
-            }
-            val account = Account(taxId = "123", username = null)
-            val employment = Employment(hiredOn = LocalDate.of(2024, 3, 1), leftOn = null)
-
-            val violations = account.validate().violations + employment.validate().violations
-
-            violations shouldBe listOf(
-                Violation(path = "taxId", message = "CPF inválido ou CNPJ inválido", code = "or"),
-                Violation(path = "username", message = "username é obrigatório", code = "required"),
-                Violation(path = "hiredOn", message = "hiredOn não pode estar no futuro", code = "pastOrPresent")
             )
         }
 

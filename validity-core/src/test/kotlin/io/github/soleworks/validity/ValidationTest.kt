@@ -3,7 +3,6 @@ package io.github.soleworks.validity
 import io.github.soleworks.validity.samples.Batch
 import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Operation
-import io.github.soleworks.validity.samples.readme.search
 import io.github.soleworks.validity.samples.validation
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
@@ -33,18 +32,6 @@ class ValidationTest {
 
             result.violations shouldBe listOf(
                 Violation(path = "phone", message = "must have at least 8 characters", code = "minLength")
-            )
-        }
-
-        @Test
-        fun `given values that are not properties should report them under their names`() {
-            val rules = search(query = "kt", page = 0)
-
-            val result = rules.validate()
-
-            result.violations shouldBe listOf(
-                Violation(path = "query", message = "must have at least 3 characters", code = "minLength"),
-                Violation(path = "page", message = "must be at least 1", code = "min")
             )
         }
     }

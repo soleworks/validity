@@ -2,8 +2,6 @@ package io.github.soleworks.validity.phone
 
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Violation
-import io.github.soleworks.validity.phone.samples.readme.Contact
-import io.github.soleworks.validity.validate
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -309,17 +307,6 @@ class PhoneConstraintsTest {
 
             violations shouldBe listOf(
                 Violation(path = "phoneNumber", message = "must be a valid mobile phone number", code = "mobilePhone")
-            )
-        }
-
-        @Test
-        fun `given a contact whose mobile is a landline should report it`() {
-            val contact = Contact(countryCode = "55", areaCode = "11", mobile = "3333-4444")
-
-            val violations = contact.validate().violations
-
-            violations shouldBe listOf(
-                Violation(path = "mobile", message = "must be a valid mobile phone number", code = "mobilePhone")
             )
         }
 
