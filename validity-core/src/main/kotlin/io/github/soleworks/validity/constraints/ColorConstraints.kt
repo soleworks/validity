@@ -6,12 +6,12 @@ import io.github.soleworks.validity.messages
 private const val MAX_CHANNEL = 255
 private const val MAX_HUE = 360.0
 private const val MAX_PERCENTAGE = 100.0
-private const val ALPHA = "(?:\\s*,\\s*(?:0?\\.\\d+|[01](?:\\.0+)?))?"
+private const val ALPHA = """(?:\s*,\s*(?:0?\.\d+|[01](?:\.0+)?))?"""
 
 private val HEX_COLOR_FORMAT = Regex("#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})")
-private val RGB_COLOR_FORMAT = Regex("rgba?\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})$ALPHA\\s*\\)")
+private val RGB_COLOR_FORMAT = Regex("""rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})$ALPHA\s*\)""")
 private val HSL_COLOR_FORMAT = Regex(
-    "hsla?\\(\\s*(\\d{1,3}(?:\\.\\d+)?)\\s*,\\s*(\\d{1,3}(?:\\.\\d+)?)%\\s*,\\s*(\\d{1,3}(?:\\.\\d+)?)%$ALPHA\\s*\\)"
+    """hsla?\(\s*(\d{1,3}(?:\.\d+)?)\s*,\s*(\d{1,3}(?:\.\d+)?)%\s*,\s*(\d{1,3}(?:\.\d+)?)%$ALPHA\s*\)"""
 )
 
 public fun ValidationNode<String>.hexColor(
@@ -38,13 +38,11 @@ public fun ValidationNode<String>.hslColor(
     predicate = { it.isHslColor() }
 )
 
-private fun String.isRgbColor(): Boolean = RGB_COLOR_FORMAT.matchEntire(this)
-    ?.groupValues
-    ?.drop(1)
-    ?.all { channel -> channel.toInt() <= MAX_CHANNEL } == true
+private fun String.isRgbColor(): Boolean =
+    RGB_COLOR_FORMAT.groups(this)?.all { channel -> channel.toInt() <= MAX_CHANNEL } == true
 
 private fun String.isHslColor(): Boolean {
-    val values = HSL_COLOR_FORMAT.matchEntire(this)?.groupValues?.drop(1)?.map(String::toDouble) ?: return false
+    val (hue, saturation, lightness) = HSL_COLOR_FORMAT.groups(this)?.map(String::toDouble) ?: return false
 
-    return values[0] <= MAX_HUE && values[1] <= MAX_PERCENTAGE && values[2] <= MAX_PERCENTAGE
+    return hue <= MAX_HUE && saturation <= MAX_PERCENTAGE && lightness <= MAX_PERCENTAGE
 }

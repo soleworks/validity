@@ -29,25 +29,13 @@ public class ValidationNode<V>(
             if (predicate(value))
                 null
             else
-                Violation(path, message(value).filled(path, value), code)
+                Violation(
+                    path = path,
+                    message = message(value).filled("path" to path, "value" to value),
+                    code = code
+                )
         }
     )
-
-    internal fun constraint(
-        message: (V) -> String,
-        code: String,
-        skipped: Boolean,
-        predicate: (V) -> Boolean
-    ) {
-        if (skipped)
-            return
-
-        constraint(
-            message = message,
-            code = code,
-            predicate = predicate
-        )
-    }
 
     internal fun add(
         constraint: Constraint<V>
@@ -71,8 +59,10 @@ public class ValidationNode<V>(
     ): ValidationNode<V> = if (path == this.path)
         this
     else
-        ValidationNode(path, value).also {
-            it.constraints += constraints
-            it.groups += groups.map { nodes -> nodes.map { node -> node.relocated(path + node.path.removePrefix(this.path)) } }
+        ValidationNode(path, value).also { relocated ->
+            relocated.constraints += constraints
+            relocated.groups += groups.map { nodes ->
+                nodes.map { node -> node.relocated(path + node.path.removePrefix(this.path)) }
+            }
         }
 }

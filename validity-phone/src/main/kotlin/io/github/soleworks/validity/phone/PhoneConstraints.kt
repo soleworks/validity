@@ -2,6 +2,8 @@ package io.github.soleworks.validity.phone
 
 import io.github.soleworks.validity.ValidationNode
 
+private val PLACEHOLDER = Regex("""\{(\w+)}""")
+
 public fun ValidationNode<String>.phone(
     countryCode: String? = null,
     areaCode: String? = null,
@@ -11,7 +13,7 @@ public fun ValidationNode<String>.phone(
     countryCode = countryCode,
     areaCode = areaCode,
     format = format,
-    message = { _, _, _ -> message.withPhonePlaceholders(countryCode, areaCode, format) }
+    message = { _, _, _ -> message.filled("countryCode" to countryCode, "areaCode" to areaCode, "format" to format) }
 )
 
 public fun ValidationNode<String>.phone(
@@ -22,7 +24,7 @@ public fun ValidationNode<String>.phone(
 ): Unit = constraint(
     message = { it.message(countryCode, areaCode, format) },
     code = "phone",
-    predicate = { PhoneNumbers.isValid(it, countryCode, areaCode, format) }
+    predicate = { it.isPhone(countryCode = countryCode, areaCode = areaCode, format = format) }
 )
 
 public fun ValidationNode<String>.mobilePhone(
@@ -34,7 +36,7 @@ public fun ValidationNode<String>.mobilePhone(
     countryCode = countryCode,
     areaCode = areaCode,
     format = format,
-    message = { _, _, _ -> message.withPhonePlaceholders(countryCode, areaCode, format) }
+    message = { _, _, _ -> message.filled("countryCode" to countryCode, "areaCode" to areaCode, "format" to format) }
 )
 
 public fun ValidationNode<String>.mobilePhone(
@@ -45,7 +47,7 @@ public fun ValidationNode<String>.mobilePhone(
 ): Unit = constraint(
     message = { it.message(countryCode, areaCode, format) },
     code = "mobilePhone",
-    predicate = { PhoneNumbers.isMobile(it, countryCode, areaCode, format) }
+    predicate = { it.isMobilePhone(countryCode = countryCode, areaCode = areaCode, format = format) }
 )
 
 public fun ValidationNode<String>.countryCode(
@@ -53,7 +55,7 @@ public fun ValidationNode<String>.countryCode(
 ): Unit = constraint(
     message = message,
     code = "countryCode",
-    predicate = { PhoneNumbers.isCountryCode(it) }
+    predicate = { it.isCountryCode() }
 )
 
 public fun ValidationNode<String>.areaCode(
@@ -61,7 +63,7 @@ public fun ValidationNode<String>.areaCode(
     message: String = phoneMessages.areaCode
 ): Unit = areaCode(
     countryCode = countryCode,
-    message = { message.replace("{countryCode}", countryCode.orEmpty()) }
+    message = { message.filled("countryCode" to countryCode) }
 )
 
 public fun ValidationNode<String>.areaCode(
@@ -70,13 +72,26 @@ public fun ValidationNode<String>.areaCode(
 ): Unit = constraint(
     message = { it.message(countryCode) },
     code = "areaCode",
-    predicate = { PhoneNumbers.isAreaCode(it, countryCode) }
+    predicate = { it.isAreaCode(countryCode) }
 )
 
-private fun String.withPhonePlaceholders(
-    countryCode: String?,
-    areaCode: String?,
-    format: PhoneFormat?
-): String = replace("{countryCode}", countryCode.orEmpty())
-    .replace("{areaCode}", areaCode.orEmpty())
-    .replace("{format}", format?.name.orEmpty())
+private fun String.filled(
+    vararg placeholders: Pair<String, Any?>
+): String {
+    val values = placeholders.toMap()
+
+    return PLACEHOLDER.replace(this) { match ->
+        val name = match.groupValues[1]
+
+        if (name in values)
+            values[name].placeholderText()
+        else
+            match.value
+    }
+}
+
+private fun Any?.placeholderText(): String = when (this) {
+    null -> ""
+    is Iterable<*> -> joinToString()
+    else -> toString()
+}

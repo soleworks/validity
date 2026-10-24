@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
 
 public fun ValidationNode<out Collection<*>>.minSize(
@@ -8,7 +9,7 @@ public fun ValidationNode<out Collection<*>>.minSize(
     message: String = messages.minSize
 ): Unit = minSize(
     min = min,
-    message = { message.replace("{min}", "$min") }
+    message = { message.filled("min" to min) }
 )
 
 public fun ValidationNode<out Collection<*>>.minSize(
@@ -26,7 +27,7 @@ public fun ValidationNode<out Array<*>>.minSize(
     message: String = messages.minSize
 ): Unit = minSize(
     min = min,
-    message = { message.replace("{min}", "$min") }
+    message = { message.filled("min" to min) }
 )
 
 @JvmName("minSizeArray")
@@ -44,7 +45,7 @@ public fun ValidationNode<out Collection<*>>.maxSize(
     message: String = messages.maxSize
 ): Unit = maxSize(
     max = max,
-    message = { message.replace("{max}", "$max") }
+    message = { message.filled("max" to max) }
 )
 
 public fun ValidationNode<out Collection<*>>.maxSize(
@@ -62,7 +63,7 @@ public fun ValidationNode<out Array<*>>.maxSize(
     message: String = messages.maxSize
 ): Unit = maxSize(
     max = max,
-    message = { message.replace("{max}", "$max") }
+    message = { message.filled("max" to max) }
 )
 
 @JvmName("maxSizeArray")
@@ -80,7 +81,7 @@ public fun ValidationNode<out Collection<*>>.size(
     message: String = messages.size
 ): Unit = size(
     size = size,
-    message = { message.replace("{size}", "$size") }
+    message = { message.filled("size" to size) }
 )
 
 public fun ValidationNode<out Collection<*>>.size(
@@ -98,7 +99,7 @@ public fun ValidationNode<out Array<*>>.size(
     message: String = messages.size
 ): Unit = size(
     size = size,
-    message = { message.replace("{size}", "$size") }
+    message = { message.filled("size" to size) }
 )
 
 @JvmName("sizeArray")
@@ -118,7 +119,7 @@ public fun ValidationNode<out Collection<*>>.sizeBetween(
 ): Unit = sizeBetween(
     min = min,
     max = max,
-    message = { _, _ -> message.replace("{min}", "$min").replace("{max}", "$max") }
+    message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
 public fun ValidationNode<out Collection<*>>.sizeBetween(
@@ -139,7 +140,7 @@ public fun ValidationNode<out Array<*>>.sizeBetween(
 ): Unit = sizeBetween(
     min = min,
     max = max,
-    message = { _, _ -> message.replace("{min}", "$min").replace("{max}", "$max") }
+    message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
 @JvmName("sizeBetweenArray")
@@ -244,18 +245,22 @@ public fun <E> ValidationNode<List<E>>.contains(
     message: String = messages.containsElement
 ): Unit = contains(
     element = element,
-    message = { message.replace("{element}", "$element") }
+    message = { message.filled("element" to element) }
 )
 
 public fun <E> ValidationNode<List<E>>.contains(
     element: E?,
-    message: List<E>.(E?) -> String
-): Unit = constraint(
-    message = { it.message(element) },
-    code = "contains",
-    skipped = element == null,
-    predicate = { element == null || element in it }
-)
+    message: List<E>.(E) -> String
+) {
+    if (element == null)
+        return
+
+    constraint(
+        message = { it.message(element) },
+        code = "contains",
+        predicate = { element in it }
+    )
+}
 
 @JvmName("containsSet")
 public fun <E> ValidationNode<Set<E>>.contains(
@@ -263,19 +268,23 @@ public fun <E> ValidationNode<Set<E>>.contains(
     message: String = messages.containsElement
 ): Unit = contains(
     element = element,
-    message = { message.replace("{element}", "$element") }
+    message = { message.filled("element" to element) }
 )
 
 @JvmName("containsSet")
 public fun <E> ValidationNode<Set<E>>.contains(
     element: E?,
-    message: Set<E>.(E?) -> String
-): Unit = constraint(
-    message = { it.message(element) },
-    code = "contains",
-    skipped = element == null,
-    predicate = { element == null || element in it }
-)
+    message: Set<E>.(E) -> String
+) {
+    if (element == null)
+        return
+
+    constraint(
+        message = { it.message(element) },
+        code = "contains",
+        predicate = { element in it }
+    )
+}
 
 @JvmName("containsArray")
 public fun <E> ValidationNode<Array<E>>.contains(
@@ -283,37 +292,45 @@ public fun <E> ValidationNode<Array<E>>.contains(
     message: String = messages.containsElement
 ): Unit = contains(
     element = element,
-    message = { message.replace("{element}", "$element") }
+    message = { message.filled("element" to element) }
 )
 
 @JvmName("containsArray")
 public fun <E> ValidationNode<Array<E>>.contains(
     element: E?,
-    message: Array<E>.(E?) -> String
-): Unit = constraint(
-    message = { it.message(element) },
-    code = "contains",
-    skipped = element == null,
-    predicate = { element == null || element in it }
-)
+    message: Array<E>.(E) -> String
+) {
+    if (element == null)
+        return
+
+    constraint(
+        message = { it.message(element) },
+        code = "contains",
+        predicate = { element in it }
+    )
+}
 
 public fun <E> ValidationNode<List<E>>.containsAll(
     elements: Iterable<E>?,
     message: String = messages.containsAll
 ): Unit = containsAll(
     elements = elements,
-    message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
+    message = { message.filled("elements" to elements) }
 )
 
 public fun <E> ValidationNode<List<E>>.containsAll(
     elements: Iterable<E>?,
-    message: List<E>.(Iterable<E>?) -> String
-): Unit = constraint(
-    message = { it.message(elements) },
-    code = "containsAll",
-    skipped = elements == null,
-    predicate = { elements == null || elements.all { element -> element in it } }
-)
+    message: List<E>.(Iterable<E>) -> String
+) {
+    if (elements == null)
+        return
+
+    constraint(
+        message = { it.message(elements) },
+        code = "containsAll",
+        predicate = { elements.all { element -> element in it } }
+    )
+}
 
 @JvmName("containsAllSet")
 public fun <E> ValidationNode<Set<E>>.containsAll(
@@ -321,19 +338,23 @@ public fun <E> ValidationNode<Set<E>>.containsAll(
     message: String = messages.containsAll
 ): Unit = containsAll(
     elements = elements,
-    message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
+    message = { message.filled("elements" to elements) }
 )
 
 @JvmName("containsAllSet")
 public fun <E> ValidationNode<Set<E>>.containsAll(
     elements: Iterable<E>?,
-    message: Set<E>.(Iterable<E>?) -> String
-): Unit = constraint(
-    message = { it.message(elements) },
-    code = "containsAll",
-    skipped = elements == null,
-    predicate = { elements == null || elements.all { element -> element in it } }
-)
+    message: Set<E>.(Iterable<E>) -> String
+) {
+    if (elements == null)
+        return
+
+    constraint(
+        message = { it.message(elements) },
+        code = "containsAll",
+        predicate = { elements.all { element -> element in it } }
+    )
+}
 
 @JvmName("containsAllArray")
 public fun <E> ValidationNode<Array<E>>.containsAll(
@@ -341,37 +362,45 @@ public fun <E> ValidationNode<Array<E>>.containsAll(
     message: String = messages.containsAll
 ): Unit = containsAll(
     elements = elements,
-    message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
+    message = { message.filled("elements" to elements) }
 )
 
 @JvmName("containsAllArray")
 public fun <E> ValidationNode<Array<E>>.containsAll(
     elements: Iterable<E>?,
-    message: Array<E>.(Iterable<E>?) -> String
-): Unit = constraint(
-    message = { it.message(elements) },
-    code = "containsAll",
-    skipped = elements == null,
-    predicate = { elements == null || elements.all { element -> element in it } }
-)
+    message: Array<E>.(Iterable<E>) -> String
+) {
+    if (elements == null)
+        return
+
+    constraint(
+        message = { it.message(elements) },
+        code = "containsAll",
+        predicate = { elements.all { element -> element in it } }
+    )
+}
 
 public fun <E> ValidationNode<List<E>>.containsAny(
     elements: Iterable<E>?,
     message: String = messages.containsAny
 ): Unit = containsAny(
     elements = elements,
-    message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
+    message = { message.filled("elements" to elements) }
 )
 
 public fun <E> ValidationNode<List<E>>.containsAny(
     elements: Iterable<E>?,
-    message: List<E>.(Iterable<E>?) -> String
-): Unit = constraint(
-    message = { it.message(elements) },
-    code = "containsAny",
-    skipped = elements == null,
-    predicate = { elements == null || elements.any { element -> element in it } }
-)
+    message: List<E>.(Iterable<E>) -> String
+) {
+    if (elements == null)
+        return
+
+    constraint(
+        message = { it.message(elements) },
+        code = "containsAny",
+        predicate = { elements.any { element -> element in it } }
+    )
+}
 
 @JvmName("containsAnySet")
 public fun <E> ValidationNode<Set<E>>.containsAny(
@@ -379,19 +408,23 @@ public fun <E> ValidationNode<Set<E>>.containsAny(
     message: String = messages.containsAny
 ): Unit = containsAny(
     elements = elements,
-    message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
+    message = { message.filled("elements" to elements) }
 )
 
 @JvmName("containsAnySet")
 public fun <E> ValidationNode<Set<E>>.containsAny(
     elements: Iterable<E>?,
-    message: Set<E>.(Iterable<E>?) -> String
-): Unit = constraint(
-    message = { it.message(elements) },
-    code = "containsAny",
-    skipped = elements == null,
-    predicate = { elements == null || elements.any { element -> element in it } }
-)
+    message: Set<E>.(Iterable<E>) -> String
+) {
+    if (elements == null)
+        return
+
+    constraint(
+        message = { it.message(elements) },
+        code = "containsAny",
+        predicate = { elements.any { element -> element in it } }
+    )
+}
 
 @JvmName("containsAnyArray")
 public fun <E> ValidationNode<Array<E>>.containsAny(
@@ -399,16 +432,20 @@ public fun <E> ValidationNode<Array<E>>.containsAny(
     message: String = messages.containsAny
 ): Unit = containsAny(
     elements = elements,
-    message = { message.replace("{elements}", elements?.joinToString().orEmpty()) }
+    message = { message.filled("elements" to elements) }
 )
 
 @JvmName("containsAnyArray")
 public fun <E> ValidationNode<Array<E>>.containsAny(
     elements: Iterable<E>?,
-    message: Array<E>.(Iterable<E>?) -> String
-): Unit = constraint(
-    message = { it.message(elements) },
-    code = "containsAny",
-    skipped = elements == null,
-    predicate = { elements == null || elements.any { element -> element in it } }
-)
+    message: Array<E>.(Iterable<E>) -> String
+) {
+    if (elements == null)
+        return
+
+    constraint(
+        message = { it.message(elements) },
+        code = "containsAny",
+        predicate = { elements.any { element -> element in it } }
+    )
+}

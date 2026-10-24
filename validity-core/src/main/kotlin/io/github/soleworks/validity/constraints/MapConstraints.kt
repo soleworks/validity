@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
 
 public fun ValidationNode<out Map<*, *>>.minSize(
@@ -8,7 +9,7 @@ public fun ValidationNode<out Map<*, *>>.minSize(
     message: String = messages.minEntries
 ): Unit = minSize(
     min = min,
-    message = { message.replace("{min}", "$min") }
+    message = { message.filled("min" to min) }
 )
 
 public fun ValidationNode<out Map<*, *>>.minSize(
@@ -25,7 +26,7 @@ public fun ValidationNode<out Map<*, *>>.maxSize(
     message: String = messages.maxEntries
 ): Unit = maxSize(
     max = max,
-    message = { message.replace("{max}", "$max") }
+    message = { message.filled("max" to max) }
 )
 
 public fun ValidationNode<out Map<*, *>>.maxSize(
@@ -42,7 +43,7 @@ public fun ValidationNode<out Map<*, *>>.size(
     message: String = messages.entries
 ): Unit = size(
     size = size,
-    message = { message.replace("{size}", "$size") }
+    message = { message.filled("size" to size) }
 )
 
 public fun ValidationNode<out Map<*, *>>.size(
@@ -61,7 +62,7 @@ public fun ValidationNode<out Map<*, *>>.sizeBetween(
 ): Unit = sizeBetween(
     min = min,
     max = max,
-    message = { _, _ -> message.replace("{min}", "$min").replace("{max}", "$max") }
+    message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
 public fun ValidationNode<out Map<*, *>>.sizeBetween(
@@ -87,33 +88,41 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKey(
     message: String = messages.containsKey
 ): Unit = containsKey(
     key = key,
-    message = { message.replace("{key}", "$key") }
+    message = { message.filled("key" to key) }
 )
 
 public fun <K> ValidationNode<out Map<K, *>>.containsKey(
     key: K?,
-    message: Map<K, *>.(K?) -> String
-): Unit = constraint(
-    message = { it.message(key) },
-    code = "containsKey",
-    skipped = key == null,
-    predicate = { key == null || key in it }
-)
+    message: Map<K, *>.(K) -> String
+) {
+    if (key == null)
+        return
+
+    constraint(
+        message = { it.message(key) },
+        code = "containsKey",
+        predicate = { key in it }
+    )
+}
 
 public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
     keys: Iterable<K>?,
     message: String = messages.containsKeys
 ): Unit = containsKeys(
     keys = keys,
-    message = { message.replace("{keys}", keys?.joinToString().orEmpty()) }
+    message = { message.filled("keys" to keys) }
 )
 
 public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
     keys: Iterable<K>?,
-    message: Map<K, *>.(Iterable<K>?) -> String
-): Unit = constraint(
-    message = { it.message(keys) },
-    code = "containsKeys",
-    skipped = keys == null,
-    predicate = { keys == null || keys.all { key -> key in it } }
-)
+    message: Map<K, *>.(Iterable<K>) -> String
+) {
+    if (keys == null)
+        return
+
+    constraint(
+        message = { it.message(keys) },
+        code = "containsKeys",
+        predicate = { keys.all { key -> key in it } }
+    )
+}

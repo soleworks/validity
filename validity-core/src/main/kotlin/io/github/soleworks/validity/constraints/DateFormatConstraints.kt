@@ -1,14 +1,15 @@
 package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
-private const val ISO_DURATION_DATE = "(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?"
-private const val ISO_DURATION_TIME = "(?:T(?=\\d)(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?"
+private const val ISO_DURATION_DATE = """(?:\d+Y)?(?:\d+M)?(?:\d+W)?(?:\d+D)?"""
+private const val ISO_DURATION_TIME = """(?:T(?=\d)(?:\d+H)?(?:\d+M)?(?:\d+(?:\.\d+)?S)?)?"""
 
 private val ISO_DURATION_FORMAT = Regex("P(?!$)$ISO_DURATION_DATE$ISO_DURATION_TIME")
 
@@ -49,7 +50,7 @@ public fun ValidationNode<String>.dateFormat(
     message: String = messages.dateFormat
 ): Unit = dateFormat(
     pattern = pattern,
-    message = { message.replace("{pattern}", pattern) }
+    message = { message.filled("pattern" to pattern) }
 )
 
 public fun ValidationNode<String>.dateFormat(
@@ -63,5 +64,4 @@ public fun ValidationNode<String>.dateFormat(
 
 private fun String.matchesDateFormat(
     formatter: DateTimeFormatter
-): Boolean =
-    runCatching { formatter.format(formatter.parse(this)) == this }.getOrDefault(false)
+): Boolean = runCatching { formatter.format(formatter.parse(this)) == this }.getOrDefault(false)
