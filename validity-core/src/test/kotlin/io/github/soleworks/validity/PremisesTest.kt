@@ -449,6 +449,15 @@ class PremisesTest {
                 )
             )
         }
+
+        @Test
+        fun `given a negative count should fail when the rules are declared`() {
+            val error = shouldThrow<IllegalArgumentException> {
+                Signup().run { validation { atMostOf(-1, ::coupon, ::giftCard, ::cashback) } }
+            }
+
+            error.message shouldBe "atMostOf needs a count between 0 and the number of properties"
+        }
     }
 
     @Nested
