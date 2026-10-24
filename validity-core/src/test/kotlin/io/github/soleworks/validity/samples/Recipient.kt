@@ -19,7 +19,7 @@ data class Recipient(
     val companyName: String? = null
 ) : Validatable {
     override fun validation() = validation {
-        exactlyOneOf(::pixKey, ::bankAccount, ::boleto)
+        exactlyOneOf(::pixKey, ::bankAccount, ::boleto, path = "payment")
         atLeastOneOf(::email, ::phone)
         atMostOneOf(::cpf, ::cnpj, ::passport)
 

@@ -81,9 +81,11 @@ public fun KProperty0<*>.forbidden(
 context(validation: Validation)
 public fun atLeastOneOf(
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.atLeastOneOf
 ): Unit = presence(
     properties = properties,
+    path = path,
     message = message,
     code = "atLeastOneOf",
     accepts = { filled, _ -> filled >= 1 }
@@ -92,116 +94,113 @@ public fun atLeastOneOf(
 context(validation: Validation)
 public fun atMostOneOf(
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.atMostOneOf
 ): Unit = presence(
     properties = properties,
+    path = path,
     message = message,
     code = "atMostOneOf",
-    accepts = { filled, value -> value == null || filled <= 1 }
+    accepts = { filled, _ -> filled <= 1 }
 )
 
 context(validation: Validation)
 public fun exactlyOneOf(
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.exactlyOneOf
 ): Unit = presence(
     properties = properties,
+    path = path,
     message = message,
     code = "exactlyOneOf",
-    accepts = { filled, value -> filled == 1 || (filled > 1 && value == null) }
+    accepts = { filled, _ -> filled == 1 }
 )
 
 context(validation: Validation)
 public fun allOrNoneOf(
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.allOrNoneOf
 ): Unit = presence(
     properties = properties,
+    path = path,
     message = message,
     code = "allOrNoneOf",
-    accepts = { filled, value -> filled == 0 || value != null }
+    accepts = { filled, total -> filled == 0 || filled == total }
 )
 
 context(validation: Validation)
 public fun atLeastOf(
     count: Int,
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.atLeastOf
 ): Unit = presence(
-    count = count,
-    properties = properties,
-    message = message,
+    properties = properties.counting(count, code = "atLeastOf"),
+    path = path,
+    message = message.filled("count" to count),
     code = "atLeastOf",
-    accepts = { filled, value -> filled >= count || value != null }
+    accepts = { filled, _ -> filled >= count }
 )
 
 context(validation: Validation)
 public fun atMostOf(
     count: Int,
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.atMostOf
 ): Unit = presence(
-    count = count,
-    properties = properties,
-    message = message,
+    properties = properties.counting(count, code = "atMostOf"),
+    path = path,
+    message = message.filled("count" to count),
     code = "atMostOf",
-    accepts = { filled, value -> filled <= count || value == null }
+    accepts = { filled, _ -> filled <= count }
 )
 
 context(validation: Validation)
 public fun exactlyOf(
     count: Int,
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.exactlyOf
 ): Unit = presence(
-    count = count,
-    properties = properties,
-    message = message,
+    properties = properties.counting(count, code = "exactlyOf"),
+    path = path,
+    message = message.filled("count" to count),
     code = "exactlyOf",
-    accepts = { filled, value ->
-        filled == count || (filled < count && value != null) || (filled > count && value == null)
-    }
+    accepts = { filled, _ -> filled == count }
 )
 
-context(validation: Validation)
-private fun presence(
+private fun Array<out KProperty0<*>>.counting(
     count: Int,
-    properties: Array<out KProperty0<*>>,
-    message: String,
-    code: String,
-    accepts: (filled: Int, value: Any?) -> Boolean
-) {
-    require(count in 0..properties.distinct().size) { "$code needs a count between 0 and the number of properties" }
-
-    presence(
-        properties = properties,
-        message = message.filled("count" to count),
-        code = code,
-        accepts = accepts
-    )
+    code: String
+): Array<out KProperty0<*>> = also {
+    require(count in 0..distinct().size) { "$code needs a count between 0 and the number of properties" }
 }
 
 context(validation: Validation)
 private fun presence(
     properties: Array<out KProperty0<*>>,
+    path: String,
     message: String,
     code: String,
-    accepts: (filled: Int, value: Any?) -> Boolean
+    accepts: (filled: Int, total: Int) -> Boolean
 ) {
     require(properties.isNotEmpty()) { "$code needs at least one property" }
 
     val distinct = properties.distinct()
-    val values = distinct.map { it.get() }
-    val filled = values.count { it != null }
-    val text = message.filled("fields" to distinct.map { it.name })
+    val names = distinct.map { it.name }
+    val filled = distinct.filter { it.get() != null }.map { it.name }
+    val isShort = (filled.size + 1..names.size).any { count -> accepts(count, names.size) }
+    val fields = if (isShort) names - filled.toSet() else filled
 
-    distinct.zip(values).forEach { (property, value) ->
-        validation.add(
-            path = property.name,
-            value = value,
-            message = text,
+    validation.metadata("fields" to fields) {
+        constraint(
+            path = path,
+            message = message.filled("fields" to names),
             code = code,
-            predicate = { accepts(filled, it) }
+            predicate = { accepts(filled.size, names.size) }
         )
     }
 }

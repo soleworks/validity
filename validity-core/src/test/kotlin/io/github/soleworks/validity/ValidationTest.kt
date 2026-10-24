@@ -124,16 +124,10 @@ class ValidationTest {
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "email",
+                    path = "",
                     message = "at least one of email, phone is required",
                     code = "atLeastOneOf",
-                    metadata = mapOf("operationId" to "op-1")
-                ),
-                Violation(
-                    path = "phone",
-                    message = "at least one of email, phone is required",
-                    code = "atLeastOneOf",
-                    metadata = mapOf("operationId" to "op-1")
+                    metadata = mapOf("operationId" to "op-1", "fields" to listOf("email", "phone"))
                 )
             )
         }

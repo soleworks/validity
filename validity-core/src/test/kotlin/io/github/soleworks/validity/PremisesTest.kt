@@ -215,14 +215,18 @@ class PremisesTest {
         }
 
         @Test
-        fun `given neither an email nor a phone should report both fields`() {
+        fun `given neither an email nor a phone should report it once with both fields`() {
             val recipient = Recipient(email = null, phone = null)
 
             val result = recipient.validate()
 
             result.violations shouldBe listOf(
-                Violation(path = "email", message = "at least one of email, phone is required", code = "atLeastOneOf"),
-                Violation(path = "phone", message = "at least one of email, phone is required", code = "atLeastOneOf")
+                Violation(
+                    path = "",
+                    message = "at least one of email, phone is required",
+                    code = "atLeastOneOf",
+                    metadata = mapOf("fields" to listOf("email", "phone"))
+                )
             )
         }
 
@@ -233,8 +237,12 @@ class PremisesTest {
             val result = login.validate()
 
             result.violations shouldBe listOf(
-                Violation(path = "email", message = "informe email, phone", code = "atLeastOneOf"),
-                Violation(path = "phone", message = "informe email, phone", code = "atLeastOneOf")
+                Violation(
+                    path = "",
+                    message = "informe email, phone",
+                    code = "atLeastOneOf",
+                    metadata = mapOf("fields" to listOf("email", "phone"))
+                )
             )
         }
     }
@@ -261,21 +269,17 @@ class PremisesTest {
         }
 
         @Test
-        fun `given a CPF and a CNPJ should report only the filled fields`() {
+        fun `given a CPF and a CNPJ should report it once with the filled fields`() {
             val recipient = Recipient(cpf = "52998224725", cnpj = "11222333000181")
 
             val result = recipient.validate()
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "cpf",
+                    path = "",
                     message = "at most one of cpf, cnpj, passport can be filled",
-                    code = "atMostOneOf"
-                ),
-                Violation(
-                    path = "cnpj",
-                    message = "at most one of cpf, cnpj, passport can be filled",
-                    code = "atMostOneOf"
+                    code = "atMostOneOf",
+                    metadata = mapOf("fields" to listOf("cpf", "cnpj"))
                 )
             )
         }
@@ -294,46 +298,33 @@ class PremisesTest {
         }
 
         @Test
-        fun `given no way to pay should report every field`() {
+        fun `given no way to pay should report it at the path with every field`() {
             val recipient = Recipient(pixKey = null, bankAccount = null, boleto = null)
 
             val result = recipient.validate()
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "pixKey",
+                    path = "payment",
                     message = "exactly one of pixKey, bankAccount, boleto must be filled",
-                    code = "exactlyOneOf"
-                ),
-                Violation(
-                    path = "bankAccount",
-                    message = "exactly one of pixKey, bankAccount, boleto must be filled",
-                    code = "exactlyOneOf"
-                ),
-                Violation(
-                    path = "boleto",
-                    message = "exactly one of pixKey, bankAccount, boleto must be filled",
-                    code = "exactlyOneOf"
+                    code = "exactlyOneOf",
+                    metadata = mapOf("fields" to listOf("pixKey", "bankAccount", "boleto"))
                 )
             )
         }
 
         @Test
-        fun `given a pix key and a bank account should report only the filled fields`() {
+        fun `given a pix key and a bank account should report it at the path with the filled fields`() {
             val recipient = Recipient(pixKey = "ana@mail.com", bankAccount = "0001-12345")
 
             val result = recipient.validate()
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "pixKey",
+                    path = "payment",
                     message = "exactly one of pixKey, bankAccount, boleto must be filled",
-                    code = "exactlyOneOf"
-                ),
-                Violation(
-                    path = "bankAccount",
-                    message = "exactly one of pixKey, bankAccount, boleto must be filled",
-                    code = "exactlyOneOf"
+                    code = "exactlyOneOf",
+                    metadata = mapOf("fields" to listOf("pixKey", "bankAccount"))
                 )
             )
         }
@@ -377,21 +368,17 @@ class PremisesTest {
         }
 
         @Test
-        fun `given only an agency should report the empty fields`() {
+        fun `given only an agency should report it once with the empty fields`() {
             val account = BankAccount(agency = "0001")
 
             val result = account.validate()
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "bank",
+                    path = "",
                     message = "bank, agency, account must be filled together",
-                    code = "allOrNoneOf"
-                ),
-                Violation(
-                    path = "account",
-                    message = "bank, agency, account must be filled together",
-                    code = "allOrNoneOf"
+                    code = "allOrNoneOf",
+                    metadata = mapOf("fields" to listOf("bank", "account"))
                 )
             )
         }
@@ -410,21 +397,17 @@ class PremisesTest {
         }
 
         @Test
-        fun `given only an email should report the empty fields`() {
+        fun `given only an email should report it at the path with the empty fields`() {
             val signup = Signup(phone = null)
 
             val result = signup.validate()
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "phone",
+                    path = "contactInformation",
                     message = "at least 2 of email, phone, whatsapp must be filled",
-                    code = "atLeastOf"
-                ),
-                Violation(
-                    path = "whatsapp",
-                    message = "at least 2 of email, phone, whatsapp must be filled",
-                    code = "atLeastOf"
+                    code = "atLeastOf",
+                    metadata = mapOf("fields" to listOf("phone", "whatsapp"))
                 )
             )
         }
@@ -452,26 +435,17 @@ class PremisesTest {
         }
 
         @Test
-        fun `given three discounts should report the filled fields`() {
+        fun `given three discounts should report it once with the filled fields`() {
             val signup = Signup(coupon = "PROMO10", giftCard = "GIFT-1", cashback = "CB-5")
 
             val result = signup.validate()
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "coupon",
+                    path = "",
                     message = "at most 2 of coupon, giftCard, cashback can be filled",
-                    code = "atMostOf"
-                ),
-                Violation(
-                    path = "giftCard",
-                    message = "at most 2 of coupon, giftCard, cashback can be filled",
-                    code = "atMostOf"
-                ),
-                Violation(
-                    path = "cashback",
-                    message = "at most 2 of coupon, giftCard, cashback can be filled",
-                    code = "atMostOf"
+                    code = "atMostOf",
+                    metadata = mapOf("fields" to listOf("coupon", "giftCard", "cashback"))
                 )
             )
         }
@@ -490,46 +464,33 @@ class PremisesTest {
         }
 
         @Test
-        fun `given one reference should report the empty fields`() {
+        fun `given one reference should report it once with the empty fields`() {
             val signup = Signup(secondReference = null)
 
             val result = signup.validate()
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "secondReference",
+                    path = "",
                     message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
-                    code = "exactlyOf"
-                ),
-                Violation(
-                    path = "thirdReference",
-                    message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
-                    code = "exactlyOf"
+                    code = "exactlyOf",
+                    metadata = mapOf("fields" to listOf("secondReference", "thirdReference"))
                 )
             )
         }
 
         @Test
-        fun `given three references should report the filled fields`() {
+        fun `given three references should report it once with the filled fields`() {
             val signup = Signup(thirdReference = "Duda")
 
             val result = signup.validate()
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "firstReference",
+                    path = "",
                     message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
-                    code = "exactlyOf"
-                ),
-                Violation(
-                    path = "secondReference",
-                    message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
-                    code = "exactlyOf"
-                ),
-                Violation(
-                    path = "thirdReference",
-                    message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
-                    code = "exactlyOf"
+                    code = "exactlyOf",
+                    metadata = mapOf("fields" to listOf("firstReference", "secondReference", "thirdReference"))
                 )
             )
         }

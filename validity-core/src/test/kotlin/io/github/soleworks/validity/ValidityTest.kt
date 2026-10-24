@@ -164,8 +164,12 @@ class ValidityTest {
             val result = recipient.validate()
 
             result.violations shouldBe listOf(
-                Violation(path = "email", message = "informe email, phone", code = "atLeastOneOf"),
-                Violation(path = "phone", message = "informe email, phone", code = "atLeastOneOf"),
+                Violation(
+                    path = "",
+                    message = "informe email, phone",
+                    code = "atLeastOneOf",
+                    metadata = mapOf("fields" to listOf("email", "phone"))
+                ),
                 Violation(path = "companyName", message = "deve ficar vazio", code = "forbidden")
             )
         }
@@ -285,22 +289,17 @@ class ValidityTest {
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "pixKey",
+                    path = "payment",
                     message = "exatamente um de pixKey, bankAccount, boleto",
-                    code = "exactlyOneOf"
+                    code = "exactlyOneOf",
+                    metadata = mapOf("fields" to listOf("pixKey", "bankAccount", "boleto"))
                 ),
                 Violation(
-                    path = "bankAccount",
-                    message = "exatamente um de pixKey, bankAccount, boleto",
-                    code = "exactlyOneOf"
-                ),
-                Violation(
-                    path = "boleto",
-                    message = "exatamente um de pixKey, bankAccount, boleto",
-                    code = "exactlyOneOf"
-                ),
-                Violation(path = "cpf", message = "no máximo um de cpf, cnpj, passport", code = "atMostOneOf"),
-                Violation(path = "cnpj", message = "no máximo um de cpf, cnpj, passport", code = "atMostOneOf")
+                    path = "",
+                    message = "no máximo um de cpf, cnpj, passport",
+                    code = "atMostOneOf",
+                    metadata = mapOf("fields" to listOf("cpf", "cnpj"))
+                )
             )
         }
 

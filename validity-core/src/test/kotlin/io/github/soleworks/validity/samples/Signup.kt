@@ -18,7 +18,7 @@ data class Signup(
     val thirdReference: String? = null
 ) : Validatable {
     override fun validation() = validation {
-        atLeastOf(2, ::email, ::phone, ::whatsapp)
+        atLeastOf(2, ::email, ::phone, ::whatsapp, path = "contactInformation")
         atMostOf(2, ::coupon, ::giftCard, ::cashback)
         exactlyOf(2, ::firstReference, ::secondReference, ::thirdReference)
     }
