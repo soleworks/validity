@@ -171,7 +171,9 @@ A documentation site is on its way, with every concept, the full list of constra
 - **Detekt** runs every rule it has, the ktlint and libraries rule sets included. [config/detekt/detekt.yml](config/detekt/detekt.yml) lists the few rules this project tunes, each with its reason. `./gradlew detektMain detektTest -PautoCorrect=true` fixes the formatting it can.
 - **Konsist**, in the internal `harness` module, checks the conventions Detekt cannot see: how a constraint is declared, how values are named, and that every test is a Given, a When and a Then, ordered by what it checks.
 
-Neither tool, nor Kotest, is a dependency of a published module.
+**Kover** measures what the tests cover in `validity-core` and `validity-phone`. `./gradlew :koverHtmlReport` writes the report to `build/reports/kover/html`, and CI uploads it to [Codecov](https://codecov.io/gh/soleworks/validity).
+
+None of these tools, nor Kotest, is a dependency of a published module.
 
 The examples in this README are samples in
 [validity-core/src/test/.../samples/readme](validity-core/src/test/kotlin/io/github/soleworks/validity/samples/readme),
