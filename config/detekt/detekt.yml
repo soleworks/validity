@@ -1,0 +1,96 @@
+# Detekt runs every rule it has (allRules = true), including the ktlint and libraries rule sets.
+# This file only lists the rules this project tunes or turns off, each with the reason.
+
+comments:
+  # KDoc on the public API is its own piece of work (SOL-5). These turn on with it.
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
+  UndocumentedPublicProperty:
+    active: false
+
+complexity:
+  # A test class mirrors a whole source file, one nested class per public function.
+  LargeClass:
+    excludes: ['**/test/**']
+  # The violation code is the constraint's name, so each overload repeats it.
+  StringLiteralDuplication:
+    active: false
+  # One file holds one family of constraints, with an overload per type it accepts.
+  TooManyFunctions:
+    active: false
+
+libraries:
+  # The public API is what the library is for.
+  LibraryEntitiesShouldNotBePublic:
+    active: false
+  # Tests are not part of the library.
+  ForbiddenPublicDataClass:
+    excludes: ['**/test/**']
+  LibraryCodeMustSpecifyReturnType:
+    excludes: ['**/test/**']
+
+naming:
+  # `ip`, `or`, `and` and `not` are constraint names.
+  FunctionNameMinLength:
+    minimumFunctionNameLength: 2
+  # A test name is a sentence: `given ... should ...`.
+  FunctionNameMaxLength:
+    excludes: ['**/test/**']
+
+style:
+  # A branch with one statement has no braces, on one line or on many.
+  BracesOnIfStatements:
+    singleLine: 'never'
+    multiLine: 'never'
+  # Loops follow the same rule as `if`.
+  MandatoryBracesLoops:
+    active: false
+  # A guard clause (`?: return false`) is the way this code leaves early.
+  ReturnCount:
+    excludeGuardClauses: true
+  # `ifPresent` is the API that does nothing for null, so its nullable parameter stays.
+  CanBeNonNullable:
+    active: false
+  # A magic number is named, except where its enum entry or property already names it.
+  MagicNumber:
+    ignoreEnums: true
+  # Parentheses that make the precedence of `&&` and `||` clear are kept, as MixedConditionOperators asks.
+  UnnecessaryParentheses:
+    allowForUnclearPrecedence: true
+  # Every string with an escape is a raw string, so a regex reads the same everywhere.
+  StringShouldBeRawString:
+    maxEscapedCharacterCount: 0
+  # JUnit needs `inner` on a @Nested class.
+  UnnecessaryInnerClass:
+    excludes: ['**/test/**']
+  # The classes that only hold data are DSL receivers, and a public data class breaks ForbiddenPublicDataClass.
+  UseDataClass:
+    active: false
+
+ktlint:
+  # Every parameter goes on its own line, in a function and in a class.
+  ClassSignature:
+    forceMultilineWhenParameterCountGreaterOrEqualThan: '1'
+  FunctionSignature:
+    forceMultilineWhenParameterCountGreaterOrEqualThan: 1
+  # Imports are sorted alphabetically, with no groups.
+  ImportOrdering:
+    layout: '*'
+  # style > MaxLineLength reports the same lines.
+  MaximumLineLength:
+    active: false
+  # An expression body starts on the signature line: `): Unit = constraint(`.
+  MultilineExpressionWrapping:
+    active: false
+  # style > BracesOnIfStatements and the `if` rule above decide braces.
+  MultiLineIfElse:
+    active: false
+  MultilineLoop:
+    active: false
+  # No trailing commas.
+  TrailingCommaOnCallSite:
+    useTrailingCommaOnCallSite: false
+  TrailingCommaOnDeclarationSite:
+    useTrailingCommaOnDeclarationSite: false
