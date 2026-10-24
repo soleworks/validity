@@ -14,18 +14,32 @@ class ThailandConstraintsTest {
     inner class NationalId {
         @ParameterizedTest
         @ValueSource(strings = ["1101230000001", "1101230000060"])
-        fun `given a valid national identification number should accept it`(value: String) {
-            val node = ValidationNode("nationalId", value).apply { nationalId() }
+        fun `given a valid national identification number should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "nationalId", value = value).apply { nationalId() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["abc", "1101230000007", "0101123450000", "9101123450008", "11012300000011"])
-        fun `given an invalid national identification number should report it`(value: String) {
-            val node = ValidationNode("nationalId", value).apply { nationalId() }
+        fun `given an invalid national identification number should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "nationalId", value = value).apply { nationalId() }
 
-            node.validate() shouldBe listOf(Violation("nationalId", "must be a valid national identification number", "nationalId"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "nationalId",
+                    message = "must be a valid national identification number",
+                    code = "nationalId"
+                )
+            )
         }
     }
 }

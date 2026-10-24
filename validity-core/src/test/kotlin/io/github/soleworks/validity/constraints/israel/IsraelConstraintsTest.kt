@@ -14,18 +14,28 @@ class IsraelConstraintsTest {
     inner class TeudatZehut {
         @ParameterizedTest
         @ValueSource(strings = ["219472156", "334795465", "337090443"])
-        fun `given a valid teudat zehut should accept it`(value: String) {
-            val node = ValidationNode("teudatZehut", value).apply { teudatZehut() }
+        fun `given a valid teudat zehut should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "teudatZehut", value = value).apply { teudatZehut() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["123456789", "12345678A", "12345 678Z", "219772156", "1234567L"])
-        fun `given an invalid teudat zehut should report it`(value: String) {
-            val node = ValidationNode("teudatZehut", value).apply { teudatZehut() }
+        fun `given an invalid teudat zehut should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "teudatZehut", value = value).apply { teudatZehut() }
 
-            node.validate() shouldBe listOf(Violation("teudatZehut", "must be a valid teudat zehut", "teudatZehut"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "teudatZehut", message = "must be a valid teudat zehut", code = "teudatZehut")
+            )
         }
     }
 }

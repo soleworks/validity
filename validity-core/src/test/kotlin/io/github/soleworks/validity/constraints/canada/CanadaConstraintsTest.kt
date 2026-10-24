@@ -14,18 +14,28 @@ class CanadaConstraintsTest {
     inner class Sin {
         @ParameterizedTest
         @ValueSource(strings = ["000000000", "521719666", "469317481"])
-        fun `given a valid SIN should accept it`(value: String) {
-            val node = ValidationNode("sin", value).apply { sin() }
+        fun `given a valid SIN should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "sin", value = value).apply { sin() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["012345678", "111111111", "999999999", "744-797-853", "30692544"])
-        fun `given an invalid SIN should report it`(value: String) {
-            val node = ValidationNode("sin", value).apply { sin() }
+        fun `given an invalid SIN should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "sin", value = value).apply { sin() }
 
-            node.validate() shouldBe listOf(Violation("sin", "must be a valid SIN", "sin"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "sin", message = "must be a valid SIN", code = "sin")
+            )
         }
     }
 }

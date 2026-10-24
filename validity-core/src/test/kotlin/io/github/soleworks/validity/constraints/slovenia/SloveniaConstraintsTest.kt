@@ -14,18 +14,28 @@ class SloveniaConstraintsTest {
     inner class DavcnaStevilka {
         @ParameterizedTest
         @ValueSource(strings = ["15012557", "15012590"])
-        fun `given a davčna številka with a valid check digit should accept it`(value: String) {
-            val node = ValidationNode("davcnaStevilka", value).apply { davcnaStevilka() }
+        fun `given a davčna številka with a valid check digit should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "davcnaStevilka", value = value).apply { davcnaStevilka() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["150125577", "1501255", "15 01-255/7"])
-        fun `given a davčna številka with a wrong check digit or another format should report it`(value: String) {
-            val node = ValidationNode("davcnaStevilka", value).apply { davcnaStevilka() }
+        fun `given a davčna številka with a wrong check digit or another format should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "davcnaStevilka", value = value).apply { davcnaStevilka() }
 
-            node.validate() shouldBe listOf(Violation("davcnaStevilka", "must be a valid davčna številka", "davcnaStevilka"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "davcnaStevilka", message = "must be a valid davčna številka", code = "davcnaStevilka")
+            )
         }
     }
 }

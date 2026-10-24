@@ -12,26 +12,36 @@ class MapConstraintsTest {
     @DisplayName("When minSize is called")
     inner class MinSize {
         @Test
-        fun `given fewer prices than the minimum should report it`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { minSize(2) }
+        fun `given at least the minimum of prices should accept them`() {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000, "BRL" to 5000)).apply { minSize(2) }
 
-            node.validate() shouldBe listOf(Violation("prices", "must have at least 2 entries", "minSize"))
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given at least the minimum of prices should accept them`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000)).apply { minSize(2) }
+        fun `given fewer prices than the minimum should report it`() {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000)).apply { minSize(2) }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "must have at least 2 entries", code = "minSize")
+            )
         }
 
         @Test
         fun `given a message function should build it from the value and the minimum`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000)).apply {
                 minSize(2) { min -> "has $size prices, needs at least $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has 1 prices, needs at least 2", "minSize"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "has 1 prices, needs at least 2", code = "minSize")
+            )
         }
     }
 
@@ -39,26 +49,42 @@ class MapConstraintsTest {
     @DisplayName("When maxSize is called")
     inner class MaxSize {
         @Test
-        fun `given more prices than the maximum should report it`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000, "EUR" to 900)).apply { maxSize(2) }
+        fun `given at most the maximum of prices should accept them`() {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000, "BRL" to 5000)).apply { maxSize(2) }
 
-            node.validate() shouldBe listOf(Violation("prices", "must have at most 2 entries", "maxSize"))
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given at most the maximum of prices should accept them`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000)).apply { maxSize(2) }
+        fun `given more prices than the maximum should report it`() {
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000, "BRL" to 5000, "EUR" to 900)
+            ).apply { maxSize(2) }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "must have at most 2 entries", code = "maxSize")
+            )
         }
 
         @Test
         fun `given a message function should build it from the value and the maximum`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000, "EUR" to 900)).apply {
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000, "BRL" to 5000, "EUR" to 900)
+            ).apply {
                 maxSize(2) { max -> "has $size prices, allows at most $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has 3 prices, allows at most 2", "maxSize"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "has 3 prices, allows at most 2", code = "maxSize")
+            )
         }
     }
 
@@ -66,26 +92,36 @@ class MapConstraintsTest {
     @DisplayName("When size is called")
     inner class Size {
         @Test
-        fun `given prices without exactly the expected count should report it`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { size(2) }
+        fun `given exactly the expected count of prices should accept them`() {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000, "BRL" to 5000)).apply { size(2) }
 
-            node.validate() shouldBe listOf(Violation("prices", "must have exactly 2 entries", "size"))
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given exactly the expected count of prices should accept them`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000)).apply { size(2) }
+        fun `given prices without exactly the expected count should report it`() {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000)).apply { size(2) }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "must have exactly 2 entries", code = "size")
+            )
         }
 
         @Test
         fun `given a message function should build it from the value and the size`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000)).apply {
                 size(2) { size -> "has ${this.size} prices, needs $size" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has 1 prices, needs 2", "size"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "has 1 prices, needs 2", code = "size")
+            )
         }
     }
 
@@ -93,42 +129,67 @@ class MapConstraintsTest {
     @DisplayName("When sizeBetween is called")
     inner class SizeBetween {
         @Test
-        fun `given prices below the range should report it`() {
-            val node = ValidationNode("prices", emptyMap<String, Int>()).apply { sizeBetween(1, 2) }
-
-            node.validate() shouldBe listOf(Violation("prices", "must have between 1 and 2 entries", "sizeBetween"))
-        }
-
-        @Test
-        fun `given prices above the range should report it`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000, "EUR" to 900)).apply {
-                sizeBetween(1, 2)
-            }
-
-            node.validate() shouldBe listOf(Violation("prices", "must have between 1 and 2 entries", "sizeBetween"))
-        }
-
-        @Test
         fun `given prices at the lower limit should accept them`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { sizeBetween(1, 2) }
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000)
+            ).apply { sizeBetween(min = 1, max = 2) }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given prices at the upper limit should accept them`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000)).apply { sizeBetween(1, 2) }
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000, "BRL" to 5000)
+            ).apply { sizeBetween(min = 1, max = 2) }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given prices below the range should report it`() {
+            val node = ValidationNode("prices", emptyMap<String, Int>()).apply { sizeBetween(min = 1, max = 2) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "must have between 1 and 2 entries", code = "sizeBetween")
+            )
+        }
+
+        @Test
+        fun `given prices above the range should report it`() {
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000, "BRL" to 5000, "EUR" to 900)
+            ).apply {
+                sizeBetween(min = 1, max = 2)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "must have between 1 and 2 entries", code = "sizeBetween")
+            )
         }
 
         @Test
         fun `given a message function should build it from the value and the limits`() {
             val node = ValidationNode("prices", emptyMap<String, Int>()).apply {
-                sizeBetween(1, 2) { min, max -> "has $size prices, needs from $min to $max" }
+                sizeBetween(min = 1, max = 2) { min, max -> "has $size prices, needs from $min to $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has 0 prices, needs from 1 to 2", "sizeBetween"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "has 0 prices, needs from 1 to 2", code = "sizeBetween")
+            )
         }
     }
 
@@ -136,17 +197,23 @@ class MapConstraintsTest {
     @DisplayName("When notEmpty is called")
     inner class NotEmpty {
         @Test
-        fun `given no prices should report it`() {
-            val node = ValidationNode("prices", emptyMap<String, Int>()).apply { notEmpty() }
+        fun `given one price should accept it`() {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000)).apply { notEmpty() }
 
-            node.validate() shouldBe listOf(Violation("prices", "must not be empty", "notEmpty"))
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given one price should accept it`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { notEmpty() }
+        fun `given no prices should report it`() {
+            val node = ValidationNode("prices", emptyMap<String, Int>()).apply { notEmpty() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "must not be empty", code = "notEmpty")
+            )
         }
     }
 
@@ -154,35 +221,52 @@ class MapConstraintsTest {
     @DisplayName("When containsKey is called")
     inner class ContainsKey {
         @Test
-        fun `given prices without the local currency should report it`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { containsKey("BRL") }
+        fun `given prices with the local currency should accept them`() {
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000, "BRL" to 5000)
+            ).apply { containsKey("BRL") }
 
-            node.validate() shouldBe listOf(Violation("prices", "must contain the key BRL", "containsKey"))
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given prices with the local currency should accept them`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000)).apply { containsKey("BRL") }
+        fun `given prices without the local currency should report it`() {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000)).apply { containsKey("BRL") }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "must contain the key BRL", code = "containsKey")
+            )
         }
 
         @Test
         fun `given a store without a local currency should skip the check`() {
             val localCurrency: String? = null
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000)
+            ).apply { containsKey(localCurrency) }
 
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { containsKey(localCurrency) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a message function should build it from the value and the key`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000)).apply {
                 containsKey("BRL") { key -> "has no price in $key" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "has no price in BRL", "containsKey"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "has no price in BRL", code = "containsKey")
+            )
         }
     }
 
@@ -190,37 +274,57 @@ class MapConstraintsTest {
     @DisplayName("When containsKeys is called")
     inner class ContainsKeys {
         @Test
-        fun `given prices missing one of the required currencies should report it`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { containsKeys(listOf("BRL", "USD")) }
-
-            node.validate() shouldBe listOf(Violation("prices", "must contain the keys BRL, USD", "containsKeys"))
-        }
-
-        @Test
         fun `given prices in all the required currencies should accept them`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000, "BRL" to 5000, "EUR" to 900)).apply {
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000, "BRL" to 5000, "EUR" to 900)
+            ).apply {
                 containsKeys(listOf("BRL", "USD"))
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given prices missing one of the required currencies should report it`() {
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000)
+            ).apply { containsKeys(listOf("BRL", "USD")) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "must contain the keys BRL, USD", code = "containsKeys")
+            )
         }
 
         @Test
         fun `given a store without required currencies should skip the check`() {
             val requiredCurrencies: List<String>? = null
+            val node = ValidationNode(
+                path = "prices",
+                value = mapOf("USD" to 1000)
+            ).apply { containsKeys(requiredCurrencies) }
 
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply { containsKeys(requiredCurrencies) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a message function should build it from the value and the keys`() {
-            val node = ValidationNode("prices", mapOf("USD" to 1000)).apply {
+            val node = ValidationNode(path = "prices", value = mapOf("USD" to 1000)).apply {
                 containsKeys(listOf("BRL", "USD")) { keys -> "needs prices in $keys" }
             }
 
-            node.validate() shouldBe listOf(Violation("prices", "needs prices in [BRL, USD]", "containsKeys"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "needs prices in [BRL, USD]", code = "containsKeys")
+            )
         }
     }
 }

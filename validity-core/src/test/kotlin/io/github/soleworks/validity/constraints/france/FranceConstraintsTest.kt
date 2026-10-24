@@ -14,10 +14,14 @@ class FranceConstraintsTest {
     inner class Spi {
         @ParameterizedTest
         @ValueSource(strings = ["30 23 217 600 053", "3023217600053"])
-        fun `given a valid SPI should accept it`(value: String) {
-            val node = ValidationNode("spi", value).apply { spi() }
+        fun `given a valid SPI should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "spi", value = value).apply { spi() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
@@ -31,10 +35,16 @@ class FranceConstraintsTest {
                 "302321760005"
             ]
         )
-        fun `given an invalid SPI should report it`(value: String) {
-            val node = ValidationNode("spi", value).apply { spi() }
+        fun `given an invalid SPI should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "spi", value = value).apply { spi() }
 
-            node.validate() shouldBe listOf(Violation("spi", "must be a valid SPI", "spi"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "spi", message = "must be a valid SPI", code = "spi")
+            )
         }
     }
 }

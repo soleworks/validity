@@ -13,31 +13,35 @@ class ValidationResultTest {
     @DisplayName("When orThrow is called")
     inner class OrThrow {
         @Test
-        fun `given violations should throw them in the exception`() {
-            val customer = Customer(name = "A", email = null)
+        fun `given no violations should not throw`() {
+            val customer = Customer()
 
-            val exception = shouldThrow<ValidationException> { customer.validate().orThrow() }
-
-            exception.violations shouldBe listOf(
-                Violation("name", "must have at least 2 characters", "minLength"),
-                Violation("email", "email is mandatory", "required")
-            )
+            shouldNotThrowAny { customer.validate().orThrow() }
         }
 
         @Test
         fun `given violations should describe each one in the message`() {
             val customer = Customer(name = "A", email = null)
 
-            val exception = shouldThrow<ValidationException> { customer.validate().orThrow() }
+            val result = customer.validate()
 
-            exception.message shouldBe "name: must have at least 2 characters, email: email is mandatory"
+            val error = shouldThrow<ValidationException> { result.orThrow() }
+
+            error.message shouldBe "name: must have at least 2 characters, email: email is mandatory"
         }
 
         @Test
-        fun `given no violations should not throw`() {
-            val customer = Customer()
+        fun `given violations should throw them in the exception`() {
+            val customer = Customer(name = "A", email = null)
 
-            shouldNotThrowAny { customer.validate().orThrow() }
+            val result = customer.validate()
+
+            val error = shouldThrow<ValidationException> { result.orThrow() }
+
+            error.violations shouldBe listOf(
+                Violation(path = "name", message = "must have at least 2 characters", code = "minLength"),
+                Violation(path = "email", message = "email is mandatory", code = "required")
+            )
         }
     }
 }
