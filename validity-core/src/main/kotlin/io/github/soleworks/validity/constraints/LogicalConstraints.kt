@@ -78,6 +78,7 @@ private fun <V> ValidationNode<V>.combine(
 ) {
     val rules = ValidationNode(path, value).also { it.operator = operator }.apply(block)
     val outer = this.operator
+    val metadata = metadata
     val template = if (operator == OR) messages.or else messages.and
     val and = messages.and
 
@@ -96,7 +97,8 @@ private fun <V> ValidationNode<V>.combine(
                         template = template.filled("path" to path, "value" to value),
                         and = and.filled("path" to path, "value" to value)
                     ),
-                    code = operator
+                    code = operator,
+                    metadata = metadata
                 )
         }
     )

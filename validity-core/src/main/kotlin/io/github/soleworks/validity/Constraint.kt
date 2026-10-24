@@ -9,7 +9,23 @@ internal class Constraint<V>(
         path: String,
         value: V
     ): List<Violation> = listOfNotNull(check(path, value))
+
+    fun inheriting(
+        metadata: Map<String, Any?>
+    ): Constraint<V> = if (metadata.isEmpty())
+        this
+    else
+        Constraint { path, value -> check(path, value)?.inheriting(metadata) }
 }
+
+private fun Violation.inheriting(
+    metadata: Map<String, Any?>
+): Violation = Violation(
+    path = path,
+    message = message,
+    code = code,
+    metadata = metadata + this.metadata
+)
 
 @PublishedApi
 internal fun String.filled(

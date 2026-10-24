@@ -41,14 +41,21 @@ public fun <V : Validatable> ValidationNode<V>.valid(): Unit = valid(
 public fun <V> ValidationNode<V>.valid(
     validation: (V) -> Validation
 ): Unit = add(
-    validation(value).nodes.map { node -> node.relocated("$path.${node.path}") }
+    validation(value).nodes.map { node -> node.relocated("$path.${node.path}", metadata) }
 )
 
 private fun <T> ValidationNode<*>.child(
     path: String,
     value: T,
     block: ValidationNode<T>.() -> Unit
-): ValidationNode<T> = ValidationNode(path, value).also { it.operator = operator }.apply(block)
+): ValidationNode<T> {
+    val child = ValidationNode(path, value)
+
+    child.operator = operator
+    child.metadata = metadata
+
+    return child.apply(block)
+}
 
 private fun String.indexed(
     key: Any?

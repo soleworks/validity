@@ -152,7 +152,7 @@ private fun <V> Validation.add(
     value: V,
     block: ValidationNode<V>.() -> Unit
 ) {
-    val node = ValidationNode(path = name, value = value)
+    val node = ValidationNode(path = name, value = value).also { node -> node.metadata = metadata }
 
     add(node)
 
