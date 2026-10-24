@@ -24,9 +24,13 @@ class PhoneMessagesTest {
     inner class Phone {
         @Test
         fun `given no configuration should report the default message in English`() {
-            val node = ValidationNode("phone", "1").apply { phone() }
+            val node = ValidationNode(path = "phone", value = "1").apply { phone() }
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "phone", message = "must be a valid phone number", code = "phone")
+            )
         }
 
         @Test
@@ -39,15 +43,16 @@ class PhoneMessagesTest {
                     }
                 }
             }
-
-            val node = ValidationNode("phone", "1").apply {
+            val node = ValidationNode(path = "phone", value = "1").apply {
                 phone()
                 mobilePhone()
             }
 
-            node.validate() shouldBe listOf(
-                Violation("phone", "telefone inválido", "phone"),
-                Violation("phone", "celular inválido", "mobilePhone")
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "phone", message = "telefone inválido", code = "phone"),
+                Violation(path = "phone", message = "celular inválido", code = "mobilePhone")
             )
         }
 
@@ -67,10 +72,13 @@ class PhoneMessagesTest {
                     }
                 }
             }
+            val node = ValidationNode(path = "phone", value = "1").apply { phone() }
 
-            val node = ValidationNode("phone", "1").apply { phone() }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("phone", "must be a valid phone number", "phone"))
+            violations shouldBe listOf(
+                Violation(path = "phone", message = "must be a valid phone number", code = "phone")
+            )
         }
     }
 }

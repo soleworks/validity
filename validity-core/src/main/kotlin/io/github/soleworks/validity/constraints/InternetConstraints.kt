@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
 import java.net.URI
 
@@ -8,26 +9,24 @@ private const val IPV4_PREFIX_LENGTH = 32
 private const val IPV6_PREFIX_LENGTH = 128
 private const val IPV6_GROUPS = 8
 
-private val WEB_SCHEMES = setOf("http", "https")
-
 private const val DOMAIN_LABEL = "[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?"
+private const val IPV4_OCTET = """(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)"""
 
-private val EMAIL_FORMAT = Regex("[A-Za-z0-9.!#\$%&'*+/=?^_`{|}~-]+@$DOMAIN_LABEL(?:\\.$DOMAIN_LABEL)+")
-private val HOSTNAME_FORMAT = Regex("(?=.{1,253}$)$DOMAIN_LABEL(?:\\.$DOMAIN_LABEL)*")
-private const val IPV4_OCTET = "(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)"
-
-private val IPV4_FORMAT = Regex("$IPV4_OCTET(?:\\.$IPV4_OCTET){3}")
+private val WEB_SCHEMES = setOf("http", "https")
+private val EMAIL_FORMAT = Regex("""[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@$DOMAIN_LABEL(?:\.$DOMAIN_LABEL)+""")
+private val HOSTNAME_FORMAT = Regex("""(?=.{1,253}$)$DOMAIN_LABEL(?:\.$DOMAIN_LABEL)*""")
+private val IPV4_FORMAT = Regex("""$IPV4_OCTET(?:\.$IPV4_OCTET){3}""")
 private val IPV6_GROUP_FORMAT = Regex("[0-9A-Fa-f]{1,4}")
-private val MAC_ADDRESS_FORMAT = Regex("[0-9A-Fa-f]{2}([:-])(?:[0-9A-Fa-f]{2}\\1){4}[0-9A-Fa-f]{2}")
+private val MAC_ADDRESS_FORMAT = Regex("""[0-9A-Fa-f]{2}([:-])(?:[0-9A-Fa-f]{2}\1){4}[0-9A-Fa-f]{2}""")
 private val SLUG_FORMAT = Regex("[a-z0-9]+(?:-[a-z0-9]+)*")
-private val JWT_FORMAT = Regex("[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]*")
-private val CIDR_PREFIX_FORMAT = Regex("0|[1-9]\\d{0,2}")
+private val JWT_FORMAT = Regex("""[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*""")
+private val CIDR_PREFIX_FORMAT = Regex("""0|[1-9]\d{0,2}""")
 private val DATA_URI_FORMAT = Regex(
-    "data:(?:[a-z]+/[a-z0-9.+-]+)?(?:;[a-z0-9-]+=[a-z0-9.-]+)*(?:;base64)?,\\S*",
+    """data:(?:[a-z]+/[a-z0-9.+-]+)?(?:;[a-z0-9-]+=[a-z0-9.-]+)*(?:;base64)?,\S*""",
     RegexOption.IGNORE_CASE
 )
 private val MIME_TYPE_FORMAT = Regex(
-    "(?:application|audio|font|haptics|image|message|model|multipart|text|video)/[A-Za-z0-9!#\$&^_.+-]+",
+    """(?:application|audio|font|haptics|image|message|model|multipart|text|video)/[A-Za-z0-9!#$&^_.+-]+""",
     RegexOption.IGNORE_CASE
 )
 
@@ -44,7 +43,7 @@ public fun ValidationNode<String>.url(
     message: String = messages.url
 ): Unit = url(
     schemes = schemes,
-    message = { message.replace("{schemes}", schemes.joinToString()) }
+    message = { message.filled("schemes" to schemes) }
 )
 
 public fun ValidationNode<String>.url(
@@ -151,11 +150,11 @@ private fun String.isIpv6(): Boolean {
     val hexGroups = groups.flatten().let { all -> if (embeddedIpv4 == null) all else all.dropLast(1) }
     val size = hexGroups.size + if (embeddedIpv4 == null) 0 else 2
 
-    val validIpv4 = embeddedIpv4 == null || IPV4_FORMAT.matches(embeddedIpv4)
-    val validGroups = hexGroups.all(IPV6_GROUP_FORMAT::matches) && validIpv4
-    val validSize = if (halves.size == 2) size < IPV6_GROUPS else size == IPV6_GROUPS
+    val isValidIpv4 = embeddedIpv4 == null || IPV4_FORMAT.matches(embeddedIpv4)
+    val hasValidGroups = hexGroups.all(IPV6_GROUP_FORMAT::matches) && isValidIpv4
+    val hasValidSize = if (halves.size == 2) size < IPV6_GROUPS else size == IPV6_GROUPS
 
-    return halves.size <= 2 && validGroups && validSize
+    return halves.size <= 2 && hasValidGroups && hasValidSize
 }
 
 private fun String.isCidr(): Boolean {

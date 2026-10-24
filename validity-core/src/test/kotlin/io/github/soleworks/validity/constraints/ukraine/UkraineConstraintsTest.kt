@@ -14,18 +14,28 @@ class UkraineConstraintsTest {
     inner class Rnokpp {
         @ParameterizedTest
         @ValueSource(strings = ["3006321856", "3003102490", "2164212906"])
-        fun `given an RNOKPP with a valid check digit should accept it`(value: String) {
-            val node = ValidationNode("rnokpp", value).apply { rnokpp() }
+        fun `given an RNOKPP with a valid check digit should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "rnokpp", value = value).apply { rnokpp() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["2565975632", "256597563287", "КС00123456", "2896235845"])
-        fun `given an RNOKPP with a wrong check digit or another format should report it`(value: String) {
-            val node = ValidationNode("rnokpp", value).apply { rnokpp() }
+        fun `given an RNOKPP with a wrong check digit or another format should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "rnokpp", value = value).apply { rnokpp() }
 
-            node.validate() shouldBe listOf(Violation("rnokpp", "must be a valid RNOKPP", "rnokpp"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "rnokpp", message = "must be a valid RNOKPP", code = "rnokpp")
+            )
         }
     }
 }

@@ -36,142 +36,205 @@ class TemporalConstraintsTest {
     @DisplayName("When past is called")
     inner class Past {
         @Test
-        fun `given a LocalDate in the future should report it`() {
-            val node = ValidationNode("occurredAt", LocalDate.now().plusDays(1)).apply { past() }
+        fun `given a LocalDate in the past should accept it`() {
+            val node = ValidationNode(path = "occurredAt", value = LocalDate.now().minusDays(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a LocalDate in the past should accept it`() {
-            val node = ValidationNode("occurredAt", LocalDate.now().minusDays(1)).apply { past() }
+        fun `given a LocalDateTime in the past should accept it`() {
+            val node = ValidationNode(path = "occurredAt", value = LocalDateTime.now().minusHours(1)).apply { past() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a ZonedDateTime in the past should accept it`() {
+            val node = ValidationNode(path = "occurredAt", value = ZonedDateTime.now().minusHours(1)).apply { past() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an OffsetDateTime in the past should accept it`() {
+            val node = ValidationNode(path = "occurredAt", value = OffsetDateTime.now().minusHours(1)).apply { past() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an Instant in the past should accept it`() {
+            val node = ValidationNode(path = "occurredAt", value = Instant.now().minusSeconds(3600)).apply { past() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a YearMonth in the past should accept it`() {
+            val node = ValidationNode(path = "occurredAt", value = YearMonth.now().minusMonths(1)).apply { past() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Year in the past should accept it`() {
+            val node = ValidationNode(path = "occurredAt", value = Year.now().minusYears(1)).apply { past() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Date in the past should accept it`() {
+            val node = ValidationNode(
+                path = "occurredAt",
+                value = Date.from(Instant.now().minusSeconds(3600))
+            ).apply { past() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalDate in the future should report it`() {
+            val node = ValidationNode(path = "occurredAt", value = LocalDate.now().plusDays(1)).apply { past() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given today as a LocalDate should report it`() {
             Validity.configure { clock = today }
+            val node = ValidationNode(path = "occurredAt", value = LocalDate.of(2026, 10, 10)).apply { past() }
 
-            val node = ValidationNode("occurredAt", LocalDate.of(2026, 10, 10)).apply { past() }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given a LocalDateTime in the future should report it`() {
-            val node = ValidationNode("occurredAt", LocalDateTime.now().plusHours(1)).apply { past() }
+            val node = ValidationNode(path = "occurredAt", value = LocalDateTime.now().plusHours(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a LocalDateTime in the past should accept it`() {
-            val node = ValidationNode("occurredAt", LocalDateTime.now().minusHours(1)).apply { past() }
-
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given a ZonedDateTime in the future should report it`() {
-            val node = ValidationNode("occurredAt", ZonedDateTime.now().plusHours(1)).apply { past() }
+            val node = ValidationNode(path = "occurredAt", value = ZonedDateTime.now().plusHours(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a ZonedDateTime in the past should accept it`() {
-            val node = ValidationNode("occurredAt", ZonedDateTime.now().minusHours(1)).apply { past() }
-
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given an OffsetDateTime in the future should report it`() {
-            val node = ValidationNode("occurredAt", OffsetDateTime.now().plusHours(1)).apply { past() }
+            val node = ValidationNode(path = "occurredAt", value = OffsetDateTime.now().plusHours(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given an OffsetDateTime in the past should accept it`() {
-            val node = ValidationNode("occurredAt", OffsetDateTime.now().minusHours(1)).apply { past() }
-
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given an Instant in the future should report it`() {
-            val node = ValidationNode("occurredAt", Instant.now().plusSeconds(3600)).apply { past() }
+            val node = ValidationNode(path = "occurredAt", value = Instant.now().plusSeconds(3600)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given an Instant in the past should accept it`() {
-            val node = ValidationNode("occurredAt", Instant.now().minusSeconds(3600)).apply { past() }
-
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given a YearMonth in the future should report it`() {
-            val node = ValidationNode("occurredAt", YearMonth.now().plusMonths(1)).apply { past() }
+            val node = ValidationNode(path = "occurredAt", value = YearMonth.now().plusMonths(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a YearMonth in the past should accept it`() {
-            val node = ValidationNode("occurredAt", YearMonth.now().minusMonths(1)).apply { past() }
-
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given the current month as a YearMonth should report it`() {
             Validity.configure { clock = today }
+            val node = ValidationNode(path = "occurredAt", value = YearMonth.of(2026, 10)).apply { past() }
 
-            val node = ValidationNode("occurredAt", YearMonth.of(2026, 10)).apply { past() }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given a Year in the future should report it`() {
-            val node = ValidationNode("occurredAt", Year.now().plusYears(1)).apply { past() }
+            val node = ValidationNode(path = "occurredAt", value = Year.now().plusYears(1)).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a Year in the past should accept it`() {
-            val node = ValidationNode("occurredAt", Year.now().minusYears(1)).apply { past() }
-
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given the current year as a Year should report it`() {
             Validity.configure { clock = today }
+            val node = ValidationNode(path = "occurredAt", value = Year.of(2026)).apply { past() }
 
-            val node = ValidationNode("occurredAt", Year.of(2026)).apply { past() }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
 
         @Test
         fun `given a Date in the future should report it`() {
-            val node = ValidationNode("occurredAt", Date.from(Instant.now().plusSeconds(3600))).apply { past() }
+            val node = ValidationNode(
+                path = "occurredAt",
+                value = Date.from(Instant.now().plusSeconds(3600))
+            ).apply { past() }
 
-            node.validate() shouldBe listOf(Violation("occurredAt", "must be in the past", "past"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a Date in the past should accept it`() {
-            val node = ValidationNode("occurredAt", Date.from(Instant.now().minusSeconds(3600))).apply { past() }
-
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "occurredAt", message = "must be in the past", code = "past")
+            )
         }
     }
 
@@ -179,136 +242,202 @@ class TemporalConstraintsTest {
     @DisplayName("When future is called")
     inner class Future {
         @Test
-        fun `given a LocalDate in the past should report it`() {
-            val node = ValidationNode("expiresAt", LocalDate.now().minusDays(1)).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
-        }
-
-        @Test
         fun `given a LocalDate in the future should accept it`() {
-            val node = ValidationNode("expiresAt", LocalDate.now().plusDays(1)).apply { future() }
+            val node = ValidationNode(path = "expiresAt", value = LocalDate.now().plusDays(1)).apply { future() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given today as a LocalDate should report it`() {
-            val node = ValidationNode("expiresAt", LocalDate.now()).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
-        }
-
-        @Test
-        fun `given a LocalDateTime in the past should report it`() {
-            val node = ValidationNode("expiresAt", LocalDateTime.now().minusHours(1)).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalDateTime in the future should accept it`() {
-            val node = ValidationNode("expiresAt", LocalDateTime.now().plusHours(1)).apply { future() }
+            val node = ValidationNode(path = "expiresAt", value = LocalDateTime.now().plusHours(1)).apply { future() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a ZonedDateTime in the past should report it`() {
-            val node = ValidationNode("expiresAt", ZonedDateTime.now().minusHours(1)).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a ZonedDateTime in the future should accept it`() {
-            val node = ValidationNode("expiresAt", ZonedDateTime.now().plusHours(1)).apply { future() }
+            val node = ValidationNode(path = "expiresAt", value = ZonedDateTime.now().plusHours(1)).apply { future() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given an OffsetDateTime in the past should report it`() {
-            val node = ValidationNode("expiresAt", OffsetDateTime.now().minusHours(1)).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetDateTime in the future should accept it`() {
-            val node = ValidationNode("expiresAt", OffsetDateTime.now().plusHours(1)).apply { future() }
+            val node = ValidationNode(path = "expiresAt", value = OffsetDateTime.now().plusHours(1)).apply { future() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given an Instant in the past should report it`() {
-            val node = ValidationNode("expiresAt", Instant.now().minusSeconds(3600)).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an Instant in the future should accept it`() {
-            val node = ValidationNode("expiresAt", Instant.now().plusSeconds(3600)).apply { future() }
+            val node = ValidationNode(path = "expiresAt", value = Instant.now().plusSeconds(3600)).apply { future() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a YearMonth in the past should report it`() {
-            val node = ValidationNode("expiresAt", YearMonth.now().minusMonths(1)).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a YearMonth in the future should accept it`() {
-            val node = ValidationNode("expiresAt", YearMonth.now().plusMonths(1)).apply { future() }
+            val node = ValidationNode(path = "expiresAt", value = YearMonth.now().plusMonths(1)).apply { future() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given the current month as a YearMonth should report it`() {
-            val node = ValidationNode("expiresAt", YearMonth.now()).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
-        }
-
-        @Test
-        fun `given a Year in the past should report it`() {
-            val node = ValidationNode("expiresAt", Year.now().minusYears(1)).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a Year in the future should accept it`() {
-            val node = ValidationNode("expiresAt", Year.now().plusYears(1)).apply { future() }
+            val node = ValidationNode(path = "expiresAt", value = Year.now().plusYears(1)).apply { future() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given the current year as a Year should report it`() {
-            val node = ValidationNode("expiresAt", Year.now()).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
-        }
-
-        @Test
-        fun `given a Date in the past should report it`() {
-            val node = ValidationNode("expiresAt", Date.from(Instant.now().minusSeconds(3600))).apply { future() }
-
-            node.validate() shouldBe listOf(Violation("expiresAt", "must be in the future", "future"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a Date in the future should accept it`() {
-            val node = ValidationNode("expiresAt", Date.from(Instant.now().plusSeconds(3600))).apply { future() }
+            val node = ValidationNode(
+                path = "expiresAt",
+                value = Date.from(Instant.now().plusSeconds(3600))
+            ).apply { future() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalDate in the past should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = LocalDate.now().minusDays(1)).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given today as a LocalDate should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = LocalDate.now()).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given a LocalDateTime in the past should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = LocalDateTime.now().minusHours(1)).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given a ZonedDateTime in the past should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = ZonedDateTime.now().minusHours(1)).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given an OffsetDateTime in the past should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = OffsetDateTime.now().minusHours(1)).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given an Instant in the past should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = Instant.now().minusSeconds(3600)).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given a YearMonth in the past should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = YearMonth.now().minusMonths(1)).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given the current month as a YearMonth should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = YearMonth.now()).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given a Year in the past should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = Year.now().minusYears(1)).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given the current year as a Year should report it`() {
+            val node = ValidationNode(path = "expiresAt", value = Year.now()).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given a Date in the past should report it`() {
+            val node = ValidationNode(
+                path = "expiresAt",
+                value = Date.from(Instant.now().minusSeconds(3600))
+            ).apply { future() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "expiresAt", message = "must be in the future", code = "future")
+            )
         }
     }
 
@@ -316,136 +445,226 @@ class TemporalConstraintsTest {
     @DisplayName("When pastOrPresent is called")
     inner class PastOrPresent {
         @Test
-        fun `given a LocalDate in the future should report it`() {
-            val node = ValidationNode("issuedAt", LocalDate.now().plusDays(1)).apply { pastOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
-        }
-
-        @Test
         fun `given a LocalDate in the past should accept it`() {
-            val node = ValidationNode("issuedAt", LocalDate.now().minusDays(1)).apply { pastOrPresent() }
+            val node = ValidationNode(path = "issuedAt", value = LocalDate.now().minusDays(1)).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given today as a LocalDate should accept it`() {
-            val node = ValidationNode("issuedAt", LocalDate.now()).apply { pastOrPresent() }
+            val node = ValidationNode(path = "issuedAt", value = LocalDate.now()).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a LocalDateTime in the future should report it`() {
-            val node = ValidationNode("issuedAt", LocalDateTime.now().plusHours(1)).apply { pastOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalDateTime in the past should accept it`() {
-            val node = ValidationNode("issuedAt", LocalDateTime.now().minusHours(1)).apply { pastOrPresent() }
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = LocalDateTime.now().minusHours(1)
+            ).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a ZonedDateTime in the future should report it`() {
-            val node = ValidationNode("issuedAt", ZonedDateTime.now().plusHours(1)).apply { pastOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a ZonedDateTime in the past should accept it`() {
-            val node = ValidationNode("issuedAt", ZonedDateTime.now().minusHours(1)).apply { pastOrPresent() }
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = ZonedDateTime.now().minusHours(1)
+            ).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given an OffsetDateTime in the future should report it`() {
-            val node = ValidationNode("issuedAt", OffsetDateTime.now().plusHours(1)).apply { pastOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetDateTime in the past should accept it`() {
-            val node = ValidationNode("issuedAt", OffsetDateTime.now().minusHours(1)).apply { pastOrPresent() }
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = OffsetDateTime.now().minusHours(1)
+            ).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given an Instant in the future should report it`() {
-            val node = ValidationNode("issuedAt", Instant.now().plusSeconds(3600)).apply { pastOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an Instant in the past should accept it`() {
-            val node = ValidationNode("issuedAt", Instant.now().minusSeconds(3600)).apply { pastOrPresent() }
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = Instant.now().minusSeconds(3600)
+            ).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a YearMonth in the future should report it`() {
-            val node = ValidationNode("issuedAt", YearMonth.now().plusMonths(1)).apply { pastOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a YearMonth in the past should accept it`() {
-            val node = ValidationNode("issuedAt", YearMonth.now().minusMonths(1)).apply { pastOrPresent() }
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = YearMonth.now().minusMonths(1)
+            ).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given the current month as a YearMonth should accept it`() {
-            val node = ValidationNode("issuedAt", YearMonth.now()).apply { pastOrPresent() }
+            val node = ValidationNode(path = "issuedAt", value = YearMonth.now()).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a Year in the future should report it`() {
-            val node = ValidationNode("issuedAt", Year.now().plusYears(1)).apply { pastOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a Year in the past should accept it`() {
-            val node = ValidationNode("issuedAt", Year.now().minusYears(1)).apply { pastOrPresent() }
+            val node = ValidationNode(path = "issuedAt", value = Year.now().minusYears(1)).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given the current year as a Year should accept it`() {
-            val node = ValidationNode("issuedAt", Year.now()).apply { pastOrPresent() }
+            val node = ValidationNode(path = "issuedAt", value = Year.now()).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a Date in the future should report it`() {
-            val node = ValidationNode("issuedAt", Date.from(Instant.now().plusSeconds(3600))).apply { pastOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("issuedAt", "must be in the past or present", "pastOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a Date in the past should accept it`() {
-            val node = ValidationNode("issuedAt", Date.from(Instant.now().minusSeconds(3600))).apply { pastOrPresent() }
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = Date.from(Instant.now().minusSeconds(3600))
+            ).apply { pastOrPresent() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalDate in the future should report it`() {
+            val node = ValidationNode(path = "issuedAt", value = LocalDate.now().plusDays(1)).apply { pastOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "issuedAt", message = "must be in the past or present", code = "pastOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a LocalDateTime in the future should report it`() {
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = LocalDateTime.now().plusHours(1)
+            ).apply { pastOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "issuedAt", message = "must be in the past or present", code = "pastOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a ZonedDateTime in the future should report it`() {
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = ZonedDateTime.now().plusHours(1)
+            ).apply { pastOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "issuedAt", message = "must be in the past or present", code = "pastOrPresent")
+            )
+        }
+
+        @Test
+        fun `given an OffsetDateTime in the future should report it`() {
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = OffsetDateTime.now().plusHours(1)
+            ).apply { pastOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "issuedAt", message = "must be in the past or present", code = "pastOrPresent")
+            )
+        }
+
+        @Test
+        fun `given an Instant in the future should report it`() {
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = Instant.now().plusSeconds(3600)
+            ).apply { pastOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "issuedAt", message = "must be in the past or present", code = "pastOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a YearMonth in the future should report it`() {
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = YearMonth.now().plusMonths(1)
+            ).apply { pastOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "issuedAt", message = "must be in the past or present", code = "pastOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a Year in the future should report it`() {
+            val node = ValidationNode(path = "issuedAt", value = Year.now().plusYears(1)).apply { pastOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "issuedAt", message = "must be in the past or present", code = "pastOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a Date in the future should report it`() {
+            val node = ValidationNode(
+                path = "issuedAt",
+                value = Date.from(Instant.now().plusSeconds(3600))
+            ).apply { pastOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "issuedAt", message = "must be in the past or present", code = "pastOrPresent")
+            )
         }
     }
 
@@ -453,146 +672,239 @@ class TemporalConstraintsTest {
     @DisplayName("When futureOrPresent is called")
     inner class FutureOrPresent {
         @Test
-        fun `given a LocalDate in the past should report it`() {
-            val node = ValidationNode("scheduledAt", LocalDate.now().minusDays(1)).apply { futureOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
-        }
-
-        @Test
         fun `given a LocalDate in the future should accept it`() {
-            val node = ValidationNode("scheduledAt", LocalDate.now().plusDays(1)).apply { futureOrPresent() }
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = LocalDate.now().plusDays(1)
+            ).apply { futureOrPresent() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given today as a LocalDate should accept it`() {
             Validity.configure { clock = today }
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = LocalDate.of(2026, 10, 10)
+            ).apply { futureOrPresent() }
 
-            val node = ValidationNode("scheduledAt", LocalDate.of(2026, 10, 10)).apply { futureOrPresent() }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a LocalDateTime in the past should report it`() {
-            val node = ValidationNode("scheduledAt", LocalDateTime.now().minusHours(1)).apply { futureOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalDateTime in the future should accept it`() {
-            val node = ValidationNode("scheduledAt", LocalDateTime.now().plusHours(1)).apply { futureOrPresent() }
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = LocalDateTime.now().plusHours(1)
+            ).apply { futureOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a ZonedDateTime in the past should report it`() {
-            val node = ValidationNode("scheduledAt", ZonedDateTime.now().minusHours(1)).apply { futureOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a ZonedDateTime in the future should accept it`() {
-            val node = ValidationNode("scheduledAt", ZonedDateTime.now().plusHours(1)).apply { futureOrPresent() }
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = ZonedDateTime.now().plusHours(1)
+            ).apply { futureOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given an OffsetDateTime in the past should report it`() {
-            val node = ValidationNode("scheduledAt", OffsetDateTime.now().minusHours(1)).apply { futureOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetDateTime in the future should accept it`() {
-            val node = ValidationNode("scheduledAt", OffsetDateTime.now().plusHours(1)).apply { futureOrPresent() }
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = OffsetDateTime.now().plusHours(1)
+            ).apply { futureOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given an Instant in the past should report it`() {
-            val node = ValidationNode("scheduledAt", Instant.now().minusSeconds(3600)).apply { futureOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an Instant in the future should accept it`() {
-            val node = ValidationNode("scheduledAt", Instant.now().plusSeconds(3600)).apply { futureOrPresent() }
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = Instant.now().plusSeconds(3600)
+            ).apply { futureOrPresent() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a YearMonth in the past should report it`() {
-            val node = ValidationNode("scheduledAt", YearMonth.now().minusMonths(1)).apply { futureOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a YearMonth in the future should accept it`() {
-            val node = ValidationNode("scheduledAt", YearMonth.now().plusMonths(1)).apply { futureOrPresent() }
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = YearMonth.now().plusMonths(1)
+            ).apply { futureOrPresent() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given the current month as a YearMonth should accept it`() {
             Validity.configure { clock = today }
+            val node = ValidationNode(path = "scheduledAt", value = YearMonth.of(2026, 10)).apply { futureOrPresent() }
 
-            val node = ValidationNode("scheduledAt", YearMonth.of(2026, 10)).apply { futureOrPresent() }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a Year in the past should report it`() {
-            val node = ValidationNode("scheduledAt", Year.now().minusYears(1)).apply { futureOrPresent() }
-
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a Year in the future should accept it`() {
-            val node = ValidationNode("scheduledAt", Year.now().plusYears(1)).apply { futureOrPresent() }
+            val node = ValidationNode(path = "scheduledAt", value = Year.now().plusYears(1)).apply { futureOrPresent() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given the current year as a Year should accept it`() {
             Validity.configure { clock = today }
+            val node = ValidationNode(path = "scheduledAt", value = Year.of(2026)).apply { futureOrPresent() }
 
-            val node = ValidationNode("scheduledAt", Year.of(2026)).apply { futureOrPresent() }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a Date in the past should report it`() {
-            val node = ValidationNode("scheduledAt", Date.from(Instant.now().minusSeconds(3600))).apply {
-                futureOrPresent()
-            }
-
-            node.validate() shouldBe listOf(Violation("scheduledAt", "must be in the future or present", "futureOrPresent"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a Date in the future should accept it`() {
-            val node = ValidationNode("scheduledAt", Date.from(Instant.now().plusSeconds(3600))).apply {
+            val node = ValidationNode(path = "scheduledAt", value = Date.from(Instant.now().plusSeconds(3600))).apply {
                 futureOrPresent()
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalDate in the past should report it`() {
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = LocalDate.now().minusDays(1)
+            ).apply { futureOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "scheduledAt", message = "must be in the future or present", code = "futureOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a LocalDateTime in the past should report it`() {
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = LocalDateTime.now().minusHours(1)
+            ).apply { futureOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "scheduledAt", message = "must be in the future or present", code = "futureOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a ZonedDateTime in the past should report it`() {
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = ZonedDateTime.now().minusHours(1)
+            ).apply { futureOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "scheduledAt", message = "must be in the future or present", code = "futureOrPresent")
+            )
+        }
+
+        @Test
+        fun `given an OffsetDateTime in the past should report it`() {
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = OffsetDateTime.now().minusHours(1)
+            ).apply { futureOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "scheduledAt", message = "must be in the future or present", code = "futureOrPresent")
+            )
+        }
+
+        @Test
+        fun `given an Instant in the past should report it`() {
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = Instant.now().minusSeconds(3600)
+            ).apply { futureOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "scheduledAt", message = "must be in the future or present", code = "futureOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a YearMonth in the past should report it`() {
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = YearMonth.now().minusMonths(1)
+            ).apply { futureOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "scheduledAt", message = "must be in the future or present", code = "futureOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a Year in the past should report it`() {
+            val node = ValidationNode(
+                path = "scheduledAt",
+                value = Year.now().minusYears(1)
+            ).apply { futureOrPresent() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "scheduledAt", message = "must be in the future or present", code = "futureOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a Date in the past should report it`() {
+            val node = ValidationNode(path = "scheduledAt", value = Date.from(Instant.now().minusSeconds(3600))).apply {
+                futureOrPresent()
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "scheduledAt", message = "must be in the future or present", code = "futureOrPresent")
+            )
         }
     }
 
@@ -600,433 +912,562 @@ class TemporalConstraintsTest {
     @DisplayName("When after is called")
     inner class After {
         @Test
-        fun `given a LocalDate equal to the reference should report it`() {
-            val reference = LocalDate.of(2026, 1, 10)
-
-            val node = ValidationNode("endsAt", LocalDate.of(2026, 1, 10)).apply { after(reference) }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10", "after"))
-        }
-
-        @Test
         fun `given a LocalDate after the reference should accept it`() {
             val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(path = "endsAt", value = LocalDate.of(2026, 1, 11)).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", LocalDate.of(2026, 1, 11)).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalDate should skip the check`() {
-            val reference: LocalDate? = null
-
-            val node = ValidationNode("endsAt", LocalDate.of(2026, 1, 10)).apply { after(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalDate should build it from the value and the reference`() {
-            val reference = LocalDate.of(2026, 1, 10)
-
-            val node = ValidationNode("endsAt", LocalDate.of(2026, 1, 10)).apply {
-                after(reference) { other -> "$this is not after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10 is not after 2026-01-10", "after"))
-        }
-
-        @Test
-        fun `given a LocalDateTime equal to the reference should report it`() {
-            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("endsAt", LocalDateTime.of(2026, 1, 10, 10, 0)).apply { after(reference) }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00", "after"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalDateTime after the reference should accept it`() {
             val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(
+                path = "endsAt",
+                value = LocalDateTime.of(2026, 1, 10, 11, 0)
+            ).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", LocalDateTime.of(2026, 1, 10, 11, 0)).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalDateTime should skip the check`() {
-            val reference: LocalDateTime? = null
-
-            val node = ValidationNode("endsAt", LocalDateTime.of(2026, 1, 10, 10, 0)).apply { after(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalDateTime should build it from the value and the reference`() {
-            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("endsAt", LocalDateTime.of(2026, 1, 10, 10, 0)).apply {
-                after(reference) { other -> "$this is not after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10T10:00 is not after 2026-01-10T10:00", "after"))
-        }
-
-        @Test
-        fun `given a LocalTime equal to the reference should report it`() {
-            val reference = LocalTime.of(10, 0)
-
-            val node = ValidationNode("endsAt", LocalTime.of(10, 0)).apply { after(reference) }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 10:00", "after"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalTime after the reference should accept it`() {
             val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "endsAt", value = LocalTime.of(11, 0)).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", LocalTime.of(11, 0)).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalTime should skip the check`() {
-            val reference: LocalTime? = null
-
-            val node = ValidationNode("endsAt", LocalTime.of(10, 0)).apply { after(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalTime should build it from the value and the reference`() {
-            val reference = LocalTime.of(10, 0)
-
-            val node = ValidationNode("endsAt", LocalTime.of(10, 0)).apply {
-                after(reference) { other -> "$this is not after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "10:00 is not after 10:00", "after"))
-        }
-
-        @Test
-        fun `given an OffsetTime equal to the reference should report it`() {
-            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("endsAt", OffsetTime.of(10, 0, 0, 0, UTC)).apply { after(reference) }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 10:00Z", "after"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetTime after the reference should accept it`() {
             val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "endsAt",
+                value = OffsetTime.of(11, 0, 0, 0, UTC)
+            ).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", OffsetTime.of(11, 0, 0, 0, UTC)).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for an OffsetTime should skip the check`() {
-            val reference: OffsetTime? = null
-
-            val node = ValidationNode("endsAt", OffsetTime.of(10, 0, 0, 0, UTC)).apply { after(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetTime should build it from the value and the reference`() {
-            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("endsAt", OffsetTime.of(10, 0, 0, 0, UTC)).apply {
-                after(reference) { other -> "$this is not after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "10:00Z is not after 10:00Z", "after"))
-        }
-
-        @Test
-        fun `given a ZonedDateTime equal to the reference should report it`() {
-            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("endsAt", ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                after(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00Z", "after"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a ZonedDateTime after the reference should accept it`() {
             val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("endsAt", ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
+            val node = ValidationNode(path = "endsAt", value = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
                 after(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for a ZonedDateTime should skip the check`() {
-            val reference: ZonedDateTime? = null
-
-            val node = ValidationNode("endsAt", ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                after(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a ZonedDateTime should build it from the value and the reference`() {
-            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("endsAt", ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                after(reference) { other -> "$this is not after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10T10:00Z is not after 2026-01-10T10:00Z", "after"))
-        }
-
-        @Test
-        fun `given an OffsetDateTime equal to the reference should report it`() {
-            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("endsAt", OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                after(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00Z", "after"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetDateTime after the reference should accept it`() {
             val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("endsAt", OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
+            val node = ValidationNode(path = "endsAt", value = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
                 after(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for an OffsetDateTime should skip the check`() {
-            val reference: OffsetDateTime? = null
-
-            val node = ValidationNode("endsAt", OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                after(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetDateTime should build it from the value and the reference`() {
-            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("endsAt", OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                after(reference) { other -> "$this is not after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-01-10T10:00Z is not after 2026-01-10T10:00Z", "after"))
-        }
-
-        @Test
-        fun `given an Instant equal to the reference should report it`() {
-            val reference = Instant.parse("2026-01-10T10:00:00Z")
-
-            val node = ValidationNode("endsAt", Instant.parse("2026-01-10T10:00:00Z")).apply { after(reference) }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T10:00:00Z", "after"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an Instant after the reference should accept it`() {
             val reference = Instant.parse("2026-01-10T10:00:00Z")
+            val node = ValidationNode(
+                path = "endsAt",
+                value = Instant.parse("2026-01-10T11:00:00Z")
+            ).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", Instant.parse("2026-01-10T11:00:00Z")).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given no reference for an Instant should skip the check`() {
-            val reference: Instant? = null
+        fun `given a YearMonth after the reference should accept it`() {
+            val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(path = "endsAt", value = YearMonth.of(2026, 11)).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", Instant.parse("2026-01-10T10:00:00Z")).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a message function for an Instant should build it from the value and the reference`() {
-            val reference = Instant.parse("2026-01-10T10:00:00Z")
+        fun `given a Year after the reference should accept it`() {
+            val reference = Year.of(2024)
+            val node = ValidationNode(path = "endsAt", value = Year.of(2025)).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", Instant.parse("2026-01-10T10:00:00Z")).apply {
-                after(reference) { other -> "$this is not after $other" }
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Date after the reference should accept it`() {
+            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            val node = ValidationNode(path = "endsAt", value = Date.from(Instant.parse("2026-01-10T11:00:00Z"))).apply {
+                after(reference)
             }
 
-            node.validate() shouldBe listOf(
-                Violation("endsAt", "2026-01-10T10:00:00Z is not after 2026-01-10T10:00:00Z", "after")
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalDate equal to the reference should report it`() {
+            val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(path = "endsAt", value = LocalDate.of(2026, 1, 10)).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 2026-01-10", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a LocalDateTime equal to the reference should report it`() {
+            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(
+                path = "endsAt",
+                value = LocalDateTime.of(2026, 1, 10, 10, 0)
+            ).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 2026-01-10T10:00", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a LocalTime equal to the reference should report it`() {
+            val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "endsAt", value = LocalTime.of(10, 0)).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 10:00", code = "after")
+            )
+        }
+
+        @Test
+        fun `given an OffsetTime equal to the reference should report it`() {
+            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "endsAt",
+                value = OffsetTime.of(10, 0, 0, 0, UTC)
+            ).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 10:00Z", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a ZonedDateTime equal to the reference should report it`() {
+            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "endsAt", value = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+                after(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 2026-01-10T10:00Z", code = "after")
+            )
+        }
+
+        @Test
+        fun `given an OffsetDateTime equal to the reference should report it`() {
+            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "endsAt", value = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+                after(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 2026-01-10T10:00Z", code = "after")
+            )
+        }
+
+        @Test
+        fun `given an Instant equal to the reference should report it`() {
+            val reference = Instant.parse("2026-01-10T10:00:00Z")
+            val node = ValidationNode(
+                path = "endsAt",
+                value = Instant.parse("2026-01-10T10:00:00Z")
+            ).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 2026-01-10T10:00:00Z", code = "after")
             )
         }
 
         @Test
         fun `given a YearMonth equal to the reference should report it`() {
             val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(path = "endsAt", value = YearMonth.of(2026, 10)).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", YearMonth.of(2026, 10)).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-10", "after"))
-        }
-
-        @Test
-        fun `given a YearMonth after the reference should accept it`() {
-            val reference = YearMonth.of(2026, 10)
-
-            val node = ValidationNode("endsAt", YearMonth.of(2026, 11)).apply { after(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a YearMonth should skip the check`() {
-            val reference: YearMonth? = null
-
-            val node = ValidationNode("endsAt", YearMonth.of(2026, 10)).apply { after(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a YearMonth should build it from the value and the reference`() {
-            val reference = YearMonth.of(2026, 10)
-
-            val node = ValidationNode("endsAt", YearMonth.of(2026, 10)).apply {
-                after(reference) { other -> "$this is not after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "2026-10 is not after 2026-10", "after"))
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 2026-10", code = "after")
+            )
         }
 
         @Test
         fun `given a Year equal to the reference should report it`() {
             val reference = Year.of(2024)
+            val node = ValidationNode(path = "endsAt", value = Year.of(2024)).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", Year.of(2024)).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2024", "after"))
-        }
-
-        @Test
-        fun `given a Year after the reference should accept it`() {
-            val reference = Year.of(2024)
-
-            val node = ValidationNode("endsAt", Year.of(2025)).apply { after(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a Year should skip the check`() {
-            val reference: Year? = null
-
-            val node = ValidationNode("endsAt", Year.of(2024)).apply { after(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a Year should build it from the value and the reference`() {
-            val reference = Year.of(2024)
-
-            val node = ValidationNode("endsAt", Year.of(2024)).apply {
-                after(reference) { other -> "$this is not after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "2024 is not after 2024", "after"))
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 2024", code = "after")
+            )
         }
 
         @Test
         fun `given a Date equal to the reference should report it`() {
             val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("endsAt", Date.from(Instant.parse("2026-01-10T10:00:00Z"))).apply {
+            val node = ValidationNode(path = "endsAt", value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))).apply {
                 after(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after $reference", "after"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a Date after the reference should accept it`() {
-            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("endsAt", Date.from(Instant.parse("2026-01-10T11:00:00Z"))).apply {
-                after(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a Date should skip the check`() {
-            val reference: Date? = null
-
-            val node = ValidationNode("endsAt", Date.from(Instant.parse("2026-01-10T10:00:00Z"))).apply {
-                after(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a Date should build it from the value and the reference`() {
-            val value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("endsAt", value).apply {
-                after(reference) { other -> "$this is not after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("endsAt", "$value is not after $reference", "after"))
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after $reference", code = "after")
+            )
         }
 
         @Test
         fun `given a ZonedDateTime at the same instant in another zone should report it`() {
             val reference = ZonedDateTime.of(2026, 1, 10, 7, 0, 0, 0, ZoneId.of("America/Sao_Paulo"))
+            val node = ValidationNode(
+                path = "endsAt",
+                value = reference.withZoneSameInstant(UTC)
+            ).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", reference.withZoneSameInstant(UTC)).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(
-                Violation("endsAt", "must be after 2026-01-10T07:00-03:00[America/Sao_Paulo]", "after")
+            violations shouldBe listOf(
+                Violation(
+                    path = "endsAt",
+                    message = "must be after 2026-01-10T07:00-03:00[America/Sao_Paulo]",
+                    code = "after"
+                )
             )
         }
 
         @Test
         fun `given an OffsetDateTime at the same instant in another offset should report it`() {
             val reference = OffsetDateTime.of(2026, 1, 10, 7, 0, 0, 0, ZoneOffset.ofHours(-3))
+            val node = ValidationNode(
+                path = "endsAt",
+                value = reference.withOffsetSameInstant(UTC)
+            ).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", reference.withOffsetSameInstant(UTC)).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 2026-01-10T07:00-03:00", "after"))
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 2026-01-10T07:00-03:00", code = "after")
+            )
         }
 
         @Test
         fun `given an OffsetTime at the same instant in another offset should report it`() {
             val reference = OffsetTime.of(7, 0, 0, 0, ZoneOffset.ofHours(-3))
+            val node = ValidationNode(
+                path = "endsAt",
+                value = reference.withOffsetSameInstant(UTC)
+            ).apply { after(reference) }
 
-            val node = ValidationNode("endsAt", reference.withOffsetSameInstant(UTC)).apply { after(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("endsAt", "must be after 07:00-03:00", "after"))
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "must be after 07:00-03:00", code = "after")
+            )
+        }
+
+        @Test
+        fun `given no reference for a LocalDate should skip the check`() {
+            val reference: LocalDate? = null
+            val node = ValidationNode(path = "endsAt", value = LocalDate.of(2026, 1, 10)).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a LocalDateTime should skip the check`() {
+            val reference: LocalDateTime? = null
+            val node = ValidationNode(
+                path = "endsAt",
+                value = LocalDateTime.of(2026, 1, 10, 10, 0)
+            ).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a LocalTime should skip the check`() {
+            val reference: LocalTime? = null
+            val node = ValidationNode(path = "endsAt", value = LocalTime.of(10, 0)).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an OffsetTime should skip the check`() {
+            val reference: OffsetTime? = null
+            val node = ValidationNode(
+                path = "endsAt",
+                value = OffsetTime.of(10, 0, 0, 0, UTC)
+            ).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a ZonedDateTime should skip the check`() {
+            val reference: ZonedDateTime? = null
+            val node = ValidationNode(path = "endsAt", value = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+                after(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an OffsetDateTime should skip the check`() {
+            val reference: OffsetDateTime? = null
+            val node = ValidationNode(path = "endsAt", value = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+                after(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an Instant should skip the check`() {
+            val reference: Instant? = null
+            val node = ValidationNode(
+                path = "endsAt",
+                value = Instant.parse("2026-01-10T10:00:00Z")
+            ).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a YearMonth should skip the check`() {
+            val reference: YearMonth? = null
+            val node = ValidationNode(path = "endsAt", value = YearMonth.of(2026, 10)).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a Year should skip the check`() {
+            val reference: Year? = null
+            val node = ValidationNode(path = "endsAt", value = Year.of(2024)).apply { after(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a Date should skip the check`() {
+            val reference: Date? = null
+            val node = ValidationNode(path = "endsAt", value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))).apply {
+                after(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function for a LocalDate should build it from the value and the reference`() {
+            val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(path = "endsAt", value = LocalDate.of(2026, 1, 10)).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "2026-01-10 is not after 2026-01-10", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalDateTime should build it from the value and the reference`() {
+            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(path = "endsAt", value = LocalDateTime.of(2026, 1, 10, 10, 0)).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "2026-01-10T10:00 is not after 2026-01-10T10:00", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalTime should build it from the value and the reference`() {
+            val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "endsAt", value = LocalTime.of(10, 0)).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "10:00 is not after 10:00", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetTime should build it from the value and the reference`() {
+            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "endsAt", value = OffsetTime.of(10, 0, 0, 0, UTC)).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "10:00Z is not after 10:00Z", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a message function for a ZonedDateTime should build it from the value and the reference`() {
+            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "endsAt", value = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "2026-01-10T10:00Z is not after 2026-01-10T10:00Z", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetDateTime should build it from the value and the reference`() {
+            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "endsAt", value = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "2026-01-10T10:00Z is not after 2026-01-10T10:00Z", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a message function for an Instant should build it from the value and the reference`() {
+            val reference = Instant.parse("2026-01-10T10:00:00Z")
+            val node = ValidationNode(path = "endsAt", value = Instant.parse("2026-01-10T10:00:00Z")).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "endsAt",
+                    message = "2026-01-10T10:00:00Z is not after 2026-01-10T10:00:00Z",
+                    code = "after"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a YearMonth should build it from the value and the reference`() {
+            val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(path = "endsAt", value = YearMonth.of(2026, 10)).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "2026-10 is not after 2026-10", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a message function for a Year should build it from the value and the reference`() {
+            val reference = Year.of(2024)
+            val node = ValidationNode(path = "endsAt", value = Year.of(2024)).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "2024 is not after 2024", code = "after")
+            )
+        }
+
+        @Test
+        fun `given a message function for a Date should build it from the value and the reference`() {
+            val value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            val node = ValidationNode(path = "endsAt", value = value).apply {
+                after(reference) { other -> "$this is not after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "endsAt", message = "$value is not after $reference", code = "after")
+            )
         }
     }
 
@@ -1034,433 +1475,604 @@ class TemporalConstraintsTest {
     @DisplayName("When before is called")
     inner class Before {
         @Test
-        fun `given a LocalDate equal to the reference should report it`() {
-            val reference = LocalDate.of(2026, 1, 10)
-
-            val node = ValidationNode("startsAt", LocalDate.of(2026, 1, 10)).apply { before(reference) }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10", "before"))
-        }
-
-        @Test
         fun `given a LocalDate before the reference should accept it`() {
             val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(path = "startsAt", value = LocalDate.of(2026, 1, 9)).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", LocalDate.of(2026, 1, 9)).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalDate should skip the check`() {
-            val reference: LocalDate? = null
-
-            val node = ValidationNode("startsAt", LocalDate.of(2026, 1, 10)).apply { before(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalDate should build it from the value and the reference`() {
-            val reference = LocalDate.of(2026, 1, 10)
-
-            val node = ValidationNode("startsAt", LocalDate.of(2026, 1, 10)).apply {
-                before(reference) { other -> "$this is not before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10 is not before 2026-01-10", "before"))
-        }
-
-        @Test
-        fun `given a LocalDateTime equal to the reference should report it`() {
-            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("startsAt", LocalDateTime.of(2026, 1, 10, 10, 0)).apply { before(reference) }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00", "before"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalDateTime before the reference should accept it`() {
             val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(
+                path = "startsAt",
+                value = LocalDateTime.of(2026, 1, 10, 9, 0)
+            ).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", LocalDateTime.of(2026, 1, 10, 9, 0)).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalDateTime should skip the check`() {
-            val reference: LocalDateTime? = null
-
-            val node = ValidationNode("startsAt", LocalDateTime.of(2026, 1, 10, 10, 0)).apply { before(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalDateTime should build it from the value and the reference`() {
-            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("startsAt", LocalDateTime.of(2026, 1, 10, 10, 0)).apply {
-                before(reference) { other -> "$this is not before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10T10:00 is not before 2026-01-10T10:00", "before"))
-        }
-
-        @Test
-        fun `given a LocalTime equal to the reference should report it`() {
-            val reference = LocalTime.of(10, 0)
-
-            val node = ValidationNode("startsAt", LocalTime.of(10, 0)).apply { before(reference) }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 10:00", "before"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalTime before the reference should accept it`() {
             val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "startsAt", value = LocalTime.of(9, 0)).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", LocalTime.of(9, 0)).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalTime should skip the check`() {
-            val reference: LocalTime? = null
-
-            val node = ValidationNode("startsAt", LocalTime.of(10, 0)).apply { before(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalTime should build it from the value and the reference`() {
-            val reference = LocalTime.of(10, 0)
-
-            val node = ValidationNode("startsAt", LocalTime.of(10, 0)).apply {
-                before(reference) { other -> "$this is not before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "10:00 is not before 10:00", "before"))
-        }
-
-        @Test
-        fun `given an OffsetTime equal to the reference should report it`() {
-            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("startsAt", OffsetTime.of(10, 0, 0, 0, UTC)).apply { before(reference) }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 10:00Z", "before"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetTime before the reference should accept it`() {
             val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "startsAt",
+                value = OffsetTime.of(9, 0, 0, 0, UTC)
+            ).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", OffsetTime.of(9, 0, 0, 0, UTC)).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for an OffsetTime should skip the check`() {
-            val reference: OffsetTime? = null
-
-            val node = ValidationNode("startsAt", OffsetTime.of(10, 0, 0, 0, UTC)).apply { before(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetTime should build it from the value and the reference`() {
-            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("startsAt", OffsetTime.of(10, 0, 0, 0, UTC)).apply {
-                before(reference) { other -> "$this is not before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "10:00Z is not before 10:00Z", "before"))
-        }
-
-        @Test
-        fun `given a ZonedDateTime equal to the reference should report it`() {
-            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("startsAt", ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                before(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00Z", "before"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a ZonedDateTime before the reference should accept it`() {
             val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("startsAt", ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
+            val node = ValidationNode(path = "startsAt", value = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
                 before(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for a ZonedDateTime should skip the check`() {
-            val reference: ZonedDateTime? = null
-
-            val node = ValidationNode("startsAt", ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                before(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a ZonedDateTime should build it from the value and the reference`() {
-            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("startsAt", ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                before(reference) { other -> "$this is not before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10T10:00Z is not before 2026-01-10T10:00Z", "before"))
-        }
-
-        @Test
-        fun `given an OffsetDateTime equal to the reference should report it`() {
-            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("startsAt", OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                before(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00Z", "before"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetDateTime before the reference should accept it`() {
             val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("startsAt", OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
+            val node = ValidationNode(
+                path = "startsAt",
+                value = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            ).apply {
                 before(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for an OffsetDateTime should skip the check`() {
-            val reference: OffsetDateTime? = null
-
-            val node = ValidationNode("startsAt", OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                before(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetDateTime should build it from the value and the reference`() {
-            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("startsAt", OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                before(reference) { other -> "$this is not before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-01-10T10:00Z is not before 2026-01-10T10:00Z", "before"))
-        }
-
-        @Test
-        fun `given an Instant equal to the reference should report it`() {
-            val reference = Instant.parse("2026-01-10T10:00:00Z")
-
-            val node = ValidationNode("startsAt", Instant.parse("2026-01-10T10:00:00Z")).apply { before(reference) }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T10:00:00Z", "before"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an Instant before the reference should accept it`() {
             val reference = Instant.parse("2026-01-10T10:00:00Z")
+            val node = ValidationNode(
+                path = "startsAt",
+                value = Instant.parse("2026-01-10T09:00:00Z")
+            ).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", Instant.parse("2026-01-10T09:00:00Z")).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given no reference for an Instant should skip the check`() {
-            val reference: Instant? = null
+        fun `given a YearMonth before the reference should accept it`() {
+            val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(path = "startsAt", value = YearMonth.of(2026, 9)).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", Instant.parse("2026-01-10T10:00:00Z")).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a message function for an Instant should build it from the value and the reference`() {
-            val reference = Instant.parse("2026-01-10T10:00:00Z")
+        fun `given a Year before the reference should accept it`() {
+            val reference = Year.of(2024)
+            val node = ValidationNode(path = "startsAt", value = Year.of(2023)).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", Instant.parse("2026-01-10T10:00:00Z")).apply {
-                before(reference) { other -> "$this is not before $other" }
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Date before the reference should accept it`() {
+            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            val node = ValidationNode(
+                path = "startsAt",
+                value = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
+            ).apply {
+                before(reference)
             }
 
-            node.validate() shouldBe listOf(
-                Violation("startsAt", "2026-01-10T10:00:00Z is not before 2026-01-10T10:00:00Z", "before")
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalDate equal to the reference should report it`() {
+            val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(path = "startsAt", value = LocalDate.of(2026, 1, 10)).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 2026-01-10", code = "before")
+            )
+        }
+
+        @Test
+        fun `given a LocalDateTime equal to the reference should report it`() {
+            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(
+                path = "startsAt",
+                value = LocalDateTime.of(2026, 1, 10, 10, 0)
+            ).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 2026-01-10T10:00", code = "before")
+            )
+        }
+
+        @Test
+        fun `given a LocalTime equal to the reference should report it`() {
+            val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "startsAt", value = LocalTime.of(10, 0)).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 10:00", code = "before")
+            )
+        }
+
+        @Test
+        fun `given an OffsetTime equal to the reference should report it`() {
+            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "startsAt",
+                value = OffsetTime.of(10, 0, 0, 0, UTC)
+            ).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 10:00Z", code = "before")
+            )
+        }
+
+        @Test
+        fun `given a ZonedDateTime equal to the reference should report it`() {
+            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "startsAt",
+                value = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
+                before(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 2026-01-10T10:00Z", code = "before")
+            )
+        }
+
+        @Test
+        fun `given an OffsetDateTime equal to the reference should report it`() {
+            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "startsAt",
+                value = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
+                before(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 2026-01-10T10:00Z", code = "before")
+            )
+        }
+
+        @Test
+        fun `given an Instant equal to the reference should report it`() {
+            val reference = Instant.parse("2026-01-10T10:00:00Z")
+            val node = ValidationNode(
+                path = "startsAt",
+                value = Instant.parse("2026-01-10T10:00:00Z")
+            ).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 2026-01-10T10:00:00Z", code = "before")
             )
         }
 
         @Test
         fun `given a YearMonth equal to the reference should report it`() {
             val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(path = "startsAt", value = YearMonth.of(2026, 10)).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", YearMonth.of(2026, 10)).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-10", "before"))
-        }
-
-        @Test
-        fun `given a YearMonth before the reference should accept it`() {
-            val reference = YearMonth.of(2026, 10)
-
-            val node = ValidationNode("startsAt", YearMonth.of(2026, 9)).apply { before(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a YearMonth should skip the check`() {
-            val reference: YearMonth? = null
-
-            val node = ValidationNode("startsAt", YearMonth.of(2026, 10)).apply { before(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a YearMonth should build it from the value and the reference`() {
-            val reference = YearMonth.of(2026, 10)
-
-            val node = ValidationNode("startsAt", YearMonth.of(2026, 10)).apply {
-                before(reference) { other -> "$this is not before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "2026-10 is not before 2026-10", "before"))
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 2026-10", code = "before")
+            )
         }
 
         @Test
         fun `given a Year equal to the reference should report it`() {
             val reference = Year.of(2024)
+            val node = ValidationNode(path = "startsAt", value = Year.of(2024)).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", Year.of(2024)).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2024", "before"))
-        }
-
-        @Test
-        fun `given a Year before the reference should accept it`() {
-            val reference = Year.of(2024)
-
-            val node = ValidationNode("startsAt", Year.of(2023)).apply { before(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a Year should skip the check`() {
-            val reference: Year? = null
-
-            val node = ValidationNode("startsAt", Year.of(2024)).apply { before(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a Year should build it from the value and the reference`() {
-            val reference = Year.of(2024)
-
-            val node = ValidationNode("startsAt", Year.of(2024)).apply {
-                before(reference) { other -> "$this is not before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "2024 is not before 2024", "before"))
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 2024", code = "before")
+            )
         }
 
         @Test
         fun `given a Date equal to the reference should report it`() {
             val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("startsAt", Date.from(Instant.parse("2026-01-10T10:00:00Z"))).apply {
+            val node = ValidationNode(
+                path = "startsAt",
+                value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            ).apply {
                 before(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before $reference", "before"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a Date before the reference should accept it`() {
-            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("startsAt", Date.from(Instant.parse("2026-01-10T09:00:00Z"))).apply {
-                before(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a Date should skip the check`() {
-            val reference: Date? = null
-
-            val node = ValidationNode("startsAt", Date.from(Instant.parse("2026-01-10T10:00:00Z"))).apply {
-                before(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a Date should build it from the value and the reference`() {
-            val value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("startsAt", value).apply {
-                before(reference) { other -> "$this is not before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("startsAt", "$value is not before $reference", "before"))
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before $reference", code = "before")
+            )
         }
 
         @Test
         fun `given a ZonedDateTime at the same instant in another zone should report it`() {
             val reference = ZonedDateTime.of(2026, 1, 10, 7, 0, 0, 0, ZoneId.of("America/Sao_Paulo"))
+            val node = ValidationNode(
+                path = "startsAt",
+                value = reference.withZoneSameInstant(UTC)
+            ).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", reference.withZoneSameInstant(UTC)).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(
-                Violation("startsAt", "must be before 2026-01-10T07:00-03:00[America/Sao_Paulo]", "before")
+            violations shouldBe listOf(
+                Violation(
+                    path = "startsAt",
+                    message = "must be before 2026-01-10T07:00-03:00[America/Sao_Paulo]",
+                    code = "before"
+                )
             )
         }
 
         @Test
         fun `given an OffsetDateTime at the same instant in another offset should report it`() {
             val reference = OffsetDateTime.of(2026, 1, 10, 7, 0, 0, 0, ZoneOffset.ofHours(-3))
+            val node = ValidationNode(
+                path = "startsAt",
+                value = reference.withOffsetSameInstant(UTC)
+            ).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", reference.withOffsetSameInstant(UTC)).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 2026-01-10T07:00-03:00", "before"))
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 2026-01-10T07:00-03:00", code = "before")
+            )
         }
 
         @Test
         fun `given an OffsetTime at the same instant in another offset should report it`() {
             val reference = OffsetTime.of(7, 0, 0, 0, ZoneOffset.ofHours(-3))
+            val node = ValidationNode(
+                path = "startsAt",
+                value = reference.withOffsetSameInstant(UTC)
+            ).apply { before(reference) }
 
-            val node = ValidationNode("startsAt", reference.withOffsetSameInstant(UTC)).apply { before(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("startsAt", "must be before 07:00-03:00", "before"))
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be before 07:00-03:00", code = "before")
+            )
+        }
+
+        @Test
+        fun `given no reference for a LocalDate should skip the check`() {
+            val reference: LocalDate? = null
+            val node = ValidationNode(path = "startsAt", value = LocalDate.of(2026, 1, 10)).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a LocalDateTime should skip the check`() {
+            val reference: LocalDateTime? = null
+            val node = ValidationNode(
+                path = "startsAt",
+                value = LocalDateTime.of(2026, 1, 10, 10, 0)
+            ).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a LocalTime should skip the check`() {
+            val reference: LocalTime? = null
+            val node = ValidationNode(path = "startsAt", value = LocalTime.of(10, 0)).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an OffsetTime should skip the check`() {
+            val reference: OffsetTime? = null
+            val node = ValidationNode(
+                path = "startsAt",
+                value = OffsetTime.of(10, 0, 0, 0, UTC)
+            ).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a ZonedDateTime should skip the check`() {
+            val reference: ZonedDateTime? = null
+            val node = ValidationNode(
+                path = "startsAt",
+                value = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
+                before(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an OffsetDateTime should skip the check`() {
+            val reference: OffsetDateTime? = null
+            val node = ValidationNode(
+                path = "startsAt",
+                value = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
+                before(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an Instant should skip the check`() {
+            val reference: Instant? = null
+            val node = ValidationNode(
+                path = "startsAt",
+                value = Instant.parse("2026-01-10T10:00:00Z")
+            ).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a YearMonth should skip the check`() {
+            val reference: YearMonth? = null
+            val node = ValidationNode(path = "startsAt", value = YearMonth.of(2026, 10)).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a Year should skip the check`() {
+            val reference: Year? = null
+            val node = ValidationNode(path = "startsAt", value = Year.of(2024)).apply { before(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a Date should skip the check`() {
+            val reference: Date? = null
+            val node = ValidationNode(
+                path = "startsAt",
+                value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            ).apply {
+                before(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function for a LocalDate should build it from the value and the reference`() {
+            val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(path = "startsAt", value = LocalDate.of(2026, 1, 10)).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "2026-01-10 is not before 2026-01-10", code = "before")
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalDateTime should build it from the value and the reference`() {
+            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(path = "startsAt", value = LocalDateTime.of(2026, 1, 10, 10, 0)).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "startsAt",
+                    message = "2026-01-10T10:00 is not before 2026-01-10T10:00",
+                    code = "before"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalTime should build it from the value and the reference`() {
+            val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "startsAt", value = LocalTime.of(10, 0)).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "10:00 is not before 10:00", code = "before")
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetTime should build it from the value and the reference`() {
+            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "startsAt", value = OffsetTime.of(10, 0, 0, 0, UTC)).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "10:00Z is not before 10:00Z", code = "before")
+            )
+        }
+
+        @Test
+        fun `given a message function for a ZonedDateTime should build it from the value and the reference`() {
+            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "startsAt",
+                value = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "startsAt",
+                    message = "2026-01-10T10:00Z is not before 2026-01-10T10:00Z",
+                    code = "before"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetDateTime should build it from the value and the reference`() {
+            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "startsAt",
+                value = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "startsAt",
+                    message = "2026-01-10T10:00Z is not before 2026-01-10T10:00Z",
+                    code = "before"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for an Instant should build it from the value and the reference`() {
+            val reference = Instant.parse("2026-01-10T10:00:00Z")
+            val node = ValidationNode(path = "startsAt", value = Instant.parse("2026-01-10T10:00:00Z")).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "startsAt",
+                    message = "2026-01-10T10:00:00Z is not before 2026-01-10T10:00:00Z",
+                    code = "before"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a YearMonth should build it from the value and the reference`() {
+            val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(path = "startsAt", value = YearMonth.of(2026, 10)).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "2026-10 is not before 2026-10", code = "before")
+            )
+        }
+
+        @Test
+        fun `given a message function for a Year should build it from the value and the reference`() {
+            val reference = Year.of(2024)
+            val node = ValidationNode(path = "startsAt", value = Year.of(2024)).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "2024 is not before 2024", code = "before")
+            )
+        }
+
+        @Test
+        fun `given a message function for a Date should build it from the value and the reference`() {
+            val value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            val node = ValidationNode(path = "startsAt", value = value).apply {
+                before(reference) { other -> "$this is not before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "$value is not before $reference", code = "before")
+            )
         }
     }
 
@@ -1468,412 +2080,579 @@ class TemporalConstraintsTest {
     @DisplayName("When afterOrEqual is called")
     inner class AfterOrEqual {
         @Test
-        fun `given a LocalDate before the reference should report it`() {
-            val reference = LocalDate.of(2026, 1, 10)
-
-            val node = ValidationNode("checkOut", LocalDate.of(2026, 1, 9)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10", "afterOrEqual"))
-        }
-
-        @Test
         fun `given a LocalDate equal to the reference should accept it`() {
             val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(
+                path = "checkOut",
+                value = LocalDate.of(2026, 1, 10)
+            ).apply { afterOrEqual(reference) }
 
-            val node = ValidationNode("checkOut", LocalDate.of(2026, 1, 10)).apply { afterOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalDate should skip the check`() {
-            val reference: LocalDate? = null
-
-            val node = ValidationNode("checkOut", LocalDate.of(2026, 1, 9)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalDate should build it from the value and the reference`() {
-            val reference = LocalDate.of(2026, 1, 10)
-
-            val node = ValidationNode("checkOut", LocalDate.of(2026, 1, 9)).apply {
-                afterOrEqual(reference) { other -> "$this is before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-09 is before 2026-01-10", "afterOrEqual"))
-        }
-
-        @Test
-        fun `given a LocalDateTime before the reference should report it`() {
-            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("checkOut", LocalDateTime.of(2026, 1, 10, 9, 0)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00", "afterOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalDateTime equal to the reference should accept it`() {
             val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("checkOut", LocalDateTime.of(2026, 1, 10, 10, 0)).apply {
+            val node = ValidationNode(path = "checkOut", value = LocalDateTime.of(2026, 1, 10, 10, 0)).apply {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for a LocalDateTime should skip the check`() {
-            val reference: LocalDateTime? = null
-
-            val node = ValidationNode("checkOut", LocalDateTime.of(2026, 1, 10, 9, 0)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalDateTime should build it from the value and the reference`() {
-            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("checkOut", LocalDateTime.of(2026, 1, 10, 9, 0)).apply {
-                afterOrEqual(reference) { other -> "$this is before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-10T09:00 is before 2026-01-10T10:00", "afterOrEqual"))
-        }
-
-        @Test
-        fun `given a LocalTime before the reference should report it`() {
-            val reference = LocalTime.of(10, 0)
-
-            val node = ValidationNode("checkOut", LocalTime.of(9, 0)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 10:00", "afterOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalTime equal to the reference should accept it`() {
             val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "checkOut", value = LocalTime.of(10, 0)).apply { afterOrEqual(reference) }
 
-            val node = ValidationNode("checkOut", LocalTime.of(10, 0)).apply { afterOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalTime should skip the check`() {
-            val reference: LocalTime? = null
-
-            val node = ValidationNode("checkOut", LocalTime.of(9, 0)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalTime should build it from the value and the reference`() {
-            val reference = LocalTime.of(10, 0)
-
-            val node = ValidationNode("checkOut", LocalTime.of(9, 0)).apply {
-                afterOrEqual(reference) { other -> "$this is before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "09:00 is before 10:00", "afterOrEqual"))
-        }
-
-        @Test
-        fun `given an OffsetTime before the reference should report it`() {
-            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkOut", OffsetTime.of(9, 0, 0, 0, UTC)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 10:00Z", "afterOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetTime equal to the reference should accept it`() {
             val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "checkOut",
+                value = OffsetTime.of(10, 0, 0, 0, UTC)
+            ).apply { afterOrEqual(reference) }
 
-            val node = ValidationNode("checkOut", OffsetTime.of(10, 0, 0, 0, UTC)).apply { afterOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for an OffsetTime should skip the check`() {
-            val reference: OffsetTime? = null
-
-            val node = ValidationNode("checkOut", OffsetTime.of(9, 0, 0, 0, UTC)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetTime should build it from the value and the reference`() {
-            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkOut", OffsetTime.of(9, 0, 0, 0, UTC)).apply {
-                afterOrEqual(reference) { other -> "$this is before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "09:00Z is before 10:00Z", "afterOrEqual"))
-        }
-
-        @Test
-        fun `given a ZonedDateTime before the reference should report it`() {
-            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkOut", ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
-                afterOrEqual(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00Z", "afterOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a ZonedDateTime equal to the reference should accept it`() {
             val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkOut", ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+            val node = ValidationNode(
+                path = "checkOut",
+                value = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for a ZonedDateTime should skip the check`() {
-            val reference: ZonedDateTime? = null
-
-            val node = ValidationNode("checkOut", ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
-                afterOrEqual(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a ZonedDateTime should build it from the value and the reference`() {
-            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkOut", ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
-                afterOrEqual(reference) { other -> "$this is before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-10T09:00Z is before 2026-01-10T10:00Z", "afterOrEqual"))
-        }
-
-        @Test
-        fun `given an OffsetDateTime before the reference should report it`() {
-            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkOut", OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
-                afterOrEqual(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00Z", "afterOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetDateTime equal to the reference should accept it`() {
             val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkOut", OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+            val node = ValidationNode(
+                path = "checkOut",
+                value = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for an OffsetDateTime should skip the check`() {
-            val reference: OffsetDateTime? = null
-
-            val node = ValidationNode("checkOut", OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
-                afterOrEqual(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetDateTime should build it from the value and the reference`() {
-            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkOut", OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
-                afterOrEqual(reference) { other -> "$this is before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-01-10T09:00Z is before 2026-01-10T10:00Z", "afterOrEqual"))
-        }
-
-        @Test
-        fun `given an Instant before the reference should report it`() {
-            val reference = Instant.parse("2026-01-10T10:00:00Z")
-
-            val node = ValidationNode("checkOut", Instant.parse("2026-01-10T09:00:00Z")).apply {
-                afterOrEqual(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-01-10T10:00:00Z", "afterOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an Instant equal to the reference should accept it`() {
             val reference = Instant.parse("2026-01-10T10:00:00Z")
-
-            val node = ValidationNode("checkOut", Instant.parse("2026-01-10T10:00:00Z")).apply {
+            val node = ValidationNode(path = "checkOut", value = Instant.parse("2026-01-10T10:00:00Z")).apply {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given no reference for an Instant should skip the check`() {
-            val reference: Instant? = null
+        fun `given a YearMonth equal to the reference should accept it`() {
+            val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(
+                path = "checkOut",
+                value = YearMonth.of(2026, 10)
+            ).apply { afterOrEqual(reference) }
 
-            val node = ValidationNode("checkOut", Instant.parse("2026-01-10T09:00:00Z")).apply {
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Year equal to the reference should accept it`() {
+            val reference = Year.of(2024)
+            val node = ValidationNode(path = "checkOut", value = Year.of(2024)).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Date equal to the reference should accept it`() {
+            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            val node = ValidationNode(
+                path = "checkOut",
+                value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            ).apply {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a message function for an Instant should build it from the value and the reference`() {
+        fun `given a LocalDate before the reference should report it`() {
+            val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(
+                path = "checkOut",
+                value = LocalDate.of(2026, 1, 9)
+            ).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "must be after or equal to 2026-01-10", code = "afterOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a LocalDateTime before the reference should report it`() {
+            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(
+                path = "checkOut",
+                value = LocalDateTime.of(2026, 1, 10, 9, 0)
+            ).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkOut",
+                    message = "must be after or equal to 2026-01-10T10:00",
+                    code = "afterOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a LocalTime before the reference should report it`() {
+            val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "checkOut", value = LocalTime.of(9, 0)).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "must be after or equal to 10:00", code = "afterOrEqual")
+            )
+        }
+
+        @Test
+        fun `given an OffsetTime before the reference should report it`() {
+            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "checkOut",
+                value = OffsetTime.of(9, 0, 0, 0, UTC)
+            ).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "must be after or equal to 10:00Z", code = "afterOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a ZonedDateTime before the reference should report it`() {
+            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "checkOut", value = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
+                afterOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkOut",
+                    message = "must be after or equal to 2026-01-10T10:00Z",
+                    code = "afterOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given an OffsetDateTime before the reference should report it`() {
+            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "checkOut",
+                value = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            ).apply {
+                afterOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkOut",
+                    message = "must be after or equal to 2026-01-10T10:00Z",
+                    code = "afterOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given an Instant before the reference should report it`() {
             val reference = Instant.parse("2026-01-10T10:00:00Z")
-
-            val node = ValidationNode("checkOut", Instant.parse("2026-01-10T09:00:00Z")).apply {
-                afterOrEqual(reference) { other -> "$this is before $other" }
+            val node = ValidationNode(path = "checkOut", value = Instant.parse("2026-01-10T09:00:00Z")).apply {
+                afterOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(
-                Violation("checkOut", "2026-01-10T09:00:00Z is before 2026-01-10T10:00:00Z", "afterOrEqual")
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkOut",
+                    message = "must be after or equal to 2026-01-10T10:00:00Z",
+                    code = "afterOrEqual"
+                )
             )
         }
 
         @Test
         fun `given a YearMonth before the reference should report it`() {
             val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(
+                path = "checkOut",
+                value = YearMonth.of(2026, 9)
+            ).apply { afterOrEqual(reference) }
 
-            val node = ValidationNode("checkOut", YearMonth.of(2026, 9)).apply { afterOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2026-10", "afterOrEqual"))
-        }
-
-        @Test
-        fun `given a YearMonth equal to the reference should accept it`() {
-            val reference = YearMonth.of(2026, 10)
-
-            val node = ValidationNode("checkOut", YearMonth.of(2026, 10)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a YearMonth should skip the check`() {
-            val reference: YearMonth? = null
-
-            val node = ValidationNode("checkOut", YearMonth.of(2026, 9)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a YearMonth should build it from the value and the reference`() {
-            val reference = YearMonth.of(2026, 10)
-
-            val node = ValidationNode("checkOut", YearMonth.of(2026, 9)).apply {
-                afterOrEqual(reference) { other -> "$this is before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "2026-09 is before 2026-10", "afterOrEqual"))
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "must be after or equal to 2026-10", code = "afterOrEqual")
+            )
         }
 
         @Test
         fun `given a Year before the reference should report it`() {
             val reference = Year.of(2024)
+            val node = ValidationNode(path = "checkOut", value = Year.of(2023)).apply { afterOrEqual(reference) }
 
-            val node = ValidationNode("checkOut", Year.of(2023)).apply { afterOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to 2024", "afterOrEqual"))
-        }
-
-        @Test
-        fun `given a Year equal to the reference should accept it`() {
-            val reference = Year.of(2024)
-
-            val node = ValidationNode("checkOut", Year.of(2024)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a Year should skip the check`() {
-            val reference: Year? = null
-
-            val node = ValidationNode("checkOut", Year.of(2023)).apply { afterOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a Year should build it from the value and the reference`() {
-            val reference = Year.of(2024)
-
-            val node = ValidationNode("checkOut", Year.of(2023)).apply {
-                afterOrEqual(reference) { other -> "$this is before $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkOut", "2023 is before 2024", "afterOrEqual"))
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "must be after or equal to 2024", code = "afterOrEqual")
+            )
         }
 
         @Test
         fun `given a Date before the reference should report it`() {
             val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("checkOut", Date.from(Instant.parse("2026-01-10T09:00:00Z"))).apply {
+            val node = ValidationNode(
+                path = "checkOut",
+                value = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
+            ).apply {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "must be after or equal to $reference", "afterOrEqual"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "must be after or equal to $reference", code = "afterOrEqual")
+            )
         }
 
         @Test
-        fun `given a Date equal to the reference should accept it`() {
-            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+        fun `given no reference for a LocalDate should skip the check`() {
+            val reference: LocalDate? = null
+            val node = ValidationNode(
+                path = "checkOut",
+                value = LocalDate.of(2026, 1, 9)
+            ).apply { afterOrEqual(reference) }
 
-            val node = ValidationNode("checkOut", Date.from(Instant.parse("2026-01-10T10:00:00Z"))).apply {
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a LocalDateTime should skip the check`() {
+            val reference: LocalDateTime? = null
+            val node = ValidationNode(
+                path = "checkOut",
+                value = LocalDateTime.of(2026, 1, 10, 9, 0)
+            ).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a LocalTime should skip the check`() {
+            val reference: LocalTime? = null
+            val node = ValidationNode(path = "checkOut", value = LocalTime.of(9, 0)).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an OffsetTime should skip the check`() {
+            val reference: OffsetTime? = null
+            val node = ValidationNode(
+                path = "checkOut",
+                value = OffsetTime.of(9, 0, 0, 0, UTC)
+            ).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a ZonedDateTime should skip the check`() {
+            val reference: ZonedDateTime? = null
+            val node = ValidationNode(path = "checkOut", value = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an OffsetDateTime should skip the check`() {
+            val reference: OffsetDateTime? = null
+            val node = ValidationNode(
+                path = "checkOut",
+                value = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            ).apply {
+                afterOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an Instant should skip the check`() {
+            val reference: Instant? = null
+            val node = ValidationNode(path = "checkOut", value = Instant.parse("2026-01-10T09:00:00Z")).apply {
+                afterOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a YearMonth should skip the check`() {
+            val reference: YearMonth? = null
+            val node = ValidationNode(
+                path = "checkOut",
+                value = YearMonth.of(2026, 9)
+            ).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a Year should skip the check`() {
+            val reference: Year? = null
+            val node = ValidationNode(path = "checkOut", value = Year.of(2023)).apply { afterOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given no reference for a Date should skip the check`() {
             val reference: Date? = null
-
-            val node = ValidationNode("checkOut", Date.from(Instant.parse("2026-01-10T09:00:00Z"))).apply {
+            val node = ValidationNode(
+                path = "checkOut",
+                value = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
+            ).apply {
                 afterOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function for a LocalDate should build it from the value and the reference`() {
+            val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(path = "checkOut", value = LocalDate.of(2026, 1, 9)).apply {
+                afterOrEqual(reference) { other -> "$this is before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "2026-01-09 is before 2026-01-10", code = "afterOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalDateTime should build it from the value and the reference`() {
+            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(path = "checkOut", value = LocalDateTime.of(2026, 1, 10, 9, 0)).apply {
+                afterOrEqual(reference) { other -> "$this is before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkOut",
+                    message = "2026-01-10T09:00 is before 2026-01-10T10:00",
+                    code = "afterOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalTime should build it from the value and the reference`() {
+            val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "checkOut", value = LocalTime.of(9, 0)).apply {
+                afterOrEqual(reference) { other -> "$this is before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "09:00 is before 10:00", code = "afterOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetTime should build it from the value and the reference`() {
+            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "checkOut", value = OffsetTime.of(9, 0, 0, 0, UTC)).apply {
+                afterOrEqual(reference) { other -> "$this is before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "09:00Z is before 10:00Z", code = "afterOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a message function for a ZonedDateTime should build it from the value and the reference`() {
+            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "checkOut", value = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
+                afterOrEqual(reference) { other -> "$this is before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkOut",
+                    message = "2026-01-10T09:00Z is before 2026-01-10T10:00Z",
+                    code = "afterOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetDateTime should build it from the value and the reference`() {
+            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "checkOut",
+                value = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            ).apply {
+                afterOrEqual(reference) { other -> "$this is before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkOut",
+                    message = "2026-01-10T09:00Z is before 2026-01-10T10:00Z",
+                    code = "afterOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for an Instant should build it from the value and the reference`() {
+            val reference = Instant.parse("2026-01-10T10:00:00Z")
+            val node = ValidationNode(path = "checkOut", value = Instant.parse("2026-01-10T09:00:00Z")).apply {
+                afterOrEqual(reference) { other -> "$this is before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkOut",
+                    message = "2026-01-10T09:00:00Z is before 2026-01-10T10:00:00Z",
+                    code = "afterOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a YearMonth should build it from the value and the reference`() {
+            val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(path = "checkOut", value = YearMonth.of(2026, 9)).apply {
+                afterOrEqual(reference) { other -> "$this is before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "2026-09 is before 2026-10", code = "afterOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a message function for a Year should build it from the value and the reference`() {
+            val reference = Year.of(2024)
+            val node = ValidationNode(path = "checkOut", value = Year.of(2023)).apply {
+                afterOrEqual(reference) { other -> "$this is before $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "2023 is before 2024", code = "afterOrEqual")
+            )
         }
 
         @Test
         fun `given a message function for a Date should build it from the value and the reference`() {
             val value = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
             val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("checkOut", value).apply {
+            val node = ValidationNode(path = "checkOut", value = value).apply {
                 afterOrEqual(reference) { other -> "$this is before $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkOut", "$value is before $reference", "afterOrEqual"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkOut", message = "$value is before $reference", code = "afterOrEqual")
+            )
         }
     }
 
@@ -1881,414 +2660,574 @@ class TemporalConstraintsTest {
     @DisplayName("When beforeOrEqual is called")
     inner class BeforeOrEqual {
         @Test
-        fun `given a LocalDate after the reference should report it`() {
-            val reference = LocalDate.of(2026, 1, 10)
-
-            val node = ValidationNode("checkIn", LocalDate.of(2026, 1, 11)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10", "beforeOrEqual"))
-        }
-
-        @Test
         fun `given a LocalDate equal to the reference should accept it`() {
             val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(
+                path = "checkIn",
+                value = LocalDate.of(2026, 1, 10)
+            ).apply { beforeOrEqual(reference) }
 
-            val node = ValidationNode("checkIn", LocalDate.of(2026, 1, 10)).apply { beforeOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalDate should skip the check`() {
-            val reference: LocalDate? = null
-
-            val node = ValidationNode("checkIn", LocalDate.of(2026, 1, 11)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalDate should build it from the value and the reference`() {
-            val reference = LocalDate.of(2026, 1, 10)
-
-            val node = ValidationNode("checkIn", LocalDate.of(2026, 1, 11)).apply {
-                beforeOrEqual(reference) { other -> "$this is after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-11 is after 2026-01-10", "beforeOrEqual"))
-        }
-
-        @Test
-        fun `given a LocalDateTime after the reference should report it`() {
-            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("checkIn", LocalDateTime.of(2026, 1, 10, 11, 0)).apply {
-                beforeOrEqual(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00", "beforeOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalDateTime equal to the reference should accept it`() {
             val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("checkIn", LocalDateTime.of(2026, 1, 10, 10, 0)).apply {
+            val node = ValidationNode(path = "checkIn", value = LocalDateTime.of(2026, 1, 10, 10, 0)).apply {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for a LocalDateTime should skip the check`() {
-            val reference: LocalDateTime? = null
-
-            val node = ValidationNode("checkIn", LocalDateTime.of(2026, 1, 10, 11, 0)).apply {
-                beforeOrEqual(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalDateTime should build it from the value and the reference`() {
-            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
-
-            val node = ValidationNode("checkIn", LocalDateTime.of(2026, 1, 10, 11, 0)).apply {
-                beforeOrEqual(reference) { other -> "$this is after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00 is after 2026-01-10T10:00", "beforeOrEqual"))
-        }
-
-        @Test
-        fun `given a LocalTime after the reference should report it`() {
-            val reference = LocalTime.of(10, 0)
-
-            val node = ValidationNode("checkIn", LocalTime.of(11, 0)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 10:00", "beforeOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalTime equal to the reference should accept it`() {
             val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "checkIn", value = LocalTime.of(10, 0)).apply { beforeOrEqual(reference) }
 
-            val node = ValidationNode("checkIn", LocalTime.of(10, 0)).apply { beforeOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a LocalTime should skip the check`() {
-            val reference: LocalTime? = null
-
-            val node = ValidationNode("checkIn", LocalTime.of(11, 0)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalTime should build it from the value and the reference`() {
-            val reference = LocalTime.of(10, 0)
-
-            val node = ValidationNode("checkIn", LocalTime.of(11, 0)).apply {
-                beforeOrEqual(reference) { other -> "$this is after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "11:00 is after 10:00", "beforeOrEqual"))
-        }
-
-        @Test
-        fun `given an OffsetTime after the reference should report it`() {
-            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkIn", OffsetTime.of(11, 0, 0, 0, UTC)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 10:00Z", "beforeOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetTime equal to the reference should accept it`() {
             val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "checkIn",
+                value = OffsetTime.of(10, 0, 0, 0, UTC)
+            ).apply { beforeOrEqual(reference) }
 
-            val node = ValidationNode("checkIn", OffsetTime.of(10, 0, 0, 0, UTC)).apply { beforeOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for an OffsetTime should skip the check`() {
-            val reference: OffsetTime? = null
-
-            val node = ValidationNode("checkIn", OffsetTime.of(11, 0, 0, 0, UTC)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetTime should build it from the value and the reference`() {
-            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkIn", OffsetTime.of(11, 0, 0, 0, UTC)).apply {
-                beforeOrEqual(reference) { other -> "$this is after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "11:00Z is after 10:00Z", "beforeOrEqual"))
-        }
-
-        @Test
-        fun `given a ZonedDateTime after the reference should report it`() {
-            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkIn", ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
-                beforeOrEqual(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00Z", "beforeOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a ZonedDateTime equal to the reference should accept it`() {
             val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkIn", ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+            val node = ValidationNode(path = "checkIn", value = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for a ZonedDateTime should skip the check`() {
-            val reference: ZonedDateTime? = null
-
-            val node = ValidationNode("checkIn", ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
-                beforeOrEqual(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a ZonedDateTime should build it from the value and the reference`() {
-            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkIn", ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
-                beforeOrEqual(reference) { other -> "$this is after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00Z is after 2026-01-10T10:00Z", "beforeOrEqual"))
-        }
-
-        @Test
-        fun `given an OffsetDateTime after the reference should report it`() {
-            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkIn", OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
-                beforeOrEqual(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00Z", "beforeOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an OffsetDateTime equal to the reference should accept it`() {
             val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkIn", OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
+            val node = ValidationNode(
+                path = "checkIn",
+                value = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for an OffsetDateTime should skip the check`() {
-            val reference: OffsetDateTime? = null
-
-            val node = ValidationNode("checkIn", OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
-                beforeOrEqual(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetDateTime should build it from the value and the reference`() {
-            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
-
-            val node = ValidationNode("checkIn", OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
-                beforeOrEqual(reference) { other -> "$this is after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00Z is after 2026-01-10T10:00Z", "beforeOrEqual"))
-        }
-
-        @Test
-        fun `given an Instant after the reference should report it`() {
-            val reference = Instant.parse("2026-01-10T10:00:00Z")
-
-            val node = ValidationNode("checkIn", Instant.parse("2026-01-10T11:00:00Z")).apply {
-                beforeOrEqual(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-01-10T10:00:00Z", "beforeOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given an Instant equal to the reference should accept it`() {
             val reference = Instant.parse("2026-01-10T10:00:00Z")
-
-            val node = ValidationNode("checkIn", Instant.parse("2026-01-10T10:00:00Z")).apply {
+            val node = ValidationNode(path = "checkIn", value = Instant.parse("2026-01-10T10:00:00Z")).apply {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given no reference for an Instant should skip the check`() {
-            val reference: Instant? = null
-
-            val node = ValidationNode("checkIn", Instant.parse("2026-01-10T11:00:00Z")).apply {
-                beforeOrEqual(reference)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an Instant should build it from the value and the reference`() {
-            val reference = Instant.parse("2026-01-10T10:00:00Z")
-
-            val node = ValidationNode("checkIn", Instant.parse("2026-01-10T11:00:00Z")).apply {
-                beforeOrEqual(reference) { other -> "$this is after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-01-10T11:00:00Z is after 2026-01-10T10:00:00Z", "beforeOrEqual"))
-        }
-
-        @Test
-        fun `given a YearMonth after the reference should report it`() {
-            val reference = YearMonth.of(2026, 10)
-
-            val node = ValidationNode("checkIn", YearMonth.of(2026, 11)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2026-10", "beforeOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a YearMonth equal to the reference should accept it`() {
             val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(
+                path = "checkIn",
+                value = YearMonth.of(2026, 10)
+            ).apply { beforeOrEqual(reference) }
 
-            val node = ValidationNode("checkIn", YearMonth.of(2026, 10)).apply { beforeOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a YearMonth should skip the check`() {
-            val reference: YearMonth? = null
-
-            val node = ValidationNode("checkIn", YearMonth.of(2026, 11)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a YearMonth should build it from the value and the reference`() {
-            val reference = YearMonth.of(2026, 10)
-
-            val node = ValidationNode("checkIn", YearMonth.of(2026, 11)).apply {
-                beforeOrEqual(reference) { other -> "$this is after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "2026-11 is after 2026-10", "beforeOrEqual"))
-        }
-
-        @Test
-        fun `given a Year after the reference should report it`() {
-            val reference = Year.of(2024)
-
-            val node = ValidationNode("checkIn", Year.of(2025)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to 2024", "beforeOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a Year equal to the reference should accept it`() {
             val reference = Year.of(2024)
+            val node = ValidationNode(path = "checkIn", value = Year.of(2024)).apply { beforeOrEqual(reference) }
 
-            val node = ValidationNode("checkIn", Year.of(2024)).apply { beforeOrEqual(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no reference for a Year should skip the check`() {
-            val reference: Year? = null
-
-            val node = ValidationNode("checkIn", Year.of(2025)).apply { beforeOrEqual(reference) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a Year should build it from the value and the reference`() {
-            val reference = Year.of(2024)
-
-            val node = ValidationNode("checkIn", Year.of(2025)).apply {
-                beforeOrEqual(reference) { other -> "$this is after $other" }
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "2025 is after 2024", "beforeOrEqual"))
-        }
-
-        @Test
-        fun `given a Date after the reference should report it`() {
-            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("checkIn", Date.from(Instant.parse("2026-01-10T11:00:00Z"))).apply {
-                beforeOrEqual(reference)
-            }
-
-            node.validate() shouldBe listOf(Violation("checkIn", "must be before or equal to $reference", "beforeOrEqual"))
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a Date equal to the reference should accept it`() {
             val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("checkIn", Date.from(Instant.parse("2026-01-10T10:00:00Z"))).apply {
+            val node = ValidationNode(
+                path = "checkIn",
+                value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            ).apply {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalDate after the reference should report it`() {
+            val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(
+                path = "checkIn",
+                value = LocalDate.of(2026, 1, 11)
+            ).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "must be before or equal to 2026-01-10", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a LocalDateTime after the reference should report it`() {
+            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(path = "checkIn", value = LocalDateTime.of(2026, 1, 10, 11, 0)).apply {
+                beforeOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkIn",
+                    message = "must be before or equal to 2026-01-10T10:00",
+                    code = "beforeOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a LocalTime after the reference should report it`() {
+            val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "checkIn", value = LocalTime.of(11, 0)).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "must be before or equal to 10:00", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given an OffsetTime after the reference should report it`() {
+            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "checkIn",
+                value = OffsetTime.of(11, 0, 0, 0, UTC)
+            ).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "must be before or equal to 10:00Z", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a ZonedDateTime after the reference should report it`() {
+            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "checkIn", value = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
+                beforeOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkIn",
+                    message = "must be before or equal to 2026-01-10T10:00Z",
+                    code = "beforeOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given an OffsetDateTime after the reference should report it`() {
+            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "checkIn",
+                value = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            ).apply {
+                beforeOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkIn",
+                    message = "must be before or equal to 2026-01-10T10:00Z",
+                    code = "beforeOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given an Instant after the reference should report it`() {
+            val reference = Instant.parse("2026-01-10T10:00:00Z")
+            val node = ValidationNode(path = "checkIn", value = Instant.parse("2026-01-10T11:00:00Z")).apply {
+                beforeOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkIn",
+                    message = "must be before or equal to 2026-01-10T10:00:00Z",
+                    code = "beforeOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a YearMonth after the reference should report it`() {
+            val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(
+                path = "checkIn",
+                value = YearMonth.of(2026, 11)
+            ).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "must be before or equal to 2026-10", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a Year after the reference should report it`() {
+            val reference = Year.of(2024)
+            val node = ValidationNode(path = "checkIn", value = Year.of(2025)).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "must be before or equal to 2024", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a Date after the reference should report it`() {
+            val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            val node = ValidationNode(
+                path = "checkIn",
+                value = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
+            ).apply {
+                beforeOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "must be before or equal to $reference", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given no reference for a LocalDate should skip the check`() {
+            val reference: LocalDate? = null
+            val node = ValidationNode(
+                path = "checkIn",
+                value = LocalDate.of(2026, 1, 11)
+            ).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a LocalDateTime should skip the check`() {
+            val reference: LocalDateTime? = null
+            val node = ValidationNode(path = "checkIn", value = LocalDateTime.of(2026, 1, 10, 11, 0)).apply {
+                beforeOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a LocalTime should skip the check`() {
+            val reference: LocalTime? = null
+            val node = ValidationNode(path = "checkIn", value = LocalTime.of(11, 0)).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an OffsetTime should skip the check`() {
+            val reference: OffsetTime? = null
+            val node = ValidationNode(
+                path = "checkIn",
+                value = OffsetTime.of(11, 0, 0, 0, UTC)
+            ).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a ZonedDateTime should skip the check`() {
+            val reference: ZonedDateTime? = null
+            val node = ValidationNode(path = "checkIn", value = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
+                beforeOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an OffsetDateTime should skip the check`() {
+            val reference: OffsetDateTime? = null
+            val node = ValidationNode(
+                path = "checkIn",
+                value = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            ).apply {
+                beforeOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for an Instant should skip the check`() {
+            val reference: Instant? = null
+            val node = ValidationNode(path = "checkIn", value = Instant.parse("2026-01-10T11:00:00Z")).apply {
+                beforeOrEqual(reference)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a YearMonth should skip the check`() {
+            val reference: YearMonth? = null
+            val node = ValidationNode(
+                path = "checkIn",
+                value = YearMonth.of(2026, 11)
+            ).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no reference for a Year should skip the check`() {
+            val reference: Year? = null
+            val node = ValidationNode(path = "checkIn", value = Year.of(2025)).apply { beforeOrEqual(reference) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given no reference for a Date should skip the check`() {
             val reference: Date? = null
-
-            val node = ValidationNode("checkIn", Date.from(Instant.parse("2026-01-10T11:00:00Z"))).apply {
+            val node = ValidationNode(
+                path = "checkIn",
+                value = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
+            ).apply {
                 beforeOrEqual(reference)
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function for a LocalDate should build it from the value and the reference`() {
+            val reference = LocalDate.of(2026, 1, 10)
+            val node = ValidationNode(path = "checkIn", value = LocalDate.of(2026, 1, 11)).apply {
+                beforeOrEqual(reference) { other -> "$this is after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "2026-01-11 is after 2026-01-10", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalDateTime should build it from the value and the reference`() {
+            val reference = LocalDateTime.of(2026, 1, 10, 10, 0)
+            val node = ValidationNode(path = "checkIn", value = LocalDateTime.of(2026, 1, 10, 11, 0)).apply {
+                beforeOrEqual(reference) { other -> "$this is after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkIn",
+                    message = "2026-01-10T11:00 is after 2026-01-10T10:00",
+                    code = "beforeOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalTime should build it from the value and the reference`() {
+            val reference = LocalTime.of(10, 0)
+            val node = ValidationNode(path = "checkIn", value = LocalTime.of(11, 0)).apply {
+                beforeOrEqual(reference) { other -> "$this is after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "11:00 is after 10:00", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetTime should build it from the value and the reference`() {
+            val reference = OffsetTime.of(10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "checkIn", value = OffsetTime.of(11, 0, 0, 0, UTC)).apply {
+                beforeOrEqual(reference) { other -> "$this is after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "11:00Z is after 10:00Z", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a message function for a ZonedDateTime should build it from the value and the reference`() {
+            val reference = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "checkIn", value = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
+                beforeOrEqual(reference) { other -> "$this is after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkIn",
+                    message = "2026-01-10T11:00Z is after 2026-01-10T10:00Z",
+                    code = "beforeOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetDateTime should build it from the value and the reference`() {
+            val reference = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "checkIn",
+                value = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            ).apply {
+                beforeOrEqual(reference) { other -> "$this is after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkIn",
+                    message = "2026-01-10T11:00Z is after 2026-01-10T10:00Z",
+                    code = "beforeOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for an Instant should build it from the value and the reference`() {
+            val reference = Instant.parse("2026-01-10T10:00:00Z")
+            val node = ValidationNode(path = "checkIn", value = Instant.parse("2026-01-10T11:00:00Z")).apply {
+                beforeOrEqual(reference) { other -> "$this is after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "checkIn",
+                    message = "2026-01-10T11:00:00Z is after 2026-01-10T10:00:00Z",
+                    code = "beforeOrEqual"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a YearMonth should build it from the value and the reference`() {
+            val reference = YearMonth.of(2026, 10)
+            val node = ValidationNode(path = "checkIn", value = YearMonth.of(2026, 11)).apply {
+                beforeOrEqual(reference) { other -> "$this is after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "2026-11 is after 2026-10", code = "beforeOrEqual")
+            )
+        }
+
+        @Test
+        fun `given a message function for a Year should build it from the value and the reference`() {
+            val reference = Year.of(2024)
+            val node = ValidationNode(path = "checkIn", value = Year.of(2025)).apply {
+                beforeOrEqual(reference) { other -> "$this is after $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "2025 is after 2024", code = "beforeOrEqual")
+            )
         }
 
         @Test
         fun `given a message function for a Date should build it from the value and the reference`() {
             val value = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
             val reference = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
-
-            val node = ValidationNode("checkIn", value).apply {
+            val node = ValidationNode(path = "checkIn", value = value).apply {
                 beforeOrEqual(reference) { other -> "$this is after $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("checkIn", "$value is after $reference", "beforeOrEqual"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "checkIn", message = "$value is after $reference", code = "beforeOrEqual")
+            )
         }
     }
 
@@ -2296,41 +3235,49 @@ class TemporalConstraintsTest {
     @DisplayName("When min is called")
     inner class Min {
         @Test
-        fun `given a Duration below the minimum should report it`() {
+        fun `given a Duration at the minimum should accept it`() {
             val minimum = Duration.ofMinutes(10)
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(10)).apply { min(minimum) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(9)).apply { min(minimum) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be at least PT10M", "min"))
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a Duration at the minimum should accept it`() {
+        fun `given a Duration below the minimum should report it`() {
             val minimum = Duration.ofMinutes(10)
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(9)).apply { min(minimum) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply { min(minimum) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "must be at least PT10M", code = "min")
+            )
         }
 
         @Test
         fun `given no minimum for a Duration should skip the check`() {
             val minimum: Duration? = null
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(9)).apply { min(minimum) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(9)).apply { min(minimum) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a message function for a Duration should build it from the value and the minimum`() {
             val minimum = Duration.ofMinutes(10)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(9)).apply {
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(9)).apply {
                 min(minimum) { min -> "$this is below $min" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT9M is below PT10M", "min"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "PT9M is below PT10M", code = "min")
+            )
         }
     }
 
@@ -2338,41 +3285,49 @@ class TemporalConstraintsTest {
     @DisplayName("When max is called")
     inner class Max {
         @Test
-        fun `given a Duration above the maximum should report it`() {
+        fun `given a Duration at the maximum should accept it`() {
             val maximum = Duration.ofMinutes(10)
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(10)).apply { max(maximum) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(11)).apply { max(maximum) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be at most PT10M", "max"))
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a Duration at the maximum should accept it`() {
+        fun `given a Duration above the maximum should report it`() {
             val maximum = Duration.ofMinutes(10)
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(11)).apply { max(maximum) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply { max(maximum) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "must be at most PT10M", code = "max")
+            )
         }
 
         @Test
         fun `given no maximum for a Duration should skip the check`() {
             val maximum: Duration? = null
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(11)).apply { max(maximum) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(11)).apply { max(maximum) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a message function for a Duration should build it from the value and the maximum`() {
             val maximum = Duration.ofMinutes(10)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(11)).apply {
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(11)).apply {
                 max(maximum) { max -> "$this is above $max" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT11M is above PT10M", "max"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "PT11M is above PT10M", code = "max")
+            )
         }
     }
 
@@ -2380,41 +3335,49 @@ class TemporalConstraintsTest {
     @DisplayName("When greaterThan is called")
     inner class GreaterThan {
         @Test
-        fun `given a Duration equal to the reference should report it`() {
+        fun `given a Duration above the reference should accept it`() {
             val reference = Duration.ofMinutes(10)
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(11)).apply { greaterThan(reference) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply { greaterThan(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be greater than PT10M", "greaterThan"))
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a Duration above the reference should accept it`() {
+        fun `given a Duration equal to the reference should report it`() {
             val reference = Duration.ofMinutes(10)
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(10)).apply { greaterThan(reference) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(11)).apply { greaterThan(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "must be greater than PT10M", code = "greaterThan")
+            )
         }
 
         @Test
         fun `given no reference for a Duration should skip the check`() {
             val reference: Duration? = null
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(10)).apply { greaterThan(reference) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply { greaterThan(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a message function for a Duration should build it from the value and the reference`() {
             val reference = Duration.ofMinutes(10)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply {
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(10)).apply {
                 greaterThan(reference) { other -> "$this is not greater than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT10M is not greater than PT10M", "greaterThan"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "PT10M is not greater than PT10M", code = "greaterThan")
+            )
         }
     }
 
@@ -2422,41 +3385,49 @@ class TemporalConstraintsTest {
     @DisplayName("When lessThan is called")
     inner class LessThan {
         @Test
-        fun `given a Duration equal to the reference should report it`() {
+        fun `given a Duration below the reference should accept it`() {
             val reference = Duration.ofMinutes(10)
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(9)).apply { lessThan(reference) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply { lessThan(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be less than PT10M", "lessThan"))
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a Duration below the reference should accept it`() {
+        fun `given a Duration equal to the reference should report it`() {
             val reference = Duration.ofMinutes(10)
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(10)).apply { lessThan(reference) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(9)).apply { lessThan(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "must be less than PT10M", code = "lessThan")
+            )
         }
 
         @Test
         fun `given no reference for a Duration should skip the check`() {
             val reference: Duration? = null
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(10)).apply { lessThan(reference) }
 
-            val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply { lessThan(reference) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a message function for a Duration should build it from the value and the reference`() {
             val reference = Duration.ofMinutes(10)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply {
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(10)).apply {
                 lessThan(reference) { other -> "$this is not less than $other" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT10M is not less than PT10M", "lessThan"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "PT10M is not less than PT10M", code = "lessThan")
+            )
         }
     }
 
@@ -2464,86 +3435,534 @@ class TemporalConstraintsTest {
     @DisplayName("When between is called")
     inner class Between {
         @Test
-        fun `given a LocalDate below the range should report it`() {
-            val start = LocalDate.of(2026, 1, 9)
-            val end = LocalDate.of(2026, 1, 11)
-
-            val node = ValidationNode("arrivedAt", LocalDate.of(2026, 1, 8)).apply { between(start, end) }
-
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-01-09 and 2026-01-11", "between"))
-        }
-
-        @Test
-        fun `given a LocalDate above the range should report it`() {
-            val start = LocalDate.of(2026, 1, 9)
-            val end = LocalDate.of(2026, 1, 11)
-
-            val node = ValidationNode("arrivedAt", LocalDate.of(2026, 1, 12)).apply { between(start, end) }
-
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-01-09 and 2026-01-11", "between"))
-        }
-
-        @Test
         fun `given a LocalDate at the lower limit should accept it`() {
             val start = LocalDate.of(2026, 1, 9)
             val end = LocalDate.of(2026, 1, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDate.of(2026, 1, 9)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", LocalDate.of(2026, 1, 9)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalDate inside the range should accept it`() {
             val start = LocalDate.of(2026, 1, 9)
             val end = LocalDate.of(2026, 1, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDate.of(2026, 1, 10)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", LocalDate.of(2026, 1, 10)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a LocalDate at the upper limit should accept it`() {
             val start = LocalDate.of(2026, 1, 9)
             val end = LocalDate.of(2026, 1, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDate.of(2026, 1, 11)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", LocalDate.of(2026, 1, 11)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given no start for a LocalDate should skip the check`() {
-            val start: LocalDate? = null
-            val end = LocalDate.of(2026, 1, 11)
+        fun `given a LocalDateTime at the lower limit should accept it`() {
+            val start = LocalDateTime.of(2026, 1, 10, 9, 0)
+            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDateTime.of(2026, 1, 10, 9, 0)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", LocalDate.of(2026, 1, 12)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a message function for a LocalDate should build it from the value and the limits`() {
-            val start = LocalDate.of(2026, 1, 9)
-            val end = LocalDate.of(2026, 1, 11)
+        fun `given a LocalDateTime inside the range should accept it`() {
+            val start = LocalDateTime.of(2026, 1, 10, 9, 0)
+            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDateTime.of(2026, 1, 10, 10, 0)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", LocalDate.of(2026, 1, 12)).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalDateTime at the upper limit should accept it`() {
+            val start = LocalDateTime.of(2026, 1, 10, 9, 0)
+            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDateTime.of(2026, 1, 10, 11, 0)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalTime at the lower limit should accept it`() {
+            val start = LocalTime.of(9, 0)
+            val end = LocalTime.of(11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalTime.of(9, 0)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalTime inside the range should accept it`() {
+            val start = LocalTime.of(9, 0)
+            val end = LocalTime.of(11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalTime.of(10, 0)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalTime at the upper limit should accept it`() {
+            val start = LocalTime.of(9, 0)
+            val end = LocalTime.of(11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalTime.of(11, 0)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an OffsetTime at the lower limit should accept it`() {
+            val start = OffsetTime.of(9, 0, 0, 0, UTC)
+            val end = OffsetTime.of(11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetTime.of(9, 0, 0, 0, UTC)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an OffsetTime inside the range should accept it`() {
+            val start = OffsetTime.of(9, 0, 0, 0, UTC)
+            val end = OffsetTime.of(11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetTime.of(10, 0, 0, 0, UTC)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an OffsetTime at the upper limit should accept it`() {
+            val start = OffsetTime.of(9, 0, 0, 0, UTC)
+            val end = OffsetTime.of(11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetTime.of(11, 0, 0, 0, UTC)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a ZonedDateTime at the lower limit should accept it`() {
+            val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "2026-01-12 is not from 2026-01-09 to 2026-01-11", "between"))
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a ZonedDateTime inside the range should accept it`() {
+            val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a ZonedDateTime at the upper limit should accept it`() {
+            val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an OffsetDateTime at the lower limit should accept it`() {
+            val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an OffsetDateTime inside the range should accept it`() {
+            val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an OffsetDateTime at the upper limit should accept it`() {
+            val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an Instant at the lower limit should accept it`() {
+            val start = Instant.parse("2026-01-10T09:00:00Z")
+            val end = Instant.parse("2026-01-10T11:00:00Z")
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Instant.parse("2026-01-10T09:00:00Z")
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an Instant inside the range should accept it`() {
+            val start = Instant.parse("2026-01-10T09:00:00Z")
+            val end = Instant.parse("2026-01-10T11:00:00Z")
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Instant.parse("2026-01-10T10:00:00Z")
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an Instant at the upper limit should accept it`() {
+            val start = Instant.parse("2026-01-10T09:00:00Z")
+            val end = Instant.parse("2026-01-10T11:00:00Z")
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Instant.parse("2026-01-10T11:00:00Z")
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a YearMonth at the lower limit should accept it`() {
+            val start = YearMonth.of(2026, 9)
+            val end = YearMonth.of(2026, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = YearMonth.of(2026, 9)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a YearMonth inside the range should accept it`() {
+            val start = YearMonth.of(2026, 9)
+            val end = YearMonth.of(2026, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = YearMonth.of(2026, 10)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a YearMonth at the upper limit should accept it`() {
+            val start = YearMonth.of(2026, 9)
+            val end = YearMonth.of(2026, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = YearMonth.of(2026, 11)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Year at the lower limit should accept it`() {
+            val start = Year.of(2023)
+            val end = Year.of(2025)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Year.of(2023)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Year inside the range should accept it`() {
+            val start = Year.of(2023)
+            val end = Year.of(2025)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Year.of(2024)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Year at the upper limit should accept it`() {
+            val start = Year.of(2023)
+            val end = Year.of(2025)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Year.of(2025)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Date at the lower limit should accept it`() {
+            val start = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
+            val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
+            ).apply {
+                between(start = start, end = end)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Date inside the range should accept it`() {
+            val start = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
+            val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Date.from(Instant.parse("2026-01-10T10:00:00Z"))
+            ).apply {
+                between(start = start, end = end)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Date at the upper limit should accept it`() {
+            val start = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
+            val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
+            ).apply {
+                between(start = start, end = end)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Duration at the lower limit should accept it`() {
+            val min = Duration.ofMinutes(9)
+            val max = Duration.ofMinutes(11)
+            val node = ValidationNode(
+                path = "timeout",
+                value = Duration.ofMinutes(9)
+            ).apply { between(min = min, max = max) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Duration inside the range should accept it`() {
+            val min = Duration.ofMinutes(9)
+            val max = Duration.ofMinutes(11)
+            val node = ValidationNode(
+                path = "timeout",
+                value = Duration.ofMinutes(10)
+            ).apply { between(min = min, max = max) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Duration at the upper limit should accept it`() {
+            val min = Duration.ofMinutes(9)
+            val max = Duration.ofMinutes(11)
+            val node = ValidationNode(
+                path = "timeout",
+                value = Duration.ofMinutes(11)
+            ).apply { between(min = min, max = max) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a LocalDate below the range should report it`() {
+            val start = LocalDate.of(2026, 1, 9)
+            val end = LocalDate.of(2026, 1, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDate.of(2026, 1, 8)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 2026-01-09 and 2026-01-11", code = "between")
+            )
+        }
+
+        @Test
+        fun `given a LocalDate above the range should report it`() {
+            val start = LocalDate.of(2026, 1, 9)
+            val end = LocalDate.of(2026, 1, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDate.of(2026, 1, 12)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 2026-01-09 and 2026-01-11", code = "between")
+            )
         }
 
         @Test
         fun `given a LocalDateTime below the range should report it`() {
             val start = LocalDateTime.of(2026, 1, 10, 9, 0)
             val end = LocalDateTime.of(2026, 1, 10, 11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDateTime.of(2026, 1, 10, 8, 0)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", LocalDateTime.of(2026, 1, 10, 8, 0)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00 and 2026-01-10T11:00", "between")
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "must be between 2026-01-10T09:00 and 2026-01-10T11:00",
+                    code = "between"
+                )
             )
         }
 
@@ -2551,65 +3970,19 @@ class TemporalConstraintsTest {
         fun `given a LocalDateTime above the range should report it`() {
             val start = LocalDateTime.of(2026, 1, 10, 9, 0)
             val end = LocalDateTime.of(2026, 1, 10, 11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDateTime.of(2026, 1, 10, 12, 0)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", LocalDateTime.of(2026, 1, 10, 12, 0)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00 and 2026-01-10T11:00", "between")
-            )
-        }
-
-        @Test
-        fun `given a LocalDateTime at the lower limit should accept it`() {
-            val start = LocalDateTime.of(2026, 1, 10, 9, 0)
-            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalDateTime.of(2026, 1, 10, 9, 0)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a LocalDateTime inside the range should accept it`() {
-            val start = LocalDateTime.of(2026, 1, 10, 9, 0)
-            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalDateTime.of(2026, 1, 10, 10, 0)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a LocalDateTime at the upper limit should accept it`() {
-            val start = LocalDateTime.of(2026, 1, 10, 9, 0)
-            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalDateTime.of(2026, 1, 10, 11, 0)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no start for a LocalDateTime should skip the check`() {
-            val start: LocalDateTime? = null
-            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalDateTime.of(2026, 1, 10, 12, 0)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalDateTime should build it from the value and the limits`() {
-            val start = LocalDateTime.of(2026, 1, 10, 9, 0)
-            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalDateTime.of(2026, 1, 10, 12, 0)).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
-            }
-
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "2026-01-10T12:00 is not from 2026-01-10T09:00 to 2026-01-10T11:00", "between")
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "must be between 2026-01-10T09:00 and 2026-01-10T11:00",
+                    code = "between"
+                )
             )
         }
 
@@ -2617,157 +3990,85 @@ class TemporalConstraintsTest {
         fun `given a LocalTime below the range should report it`() {
             val start = LocalTime.of(9, 0)
             val end = LocalTime.of(11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalTime.of(8, 0)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", LocalTime.of(8, 0)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00 and 11:00", "between"))
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 09:00 and 11:00", code = "between")
+            )
         }
 
         @Test
         fun `given a LocalTime above the range should report it`() {
             val start = LocalTime.of(9, 0)
             val end = LocalTime.of(11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalTime.of(12, 0)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", LocalTime.of(12, 0)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00 and 11:00", "between"))
-        }
-
-        @Test
-        fun `given a LocalTime at the lower limit should accept it`() {
-            val start = LocalTime.of(9, 0)
-            val end = LocalTime.of(11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalTime.of(9, 0)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a LocalTime inside the range should accept it`() {
-            val start = LocalTime.of(9, 0)
-            val end = LocalTime.of(11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalTime.of(10, 0)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a LocalTime at the upper limit should accept it`() {
-            val start = LocalTime.of(9, 0)
-            val end = LocalTime.of(11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalTime.of(11, 0)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no start for a LocalTime should skip the check`() {
-            val start: LocalTime? = null
-            val end = LocalTime.of(11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalTime.of(12, 0)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a LocalTime should build it from the value and the limits`() {
-            val start = LocalTime.of(9, 0)
-            val end = LocalTime.of(11, 0)
-
-            val node = ValidationNode("arrivedAt", LocalTime.of(12, 0)).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
-            }
-
-            node.validate() shouldBe listOf(Violation("arrivedAt", "12:00 is not from 09:00 to 11:00", "between"))
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 09:00 and 11:00", code = "between")
+            )
         }
 
         @Test
         fun `given an OffsetTime below the range should report it`() {
             val start = OffsetTime.of(9, 0, 0, 0, UTC)
             val end = OffsetTime.of(11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetTime.of(8, 0, 0, 0, UTC)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", OffsetTime.of(8, 0, 0, 0, UTC)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00Z and 11:00Z", "between"))
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 09:00Z and 11:00Z", code = "between")
+            )
         }
 
         @Test
         fun `given an OffsetTime above the range should report it`() {
             val start = OffsetTime.of(9, 0, 0, 0, UTC)
             val end = OffsetTime.of(11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetTime.of(12, 0, 0, 0, UTC)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", OffsetTime.of(12, 0, 0, 0, UTC)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 09:00Z and 11:00Z", "between"))
-        }
-
-        @Test
-        fun `given an OffsetTime at the lower limit should accept it`() {
-            val start = OffsetTime.of(9, 0, 0, 0, UTC)
-            val end = OffsetTime.of(11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetTime.of(9, 0, 0, 0, UTC)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given an OffsetTime inside the range should accept it`() {
-            val start = OffsetTime.of(9, 0, 0, 0, UTC)
-            val end = OffsetTime.of(11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetTime.of(10, 0, 0, 0, UTC)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given an OffsetTime at the upper limit should accept it`() {
-            val start = OffsetTime.of(9, 0, 0, 0, UTC)
-            val end = OffsetTime.of(11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetTime.of(11, 0, 0, 0, UTC)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no start for an OffsetTime should skip the check`() {
-            val start: OffsetTime? = null
-            val end = OffsetTime.of(11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetTime.of(12, 0, 0, 0, UTC)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetTime should build it from the value and the limits`() {
-            val start = OffsetTime.of(9, 0, 0, 0, UTC)
-            val end = OffsetTime.of(11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetTime.of(12, 0, 0, 0, UTC)).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
-            }
-
-            node.validate() shouldBe listOf(Violation("arrivedAt", "12:00Z is not from 09:00Z to 11:00Z", "between"))
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 09:00Z and 11:00Z", code = "between")
+            )
         }
 
         @Test
         fun `given a ZonedDateTime below the range should report it`() {
             val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
             val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", ZonedDateTime.of(2026, 1, 10, 8, 0, 0, 0, UTC)).apply {
-                between(start, end)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = ZonedDateTime.of(2026, 1, 10, 8, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
             }
 
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z", "between")
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z",
+                    code = "between"
+                )
             )
         }
 
@@ -2775,75 +4076,21 @@ class TemporalConstraintsTest {
         fun `given a ZonedDateTime above the range should report it`() {
             val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
             val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", ZonedDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)).apply {
-                between(start, end)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = ZonedDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
             }
 
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z", "between")
-            )
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a ZonedDateTime at the lower limit should accept it`() {
-            val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
-            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
-                between(start, end)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a ZonedDateTime inside the range should accept it`() {
-            val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
-            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", ZonedDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                between(start, end)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a ZonedDateTime at the upper limit should accept it`() {
-            val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
-            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
-                between(start, end)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no start for a ZonedDateTime should skip the check`() {
-            val start: ZonedDateTime? = null
-            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", ZonedDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)).apply {
-                between(start, end)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a ZonedDateTime should build it from the value and the limits`() {
-            val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
-            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", ZonedDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
-            }
-
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "2026-01-10T12:00Z is not from 2026-01-10T09:00Z to 2026-01-10T11:00Z", "between")
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z",
+                    code = "between"
+                )
             )
         }
 
@@ -2851,13 +4098,21 @@ class TemporalConstraintsTest {
         fun `given an OffsetDateTime below the range should report it`() {
             val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
             val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetDateTime.of(2026, 1, 10, 8, 0, 0, 0, UTC)).apply {
-                between(start, end)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetDateTime.of(2026, 1, 10, 8, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
             }
 
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z", "between")
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z",
+                    code = "between"
+                )
             )
         }
 
@@ -2865,75 +4120,21 @@ class TemporalConstraintsTest {
         fun `given an OffsetDateTime above the range should report it`() {
             val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
             val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)).apply {
-                between(start, end)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
             }
 
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z", "between")
-            )
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given an OffsetDateTime at the lower limit should accept it`() {
-            val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
-            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)).apply {
-                between(start, end)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given an OffsetDateTime inside the range should accept it`() {
-            val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
-            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetDateTime.of(2026, 1, 10, 10, 0, 0, 0, UTC)).apply {
-                between(start, end)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given an OffsetDateTime at the upper limit should accept it`() {
-            val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
-            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)).apply {
-                between(start, end)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no start for an OffsetDateTime should skip the check`() {
-            val start: OffsetDateTime? = null
-            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)).apply {
-                between(start, end)
-            }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an OffsetDateTime should build it from the value and the limits`() {
-            val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
-            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
-
-            val node = ValidationNode("arrivedAt", OffsetDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
-            }
-
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "2026-01-10T12:00Z is not from 2026-01-10T09:00Z to 2026-01-10T11:00Z", "between")
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "must be between 2026-01-10T09:00Z and 2026-01-10T11:00Z",
+                    code = "between"
+                )
             )
         }
 
@@ -2941,11 +4142,19 @@ class TemporalConstraintsTest {
         fun `given an Instant below the range should report it`() {
             val start = Instant.parse("2026-01-10T09:00:00Z")
             val end = Instant.parse("2026-01-10T11:00:00Z")
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Instant.parse("2026-01-10T08:00:00Z")
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", Instant.parse("2026-01-10T08:00:00Z")).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00:00Z and 2026-01-10T11:00:00Z", "between")
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "must be between 2026-01-10T09:00:00Z and 2026-01-10T11:00:00Z",
+                    code = "between"
+                )
             )
         }
 
@@ -2953,65 +4162,19 @@ class TemporalConstraintsTest {
         fun `given an Instant above the range should report it`() {
             val start = Instant.parse("2026-01-10T09:00:00Z")
             val end = Instant.parse("2026-01-10T11:00:00Z")
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Instant.parse("2026-01-10T12:00:00Z")
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", Instant.parse("2026-01-10T12:00:00Z")).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "must be between 2026-01-10T09:00:00Z and 2026-01-10T11:00:00Z", "between")
-            )
-        }
-
-        @Test
-        fun `given an Instant at the lower limit should accept it`() {
-            val start = Instant.parse("2026-01-10T09:00:00Z")
-            val end = Instant.parse("2026-01-10T11:00:00Z")
-
-            val node = ValidationNode("arrivedAt", Instant.parse("2026-01-10T09:00:00Z")).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given an Instant inside the range should accept it`() {
-            val start = Instant.parse("2026-01-10T09:00:00Z")
-            val end = Instant.parse("2026-01-10T11:00:00Z")
-
-            val node = ValidationNode("arrivedAt", Instant.parse("2026-01-10T10:00:00Z")).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given an Instant at the upper limit should accept it`() {
-            val start = Instant.parse("2026-01-10T09:00:00Z")
-            val end = Instant.parse("2026-01-10T11:00:00Z")
-
-            val node = ValidationNode("arrivedAt", Instant.parse("2026-01-10T11:00:00Z")).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no start for an Instant should skip the check`() {
-            val start: Instant? = null
-            val end = Instant.parse("2026-01-10T11:00:00Z")
-
-            val node = ValidationNode("arrivedAt", Instant.parse("2026-01-10T12:00:00Z")).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for an Instant should build it from the value and the limits`() {
-            val start = Instant.parse("2026-01-10T09:00:00Z")
-            val end = Instant.parse("2026-01-10T11:00:00Z")
-
-            val node = ValidationNode("arrivedAt", Instant.parse("2026-01-10T12:00:00Z")).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
-            }
-
-            node.validate() shouldBe listOf(
-                Violation("arrivedAt", "2026-01-10T12:00:00Z is not from 2026-01-10T09:00:00Z to 2026-01-10T11:00:00Z", "between")
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "must be between 2026-01-10T09:00:00Z and 2026-01-10T11:00:00Z",
+                    code = "between"
+                )
             )
         }
 
@@ -3019,216 +4182,453 @@ class TemporalConstraintsTest {
         fun `given a YearMonth below the range should report it`() {
             val start = YearMonth.of(2026, 9)
             val end = YearMonth.of(2026, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = YearMonth.of(2026, 8)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", YearMonth.of(2026, 8)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-09 and 2026-11", "between"))
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 2026-09 and 2026-11", code = "between")
+            )
         }
 
         @Test
         fun `given a YearMonth above the range should report it`() {
             val start = YearMonth.of(2026, 9)
             val end = YearMonth.of(2026, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = YearMonth.of(2026, 12)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", YearMonth.of(2026, 12)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2026-09 and 2026-11", "between"))
-        }
-
-        @Test
-        fun `given a YearMonth at the lower limit should accept it`() {
-            val start = YearMonth.of(2026, 9)
-            val end = YearMonth.of(2026, 11)
-
-            val node = ValidationNode("arrivedAt", YearMonth.of(2026, 9)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a YearMonth inside the range should accept it`() {
-            val start = YearMonth.of(2026, 9)
-            val end = YearMonth.of(2026, 11)
-
-            val node = ValidationNode("arrivedAt", YearMonth.of(2026, 10)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a YearMonth at the upper limit should accept it`() {
-            val start = YearMonth.of(2026, 9)
-            val end = YearMonth.of(2026, 11)
-
-            val node = ValidationNode("arrivedAt", YearMonth.of(2026, 11)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no start for a YearMonth should skip the check`() {
-            val start: YearMonth? = null
-            val end = YearMonth.of(2026, 11)
-
-            val node = ValidationNode("arrivedAt", YearMonth.of(2026, 12)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a YearMonth should build it from the value and the limits`() {
-            val start = YearMonth.of(2026, 9)
-            val end = YearMonth.of(2026, 11)
-
-            val node = ValidationNode("arrivedAt", YearMonth.of(2026, 12)).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
-            }
-
-            node.validate() shouldBe listOf(Violation("arrivedAt", "2026-12 is not from 2026-09 to 2026-11", "between"))
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 2026-09 and 2026-11", code = "between")
+            )
         }
 
         @Test
         fun `given a Year below the range should report it`() {
             val start = Year.of(2023)
             val end = Year.of(2025)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Year.of(2022)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", Year.of(2022)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2023 and 2025", "between"))
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 2023 and 2025", code = "between")
+            )
         }
 
         @Test
         fun `given a Year above the range should report it`() {
             val start = Year.of(2023)
             val end = Year.of(2025)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Year.of(2026)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", Year.of(2026)).apply { between(start, end) }
+            val violations = node.validate()
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between 2023 and 2025", "between"))
-        }
-
-        @Test
-        fun `given a Year at the lower limit should accept it`() {
-            val start = Year.of(2023)
-            val end = Year.of(2025)
-
-            val node = ValidationNode("arrivedAt", Year.of(2023)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a Year inside the range should accept it`() {
-            val start = Year.of(2023)
-            val end = Year.of(2025)
-
-            val node = ValidationNode("arrivedAt", Year.of(2024)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a Year at the upper limit should accept it`() {
-            val start = Year.of(2023)
-            val end = Year.of(2025)
-
-            val node = ValidationNode("arrivedAt", Year.of(2025)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no start for a Year should skip the check`() {
-            val start: Year? = null
-            val end = Year.of(2025)
-
-            val node = ValidationNode("arrivedAt", Year.of(2026)).apply { between(start, end) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a message function for a Year should build it from the value and the limits`() {
-            val start = Year.of(2023)
-            val end = Year.of(2025)
-
-            val node = ValidationNode("arrivedAt", Year.of(2026)).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
-            }
-
-            node.validate() shouldBe listOf(Violation("arrivedAt", "2026 is not from 2023 to 2025", "between"))
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between 2023 and 2025", code = "between")
+            )
         }
 
         @Test
         fun `given a Date below the range should report it`() {
             val start = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
             val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
-
-            val node = ValidationNode("arrivedAt", Date.from(Instant.parse("2026-01-10T08:00:00Z"))).apply {
-                between(start, end)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Date.from(Instant.parse("2026-01-10T08:00:00Z"))
+            ).apply {
+                between(start = start, end = end)
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between $start and $end", "between"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between $start and $end", code = "between")
+            )
         }
 
         @Test
         fun `given a Date above the range should report it`() {
             val start = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
             val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
-
-            val node = ValidationNode("arrivedAt", Date.from(Instant.parse("2026-01-10T12:00:00Z"))).apply {
-                between(start, end)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Date.from(Instant.parse("2026-01-10T12:00:00Z"))
+            ).apply {
+                between(start = start, end = end)
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "must be between $start and $end", "between"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "must be between $start and $end", code = "between")
+            )
         }
 
         @Test
-        fun `given a Date at the lower limit should accept it`() {
-            val start = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
-            val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
+        fun `given a Duration below the range should report it`() {
+            val min = Duration.ofMinutes(9)
+            val max = Duration.ofMinutes(11)
+            val node = ValidationNode(
+                path = "timeout",
+                value = Duration.ofMinutes(8)
+            ).apply { between(min = min, max = max) }
 
-            val node = ValidationNode("arrivedAt", Date.from(Instant.parse("2026-01-10T09:00:00Z"))).apply {
-                between(start, end)
-            }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "must be between PT9M and PT11M", code = "between")
+            )
         }
 
         @Test
-        fun `given a Date inside the range should accept it`() {
-            val start = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
-            val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
+        fun `given a Duration above the range should report it`() {
+            val min = Duration.ofMinutes(9)
+            val max = Duration.ofMinutes(11)
+            val node = ValidationNode(
+                path = "timeout",
+                value = Duration.ofMinutes(12)
+            ).apply { between(min = min, max = max) }
 
-            val node = ValidationNode("arrivedAt", Date.from(Instant.parse("2026-01-10T10:00:00Z"))).apply {
-                between(start, end)
-            }
+            val violations = node.validate()
 
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "must be between PT9M and PT11M", code = "between")
+            )
         }
 
         @Test
-        fun `given a Date at the upper limit should accept it`() {
-            val start = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
-            val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
+        fun `given no start for a LocalDate should skip the check`() {
+            val start: LocalDate? = null
+            val end = LocalDate.of(2026, 1, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDate.of(2026, 1, 12)
+            ).apply { between(start = start, end = end) }
 
-            val node = ValidationNode("arrivedAt", Date.from(Instant.parse("2026-01-10T11:00:00Z"))).apply {
-                between(start, end)
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no start for a LocalDateTime should skip the check`() {
+            val start: LocalDateTime? = null
+            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalDateTime.of(2026, 1, 10, 12, 0)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no start for a LocalTime should skip the check`() {
+            val start: LocalTime? = null
+            val end = LocalTime.of(11, 0)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = LocalTime.of(12, 0)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no start for an OffsetTime should skip the check`() {
+            val start: OffsetTime? = null
+            val end = OffsetTime.of(11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetTime.of(12, 0, 0, 0, UTC)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no start for a ZonedDateTime should skip the check`() {
+            val start: ZonedDateTime? = null
+            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = ZonedDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no start for an OffsetDateTime should skip the check`() {
+            val start: OffsetDateTime? = null
+            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no start for an Instant should skip the check`() {
+            val start: Instant? = null
+            val end = Instant.parse("2026-01-10T11:00:00Z")
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Instant.parse("2026-01-10T12:00:00Z")
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no start for a YearMonth should skip the check`() {
+            val start: YearMonth? = null
+            val end = YearMonth.of(2026, 11)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = YearMonth.of(2026, 12)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no start for a Year should skip the check`() {
+            val start: Year? = null
+            val end = Year.of(2025)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Year.of(2026)
+            ).apply { between(start = start, end = end) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given no start for a Date should skip the check`() {
             val start: Date? = null
             val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
-
-            val node = ValidationNode("arrivedAt", Date.from(Instant.parse("2026-01-10T12:00:00Z"))).apply {
-                between(start, end)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = Date.from(Instant.parse("2026-01-10T12:00:00Z"))
+            ).apply {
+                between(start = start, end = end)
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no minimum for a Duration should skip the check`() {
+            val min: Duration? = null
+            val max = Duration.ofMinutes(11)
+            val node = ValidationNode(
+                path = "timeout",
+                value = Duration.ofMinutes(12)
+            ).apply { between(min = min, max = max) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function for a LocalDate should build it from the value and the limits`() {
+            val start = LocalDate.of(2026, 1, 9)
+            val end = LocalDate.of(2026, 1, 11)
+            val node = ValidationNode(path = "arrivedAt", value = LocalDate.of(2026, 1, 12)).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "2026-01-12 is not from 2026-01-09 to 2026-01-11",
+                    code = "between"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalDateTime should build it from the value and the limits`() {
+            val start = LocalDateTime.of(2026, 1, 10, 9, 0)
+            val end = LocalDateTime.of(2026, 1, 10, 11, 0)
+            val node = ValidationNode(path = "arrivedAt", value = LocalDateTime.of(2026, 1, 10, 12, 0)).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "2026-01-10T12:00 is not from 2026-01-10T09:00 to 2026-01-10T11:00",
+                    code = "between"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a LocalTime should build it from the value and the limits`() {
+            val start = LocalTime.of(9, 0)
+            val end = LocalTime.of(11, 0)
+            val node = ValidationNode(path = "arrivedAt", value = LocalTime.of(12, 0)).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "12:00 is not from 09:00 to 11:00", code = "between")
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetTime should build it from the value and the limits`() {
+            val start = OffsetTime.of(9, 0, 0, 0, UTC)
+            val end = OffsetTime.of(11, 0, 0, 0, UTC)
+            val node = ValidationNode(path = "arrivedAt", value = OffsetTime.of(12, 0, 0, 0, UTC)).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "12:00Z is not from 09:00Z to 11:00Z", code = "between")
+            )
+        }
+
+        @Test
+        fun `given a message function for a ZonedDateTime should build it from the value and the limits`() {
+            val start = ZonedDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            val end = ZonedDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = ZonedDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "2026-01-10T12:00Z is not from 2026-01-10T09:00Z to 2026-01-10T11:00Z",
+                    code = "between"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for an OffsetDateTime should build it from the value and the limits`() {
+            val start = OffsetDateTime.of(2026, 1, 10, 9, 0, 0, 0, UTC)
+            val end = OffsetDateTime.of(2026, 1, 10, 11, 0, 0, 0, UTC)
+            val node = ValidationNode(
+                path = "arrivedAt",
+                value = OffsetDateTime.of(2026, 1, 10, 12, 0, 0, 0, UTC)
+            ).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "2026-01-10T12:00Z is not from 2026-01-10T09:00Z to 2026-01-10T11:00Z",
+                    code = "between"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for an Instant should build it from the value and the limits`() {
+            val start = Instant.parse("2026-01-10T09:00:00Z")
+            val end = Instant.parse("2026-01-10T11:00:00Z")
+            val node = ValidationNode(path = "arrivedAt", value = Instant.parse("2026-01-10T12:00:00Z")).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "arrivedAt",
+                    message = "2026-01-10T12:00:00Z is not from 2026-01-10T09:00:00Z to 2026-01-10T11:00:00Z",
+                    code = "between"
+                )
+            )
+        }
+
+        @Test
+        fun `given a message function for a YearMonth should build it from the value and the limits`() {
+            val start = YearMonth.of(2026, 9)
+            val end = YearMonth.of(2026, 11)
+            val node = ValidationNode(path = "arrivedAt", value = YearMonth.of(2026, 12)).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "2026-12 is not from 2026-09 to 2026-11", code = "between")
+            )
+        }
+
+        @Test
+        fun `given a message function for a Year should build it from the value and the limits`() {
+            val start = Year.of(2023)
+            val end = Year.of(2025)
+            val node = ValidationNode(path = "arrivedAt", value = Year.of(2026)).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "2026 is not from 2023 to 2025", code = "between")
+            )
         }
 
         @Test
@@ -3236,84 +4636,30 @@ class TemporalConstraintsTest {
             val value = Date.from(Instant.parse("2026-01-10T12:00:00Z"))
             val start = Date.from(Instant.parse("2026-01-10T09:00:00Z"))
             val end = Date.from(Instant.parse("2026-01-10T11:00:00Z"))
-
-            val node = ValidationNode("arrivedAt", value).apply {
-                between(start, end) { from, to -> "$this is not from $from to $to" }
+            val node = ValidationNode(path = "arrivedAt", value = value).apply {
+                between(start = start, end = end) { from, to -> "$this is not from $from to $to" }
             }
 
-            node.validate() shouldBe listOf(Violation("arrivedAt", "$value is not from $start to $end", "between"))
-        }
+            val violations = node.validate()
 
-        @Test
-        fun `given a Duration below the range should report it`() {
-            val min = Duration.ofMinutes(9)
-            val max = Duration.ofMinutes(11)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(8)).apply { between(min, max) }
-
-            node.validate() shouldBe listOf(Violation("timeout", "must be between PT9M and PT11M", "between"))
-        }
-
-        @Test
-        fun `given a Duration above the range should report it`() {
-            val min = Duration.ofMinutes(9)
-            val max = Duration.ofMinutes(11)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(12)).apply { between(min, max) }
-
-            node.validate() shouldBe listOf(Violation("timeout", "must be between PT9M and PT11M", "between"))
-        }
-
-        @Test
-        fun `given a Duration at the lower limit should accept it`() {
-            val min = Duration.ofMinutes(9)
-            val max = Duration.ofMinutes(11)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(9)).apply { between(min, max) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a Duration inside the range should accept it`() {
-            val min = Duration.ofMinutes(9)
-            val max = Duration.ofMinutes(11)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(10)).apply { between(min, max) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a Duration at the upper limit should accept it`() {
-            val min = Duration.ofMinutes(9)
-            val max = Duration.ofMinutes(11)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(11)).apply { between(min, max) }
-
-            node.validate() shouldBe emptyList()
-        }
-
-        @Test
-        fun `given no minimum for a Duration should skip the check`() {
-            val min: Duration? = null
-            val max = Duration.ofMinutes(11)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(12)).apply { between(min, max) }
-
-            node.validate() shouldBe emptyList()
+            violations shouldBe listOf(
+                Violation(path = "arrivedAt", message = "$value is not from $start to $end", code = "between")
+            )
         }
 
         @Test
         fun `given a message function for a Duration should build it from the value and the limits`() {
             val min = Duration.ofMinutes(9)
             val max = Duration.ofMinutes(11)
-
-            val node = ValidationNode("timeout", Duration.ofMinutes(12)).apply {
-                between(min, max) { from, to -> "$this is not from $from to $to" }
+            val node = ValidationNode(path = "timeout", value = Duration.ofMinutes(12)).apply {
+                between(min = min, max = max) { from, to -> "$this is not from $from to $to" }
             }
 
-            node.validate() shouldBe listOf(Violation("timeout", "PT12M is not from PT9M to PT11M", "between"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "PT12M is not from PT9M to PT11M", code = "between")
+            )
         }
     }
 }

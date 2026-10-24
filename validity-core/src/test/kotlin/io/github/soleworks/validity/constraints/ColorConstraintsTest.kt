@@ -14,18 +14,28 @@ class ColorConstraintsTest {
     inner class HexColor {
         @ParameterizedTest
         @ValueSource(strings = ["#fff", "#FFAA00", "#ffaa0080", "#fffa"])
-        fun `given a valid hexadecimal color should accept it`(color: String) {
-            val node = ValidationNode("color", color).apply { hexColor() }
+        fun `given a valid hexadecimal color should accept it`(
+            color: String
+        ) {
+            val node = ValidationNode(path = "color", value = color).apply { hexColor() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["fff", "#ff", "#ggg", "#fffff"])
-        fun `given an invalid hexadecimal color should report it`(color: String) {
-            val node = ValidationNode("color", color).apply { hexColor() }
+        fun `given an invalid hexadecimal color should report it`(
+            color: String
+        ) {
+            val node = ValidationNode(path = "color", value = color).apply { hexColor() }
 
-            node.validate() shouldBe listOf(Violation("color", "must be a valid hexadecimal color", "hexColor"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "color", message = "must be a valid hexadecimal color", code = "hexColor")
+            )
         }
     }
 
@@ -34,18 +44,28 @@ class ColorConstraintsTest {
     inner class RgbColor {
         @ParameterizedTest
         @ValueSource(strings = ["rgb(255, 0, 0)", "rgba(0,0,0,0.5)", "rgb(10,20,30)", "rgba(0,0,0,1.0)"])
-        fun `given a valid RGB color should accept it`(color: String) {
-            val node = ValidationNode("color", color).apply { rgbColor() }
+        fun `given a valid RGB color should accept it`(
+            color: String
+        ) {
+            val node = ValidationNode(path = "color", value = color).apply { rgbColor() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["rgb(256, 0, 0)", "rgb(255, 0)", "rgba(0,0,0,2)", "#ff0000", "rgba(0,0,0,1.5)"])
-        fun `given an invalid RGB color should report it`(color: String) {
-            val node = ValidationNode("color", color).apply { rgbColor() }
+        fun `given an invalid RGB color should report it`(
+            color: String
+        ) {
+            val node = ValidationNode(path = "color", value = color).apply { rgbColor() }
 
-            node.validate() shouldBe listOf(Violation("color", "must be a valid RGB color", "rgbColor"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "color", message = "must be a valid RGB color", code = "rgbColor")
+            )
         }
     }
 
@@ -54,18 +74,28 @@ class ColorConstraintsTest {
     inner class HslColor {
         @ParameterizedTest
         @ValueSource(strings = ["hsl(120, 100%, 50%)", "hsla(240,50%,50%,0.3)", "hsla(0,0%,0%,1.0)"])
-        fun `given a valid HSL color should accept it`(color: String) {
-            val node = ValidationNode("color", color).apply { hslColor() }
+        fun `given a valid HSL color should accept it`(
+            color: String
+        ) {
+            val node = ValidationNode(path = "color", value = color).apply { hslColor() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["hsl(361, 100%, 50%)", "hsl(120, 101%, 50%)", "hsl(120, 100, 50)"])
-        fun `given an invalid HSL color should report it`(color: String) {
-            val node = ValidationNode("color", color).apply { hslColor() }
+        fun `given an invalid HSL color should report it`(
+            color: String
+        ) {
+            val node = ValidationNode(path = "color", value = color).apply { hslColor() }
 
-            node.validate() shouldBe listOf(Violation("color", "must be a valid HSL color", "hslColor"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "color", message = "must be a valid HSL color", code = "hslColor")
+            )
         }
     }
 }

@@ -14,19 +14,25 @@ class ValidationTest {
     @DisplayName("When validate is called")
     inner class Validate {
         @Test
-        fun `given a contact with a short phone should report it at the root`() {
-            val contact = Contact(phone = "123")
+        fun `given a valid contact should be valid`() {
+            val contact = Contact()
+            val rules = contact.validation()
 
-            contact.validation().validate().violations shouldBe listOf(
-                Violation("phone", "must have at least 8 characters", "minLength")
-            )
+            val result = rules.validate()
+
+            result.isValid shouldBe true
         }
 
         @Test
-        fun `given a valid contact should be valid`() {
-            val contact = Contact()
+        fun `given a contact with a short phone should report it at the root`() {
+            val contact = Contact(phone = "123")
+            val rules = contact.validation()
 
-            contact.validation().validate().isValid shouldBe true
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "phone", message = "must have at least 8 characters", code = "minLength")
+            )
         }
     }
 
@@ -37,20 +43,39 @@ class ValidationTest {
         fun `given premises inside the block should attach the entries to their violations`() {
             val operation = Operation(email = null, phone = null)
 
-            operation.validate().violations shouldBe listOf(
-                Violation("email", "at least one of email, phone is required", "atLeastOneOf", mapOf("operationId" to "op-1")),
-                Violation("phone", "at least one of email, phone is required", "atLeastOneOf", mapOf("operationId" to "op-1"))
+            val result = operation.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "email",
+                    message = "at least one of email, phone is required",
+                    code = "atLeastOneOf",
+                    metadata = mapOf("operationId" to "op-1")
+                ),
+                Violation(
+                    path = "phone",
+                    message = "at least one of email, phone is required",
+                    code = "atLeastOneOf",
+                    metadata = mapOf("operationId" to "op-1")
+                )
             )
         }
 
         @Test
         fun `given a missing value inside the block should attach the entries to the required violation`() {
-            val validation = validation {
-                metadata("operationId" to "op-1") { required<String>("email", null) {} }
+            val rules = validation {
+                metadata("operationId" to "op-1") { required<String>(name = "email", value = null) {} }
             }
 
-            validation.validate().violations shouldBe listOf(
-                Violation("email", "is required", "required", mapOf("operationId" to "op-1"))
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "email",
+                    message = "is required",
+                    code = "required",
+                    metadata = mapOf("operationId" to "op-1")
+                )
             )
         }
 
@@ -58,8 +83,15 @@ class ValidationTest {
         fun `given nested objects inside the block should merge the entries of each level`() {
             val batch = Batch(operations = listOf(Operation(id = "op-7", amount = 0)))
 
-            batch.validate().violations shouldBe listOf(
-                Violation("operations[0].amount", "must be positive", "positive", mapOf("clientId" to "c-9", "operationId" to "op-7"))
+            val result = batch.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "operations[0].amount",
+                    message = "must be positive",
+                    code = "positive",
+                    metadata = mapOf("clientId" to "c-9", "operationId" to "op-7")
+                )
             )
         }
 
@@ -67,26 +99,35 @@ class ValidationTest {
         fun `given a collection of a nested object inside the block should attach the entries to its elements`() {
             val batch = Batch(operations = listOf(Operation(tags = listOf("x"))))
 
-            batch.validate().violations shouldBe listOf(
+            val result = batch.validate()
+
+            result.violations shouldBe listOf(
                 Violation(
-                    "operations[0].tags[0]",
-                    "must have at least 3 characters",
-                    "minLength",
-                    mapOf("clientId" to "c-9", "operationId" to "op-1")
+                    path = "operations[0].tags[0]",
+                    message = "must have at least 3 characters",
+                    code = "minLength",
+                    metadata = mapOf("clientId" to "c-9", "operationId" to "op-1")
                 )
             )
         }
 
         @Test
         fun `given a rule after the block should report it without the entries`() {
-            val validation = validation {
-                metadata("operationId" to "op-1") { required<String>("email", null) {} }
-                required<String>("phone", null) {}
+            val rules = validation {
+                metadata("operationId" to "op-1") { required<String>(name = "email", value = null) {} }
+                required<String>(name = "phone", value = null) {}
             }
 
-            validation.validate().violations shouldBe listOf(
-                Violation("email", "is required", "required", mapOf("operationId" to "op-1")),
-                Violation("phone", "is required", "required")
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "email",
+                    message = "is required",
+                    code = "required",
+                    metadata = mapOf("operationId" to "op-1")
+                ),
+                Violation(path = "phone", message = "is required", code = "required")
             )
         }
     }

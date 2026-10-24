@@ -18,24 +18,97 @@ class PremisesTest {
     @DisplayName("When required is called")
     inner class Required {
         @Test
+        fun `given a valid value should accept it`() {
+            val rules = validation { required(name = "cpf", value = "52998224725") { cpf() } }
+
+            val result = rules.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
         fun `given a customer without a name should report only that it is required`() {
             val customer = Customer(name = null)
 
-            customer.validate().violations shouldBe listOf(Violation("name", "is required", "required"))
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "is required", code = "required")
+            )
         }
 
         @Test
         fun `given a customer with a short name should run the rules of the name`() {
             val customer = Customer(name = "A")
 
-            customer.validate().violations shouldBe listOf(Violation("name", "must have at least 2 characters", "minLength"))
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "must have at least 2 characters", code = "minLength")
+            )
         }
 
         @Test
         fun `given a custom message should report it when the email is missing`() {
             val customer = Customer(email = null)
 
-            customer.validate().violations shouldBe listOf(Violation("email", "email is mandatory", "required"))
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "email", message = "email is mandatory", code = "required")
+            )
+        }
+
+        @Test
+        fun `given a missing value should report only that it is required`() {
+            val cpf: String? = null
+            val rules = validation { required(name = "cpf", value = cpf) { cpf() } }
+
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "cpf", message = "is required", code = "required")
+            )
+        }
+
+        @Test
+        fun `given an invalid value should run its rules under the name`() {
+            val rules = validation { required(name = "cpf", value = "123") { cpf() } }
+
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "cpf", message = "must be a valid CPF", code = "cpf")
+            )
+        }
+
+        @Test
+        fun `given a custom message should report it when the value is missing`() {
+            val cpf: String? = null
+            val rules = validation { required(name = "cpf", value = cpf, message = "informe o CPF") { cpf() } }
+
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "cpf", message = "informe o CPF", code = "required")
+            )
+        }
+
+        @Test
+        fun `given several values should report each one under its own name`() {
+            val cpf: String? = null
+            val page = 0
+            val rules = validation {
+                required(name = "cpf", value = cpf) { cpf() }
+                required(name = "page", value = page) { min(1) }
+            }
+
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "cpf", message = "is required", code = "required"),
+                Violation(path = "page", message = "must be at least 1", code = "min")
+            )
         }
     }
 
@@ -43,17 +116,44 @@ class PremisesTest {
     @DisplayName("When ifPresent is called")
     inner class IfPresent {
         @Test
-        fun `given a customer without a nickname should not validate it`() {
-            val customer = Customer(nickname = null)
+        fun `given a missing value should accept it`() {
+            val page: Int? = null
+            val rules = validation { ifPresent(name = "page", value = page) { min(1) } }
 
-            customer.validate().violations shouldBe emptyList()
+            val result = rules.validate()
+
+            result.violations shouldBe emptyList()
         }
 
         @Test
         fun `given a short nickname should run its rules`() {
             val customer = Customer(nickname = "Al")
 
-            customer.validate().violations shouldBe listOf(Violation("nickname", "must have at least 3 characters", "minLength"))
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "nickname", message = "must have at least 3 characters", code = "minLength")
+            )
+        }
+
+        @Test
+        fun `given a present value should run its rules under the name`() {
+            val rules = validation { ifPresent(name = "page", value = 0) { min(1) } }
+
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "page", message = "must be at least 1", code = "min")
+            )
+        }
+
+        @Test
+        fun `given a customer without a nickname should not validate it`() {
+            val customer = Customer(nickname = null)
+
+            val result = customer.validate()
+
+            result.violations shouldBe emptyList()
         }
     }
 
@@ -61,24 +161,34 @@ class PremisesTest {
     @DisplayName("When forbidden is called")
     inner class Forbidden {
         @Test
-        fun `given a CPF and a company name should report the company name`() {
-            val recipient = Recipient(companyName = "Ana LTDA")
-
-            recipient.validate().violations shouldBe listOf(Violation("companyName", "must be null", "forbidden"))
-        }
-
-        @Test
         fun `given a CPF without a company name should accept it`() {
             val recipient = Recipient(companyName = null)
 
-            recipient.validate().violations shouldBe emptyList()
+            val result = recipient.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a CPF and a company name should report the company name`() {
+            val recipient = Recipient(companyName = "Ana LTDA")
+
+            val result = recipient.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "companyName", message = "must be null", code = "forbidden")
+            )
         }
 
         @Test
         fun `given a custom message should report it`() {
             val login = Login(email = null, phone = "11999999999", password = "secret")
 
-            login.validate().violations shouldBe listOf(Violation("password", "password needs an email", "forbidden"))
+            val result = login.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "password", message = "password needs an email", code = "forbidden")
+            )
         }
     }
 
@@ -86,36 +196,44 @@ class PremisesTest {
     @DisplayName("When atLeastOneOf is called")
     inner class AtLeastOneOf {
         @Test
-        fun `given neither an email nor a phone should report both fields`() {
-            val recipient = Recipient(email = null, phone = null)
-
-            recipient.validate().violations shouldBe listOf(
-                Violation("email", "at least one of email, phone is required", "atLeastOneOf"),
-                Violation("phone", "at least one of email, phone is required", "atLeastOneOf")
-            )
-        }
-
-        @Test
         fun `given only a phone should accept it`() {
             val recipient = Recipient(email = null, phone = "11999999999")
 
-            recipient.validate().violations shouldBe emptyList()
+            val result = recipient.validate()
+
+            result.violations shouldBe emptyList()
         }
 
         @Test
         fun `given both an email and a phone should accept them`() {
             val recipient = Recipient(email = "ana@mail.com", phone = "11999999999")
 
-            recipient.validate().violations shouldBe emptyList()
+            val result = recipient.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given neither an email nor a phone should report both fields`() {
+            val recipient = Recipient(email = null, phone = null)
+
+            val result = recipient.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "email", message = "at least one of email, phone is required", code = "atLeastOneOf"),
+                Violation(path = "phone", message = "at least one of email, phone is required", code = "atLeastOneOf")
+            )
         }
 
         @Test
         fun `given a custom message should replace the fields placeholder`() {
             val login = Login(email = null, phone = null)
 
-            login.validate().violations shouldBe listOf(
-                Violation("email", "informe email, phone", "atLeastOneOf"),
-                Violation("phone", "informe email, phone", "atLeastOneOf")
+            val result = login.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "email", message = "informe email, phone", code = "atLeastOneOf"),
+                Violation(path = "phone", message = "informe email, phone", code = "atLeastOneOf")
             )
         }
     }
@@ -124,27 +242,41 @@ class PremisesTest {
     @DisplayName("When atMostOneOf is called")
     inner class AtMostOneOf {
         @Test
-        fun `given a CPF and a CNPJ should report only the filled fields`() {
-            val recipient = Recipient(cpf = "52998224725", cnpj = "11222333000181")
-
-            recipient.validate().violations shouldBe listOf(
-                Violation("cpf", "at most one of cpf, cnpj, passport can be filled", "atMostOneOf"),
-                Violation("cnpj", "at most one of cpf, cnpj, passport can be filled", "atMostOneOf")
-            )
-        }
-
-        @Test
         fun `given only a CNPJ should accept it`() {
             val recipient = Recipient(cpf = null, cnpj = "11222333000181")
 
-            recipient.validate().violations shouldBe emptyList()
+            val result = recipient.validate()
+
+            result.violations shouldBe emptyList()
         }
 
         @Test
         fun `given neither a CPF nor a CNPJ should accept it`() {
             val recipient = Recipient(cpf = null, cnpj = null)
 
-            recipient.validate().violations shouldBe emptyList()
+            val result = recipient.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a CPF and a CNPJ should report only the filled fields`() {
+            val recipient = Recipient(cpf = "52998224725", cnpj = "11222333000181")
+
+            val result = recipient.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "cpf",
+                    message = "at most one of cpf, cnpj, passport can be filled",
+                    code = "atMostOneOf"
+                ),
+                Violation(
+                    path = "cnpj",
+                    message = "at most one of cpf, cnpj, passport can be filled",
+                    code = "atMostOneOf"
+                )
+            )
         }
     }
 
@@ -152,13 +284,36 @@ class PremisesTest {
     @DisplayName("When exactlyOneOf is called")
     inner class ExactlyOneOf {
         @Test
+        fun `given only a bank account should accept it`() {
+            val recipient = Recipient(pixKey = null, bankAccount = "0001-12345")
+
+            val result = recipient.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
         fun `given no way to pay should report every field`() {
             val recipient = Recipient(pixKey = null, bankAccount = null, boleto = null)
 
-            recipient.validate().violations shouldBe listOf(
-                Violation("pixKey", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf"),
-                Violation("bankAccount", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf"),
-                Violation("boleto", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf")
+            val result = recipient.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "pixKey",
+                    message = "exactly one of pixKey, bankAccount, boleto must be filled",
+                    code = "exactlyOneOf"
+                ),
+                Violation(
+                    path = "bankAccount",
+                    message = "exactly one of pixKey, bankAccount, boleto must be filled",
+                    code = "exactlyOneOf"
+                ),
+                Violation(
+                    path = "boleto",
+                    message = "exactly one of pixKey, bankAccount, boleto must be filled",
+                    code = "exactlyOneOf"
+                )
             )
         }
 
@@ -166,24 +321,29 @@ class PremisesTest {
         fun `given a pix key and a bank account should report only the filled fields`() {
             val recipient = Recipient(pixKey = "ana@mail.com", bankAccount = "0001-12345")
 
-            recipient.validate().violations shouldBe listOf(
-                Violation("pixKey", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf"),
-                Violation("bankAccount", "exactly one of pixKey, bankAccount, boleto must be filled", "exactlyOneOf")
+            val result = recipient.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "pixKey",
+                    message = "exactly one of pixKey, bankAccount, boleto must be filled",
+                    code = "exactlyOneOf"
+                ),
+                Violation(
+                    path = "bankAccount",
+                    message = "exactly one of pixKey, bankAccount, boleto must be filled",
+                    code = "exactlyOneOf"
+                )
             )
-        }
-
-        @Test
-        fun `given only a bank account should accept it`() {
-            val recipient = Recipient(pixKey = null, bankAccount = "0001-12345")
-
-            recipient.validate().violations shouldBe emptyList()
         }
 
         @Test
         fun `given the same property twice should count it once`() {
             val shipment = Shipment(trackingCode = "BR123", pickupCode = null)
 
-            shipment.validate().violations shouldBe emptyList()
+            val result = shipment.validate()
+
+            result.violations shouldBe emptyList()
         }
 
         @Test
@@ -198,99 +358,41 @@ class PremisesTest {
     @DisplayName("When allOrNoneOf is called")
     inner class AllOrNoneOf {
         @Test
-        fun `given only an agency should report the empty fields`() {
-            val account = BankAccount(agency = "0001")
-
-            account.validate().violations shouldBe listOf(
-                Violation("bank", "bank, agency, account must be filled together", "allOrNoneOf"),
-                Violation("account", "bank, agency, account must be filled together", "allOrNoneOf")
-            )
-        }
-
-        @Test
         fun `given every field should accept them`() {
             val account = BankAccount(bank = "341", agency = "0001", account = "12345-6")
 
-            account.validate().violations shouldBe emptyList()
+            val result = account.validate()
+
+            result.violations shouldBe emptyList()
         }
 
         @Test
         fun `given no field should accept it`() {
             val account = BankAccount()
 
-            account.validate().violations shouldBe emptyList()
-        }
-    }
-
-    @Nested
-    @DisplayName("When required is called with a value")
-    inner class RequiredValue {
-        @Test
-        fun `given a missing value should report only that it is required`() {
-            val cpf: String? = null
-
-            val result = validation { required("cpf", cpf) { cpf() } }.validate()
-
-            result.violations shouldBe listOf(Violation("cpf", "is required", "required"))
-        }
-
-        @Test
-        fun `given an invalid value should run its rules under the name`() {
-            val result = validation { required("cpf", "123") { cpf() } }.validate()
-
-            result.violations shouldBe listOf(Violation("cpf", "must be a valid CPF", "cpf"))
-        }
-
-        @Test
-        fun `given a valid value should accept it`() {
-            val result = validation { required("cpf", "52998224725") { cpf() } }.validate()
+            val result = account.validate()
 
             result.violations shouldBe emptyList()
         }
 
         @Test
-        fun `given a custom message should report it when the value is missing`() {
-            val cpf: String? = null
+        fun `given only an agency should report the empty fields`() {
+            val account = BankAccount(agency = "0001")
 
-            val result = validation { required("cpf", cpf, "informe o CPF") { cpf() } }.validate()
-
-            result.violations shouldBe listOf(Violation("cpf", "informe o CPF", "required"))
-        }
-
-        @Test
-        fun `given several values should report each one under its own name`() {
-            val cpf: String? = null
-            val page = 0
-
-            val result = validation {
-                required("cpf", cpf) { cpf() }
-                required("page", page) { min(1) }
-            }.validate()
+            val result = account.validate()
 
             result.violations shouldBe listOf(
-                Violation("cpf", "is required", "required"),
-                Violation("page", "must be at least 1", "min")
+                Violation(
+                    path = "bank",
+                    message = "bank, agency, account must be filled together",
+                    code = "allOrNoneOf"
+                ),
+                Violation(
+                    path = "account",
+                    message = "bank, agency, account must be filled together",
+                    code = "allOrNoneOf"
+                )
             )
-        }
-    }
-
-    @Nested
-    @DisplayName("When ifPresent is called with a value")
-    inner class IfPresentValue {
-        @Test
-        fun `given a missing value should accept it`() {
-            val page: Int? = null
-
-            val result = validation { ifPresent("page", page) { min(1) } }.validate()
-
-            result.violations shouldBe emptyList()
-        }
-
-        @Test
-        fun `given a present value should run its rules under the name`() {
-            val result = validation { ifPresent("page", 0) { min(1) } }.validate()
-
-            result.violations shouldBe listOf(Violation("page", "must be at least 1", "min"))
         }
     }
 }

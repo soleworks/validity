@@ -14,10 +14,14 @@ class NetherlandsConstraintsTest {
     inner class Bsn {
         @ParameterizedTest
         @ValueSource(strings = ["174559434", "612890053", "087880532", "386625918"])
-        fun `given a valid BSN should accept it`(value: String) {
-            val node = ValidationNode("bsn", value).apply { bsn() }
+        fun `given a valid BSN should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "bsn", value = value).apply { bsn() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
@@ -33,10 +37,16 @@ class NetherlandsConstraintsTest {
                 "abcdefghi"
             ]
         )
-        fun `given an invalid BSN should report it`(value: String) {
-            val node = ValidationNode("bsn", value).apply { bsn() }
+        fun `given an invalid BSN should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "bsn", value = value).apply { bsn() }
 
-            node.validate() shouldBe listOf(Violation("bsn", "must be a valid BSN", "bsn"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "bsn", message = "must be a valid BSN", code = "bsn")
+            )
         }
     }
 }

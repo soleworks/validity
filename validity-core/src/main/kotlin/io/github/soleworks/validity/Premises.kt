@@ -29,21 +29,19 @@ public fun <V : Any> required(
     block: ValidationNode<V>.() -> Unit
 ) {
     if (value == null)
-        return validation.add(
-            node<V?>(name, null).apply {
-                constraint(
-                    message = message,
-                    code = "required",
-                    predicate = { it != null }
-                )
-            }
+        return validation.add<V?>(
+            name = name,
+            value = null,
+            message = message,
+            code = "required",
+            predicate = { it != null }
         )
 
-    val node = node(name, value)
-
-    validation.add(node)
-
-    node.apply(block)
+    validation.add(
+        name = name,
+        value = value,
+        block = block
+    )
 }
 
 context(validation: Validation)
@@ -61,27 +59,23 @@ public fun <V : Any> ifPresent(
     value: V?,
     block: ValidationNode<V>.() -> Unit
 ) {
-    if (value == null)
-        return
-
-    val node = node(name, value)
-
-    validation.add(node)
-
-    node.apply(block)
+    if (value != null)
+        validation.add(
+            name = name,
+            value = value,
+            block = block
+        )
 }
 
 context(validation: Validation)
 public fun KProperty0<*>.forbidden(
     message: String = messages.forbidden
 ): Unit = validation.add(
-    node(name, get()).apply {
-        constraint(
-            message = message,
-            code = "forbidden",
-            predicate = { it == null }
-        )
-    }
+    name = name,
+    value = get(),
+    message = message,
+    code = "forbidden",
+    predicate = { it == null }
 )
 
 context(validation: Validation)
@@ -140,23 +134,47 @@ private fun presence(
     val distinct = properties.distinct()
     val values = distinct.map { it.get() }
     val filled = values.count { it != null }
-    val text = message.replace("{fields}", distinct.joinToString { it.name })
+    val text = message.filled("fields" to distinct.map { it.name })
 
     distinct.zip(values).forEach { (property, value) ->
         validation.add(
-            node(property.name, value).apply {
-                constraint(
-                    message = text,
-                    code = code,
-                    predicate = { accepts(filled, it) }
-                )
-            }
+            name = property.name,
+            value = value,
+            message = text,
+            code = code,
+            predicate = { accepts(filled, it) }
         )
     }
 }
 
-context(validation: Validation)
-private fun <V> node(
+private fun <V> Validation.add(
     name: String,
-    value: V
-): ValidationNode<V> = ValidationNode(name, value).also { it.metadata = validation.metadata }
+    value: V,
+    block: ValidationNode<V>.() -> Unit
+) {
+    val node = ValidationNode(path = name, value = value).also { node -> node.metadata = metadata }
+
+    add(node)
+
+    node.apply(block)
+}
+
+private fun <V> Validation.add(
+    name: String,
+    value: V,
+    message: String,
+    code: String,
+    predicate: (V) -> Boolean
+) {
+    add(
+        name = name,
+        value = value,
+        block = {
+            constraint(
+                message = message,
+                code = code,
+                predicate = predicate
+            )
+        }
+    )
+}

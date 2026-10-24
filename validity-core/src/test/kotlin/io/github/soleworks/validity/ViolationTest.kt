@@ -11,16 +11,26 @@ class ViolationTest {
     inner class ToString {
         @Test
         fun `given no metadata should leave it out of the text`() {
-            val violation = Violation("amount", "must be positive", "positive")
+            val violation = Violation(path = "amount", message = "must be positive", code = "positive")
 
-            violation.toString() shouldBe "Violation(path=amount, message=must be positive, code=positive)"
+            val result = violation.toString()
+
+            result shouldBe "Violation(path=amount, message=must be positive, code=positive)"
         }
 
         @Test
         fun `given metadata should show it in the text`() {
-            val violation = Violation("amount", "must be positive", "positive", mapOf("operationId" to "op-1"))
+            val violation = Violation(
+                path = "amount",
+                message = "must be positive",
+                code = "positive",
+                metadata = mapOf("operationId" to "op-1")
+            )
 
-            violation.toString() shouldBe "Violation(path=amount, message=must be positive, code=positive, metadata={operationId=op-1})"
+            val result = violation.toString()
+
+            result shouldBe
+                "Violation(path=amount, message=must be positive, code=positive, metadata={operationId=op-1})"
         }
     }
 }

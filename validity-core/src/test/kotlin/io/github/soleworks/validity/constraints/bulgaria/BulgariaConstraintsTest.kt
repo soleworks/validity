@@ -14,10 +14,14 @@ class BulgariaConstraintsTest {
     inner class Egn {
         @ParameterizedTest
         @ValueSource(strings = ["7501010010", "0101010012", "0111010010", "7521010014", "7541010019"])
-        fun `given an EGN with a valid date and check digit should accept it`(value: String) {
-            val node = ValidationNode("egn", value).apply { egn() }
+        fun `given an EGN with a valid date and check digit should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "egn", value = value).apply { egn() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
@@ -25,9 +29,13 @@ class BulgariaConstraintsTest {
         fun `given an EGN with an impossible date, a wrong check digit or another format should report it`(
             value: String
         ) {
-            val node = ValidationNode("egn", value).apply { egn() }
+            val node = ValidationNode(path = "egn", value = value).apply { egn() }
 
-            node.validate() shouldBe listOf(Violation("egn", "must be a valid EGN", "egn"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "egn", message = "must be a valid EGN", code = "egn")
+            )
         }
     }
 }

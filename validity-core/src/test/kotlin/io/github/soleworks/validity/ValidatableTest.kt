@@ -13,19 +13,21 @@ class ValidatableTest {
     @DisplayName("When validateOrThrow is called")
     inner class ValidateOrThrow {
         @Test
-        fun `given an invalid object should throw its violations`() {
-            val customer = Customer(name = "A")
-
-            val exception = shouldThrow<ValidationException> { customer.validateOrThrow() }
-
-            exception.violations shouldBe listOf(Violation("name", "must have at least 2 characters", "minLength"))
-        }
-
-        @Test
         fun `given a valid object should not throw`() {
             val customer = Customer()
 
             shouldNotThrowAny { customer.validateOrThrow() }
+        }
+
+        @Test
+        fun `given an invalid object should throw its violations`() {
+            val customer = Customer(name = "A")
+
+            val error = shouldThrow<ValidationException> { customer.validateOrThrow() }
+
+            error.violations shouldBe listOf(
+                Violation(path = "name", message = "must have at least 2 characters", code = "minLength")
+            )
         }
     }
 }

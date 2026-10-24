@@ -57,6 +57,7 @@ Transfer(method = "DOC", amount = BigDecimal("10.001"), document = "123").valida
 - [Metadata](#metadata)
 - [Configuration](#configuration)
 - [Modules](#modules)
+- [Development](#development)
 
 ## Running a validation
 
@@ -361,6 +362,15 @@ the current date; set a fixed one in tests. The default is the system clock.
 ## Requirements
 
 Java 17+.
+
+## Development
+
+`./gradlew build` compiles, tests and checks every module. Two tools keep the code in one style:
+
+- **Detekt** runs every rule it has, the ktlint and libraries rule sets included. [config/detekt/detekt.yml](config/detekt/detekt.yml) lists the few rules this project tunes, each with its reason. `./gradlew detektMain detektTest -PautoCorrect=true` fixes the formatting it can.
+- **Konsist**, in the internal `harness` module, checks the conventions Detekt cannot see: how a constraint is declared, how values are named, and that every test is a Given, a When and a Then, ordered by what it checks.
+
+Neither tool, nor Kotest, is a dependency of a published module.
 
 ## License
 

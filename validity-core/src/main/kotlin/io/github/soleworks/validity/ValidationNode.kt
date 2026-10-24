@@ -34,7 +34,12 @@ public class ValidationNode<V>(
                 if (predicate(value))
                     null
                 else
-                    Violation(path, message(value).filled(path, value), code, metadata)
+                    Violation(
+                        path = path,
+                        message = message(value).filled("path" to path, "value" to value),
+                        code = code,
+                        metadata = metadata
+                    )
             }
         )
     }
@@ -52,22 +57,6 @@ public class ValidationNode<V>(
         } finally {
             metadata = outer
         }
-    }
-
-    internal fun constraint(
-        message: (V) -> String,
-        code: String,
-        skipped: Boolean,
-        predicate: (V) -> Boolean
-    ) {
-        if (skipped)
-            return
-
-        constraint(
-            message = message,
-            code = code,
-            predicate = predicate
-        )
     }
 
     internal fun add(
@@ -93,9 +82,9 @@ public class ValidationNode<V>(
     ): ValidationNode<V> = if (path == this.path && metadata.isEmpty())
         this
     else
-        ValidationNode(path, value).also {
-            it.constraints += if (metadata.isEmpty()) constraints else constraints.map { constraint -> constraint.inheriting(metadata) }
-            it.groups += groups.map { nodes ->
+        ValidationNode(path, value).also { relocated ->
+            relocated.constraints += constraints.map { constraint -> constraint.inheriting(metadata) }
+            relocated.groups += groups.map { nodes ->
                 nodes.map { node -> node.relocated(path + node.path.removePrefix(this.path), metadata) }
             }
         }

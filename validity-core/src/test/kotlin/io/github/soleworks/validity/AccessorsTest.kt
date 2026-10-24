@@ -17,17 +17,23 @@ class AccessorsTest {
         fun `given a short tag should report it with its index`() {
             val order = Order(tags = listOf("gift", "x"))
 
-            order.validate().violations shouldBe listOf(Violation("tags[1]", "must have at least 3 characters", "minLength"))
+            val result = order.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "tags[1]", message = "must have at least 3 characters", code = "minLength")
+            )
         }
 
         @Test
         fun `given a list rule and item rules should report the list before its items`() {
             val order = Order(tags = listOf("a", "b", "gift", "sale"))
 
-            order.validate().violations shouldBe listOf(
-                Violation("tags", "must have at most 3 tags", ""),
-                Violation("tags[0]", "must have at least 3 characters", "minLength"),
-                Violation("tags[1]", "must have at least 3 characters", "minLength")
+            val result = order.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "tags", message = "must have at most 3 tags", code = ""),
+                Violation(path = "tags[0]", message = "must have at least 3 characters", code = "minLength"),
+                Violation(path = "tags[1]", message = "must have at least 3 characters", code = "minLength")
             )
         }
 
@@ -35,21 +41,33 @@ class AccessorsTest {
         fun `given boxes of products should report the product with both indexes`() {
             val order = Order(boxes = listOf(listOf("SKU-1", "S2")))
 
-            order.validate().violations shouldBe listOf(Violation("boxes[0][1]", "must have at least 5 characters", "minLength"))
+            val result = order.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "boxes[0][1]", message = "must have at least 5 characters", code = "minLength")
+            )
         }
 
         @Test
         fun `given a short coupon code in an array should report it with its index`() {
             val order = Order(couponCodes = arrayOf("PROMO10", "OFF"))
 
-            order.validate().violations shouldBe listOf(Violation("couponCodes[1]", "must have at least 5 characters", "minLength"))
+            val result = order.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "couponCodes[1]", message = "must have at least 5 characters", code = "minLength")
+            )
         }
 
         @Test
         fun `given a rule on a price entry should report it with its currency`() {
             val order = Order(prices = mapOf("BRL" to 50))
 
-            order.validate().violations shouldBe listOf(Violation("prices[BRL]", "must be at least 100 in BRL", ""))
+            val result = order.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "prices[BRL]", message = "must be at least 100 in BRL", code = "")
+            )
         }
     }
 
@@ -60,7 +78,11 @@ class AccessorsTest {
         fun `given a currency code that is too short should report it with the key`() {
             val order = Order(prices = mapOf("US" to 1000))
 
-            order.validate().violations shouldBe listOf(Violation("prices[US]", "must have at least 3 characters", "minLength"))
+            val result = order.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "prices[US]", message = "must have at least 3 characters", code = "minLength")
+            )
         }
     }
 
@@ -71,7 +93,11 @@ class AccessorsTest {
         fun `given a missing price should report it with its currency`() {
             val order = Order(prices = mapOf("USD" to null))
 
-            order.validate().violations shouldBe listOf(Violation("prices[USD]", "is required", "notNull"))
+            val result = order.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "prices[USD]", message = "is required", code = "notNull")
+            )
         }
     }
 
@@ -82,22 +108,36 @@ class AccessorsTest {
         fun `given an address without a street should report it under the address`() {
             val customer = Customer(address = Address(street = null))
 
-            customer.validate().violations shouldBe listOf(Violation("address.street", "is required", "required"))
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "address.street", message = "is required", code = "required")
+            )
         }
 
         @Test
         fun `given a list of addresses should report each one under its index`() {
             val customer = Customer(addresses = listOf(Address(), Address(street = null)))
 
-            customer.validate().violations shouldBe listOf(Violation("addresses[1].street", "is required", "required"))
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "addresses[1].street", message = "is required", code = "required")
+            )
         }
 
         @Test
         fun `given an address with a short phone should report it with the full path`() {
             val customer = Customer(addresses = listOf(Address(phones = listOf("123"))))
 
-            customer.validate().violations shouldBe listOf(
-                Violation("addresses[0].phones[0]", "must have at least 8 characters", "minLength")
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "addresses[0].phones[0]",
+                    message = "must have at least 8 characters",
+                    code = "minLength"
+                )
             )
         }
 
@@ -105,19 +145,21 @@ class AccessorsTest {
         fun `given a customer without an address should report only that it is required`() {
             val customer = Customer(address = null)
 
-            customer.validate().violations shouldBe listOf(Violation("address", "is required", "required"))
-        }
-    }
+            val result = customer.validate()
 
-    @Nested
-    @DisplayName("When valid is called with a validation")
-    inner class ValidWithValidation {
+            result.violations shouldBe listOf(
+                Violation(path = "address", message = "is required", code = "required")
+            )
+        }
+
         @Test
         fun `given a contact with a short phone should report it under the contact`() {
             val customer = Customer(contact = Contact(phone = "123"))
 
-            customer.validate().violations shouldBe listOf(
-                Violation("contact.phone", "must have at least 8 characters", "minLength")
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "contact.phone", message = "must have at least 8 characters", code = "minLength")
             )
         }
 
@@ -125,14 +167,22 @@ class AccessorsTest {
         fun `given a list of contacts should report each one under its index`() {
             val customer = Customer(contacts = listOf(Contact(), Contact(phone = null)))
 
-            customer.validate().violations shouldBe listOf(Violation("contacts[1].phone", "is required", "required"))
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "contacts[1].phone", message = "is required", code = "required")
+            )
         }
 
         @Test
         fun `given a customer without a contact should report only that it is required`() {
             val customer = Customer(contact = null)
 
-            customer.validate().violations shouldBe listOf(Violation("contact", "is required", "required"))
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "contact", message = "is required", code = "required")
+            )
         }
     }
 }

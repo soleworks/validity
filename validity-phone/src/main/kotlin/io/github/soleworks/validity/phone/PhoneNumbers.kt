@@ -6,168 +6,187 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil.ValidationResult
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber.CountryCodeSource
 
-internal object PhoneNumbers {
-    private const val UNKNOWN_REGION = "ZZ"
-    private const val PLUS = "+"
-    private const val MAX_AREA_CODE_LENGTH = 5
+private const val UNKNOWN_REGION = "ZZ"
+private const val PLUS = "+"
+private const val MAX_AREA_CODE_LENGTH = 5
 
-    private val util = PhoneNumberUtil.getInstance()
-    private val callingCodeFormat = Regex("[1-9]\\d{0,2}")
-    private val areaCodeFormat = Regex("\\d{1,$MAX_AREA_CODE_LENGTH}")
-    private val possible = setOf(ValidationResult.IS_POSSIBLE, ValidationResult.IS_POSSIBLE_LOCAL_ONLY)
-    private val geographicTypes = listOf(PhoneNumberType.FIXED_LINE, PhoneNumberType.MOBILE)
-    private val mobileTypes = setOf(PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBILE)
+private val PHONE_NUMBER_UTIL = PhoneNumberUtil.getInstance()
+private val CALLING_CODE_FORMAT = Regex("""[1-9]\d{0,2}""")
+private val AREA_CODE_FORMAT = Regex("""\d{1,$MAX_AREA_CODE_LENGTH}""")
+private val POSSIBLE_RESULTS = setOf(ValidationResult.IS_POSSIBLE, ValidationResult.IS_POSSIBLE_LOCAL_ONLY)
+private val GEOGRAPHIC_TYPES = listOf(PhoneNumberType.FIXED_LINE, PhoneNumberType.MOBILE)
+private val MOBILE_TYPES = setOf(PhoneNumberType.MOBILE, PhoneNumberType.FIXED_LINE_OR_MOBILE)
 
-    fun isValid(
-        text: String,
-        countryCode: String?,
-        areaCode: String?,
-        format: PhoneFormat?
-    ): Boolean = matches(text, countryCode, areaCode, format, null)
+internal fun String.isPhone(
+    countryCode: String?,
+    areaCode: String?,
+    format: PhoneFormat?
+): Boolean = isPhoneNumber(
+    countryCode = countryCode,
+    areaCode = areaCode,
+    format = format,
+    types = null
+)
 
-    fun isMobile(
-        text: String,
-        countryCode: String?,
-        areaCode: String?,
-        format: PhoneFormat?
-    ): Boolean = matches(text, countryCode, areaCode, format, mobileTypes)
+internal fun String.isMobilePhone(
+    countryCode: String?,
+    areaCode: String?,
+    format: PhoneFormat?
+): Boolean = isPhoneNumber(
+    countryCode = countryCode,
+    areaCode = areaCode,
+    format = format,
+    types = MOBILE_TYPES
+)
 
-    fun isCountryCode(
-        text: String
-    ): Boolean = text.toCallingCode() in util.supportedCallingCodes
+internal fun String.isCountryCode(): Boolean = toCallingCode() in PHONE_NUMBER_UTIL.supportedCallingCodes
 
-    fun isAreaCode(
-        text: String,
-        countryCode: String?
-    ): Boolean = regions(countryCode).any { region -> isAreaCodeIn(text, region) }
+internal fun String.isAreaCode(
+    countryCode: String?
+): Boolean = regions(countryCode).any { region -> isAreaCodeIn(region) }
 
-    private fun matches(
-        text: String,
-        countryCode: String?,
-        areaCode: String?,
-        format: PhoneFormat?,
-        types: Set<PhoneNumberType>?
-    ): Boolean {
-        val formats = format?.let(::listOf) ?: PhoneFormat.entries
+private fun String.isPhoneNumber(
+    countryCode: String?,
+    areaCode: String?,
+    format: PhoneFormat?,
+    types: Set<PhoneNumberType>?
+): Boolean {
+    val formats = format?.let(::listOf) ?: PhoneFormat.entries
 
-        return formats.any { candidate -> matchesAs(candidate, text, countryCode, areaCode, types) }
+    return formats.any { candidate ->
+        isPhoneNumberAs(
+            format = candidate,
+            countryCode = countryCode,
+            areaCode = areaCode,
+            types = types
+        )
     }
-
-    private fun matchesAs(
-        format: PhoneFormat,
-        text: String,
-        countryCode: String?,
-        areaCode: String?,
-        types: Set<PhoneNumberType>?
-    ): Boolean = when (format) {
-        PhoneFormat.COMPLETE -> isComplete(text, countryCode, areaCode, types)
-        PhoneFormat.AREA_CODE_AND_NUMBER -> regions(countryCode).any { region -> isValidIn(text, region, types, areaCode) }
-        PhoneFormat.NUMBER_ONLY -> regions(countryCode).any { region -> isNumberOnly(text, areaCode, region, types) }
-    }
-
-    private fun isComplete(
-        text: String,
-        countryCode: String?,
-        areaCode: String?,
-        types: Set<PhoneNumberType>?
-    ): Boolean {
-        val number = parse(if (text.trimStart().startsWith(PLUS)) text else PLUS + text, UNKNOWN_REGION) ?: return false
-        val sameCountry = countryCode == null || number.countryCode == countryCode.toCallingCode()
-
-        return util.isValidNumber(number) && sameCountry && number.hasType(types) && number.hasAreaCode(areaCode)
-    }
-
-    private fun isNumberOnly(
-        text: String,
-        areaCode: String?,
-        region: String,
-        types: Set<PhoneNumberType>?
-    ): Boolean {
-        if (areaCode != null)
-            return isValidIn(areaCode + text, region, types)
-
-        val number = parse(text, region) ?: return false
-
-        return number.isFromRegion() && number.isPossible(types)
-    }
-
-    private fun isValidIn(
-        text: String,
-        region: String,
-        types: Set<PhoneNumberType>? = null,
-        areaCode: String? = null
-    ): Boolean {
-        val number = parse(text, region) ?: return false
-
-        return number.isFromRegion() &&
-            util.isValidNumberForRegion(number, region) &&
-            number.hasType(types) &&
-            number.hasAreaCode(areaCode)
-    }
-
-    private fun isAreaCodeIn(
-        text: String,
-        region: String
-    ): Boolean {
-        val examples = geographicTypes
-            .mapNotNull { type -> util.getExampleNumberForType(region, type) }
-            .filter { example -> util.getLengthOfNationalDestinationCode(example) > 0 }
-
-        if (examples.map(util::getLengthOfNationalDestinationCode).toSet().size > 1)
-            return areaCodeFormat.matches(text)
-
-        return examples.any { example -> example.withAreaCode(text, region) }
-    }
-
-    private fun PhoneNumber.withAreaCode(
-        areaCode: String,
-        region: String
-    ): Boolean {
-        val length = util.getLengthOfNationalDestinationCode(this)
-        val subscriber = util.getNationalSignificantNumber(this).drop(length)
-
-        return areaCode.length == length && areaCodeFormat.matches(areaCode) && isValidIn(areaCode + subscriber, region)
-    }
-
-    private fun regions(
-        countryCode: String?
-    ): Collection<String> = if (countryCode == null)
-        util.supportedRegions
-    else
-        countryCode.toCallingCode()?.let(util::getRegionCodesForCountryCode).orEmpty()
-
-    private fun parse(
-        text: String,
-        region: String
-    ): PhoneNumber? = runCatching { util.parseAndKeepRawInput(text, region) }.getOrNull()
-
-    private fun PhoneNumber.isFromRegion(): Boolean = countryCodeSource == CountryCodeSource.FROM_DEFAULT_COUNTRY
-
-    private fun PhoneNumber.hasAreaCode(
-        areaCode: String?
-    ): Boolean {
-        if (areaCode == null)
-            return true
-
-        val region = util.getRegionCodeForNumber(this) ?: return false
-        val significantNumber = util.getNationalSignificantNumber(this)
-        val subscriber = significantNumber.drop(util.getLengthOfNationalDestinationCode(this))
-        val joined = parse(areaCode + subscriber, region) ?: return false
-
-        return joined.countryCode == countryCode && util.getNationalSignificantNumber(joined) == significantNumber
-    }
-
-    private fun PhoneNumber.hasType(
-        types: Set<PhoneNumberType>?
-    ): Boolean =
-        types == null || util.getNumberType(this) in types
-
-    private fun PhoneNumber.isPossible(
-        types: Set<PhoneNumberType>?
-    ): Boolean = if (types == null)
-        util.isPossibleNumberWithReason(this) in possible
-    else
-        types.any { type -> util.isPossibleNumberForTypeWithReason(this, type) in possible }
-
-    private fun String.toCallingCode(): Int? = trim().removePrefix(PLUS).takeIf(callingCodeFormat::matches)?.toInt()
 }
+
+private fun String.isPhoneNumberAs(
+    format: PhoneFormat,
+    countryCode: String?,
+    areaCode: String?,
+    types: Set<PhoneNumberType>?
+): Boolean = when (format) {
+    PhoneFormat.COMPLETE -> isComplete(countryCode = countryCode, areaCode = areaCode, types = types)
+
+    PhoneFormat.AREA_CODE_AND_NUMBER -> regions(countryCode).any { region ->
+        isValidIn(region = region, types = types, areaCode = areaCode)
+    }
+
+    PhoneFormat.NUMBER_ONLY -> regions(countryCode).any { region ->
+        isNumberOnly(areaCode = areaCode, region = region, types = types)
+    }
+}
+
+private fun String.isComplete(
+    countryCode: String?,
+    areaCode: String?,
+    types: Set<PhoneNumberType>?
+): Boolean {
+    val text = if (trimStart().startsWith(PLUS)) this else PLUS + this
+    val number = text.parse(UNKNOWN_REGION) ?: return false
+    val isSameCountry = countryCode == null || number.countryCode == countryCode.toCallingCode()
+
+    return PHONE_NUMBER_UTIL.isValidNumber(
+        number
+    ) &&
+        isSameCountry &&
+        number.hasType(types) &&
+        number.hasAreaCode(areaCode)
+}
+
+private fun String.isNumberOnly(
+    areaCode: String?,
+    region: String,
+    types: Set<PhoneNumberType>?
+): Boolean {
+    if (areaCode != null)
+        return (areaCode + this).isValidIn(region = region, types = types)
+
+    val number = parse(region) ?: return false
+
+    return number.isFromRegion() && number.isPossible(types)
+}
+
+private fun String.isValidIn(
+    region: String,
+    types: Set<PhoneNumberType>? = null,
+    areaCode: String? = null
+): Boolean {
+    val number = parse(region) ?: return false
+
+    return number.isFromRegion() &&
+        PHONE_NUMBER_UTIL.isValidNumberForRegion(number, region) &&
+        number.hasType(types) &&
+        number.hasAreaCode(areaCode)
+}
+
+private fun String.isAreaCodeIn(
+    region: String
+): Boolean {
+    val examples = GEOGRAPHIC_TYPES
+        .mapNotNull { type -> PHONE_NUMBER_UTIL.getExampleNumberForType(region, type) }
+        .filter { example -> PHONE_NUMBER_UTIL.getLengthOfNationalDestinationCode(example) > 0 }
+
+    if (examples.map(PHONE_NUMBER_UTIL::getLengthOfNationalDestinationCode).toSet().size > 1)
+        return AREA_CODE_FORMAT.matches(this)
+
+    return examples.any { example -> example.withAreaCode(areaCode = this, region = region) }
+}
+
+private fun PhoneNumber.withAreaCode(
+    areaCode: String,
+    region: String
+): Boolean {
+    val length = PHONE_NUMBER_UTIL.getLengthOfNationalDestinationCode(this)
+    val subscriber = PHONE_NUMBER_UTIL.getNationalSignificantNumber(this).drop(length)
+
+    return areaCode.length == length &&
+        AREA_CODE_FORMAT.matches(areaCode) &&
+        (areaCode + subscriber).isValidIn(region = region)
+}
+
+private fun regions(
+    countryCode: String?
+): Collection<String> = if (countryCode == null)
+    PHONE_NUMBER_UTIL.supportedRegions
+else
+    countryCode.toCallingCode()?.let(PHONE_NUMBER_UTIL::getRegionCodesForCountryCode).orEmpty()
+
+private fun String.parse(
+    region: String
+): PhoneNumber? = runCatching { PHONE_NUMBER_UTIL.parseAndKeepRawInput(this, region) }.getOrNull()
+
+private fun PhoneNumber.isFromRegion(): Boolean = countryCodeSource == CountryCodeSource.FROM_DEFAULT_COUNTRY
+
+private fun PhoneNumber.hasAreaCode(
+    areaCode: String?
+): Boolean {
+    if (areaCode == null)
+        return true
+
+    val region = PHONE_NUMBER_UTIL.getRegionCodeForNumber(this) ?: return false
+    val significantNumber = PHONE_NUMBER_UTIL.getNationalSignificantNumber(this)
+    val subscriber = significantNumber.drop(PHONE_NUMBER_UTIL.getLengthOfNationalDestinationCode(this))
+    val joined = (areaCode + subscriber).parse(region) ?: return false
+
+    return joined.countryCode == countryCode &&
+        PHONE_NUMBER_UTIL.getNationalSignificantNumber(
+            joined
+        ) == significantNumber
+}
+
+private fun PhoneNumber.hasType(
+    types: Set<PhoneNumberType>?
+): Boolean = types == null || PHONE_NUMBER_UTIL.getNumberType(this) in types
+
+private fun PhoneNumber.isPossible(
+    types: Set<PhoneNumberType>?
+): Boolean = if (types == null)
+    PHONE_NUMBER_UTIL.isPossibleNumberWithReason(this) in POSSIBLE_RESULTS
+else
+    types.any { type -> PHONE_NUMBER_UTIL.isPossibleNumberForTypeWithReason(this, type) in POSSIBLE_RESULTS }
+
+private fun String.toCallingCode(): Int? = trim().removePrefix(PLUS).takeIf(CALLING_CODE_FORMAT::matches)?.toInt()
