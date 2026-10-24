@@ -123,6 +123,65 @@ public fun allOrNoneOf(
 )
 
 context(validation: Validation)
+public fun atLeastOf(
+    count: Int,
+    vararg properties: KProperty0<*>,
+    message: String = messages.atLeastOf
+): Unit = presence(
+    count = count,
+    properties = properties,
+    message = message,
+    code = "atLeastOf",
+    accepts = { filled, value -> filled >= count || value != null }
+)
+
+context(validation: Validation)
+public fun atMostOf(
+    count: Int,
+    vararg properties: KProperty0<*>,
+    message: String = messages.atMostOf
+): Unit = presence(
+    count = count,
+    properties = properties,
+    message = message,
+    code = "atMostOf",
+    accepts = { filled, value -> filled <= count || value == null }
+)
+
+context(validation: Validation)
+public fun exactlyOf(
+    count: Int,
+    vararg properties: KProperty0<*>,
+    message: String = messages.exactlyOf
+): Unit = presence(
+    count = count,
+    properties = properties,
+    message = message,
+    code = "exactlyOf",
+    accepts = { filled, value ->
+        filled == count || (filled < count && value != null) || (filled > count && value == null)
+    }
+)
+
+context(validation: Validation)
+private fun presence(
+    count: Int,
+    properties: Array<out KProperty0<*>>,
+    message: String,
+    code: String,
+    accepts: (filled: Int, value: Any?) -> Boolean
+) {
+    require(count in 0..properties.distinct().size) { "$code needs a count between 0 and the number of properties" }
+
+    presence(
+        properties = properties,
+        message = message.filled("count" to count),
+        code = code,
+        accepts = accepts
+    )
+}
+
+context(validation: Validation)
 private fun presence(
     properties: Array<out KProperty0<*>>,
     message: String,

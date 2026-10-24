@@ -7,6 +7,7 @@ import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Login
 import io.github.soleworks.validity.samples.Recipient
 import io.github.soleworks.validity.samples.Shipment
+import io.github.soleworks.validity.samples.Signup
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
@@ -391,6 +392,144 @@ class PremisesTest {
                     path = "account",
                     message = "bank, agency, account must be filled together",
                     code = "allOrNoneOf"
+                )
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When atLeastOf is called")
+    inner class AtLeastOf {
+        @Test
+        fun `given two channels should accept them`() {
+            val signup = Signup()
+
+            val result = signup.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given only an email should report the empty fields`() {
+            val signup = Signup(phone = null)
+
+            val result = signup.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "phone",
+                    message = "at least 2 of email, phone, whatsapp must be filled",
+                    code = "atLeastOf"
+                ),
+                Violation(
+                    path = "whatsapp",
+                    message = "at least 2 of email, phone, whatsapp must be filled",
+                    code = "atLeastOf"
+                )
+            )
+        }
+
+        @Test
+        fun `given a count larger than the properties should fail when the rules are declared`() {
+            val error = shouldThrow<IllegalArgumentException> {
+                Signup().run { validation { atLeastOf(4, ::email, ::phone, ::whatsapp) } }
+            }
+
+            error.message shouldBe "atLeastOf needs a count between 0 and the number of properties"
+        }
+    }
+
+    @Nested
+    @DisplayName("When atMostOf is called")
+    inner class AtMostOf {
+        @Test
+        fun `given two discounts should accept them`() {
+            val signup = Signup(coupon = "PROMO10", giftCard = "GIFT-1")
+
+            val result = signup.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given three discounts should report the filled fields`() {
+            val signup = Signup(coupon = "PROMO10", giftCard = "GIFT-1", cashback = "CB-5")
+
+            val result = signup.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "coupon",
+                    message = "at most 2 of coupon, giftCard, cashback can be filled",
+                    code = "atMostOf"
+                ),
+                Violation(
+                    path = "giftCard",
+                    message = "at most 2 of coupon, giftCard, cashback can be filled",
+                    code = "atMostOf"
+                ),
+                Violation(
+                    path = "cashback",
+                    message = "at most 2 of coupon, giftCard, cashback can be filled",
+                    code = "atMostOf"
+                )
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When exactlyOf is called")
+    inner class ExactlyOf {
+        @Test
+        fun `given two references should accept them`() {
+            val signup = Signup()
+
+            val result = signup.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given one reference should report the empty fields`() {
+            val signup = Signup(secondReference = null)
+
+            val result = signup.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "secondReference",
+                    message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
+                    code = "exactlyOf"
+                ),
+                Violation(
+                    path = "thirdReference",
+                    message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
+                    code = "exactlyOf"
+                )
+            )
+        }
+
+        @Test
+        fun `given three references should report the filled fields`() {
+            val signup = Signup(thirdReference = "Duda")
+
+            val result = signup.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "firstReference",
+                    message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
+                    code = "exactlyOf"
+                ),
+                Violation(
+                    path = "secondReference",
+                    message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
+                    code = "exactlyOf"
+                ),
+                Violation(
+                    path = "thirdReference",
+                    message = "exactly 2 of firstReference, secondReference, thirdReference must be filled",
+                    code = "exactlyOf"
                 )
             )
         }

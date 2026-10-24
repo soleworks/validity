@@ -77,7 +77,7 @@ Violation(path=iban, message=is required, code=required)
 - **`null` is decided once.** `required`, `ifPresent` and `forbidden` settle what `null` means, and every constraint
   after them works on the non-null type, so autocomplete offers only the ones that fit.
 - **Rules across fields are built in.** `atLeastOneOf`, `exactlyOneOf` and `allOrNoneOf` cover the rules that forms
-  and payment APIs are full of, `constraint(::total, message = "...") { }` checks any rule about the whole object,
+  and payment APIs are full of, `exactlyOf(2, ::a, ::b, ::c)` counts any number of them, `constraint(::total, message = "...") { }` checks any rule about the whole object,
   and `or`, `and` and `not` combine any constraints.
 - **Nested objects and collections.** `valid()` and `each` follow the data, and every violation says where it is:
   `shipping.zipCode`, `items[1].quantity`, `prices[USD]`.
