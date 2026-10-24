@@ -1,19 +1,42 @@
-# Validity
+<div align="center">
 
-Simple, idiomatic validation for Kotlin.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/logo-light.svg">
+  <img alt="Validity logo" src="docs/assets/logo-light.svg" width="160">
+</picture>
 
-> **Work in progress.** The API is not stable and nothing is published yet.
+<h1>Validity</h1>
+
+**Validation for Kotlin, written in plain Kotlin.**
+
+Every broken rule at once, each with a path, a message for people and a code for programs.
+
+<br>
+
+[![Build](https://img.shields.io/github/actions/workflow/status/soleworks/validity/ci.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=build)](https://github.com/soleworks/validity/actions/workflows/ci.yml)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.4.20-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Java](https://img.shields.io/badge/Java-17%2B-E76F00?style=flat-square&logo=openjdk&logoColor=white)](https://adoptium.net)
+[![License](https://img.shields.io/badge/license-Apache%202.0-2F81F7?style=flat-square)](LICENSE)
+[![Maven Central](https://img.shields.io/badge/Maven%20Central-coming%20soon-8B949E?style=flat-square&logo=apachemaven&logoColor=white)](#installation)
+
+[Why Validity](#why-validity) · [Installation](#installation) · [Quick start](#quick-start) · [Modules](#modules) · [Documentation](#documentation)
+
+</div>
+
+<br>
+
+## At a glance
 
 ```kotlin
-enum class PaymentMethod { PIX, TED }
+enum class PaymentMethod { CARD, SEPA }
 
-data class Transfer(
+data class Payment(
     val method: String?,
     val amount: BigDecimal?,
-    val document: String?,
-    val pixKey: String? = null,
-    val agency: String? = null,
-    val account: String? = null
+    val currency: String?,
+    val cardNumber: String? = null,
+    val iban: String? = null
 ) : Validatable {
     override fun validation() = validation {
         ::method required { enum<PaymentMethod>() }
@@ -21,347 +44,124 @@ data class Transfer(
             positive()
             maxDecimalPlaces(2)
         }
-        ::document required {
-            or {
-                cpf()
-                cnpj()
-            }
-        }
+        ::currency required { currencyCode() }
 
         when (method) {
-            "PIX" -> ::pixKey required { maxLength(77) }
-            "TED" -> allOrNoneOf(::agency, ::account)
+            "CARD" -> ::cardNumber required { creditCard() }
+            "SEPA" -> ::iban required { iban() }
         }
     }
 }
 
-Transfer(method = "DOC", amount = BigDecimal("10.001"), document = "123").validate().violations
-// [Violation(path=method, message=must be one of PIX, TED, code=enum),
-//  Violation(path=amount, message=must have at most 2 decimal places, code=maxDecimalPlaces),
-//  Violation(path=document, message=must be a valid CPF or must be a valid CNPJ, code=or)]
+val payment = Payment(method = "SEPA", amount = "-9.999".toBigDecimal(), currency = "EURO")
+
+payment.validate().violations.forEach(::println)
 ```
 
-- A class implements `Validatable` and returns its rules from `validation()`; `validate()` runs them.
-- Every error is reported at once, each as a `Violation(path, message, code)`.
-- Conditions are plain Kotlin: `if`, `when`, loops, and the other fields of the object.
+It prints every broken rule, not just the first:
 
-## Contents
-
-- [Running a validation](#running-a-validation)
-- [Premises: how a field enters](#premises-how-a-field-enters)
-- [Rules across fields](#rules-across-fields)
-- [Nested objects and collections](#nested-objects-and-collections)
-- [Constraints](#constraints)
-- [Combining constraints](#combining-constraints)
-- [Messages](#messages)
-- [Metadata](#metadata)
-- [Configuration](#configuration)
-- [Modules](#modules)
-- [Development](#development)
-
-## Running a validation
-
-```kotlin
-val result = transfer.validate()
-
-result.isValid      // false
-result.violations   // [Violation(path=amount, message=..., code=maxDecimalPlaces), ...]
+```text
+Violation(path=amount, message=must be positive, code=positive)
+Violation(path=amount, message=must have at most 2 decimal places, code=maxDecimalPlaces)
+Violation(path=currency, message=must be a valid ISO 4217 currency code, code=currencyCode)
+Violation(path=iban, message=is required, code=required)
 ```
 
-- `path` is where the error is (`amount`, `address.street`, `phones[1]`, `prices[USD]`).
-- `message` is for people; it can be translated and configured (see [Messages](#messages)).
-- `code` is for programs: the name of the constraint that failed (`minLength`, `cpf`, `required`, `or`).
-  It does not change when the message does, so a front end can translate by `code`.
+## Why Validity
 
-To stop on an invalid object, throw its violations and let one error handler turn them into a response:
+- **Rules read like the requirements.** `::email required { email() }` is the sentence from the ticket, written next
+  to the data it protects.
+- **Conditions are plain Kotlin.** "Required if", "only for companies" and "after the check-in" are an `if`, a `when`
+  and a field of the object. No validation groups, no class-level annotations.
+- **`null` is decided once.** `required`, `ifPresent` and `forbidden` settle what `null` means, and every constraint
+  after them works on the non-null type, so autocomplete offers only the ones that fit.
+- **Rules across fields are built in.** `atLeastOneOf`, `exactlyOneOf` and `allOrNoneOf` cover the rules that forms
+  and payment APIs are full of, and `or`, `and` and `not` combine any constraints.
+- **Nested objects and collections.** `valid()` and `each` follow the data, and every violation says where it is:
+  `shipping.zipCode`, `items[1].quantity`, `prices[USD]`.
+- **Every error at once, for two audiences.** A `message` for people, configurable and translatable, and a stable
+  `code` for programs, plus the `metadata` you attach.
+- **Batteries included.** More than 140 constraints, postal codes of 72 countries, national documents of 14, and phone
+  numbers in their own module.
+- **Nothing hidden.** No annotations, no code generation, no `kotlin-reflect`. `validity-core` depends on nothing but
+  the Kotlin standard library.
+
+How it compares, in each library's own terms:
+
+| | Validity | Konform | Valiktor | Akkurate | Jakarta Validation |
+|---|---|---|---|---|---|
+| Rules are | Kotlin DSL | Kotlin DSL | Kotlin DSL | Kotlin DSL | annotations |
+| They live | in the class, or beside it | in a `Validation<T>` | usually in `init` | in a `Validator<T>` | on fields and classes |
+| A rule on another field | `if`, `when` | `dynamic { }` | code in the block | code in the block | class-level constraint, groups |
+| Code generation | none | none | none | KSP plugin | none |
+| Platforms | JVM 17+ | Multiplatform | JVM | Multiplatform | JVM |
+
+Each of them is a solid choice, and some go where Validity does not yet: Konform and Akkurate run on Kotlin
+Multiplatform, and Jakarta Validation plugs straight into the frameworks that read its annotations.
+
+## Installation
+
+> [!NOTE]
+> Validity is not on Maven Central yet: the first release, `0.1.0`, is on its way. Until it lands, clone this
+> repository next to your project and add `includeBuild("../validity")` to your `settings.gradle.kts`. Gradle then
+> builds the dependencies below from the clone.
 
 ```kotlin
-val request = call.receive<CreateAccountRequest>().also { it.validateOrThrow() }
-// or: request.validate().orThrow()
-// ValidationException: username: 'al' is too short, use at least 3 characters
-//   .violations == [Violation(path=username, message=..., code=minLength)]
-```
+dependencies {
+    implementation("io.github.soleworks:validity-core:0.1.0")
 
-A `validation { }` can also run by itself, without a class that implements `Validatable`:
-
-```kotlin
-val result = validation {
-    required("document", document) { cpf() }
-    ifPresent("page", page) { min(1) }
-}.validate()
-// document = null, page = 0
-// [Violation(path=document, message=is required, code=required),
-//  Violation(path=page, message=must be at least 1, code=min)]
-```
-
-That is the way to check values that are not properties, such as the query and path parameters of an endpoint:
-the name passed to `required` / `ifPresent` becomes the path.
-
-## Premises: how a field enters
-
-A premise takes a field (`::name`) and says what `null` means for it.
-
-| Premise | `null` | Otherwise |
-|---|---|---|
-| `::name required { }` | reports `is required` | runs the block |
-| `::name.required("tell us your name") { }` | reports the given message | runs the block |
-| `::nickname ifPresent { }` | accepted | runs the block |
-| `::companyName.forbidden()` | accepted | reports `must be null` |
-
-```kotlin
-override fun validation() = validation {
-    ::name.required("tell us your name") { minLength(2) }
-    ::nickname ifPresent { minLength(3) }
+    // Optional: phone numbers, with Google's libphonenumber
+    implementation("io.github.soleworks:validity-phone:0.1.0")
 }
 ```
 
-Inside the block, the value is never `null`, so the constraints receive the real type (`String`, not `String?`).
+Validity runs on Java 17 or newer and is built with Kotlin 2.4.
 
-## Rules across fields
+## Quick start
 
-Rules that depend on other fields read them directly, because the block runs inside the object:
-
-```kotlin
-data class Booking(val checkIn: LocalDate?, val checkOut: LocalDate?) : Validatable {
-    override fun validation() = validation {
-        ::checkIn required { futureOrPresent() }
-        ::checkOut required { after(checkIn) }
-    }
-}
-// [Violation(path=checkOut, message=must be after 2026-10-10, code=after)]
-```
-
-A constraint that compares with another value skips the check when that value is `null`; the other field's own
-premise reports it.
-
-Rules about which fields may be filled:
+Implement `Validatable`, declare the rules, and validate:
 
 ```kotlin
-override fun validation() = validation {
-    exactlyOneOf(::pixKey, ::bankAccount)
-    atLeastOneOf(::email, ::phone)
-    atMostOneOf(::cpf, ::cnpj)
-    allOrNoneOf(::bank, ::agency, ::account)
+import io.github.soleworks.validity.*
+import io.github.soleworks.validity.constraints.*
 
-    if (cpf != null) ::companyName.forbidden()
-}
-```
-
-| Premise | Fails when | Reports on |
-|---|---|---|
-| `atLeastOneOf` | every field is `null` | every field |
-| `atMostOneOf` | more than one field is filled | each filled field |
-| `exactlyOneOf` | none, or more than one, is filled | every field / each filled field |
-| `allOrNoneOf` | some, but not all, are filled | each empty field |
-
-"Required if" is a Kotlin `if`: `if (type == PIX) ::pixKey required { }`.
-
-## Nested objects and collections
-
-```kotlin
-data class Customer(
-    val phones: List<String>?,
-    val address: Address?,
-    val prices: Map<String, Int?>?
+data class User(
+    val name: String?,
+    val email: String?,
+    val age: Int?
 ) : Validatable {
     override fun validation() = validation {
-        ::phones required { each { phone(countryCode = "55") } }
-        ::address required { valid() }
-        ::prices required {
-            eachKey { length(3) }
-            eachValue { notNull() }
-        }
-    }
-}
-```
-
-- `each` runs the block on every item (`List`, `Set`, `Array`, or the entries of a `Map`); the path gets the index
-  or the key: `phones[1]`, `prices[USD]`.
-- `eachKey` / `eachValue` run it on the keys or the values of a `Map`.
-- `valid()` runs the rules of a nested object that implements `Validatable`; its paths get the field as prefix:
-  `address.street`.
-
-### Classes you don't own
-
-A class from another library (or generated code) cannot implement `Validatable`. Write its rules in a function with
-the same body, and pass the function to `valid`:
-
-```kotlin
-fun Address.validation() = validation {
-    ::street required { notBlank() }
-    ::zipCode required { postalCode(country) }
-}
-
-::address required { valid(Address::validation) }
-// [Violation(path=address.street, message=must not be blank, code=notBlank),
-//  Violation(path=address.zipCode, message=must be a valid postal code for BR, code=postalCode)]
-```
-
-The same function validates the object by itself: `address.validation().validate()`.
-
-> **Declare that function at the top level of a file.** Declared inside another class
-> (`private fun Address.validation()` inside `Customer`), a property of that outer class such as `::name` also
-> compiles in the rules and is reported as `address.name`. At the top level, it is a compile error.
-
-## Constraints
-
-Constraints are functions on the type of the value, so the autocomplete shows only the ones that apply:
-
-| Type | Examples |
-|---|---|
-| any | `equalTo`, `notEqualTo`, `oneOf`, `noneOf`, `notNull` |
-| `String` | `minLength`, `maxLength`, `length`, `notBlank`, `matches`, `contains`, `startsWith`, `digits`, `uppercase`, `enum<E>()` |
-| numbers (`Int`, `Long`, `BigDecimal`...) | `min`, `max`, `between`, `positive`, `negativeOrZero`, `multipleOf`, `maxDecimalPlaces` |
-| dates and times (`java.time`, `Date`) | `past`, `future`, `after`, `before`, `between` |
-| `Duration` | `min`, `max`, `between` |
-| collections and maps | `minSize`, `maxSize`, `notEmpty`, `distinct`, `contains`, `containsKey` |
-
-`equalTo`, `notEqualTo`, `oneOf` and `noneOf` compare the way `min` and `after` do: a `BigDecimal` by value (`10.0`
-equals `10.00`) and a `ZonedDateTime`, `OffsetDateTime` or `OffsetTime` by instant.
-
-Text formats: `email`, `url`, `uuid`, `ipv4`, `ipv6`, `hostname`, `json`, `base64`, `jwt`, `hexColor`, `iban`,
-`bic`, `creditCard`, `isbn`, `isoDate`, `dateFormat`, `isoCountryCode`, `currencyCode`, `postalCode(country)` (72
-countries) and more.
-
-Documents of 14 countries, one package each, such as `constraints.brazil` (`cpf`, `cnpj` numeric and alphanumeric,
-`cnh`, `pis`, `cep`, `placa`), `constraints.spain` (`dni`, `nie`) and `constraints.poland` (`pesel`, `nip`). Each one
-accepts and rejects the same values as at least two widely used validation libraries.
-
-A rule of your own is a `constraint`, with an optional code:
-
-```kotlin
-::amount required {
-    constraint("must be positive", code = "positive") { it > 0 }
-}
-```
-
-Reusable ones are extension functions on `ValidationNode` that call `constraint`, like the built-in ones.
-
-## Combining constraints
-
-The constraints of a block must all pass. `or`, `and` and `not` combine them differently:
-
-```kotlin
-::document required {
-    or {
-        cpf()
-        cnpj()
-    }
-}
-// "123" → Violation(path=document, message=must be a valid CPF or must be a valid CNPJ, code=or)
-
-::username required {
-    not { oneOf(listOf("admin", "root")) }
-}
-// "root" → Violation(path=username, message=is not allowed, code=not)
-```
-
-| Function | Passes when | Default message |
-|---|---|---|
-| `or { }` | at least one rule passes | the messages of the rules, joined with "or" |
-| `and { }` | every rule passes | the messages of the failing rules, joined with "and" |
-| `not { }` | none of the rules passes | `is not allowed` |
-
-Each reports one violation, with the code `or`, `and` or `not`. They nest (`or { cpf(); and { ... } }`) and take a
-message of their own: `or("must be a CPF or a CNPJ") { ... }`.
-
-- Each call inside the block is one rule: `each { }` or `valid()` counts as one rule, with all its items.
-- A rule whose reference is `null` (`equalTo(null)`, `oneOf(null)`, `postalCode(null)`) does not count.
-- A block with no rules accepts everything.
-
-## Messages
-
-Every constraint has a default message in English. Pass your own where you need it, as text with the
-constraint's placeholders or as a function of the rejected value:
-
-```kotlin
-::sku required { minLength(5, "must have at least {min} characters, like SKU-1") }
-::username required { minLength(3) { min -> "'$this' is too short, use at least $min characters" } }
-```
-
-Any message can also use `{path}` and `{value}`.
-
-To change a message everywhere, or translate the messages, configure them once at startup:
-
-```kotlin
-Validity.configure {
-    messages {
-        required = "{path} é obrigatório"
-        minLength = "{path} precisa de pelo menos {min} caracteres"
-        or = "{left} ou {right}"
-        brazil {
-            cpf = "CPF inválido"
-            cnpj = "CNPJ inválido"
-        }
-        phone {
-            phone = "telefone inválido"
-        }
-    }
-}
-// [Violation(path=document, message=CPF inválido ou CNPJ inválido, code=or),
-//  Violation(path=pixKey, message=pixKey é obrigatório, code=required)]
-```
-
-A message passed to a function wins over the configured one. The messages of each country live in its own section
-(`brazil { }`, `spain { }`...), and the phone module adds `phone { }`.
-
-## Metadata
-
-A `metadata` block attaches entries to the violations of the rules inside it, such as the ids of the operation
-being validated. A block in `validation { }` also covers the premises (`required`, `forbidden`, `atLeastOneOf`...),
-nested objects and collections inherit the entries, and an inner block adds to the outer one, winning on the same
-key:
-
-```kotlin
-data class Operation(val id: String, val amount: BigDecimal?) : Validatable {
-    override fun validation() = validation {
-        metadata("operationId" to id) {
-            ::amount required { positive() }
-        }
+        ::name required { minLength(2) }
+        ::email required { email() }
+        ::age ifPresent { min(18) }
     }
 }
 
-data class Batch(val clientId: String, val operations: List<Operation>) : Validatable {
-    override fun validation() = validation {
-        metadata("clientId" to clientId) {
-            ::operations required { each { valid() } }
-        }
-    }
-}
-// [Violation(path=operations[0].amount, message=must be positive, code=positive,
-//            metadata={clientId=c-9, operationId=op-7})]
+val result = User(name = "A", email = "ana@", age = 16).validate()
+
+result.isValid      // false
+result.violations   // every broken rule, in the order the rules are declared
 ```
 
-Read an entry with `violation.metadata["operationId"]`. A logical operator reports one violation, with the
-entries of the block it is in.
-
-## Configuration
-
-`Validity.configure { }` replaces the whole configuration: messages and the clock.
-
-```kotlin
-Validity.configure {
-    clock = Clock.fixed(Instant.parse("2030-01-01T00:00:00Z"), ZoneOffset.UTC)
-}
+```text
+Violation(path=name, message=must have at least 2 characters, code=minLength)
+Violation(path=email, message=must be a valid email, code=email)
+Violation(path=age, message=must be at least 18, code=min)
 ```
 
-The clock is the "now" of `past`, `future`, `pastOrPresent`, `futureOrPresent` and of the documents that depend on
-the current date; set a fixed one in tests. The default is the system clock.
+At the edge of your system, `user.validateOrThrow()` throws a `ValidationException` that carries the same list, so one
+error handler can turn every invalid request into a response.
 
 ## Modules
 
-| Module | What it adds |
-|---|---|
-| `validity-core` | everything above; no dependencies |
-| `validity-phone` | `phone`, `mobilePhone`, `countryCode`, `areaCode`, using Google's libphonenumber |
+| Module | What it adds | Dependencies |
+|---|---|---|
+| `validity-core` | the DSL and every constraint but the phone ones | none |
+| `validity-phone` | `phone`, `mobilePhone`, `countryCode` and `areaCode` | Google's [libphonenumber](https://github.com/google/libphonenumber) |
 
-```kotlin
-::phone required { phone(countryCode = "55", format = PhoneFormat.AREA_CODE_AND_NUMBER) }
-```
+## Documentation
 
-## Requirements
-
-Java 17+.
+A documentation site is on its way, with every concept, the full list of constraints, messages and configuration.
 
 ## Development
 
@@ -372,6 +172,10 @@ Java 17+.
 
 Neither tool, nor Kotest, is a dependency of a published module.
 
+The examples in this README are samples in
+[validity-core/src/test/.../samples/readme](validity-core/src/test/kotlin/io/github/soleworks/validity/samples/readme),
+and a test checks the output shown next to them. When you change an example, change its sample too.
+
 ## License
 
-[Apache License 2.0](LICENSE)
+Validity is released under the [Apache License 2.0](LICENSE).
