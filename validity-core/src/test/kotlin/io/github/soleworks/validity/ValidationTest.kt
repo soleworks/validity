@@ -64,7 +64,7 @@ class ValidationTest {
         @Test
         fun `given a missing value inside the block should attach the entries to the required violation`() {
             val rules = validation {
-                metadata("operationId" to "op-1") { required<String>(name = "email", value = null) {} }
+                metadata("operationId" to "op-1") { required<String>(path = "email", value = null) {} }
             }
 
             val result = rules.validate()
@@ -114,8 +114,8 @@ class ValidationTest {
         @Test
         fun `given a rule after the block should report it without the entries`() {
             val rules = validation {
-                metadata("operationId" to "op-1") { required<String>(name = "email", value = null) {} }
-                required<String>(name = "phone", value = null) {}
+                metadata("operationId" to "op-1") { required<String>(path = "email", value = null) {} }
+                required<String>(path = "phone", value = null) {}
             }
 
             val result = rules.validate()

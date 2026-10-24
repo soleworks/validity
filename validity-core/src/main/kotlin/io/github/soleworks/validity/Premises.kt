@@ -15,7 +15,7 @@ public fun <V : Any> KProperty0<V?>.required(
     message: String,
     block: ValidationNode<V>.() -> Unit
 ): Unit = required(
-    name = name,
+    path = name,
     value = get(),
     message = message,
     block = block
@@ -23,14 +23,14 @@ public fun <V : Any> KProperty0<V?>.required(
 
 context(validation: Validation)
 public fun <V : Any> required(
-    name: String,
+    path: String,
     value: V?,
     message: String = messages.required,
     block: ValidationNode<V>.() -> Unit
 ) {
     if (value == null)
         return validation.add<V?>(
-            name = name,
+            path = path,
             value = null,
             message = message,
             code = "required",
@@ -38,7 +38,7 @@ public fun <V : Any> required(
         )
 
     validation.add(
-        name = name,
+        path = path,
         value = value,
         block = block
     )
@@ -48,20 +48,20 @@ context(validation: Validation)
 public infix fun <V : Any> KProperty0<V?>.ifPresent(
     block: ValidationNode<V>.() -> Unit
 ): Unit = ifPresent(
-    name = name,
+    path = name,
     value = get(),
     block = block
 )
 
 context(validation: Validation)
 public fun <V : Any> ifPresent(
-    name: String,
+    path: String,
     value: V?,
     block: ValidationNode<V>.() -> Unit
 ) {
     if (value != null)
         validation.add(
-            name = name,
+            path = path,
             value = value,
             block = block
         )
@@ -71,7 +71,7 @@ context(validation: Validation)
 public fun KProperty0<*>.forbidden(
     message: String = messages.forbidden
 ): Unit = validation.add(
-    name = name,
+    path = name,
     value = get(),
     message = message,
     code = "forbidden",
@@ -138,7 +138,7 @@ private fun presence(
 
     distinct.zip(values).forEach { (property, value) ->
         validation.add(
-            name = property.name,
+            path = property.name,
             value = value,
             message = text,
             code = code,
@@ -148,11 +148,11 @@ private fun presence(
 }
 
 private fun <V> Validation.add(
-    name: String,
+    path: String,
     value: V,
     block: ValidationNode<V>.() -> Unit
 ) {
-    val node = ValidationNode(path = name, value = value).also { node -> node.metadata = metadata }
+    val node = ValidationNode(path = path, value = value).also { node -> node.metadata = metadata }
 
     add(node)
 
@@ -160,14 +160,14 @@ private fun <V> Validation.add(
 }
 
 private fun <V> Validation.add(
-    name: String,
+    path: String,
     value: V,
     message: String,
     code: String,
     predicate: (V) -> Boolean
 ) {
     add(
-        name = name,
+        path = path,
         value = value,
         block = {
             constraint(

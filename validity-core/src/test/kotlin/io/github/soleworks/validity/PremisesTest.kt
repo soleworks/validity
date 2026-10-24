@@ -19,7 +19,7 @@ class PremisesTest {
     inner class Required {
         @Test
         fun `given a valid value should accept it`() {
-            val rules = validation { required(name = "cpf", value = "52998224725") { cpf() } }
+            val rules = validation { required(path = "cpf", value = "52998224725") { cpf() } }
 
             val result = rules.validate()
 
@@ -62,7 +62,7 @@ class PremisesTest {
         @Test
         fun `given a missing value should report only that it is required`() {
             val cpf: String? = null
-            val rules = validation { required(name = "cpf", value = cpf) { cpf() } }
+            val rules = validation { required(path = "cpf", value = cpf) { cpf() } }
 
             val result = rules.validate()
 
@@ -72,8 +72,8 @@ class PremisesTest {
         }
 
         @Test
-        fun `given an invalid value should run its rules under the name`() {
-            val rules = validation { required(name = "cpf", value = "123") { cpf() } }
+        fun `given an invalid value should run its rules under the path`() {
+            val rules = validation { required(path = "cpf", value = "123") { cpf() } }
 
             val result = rules.validate()
 
@@ -85,7 +85,7 @@ class PremisesTest {
         @Test
         fun `given a custom message should report it when the value is missing`() {
             val cpf: String? = null
-            val rules = validation { required(name = "cpf", value = cpf, message = "informe o CPF") { cpf() } }
+            val rules = validation { required(path = "cpf", value = cpf, message = "informe o CPF") { cpf() } }
 
             val result = rules.validate()
 
@@ -95,12 +95,12 @@ class PremisesTest {
         }
 
         @Test
-        fun `given several values should report each one under its own name`() {
+        fun `given several values should report each one under its own path`() {
             val cpf: String? = null
             val page = 0
             val rules = validation {
-                required(name = "cpf", value = cpf) { cpf() }
-                required(name = "page", value = page) { min(1) }
+                required(path = "cpf", value = cpf) { cpf() }
+                required(path = "page", value = page) { min(1) }
             }
 
             val result = rules.validate()
@@ -118,7 +118,7 @@ class PremisesTest {
         @Test
         fun `given a missing value should accept it`() {
             val page: Int? = null
-            val rules = validation { ifPresent(name = "page", value = page) { min(1) } }
+            val rules = validation { ifPresent(path = "page", value = page) { min(1) } }
 
             val result = rules.validate()
 
@@ -137,8 +137,8 @@ class PremisesTest {
         }
 
         @Test
-        fun `given a present value should run its rules under the name`() {
-            val rules = validation { ifPresent(name = "page", value = 0) { min(1) } }
+        fun `given a present value should run its rules under the path`() {
+            val rules = validation { ifPresent(path = "page", value = 0) { min(1) } }
 
             val result = rules.validate()
 
