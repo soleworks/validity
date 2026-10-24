@@ -15,6 +15,7 @@ Every broken rule at once, each with a path, a message for people and a code for
 <br>
 
 [![Build](https://img.shields.io/github/actions/workflow/status/soleworks/validity/ci.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=build)](https://github.com/soleworks/validity/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/soleworks/validity?style=flat-square&logo=codecov&logoColor=white&label=coverage)](https://codecov.io/gh/soleworks/validity)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.20-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Java](https://img.shields.io/badge/Java-17%2B-E76F00?style=flat-square&logo=openjdk&logoColor=white)](https://adoptium.net)
 [![License](https://img.shields.io/badge/license-Apache%202.0-2F81F7?style=flat-square)](LICENSE)
