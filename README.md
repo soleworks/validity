@@ -1,15 +1,16 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/banner-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/banner-light.svg">
-  <img alt="Validity: validation for Kotlin, written in plain Kotlin" src="docs/assets/banner-light.svg" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="docs/assets/logo-light.svg">
+  <img alt="Validity logo" src="docs/assets/logo-light.svg" width="160">
 </picture>
 
-<br>
-<br>
+<h1>Validity</h1>
 
-**Write the rules of your classes in plain Kotlin.<br>Get every broken one back at once, with a path, a message for people and a code for programs.**
+**Validation for Kotlin, written in plain Kotlin.**
+
+Every broken rule at once, each with a path, a message for people and a code for programs.
 
 <br>
 
