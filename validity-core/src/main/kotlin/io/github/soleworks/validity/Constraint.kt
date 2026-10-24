@@ -1,6 +1,6 @@
 package io.github.soleworks.validity
 
-private val MESSAGE_PLACEHOLDERS = Regex("\\{path}|\\{value}")
+private val PLACEHOLDER_FORMAT = Regex("""\{(\w+)}""")
 
 internal class Constraint<V>(
     private val check: (path: String, value: V) -> Violation?
@@ -11,7 +11,24 @@ internal class Constraint<V>(
     ): List<Violation> = listOfNotNull(check(path, value))
 }
 
+@PublishedApi
 internal fun String.filled(
-    path: String,
-    value: Any?
-): String = MESSAGE_PLACEHOLDERS.replace(this) { if (it.value == "{path}") path else "$value" }
+    vararg placeholders: Pair<String, Any?>
+): String {
+    val values = placeholders.toMap()
+
+    return PLACEHOLDER_FORMAT.replace(this) { match ->
+        val name = match.groupValues[1]
+
+        if (name in values)
+            values[name].placeholderText()
+        else
+            match.value
+    }
+}
+
+private fun Any?.placeholderText(): String = when (this) {
+    null -> ""
+    is Iterable<*> -> joinToString()
+    else -> toString()
+}

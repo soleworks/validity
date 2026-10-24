@@ -12,19 +12,25 @@ class ValidationTest {
     @DisplayName("When validate is called")
     inner class Validate {
         @Test
-        fun `given a contact with a short phone should report it at the root`() {
-            val contact = Contact(phone = "123")
+        fun `given a valid contact should be valid`() {
+            val contact = Contact()
+            val rules = contact.validation()
 
-            contact.validation().validate().violations shouldBe listOf(
-                Violation("phone", "must have at least 8 characters", "minLength")
-            )
+            val result = rules.validate()
+
+            result.isValid shouldBe true
         }
 
         @Test
-        fun `given a valid contact should be valid`() {
-            val contact = Contact()
+        fun `given a contact with a short phone should report it at the root`() {
+            val contact = Contact(phone = "123")
+            val rules = contact.validation()
 
-            contact.validation().validate().isValid shouldBe true
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "phone", message = "must have at least 8 characters", code = "minLength")
+            )
         }
     }
 }

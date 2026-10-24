@@ -3,7 +3,6 @@ package io.github.soleworks.validity.constraints
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Violation
 import io.kotest.matchers.shouldBe
-import java.math.BigDecimal
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,18 +16,32 @@ class LocationConstraintsTest {
     inner class IsoCountryCode {
         @ParameterizedTest
         @ValueSource(strings = ["BR", "US"])
-        fun `given a valid country code should accept it`(country: String) {
-            val node = ValidationNode("country", country).apply { isoCountryCode() }
+        fun `given a valid country code should accept it`(
+            country: String
+        ) {
+            val node = ValidationNode(path = "country", value = country).apply { isoCountryCode() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["BRA", "XX", "br"])
-        fun `given an invalid country code should report it`(country: String) {
-            val node = ValidationNode("country", country).apply { isoCountryCode() }
+        fun `given an invalid country code should report it`(
+            country: String
+        ) {
+            val node = ValidationNode(path = "country", value = country).apply { isoCountryCode() }
 
-            node.validate() shouldBe listOf(Violation("country", "must be a valid ISO 3166-1 alpha-2 country code", "isoCountryCode"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "country",
+                    message = "must be a valid ISO 3166-1 alpha-2 country code",
+                    code = "isoCountryCode"
+                )
+            )
         }
     }
 
@@ -37,18 +50,32 @@ class LocationConstraintsTest {
     inner class IsoCountryCodeAlpha3 {
         @ParameterizedTest
         @ValueSource(strings = ["BRA", "USA"])
-        fun `given a valid country code should accept it`(country: String) {
-            val node = ValidationNode("country", country).apply { isoCountryCodeAlpha3() }
+        fun `given a valid country code should accept it`(
+            country: String
+        ) {
+            val node = ValidationNode(path = "country", value = country).apply { isoCountryCodeAlpha3() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["BR", "XXX"])
-        fun `given an invalid country code should report it`(country: String) {
-            val node = ValidationNode("country", country).apply { isoCountryCodeAlpha3() }
+        fun `given an invalid country code should report it`(
+            country: String
+        ) {
+            val node = ValidationNode(path = "country", value = country).apply { isoCountryCodeAlpha3() }
 
-            node.validate() shouldBe listOf(Violation("country", "must be a valid ISO 3166-1 alpha-3 country code", "isoCountryCodeAlpha3"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "country",
+                    message = "must be a valid ISO 3166-1 alpha-3 country code",
+                    code = "isoCountryCodeAlpha3"
+                )
+            )
         }
     }
 
@@ -57,18 +84,28 @@ class LocationConstraintsTest {
     inner class LanguageCode {
         @ParameterizedTest
         @ValueSource(strings = ["pt", "en"])
-        fun `given a valid language code should accept it`(language: String) {
-            val node = ValidationNode("language", language).apply { languageCode() }
+        fun `given a valid language code should accept it`(
+            language: String
+        ) {
+            val node = ValidationNode(path = "language", value = language).apply { languageCode() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["por", "xx", "PT", "iw", "in", "ji", "mo"])
-        fun `given an invalid language code should report it`(language: String) {
-            val node = ValidationNode("language", language).apply { languageCode() }
+        fun `given an invalid language code should report it`(
+            language: String
+        ) {
+            val node = ValidationNode(path = "language", value = language).apply { languageCode() }
 
-            node.validate() shouldBe listOf(Violation("language", "must be a valid ISO 639-1 language code", "languageCode"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "language", message = "must be a valid ISO 639-1 language code", code = "languageCode")
+            )
         }
     }
 
@@ -77,18 +114,28 @@ class LocationConstraintsTest {
     inner class Locale {
         @ParameterizedTest
         @ValueSource(strings = ["pt-BR", "en", "zh-Hant-TW"])
-        fun `given a valid locale should accept it`(locale: String) {
-            val node = ValidationNode("locale", locale).apply { locale() }
+        fun `given a valid locale should accept it`(
+            locale: String
+        ) {
+            val node = ValidationNode(path = "locale", value = locale).apply { locale() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["pt_BR", "", "pt-BR-"])
-        fun `given an invalid locale should report it`(locale: String) {
-            val node = ValidationNode("locale", locale).apply { locale() }
+        fun `given an invalid locale should report it`(
+            locale: String
+        ) {
+            val node = ValidationNode(path = "locale", value = locale).apply { locale() }
 
-            node.validate() shouldBe listOf(Violation("locale", "must be a valid locale", "locale"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "locale", message = "must be a valid locale", code = "locale")
+            )
         }
     }
 
@@ -97,18 +144,28 @@ class LocationConstraintsTest {
     inner class TimeZone {
         @ParameterizedTest
         @ValueSource(strings = ["America/Sao_Paulo", "UTC", "Europe/Lisbon"])
-        fun `given a valid time zone should accept it`(timeZone: String) {
-            val node = ValidationNode("timeZone", timeZone).apply { timeZone() }
+        fun `given a valid time zone should accept it`(
+            timeZone: String
+        ) {
+            val node = ValidationNode(path = "timeZone", value = timeZone).apply { timeZone() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["America/Sao Paulo", "Mars/Olympus"])
-        fun `given an invalid time zone should report it`(timeZone: String) {
-            val node = ValidationNode("timeZone", timeZone).apply { timeZone() }
+        fun `given an invalid time zone should report it`(
+            timeZone: String
+        ) {
+            val node = ValidationNode(path = "timeZone", value = timeZone).apply { timeZone() }
 
-            node.validate() shouldBe listOf(Violation("timeZone", "must be a valid time zone", "timeZone"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "timeZone", message = "must be a valid time zone", code = "timeZone")
+            )
         }
     }
 
@@ -117,66 +174,106 @@ class LocationConstraintsTest {
     inner class Latitude {
         @ParameterizedTest
         @ValueSource(doubles = [-90.0, 0.0, 90.0])
-        fun `given a valid latitude as Double should accept it`(latitude: Double) {
-            val node = ValidationNode("latitude", latitude).apply { latitude() }
+        fun `given a valid latitude as Double should accept it`(
+            latitude: Double
+        ) {
+            val node = ValidationNode(path = "latitude", value = latitude).apply { latitude() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @ParameterizedTest
-        @ValueSource(doubles = [-90.1, 90.1, Double.NaN])
-        fun `given an invalid latitude as Double should report it`(latitude: Double) {
-            val node = ValidationNode("latitude", latitude).apply { latitude() }
-
-            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude", "latitude"))
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(floats = [45f])
-        fun `given a valid latitude as Float should accept it`(latitude: Float) {
-            val node = ValidationNode("latitude", latitude).apply { latitude() }
+        fun `given a valid latitude as Float should accept it`(
+            latitude: Float
+        ) {
+            val node = ValidationNode(path = "latitude", value = latitude).apply { latitude() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @ParameterizedTest
-        @ValueSource(floats = [91f])
-        fun `given an invalid latitude as Float should report it`(latitude: Float) {
-            val node = ValidationNode("latitude", latitude).apply { latitude() }
-
-            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude", "latitude"))
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["-23.5505"])
-        fun `given a valid latitude as BigDecimal should accept it`(latitude: String) {
-            val node = ValidationNode("latitude", BigDecimal(latitude)).apply { latitude() }
+        fun `given a valid latitude as BigDecimal should accept it`(
+            latitude: String
+        ) {
+            val node = ValidationNode(path = "latitude", value = latitude.toBigDecimal()).apply { latitude() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @ParameterizedTest
-        @ValueSource(strings = ["90.0001"])
-        fun `given an invalid latitude as BigDecimal should report it`(latitude: String) {
-            val node = ValidationNode("latitude", BigDecimal(latitude)).apply { latitude() }
-
-            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude", "latitude"))
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["-23.5505", "+45"])
-        fun `given a valid latitude as String should accept it`(latitude: String) {
-            val node = ValidationNode("latitude", latitude).apply { latitude() }
+        fun `given a valid latitude as String should accept it`(
+            latitude: String
+        ) {
+            val node = ValidationNode(path = "latitude", value = latitude).apply { latitude() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(doubles = [-90.1, 90.1, Double.NaN])
+        fun `given an invalid latitude as Double should report it`(
+            latitude: Double
+        ) {
+            val node = ValidationNode(path = "latitude", value = latitude).apply { latitude() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "latitude", message = "must be a valid latitude", code = "latitude")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [91f])
+        fun `given an invalid latitude as Float should report it`(
+            latitude: Float
+        ) {
+            val node = ValidationNode(path = "latitude", value = latitude).apply { latitude() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "latitude", message = "must be a valid latitude", code = "latitude")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["90.0001"])
+        fun `given an invalid latitude as BigDecimal should report it`(
+            latitude: String
+        ) {
+            val node = ValidationNode(path = "latitude", value = latitude.toBigDecimal()).apply { latitude() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "latitude", message = "must be a valid latitude", code = "latitude")
+            )
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["91", "abc", "1e2"])
-        fun `given an invalid latitude as String should report it`(latitude: String) {
-            val node = ValidationNode("latitude", latitude).apply { latitude() }
+        fun `given an invalid latitude as String should report it`(
+            latitude: String
+        ) {
+            val node = ValidationNode(path = "latitude", value = latitude).apply { latitude() }
 
-            node.validate() shouldBe listOf(Violation("latitude", "must be a valid latitude", "latitude"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "latitude", message = "must be a valid latitude", code = "latitude")
+            )
         }
     }
 
@@ -185,66 +282,106 @@ class LocationConstraintsTest {
     inner class Longitude {
         @ParameterizedTest
         @ValueSource(doubles = [-180.0, 0.0, 180.0])
-        fun `given a valid longitude as Double should accept it`(longitude: Double) {
-            val node = ValidationNode("longitude", longitude).apply { longitude() }
+        fun `given a valid longitude as Double should accept it`(
+            longitude: Double
+        ) {
+            val node = ValidationNode(path = "longitude", value = longitude).apply { longitude() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @ParameterizedTest
-        @ValueSource(doubles = [-180.1, 180.1, Double.NaN])
-        fun `given an invalid longitude as Double should report it`(longitude: Double) {
-            val node = ValidationNode("longitude", longitude).apply { longitude() }
-
-            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude", "longitude"))
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(floats = [120f])
-        fun `given a valid longitude as Float should accept it`(longitude: Float) {
-            val node = ValidationNode("longitude", longitude).apply { longitude() }
+        fun `given a valid longitude as Float should accept it`(
+            longitude: Float
+        ) {
+            val node = ValidationNode(path = "longitude", value = longitude).apply { longitude() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @ParameterizedTest
-        @ValueSource(floats = [181f])
-        fun `given an invalid longitude as Float should report it`(longitude: Float) {
-            val node = ValidationNode("longitude", longitude).apply { longitude() }
-
-            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude", "longitude"))
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["-46.6333"])
-        fun `given a valid longitude as BigDecimal should accept it`(longitude: String) {
-            val node = ValidationNode("longitude", BigDecimal(longitude)).apply { longitude() }
+        fun `given a valid longitude as BigDecimal should accept it`(
+            longitude: String
+        ) {
+            val node = ValidationNode(path = "longitude", value = longitude.toBigDecimal()).apply { longitude() }
 
-            node.validate() shouldBe emptyList()
-        }
+            val violations = node.validate()
 
-        @ParameterizedTest
-        @ValueSource(strings = ["180.0001"])
-        fun `given an invalid longitude as BigDecimal should report it`(longitude: String) {
-            val node = ValidationNode("longitude", BigDecimal(longitude)).apply { longitude() }
-
-            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude", "longitude"))
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["-46.6333", "+120"])
-        fun `given a valid longitude as String should accept it`(longitude: String) {
-            val node = ValidationNode("longitude", longitude).apply { longitude() }
+        fun `given a valid longitude as String should accept it`(
+            longitude: String
+        ) {
+            val node = ValidationNode(path = "longitude", value = longitude).apply { longitude() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(doubles = [-180.1, 180.1, Double.NaN])
+        fun `given an invalid longitude as Double should report it`(
+            longitude: Double
+        ) {
+            val node = ValidationNode(path = "longitude", value = longitude).apply { longitude() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "longitude", message = "must be a valid longitude", code = "longitude")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [181f])
+        fun `given an invalid longitude as Float should report it`(
+            longitude: Float
+        ) {
+            val node = ValidationNode(path = "longitude", value = longitude).apply { longitude() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "longitude", message = "must be a valid longitude", code = "longitude")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["180.0001"])
+        fun `given an invalid longitude as BigDecimal should report it`(
+            longitude: String
+        ) {
+            val node = ValidationNode(path = "longitude", value = longitude.toBigDecimal()).apply { longitude() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "longitude", message = "must be a valid longitude", code = "longitude")
+            )
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["181", "abc", "1e2"])
-        fun `given an invalid longitude as String should report it`(longitude: String) {
-            val node = ValidationNode("longitude", longitude).apply { longitude() }
+        fun `given an invalid longitude as String should report it`(
+            longitude: String
+        ) {
+            val node = ValidationNode(path = "longitude", value = longitude).apply { longitude() }
 
-            node.validate() shouldBe listOf(Violation("longitude", "must be a valid longitude", "longitude"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "longitude", message = "must be a valid longitude", code = "longitude")
+            )
         }
     }
 
@@ -494,10 +631,15 @@ class LocationConstraintsTest {
                 "ZM,'10101'"
             ]
         )
-        fun `given a postal code in the format of its country should accept it`(country: String, postalCode: String) {
-            val node = ValidationNode("postalCode", postalCode).apply { postalCode(country) }
+        fun `given a postal code in the format of its country should accept it`(
+            country: String,
+            postalCode: String
+        ) {
+            val node = ValidationNode(path = "postalCode", value = postalCode).apply { postalCode(country) }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
@@ -653,51 +795,74 @@ class LocationConstraintsTest {
                 "DE,'1011'"
             ]
         )
-        fun `given a postal code out of the format of its country should report it`(country: String, postalCode: String) {
-            val node = ValidationNode("postalCode", postalCode).apply { postalCode(country) }
+        fun `given a postal code out of the format of its country should report it`(
+            country: String,
+            postalCode: String
+        ) {
+            val node = ValidationNode(path = "postalCode", value = postalCode).apply { postalCode(country) }
 
-            node.validate() shouldBe listOf(
-                Violation("postalCode", "must be a valid postal code for $country", "postalCode")
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "postalCode",
+                    message = "must be a valid postal code for $country",
+                    code = "postalCode"
+                )
             )
         }
 
         @Test
-        fun `given a country in lowercase should use the format of that country`() {
-            val node = ValidationNode("postalCode", "1234").apply { postalCode("br") }
-
-            node.validate() shouldBe listOf(Violation("postalCode", "must be a valid postal code for br", "postalCode"))
-        }
-
-        @Test
         fun `given no country should skip the check`() {
-            val node = ValidationNode("postalCode", "anything").apply { postalCode(null) }
+            val node = ValidationNode(path = "postalCode", value = "anything").apply { postalCode(null) }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a country without a known format should skip the check`() {
-            val node = ValidationNode("postalCode", "anything").apply { postalCode("PE") }
+            val node = ValidationNode(path = "postalCode", value = "anything").apply { postalCode("PE") }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @Test
         fun `given a country without a known format inside not should not count as a rule`() {
-            val node = ValidationNode("postalCode", "1234").apply {
+            val node = ValidationNode(path = "postalCode", value = "1234").apply {
                 not { postalCode("PE") }
             }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a country in lowercase should use the format of that country`() {
+            val node = ValidationNode(path = "postalCode", value = "1234").apply { postalCode("br") }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "postalCode", message = "must be a valid postal code for br", code = "postalCode")
+            )
         }
 
         @Test
         fun `given a message function should build it from the value and the country`() {
-            val node = ValidationNode("postalCode", "1234").apply {
+            val node = ValidationNode(path = "postalCode", value = "1234").apply {
                 postalCode("BR") { country -> "$this is not a postal code of $country" }
             }
 
-            node.validate() shouldBe listOf(Violation("postalCode", "1234 is not a postal code of BR", "postalCode"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "postalCode", message = "1234 is not a postal code of BR", code = "postalCode")
+            )
         }
     }
 }

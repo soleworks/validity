@@ -14,10 +14,14 @@ class PolandConstraintsTest {
     inner class Pesel {
         @ParameterizedTest
         @ValueSource(strings = ["02070803628", "02870803622", "02670803626", "01510813623", "02070800090"])
-        fun `given a PESEL with a valid date and check digit should accept it`(value: String) {
-            val node = ValidationNode("pesel", value).apply { pesel() }
+        fun `given a PESEL with a valid date and check digit should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "pesel", value = value).apply { pesel() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
@@ -25,9 +29,13 @@ class PolandConstraintsTest {
         fun `given a PESEL with a wrong check digit, an impossible date or another format should report it`(
             value: String
         ) {
-            val node = ValidationNode("pesel", value).apply { pesel() }
+            val node = ValidationNode(path = "pesel", value = value).apply { pesel() }
 
-            node.validate() shouldBe listOf(Violation("pesel", "must be a valid PESEL", "pesel"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "pesel", message = "must be a valid PESEL", code = "pesel")
+            )
         }
     }
 
@@ -36,18 +44,28 @@ class PolandConstraintsTest {
     inner class Nip {
         @ParameterizedTest
         @ValueSource(strings = ["2234567895", "5931423811", "2596048500", "4163450312"])
-        fun `given a NIP with a valid check digit should accept it`(value: String) {
-            val node = ValidationNode("nip", value).apply { nip() }
+        fun `given a NIP with a valid check digit should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "nip", value = value).apply { nip() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["2234567855", "223456789", "22 345-678/95", "5931423812", "2596048505"])
-        fun `given a NIP with a wrong check digit or another format should report it`(value: String) {
-            val node = ValidationNode("nip", value).apply { nip() }
+        fun `given a NIP with a wrong check digit or another format should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "nip", value = value).apply { nip() }
 
-            node.validate() shouldBe listOf(Violation("nip", "must be a valid NIP", "nip"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "nip", message = "must be a valid NIP", code = "nip")
+            )
         }
     }
 }

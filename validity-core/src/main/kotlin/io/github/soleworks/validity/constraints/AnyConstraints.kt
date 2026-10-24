@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
 import java.math.BigDecimal
 import java.time.OffsetDateTime
@@ -20,72 +21,88 @@ public fun <V> ValidationNode<V>.equalTo(
     message: String = messages.equalTo
 ): Unit = equalTo(
     other = other,
-    message = { message.replace("{other}", "$other") }
+    message = { message.filled("other" to other) }
 )
 
 public fun <V> ValidationNode<V>.equalTo(
     other: V?,
-    message: V.(V?) -> String
-): Unit = constraint(
-    message = { it.message(other) },
-    code = "equalTo",
-    skipped = other == null,
-    predicate = { other == null || it.isSameValue(other) }
-)
+    message: V.(V) -> String
+) {
+    if (other == null)
+        return
+
+    constraint(
+        message = { it.message(other) },
+        code = "equalTo",
+        predicate = { it.isSameValue(other) }
+    )
+}
 
 public fun <V> ValidationNode<V>.notEqualTo(
     other: V?,
     message: String = messages.notEqualTo
 ): Unit = notEqualTo(
     other = other,
-    message = { message.replace("{other}", "$other") }
+    message = { message.filled("other" to other) }
 )
 
 public fun <V> ValidationNode<V>.notEqualTo(
     other: V?,
-    message: V.(V?) -> String
-): Unit = constraint(
-    message = { it.message(other) },
-    code = "notEqualTo",
-    skipped = other == null,
-    predicate = { other == null || !it.isSameValue(other) }
-)
+    message: V.(V) -> String
+) {
+    if (other == null)
+        return
+
+    constraint(
+        message = { it.message(other) },
+        code = "notEqualTo",
+        predicate = { !it.isSameValue(other) }
+    )
+}
 
 public fun <V> ValidationNode<V>.oneOf(
     values: Iterable<V>?,
     message: String = messages.oneOf
 ): Unit = oneOf(
     values = values,
-    message = { message.replace("{values}", values?.joinToString().orEmpty()) }
+    message = { message.filled("values" to values) }
 )
 
 public fun <V> ValidationNode<V>.oneOf(
     values: Iterable<V>?,
-    message: V.(Iterable<V>?) -> String
-): Unit = constraint(
-    message = { it.message(values) },
-    code = "oneOf",
-    skipped = values == null,
-    predicate = { values == null || values.hasValue(it) }
-)
+    message: V.(Iterable<V>) -> String
+) {
+    if (values == null)
+        return
+
+    constraint(
+        message = { it.message(values) },
+        code = "oneOf",
+        predicate = { values.hasValue(it) }
+    )
+}
 
 public fun <V> ValidationNode<V>.noneOf(
     values: Iterable<V>?,
     message: String = messages.noneOf
 ): Unit = noneOf(
     values = values,
-    message = { message.replace("{values}", values?.joinToString().orEmpty()) }
+    message = { message.filled("values" to values) }
 )
 
 public fun <V> ValidationNode<V>.noneOf(
     values: Iterable<V>?,
-    message: V.(Iterable<V>?) -> String
-): Unit = constraint(
-    message = { it.message(values) },
-    code = "noneOf",
-    skipped = values == null,
-    predicate = { values == null || !values.hasValue(it) }
-)
+    message: V.(Iterable<V>) -> String
+) {
+    if (values == null)
+        return
+
+    constraint(
+        message = { it.message(values) },
+        code = "noneOf",
+        predicate = { !values.hasValue(it) }
+    )
+}
 
 private fun Any?.isSameValue(
     other: Any?

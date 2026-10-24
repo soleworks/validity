@@ -5,4 +5,4 @@ plugins {
 rootProject.name = "validity"
 include("validity-core")
 include("validity-phone")
-include("validity-kotest")
+include("harness")

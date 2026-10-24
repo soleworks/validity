@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
 import kotlin.enums.enumEntries
 
@@ -8,15 +9,15 @@ private const val ASCII_LIMIT = 128
 
 private val ASCII_DIGITS = '0'..'9'
 
-private val NUMERIC_FORMAT = Regex("[+-]?\\d+(?:\\.\\d+)?")
-private val INTEGER_FORMAT = Regex("[+-]?\\d+")
+internal val NUMERIC_FORMAT = Regex("""[+-]?\d+(?:\.\d+)?""")
+private val INTEGER_FORMAT = Regex("""[+-]?\d+""")
 
 public fun ValidationNode<String>.minLength(
     min: Int,
     message: String = messages.minLength
 ): Unit = minLength(
     min = min,
-    message = { message.replace("{min}", "$min") }
+    message = { message.filled("min" to min) }
 )
 
 public fun ValidationNode<String>.minLength(
@@ -33,7 +34,7 @@ public fun ValidationNode<String>.maxLength(
     message: String = messages.maxLength
 ): Unit = maxLength(
     max = max,
-    message = { message.replace("{max}", "$max") }
+    message = { message.filled("max" to max) }
 )
 
 public fun ValidationNode<String>.maxLength(
@@ -50,7 +51,7 @@ public fun ValidationNode<String>.length(
     message: String = messages.length
 ): Unit = length(
     length = length,
-    message = { message.replace("{length}", "$length") }
+    message = { message.filled("length" to length) }
 )
 
 public fun ValidationNode<String>.length(
@@ -69,7 +70,7 @@ public fun ValidationNode<String>.lengthBetween(
 ): Unit = lengthBetween(
     min = min,
     max = max,
-    message = { _, _ -> message.replace("{min}", "$min").replace("{max}", "$max") }
+    message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
 public fun ValidationNode<String>.lengthBetween(
@@ -103,7 +104,7 @@ public fun ValidationNode<String>.matches(
     message: String = messages.matches
 ): Unit = matches(
     regex = regex,
-    message = { message.replace("{regex}", "$regex") }
+    message = { message.filled("regex" to regex) }
 )
 
 public fun ValidationNode<String>.matches(
@@ -120,7 +121,7 @@ public fun ValidationNode<String>.notMatches(
     message: String = messages.notMatches
 ): Unit = notMatches(
     regex = regex,
-    message = { message.replace("{regex}", "$regex") }
+    message = { message.filled("regex" to regex) }
 )
 
 public fun ValidationNode<String>.notMatches(
@@ -137,108 +138,132 @@ public fun ValidationNode<String>.contains(
     message: String = messages.contains
 ): Unit = contains(
     text = text,
-    message = { message.replace("{text}", "$text") }
+    message = { message.filled("text" to text) }
 )
 
 public fun ValidationNode<String>.contains(
     text: String?,
-    message: String.(String?) -> String
-): Unit = constraint(
-    message = { it.message(text) },
-    code = "contains",
-    skipped = text == null,
-    predicate = { text == null || it.contains(text) }
-)
+    message: String.(String) -> String
+) {
+    if (text == null)
+        return
+
+    constraint(
+        message = { it.message(text) },
+        code = "contains",
+        predicate = { it.contains(text) }
+    )
+}
 
 public fun ValidationNode<String>.notContains(
     text: String?,
     message: String = messages.notContains
 ): Unit = notContains(
     text = text,
-    message = { message.replace("{text}", "$text") }
+    message = { message.filled("text" to text) }
 )
 
 public fun ValidationNode<String>.notContains(
     text: String?,
-    message: String.(String?) -> String
-): Unit = constraint(
-    message = { it.message(text) },
-    code = "notContains",
-    skipped = text == null,
-    predicate = { text == null || !it.contains(text) }
-)
+    message: String.(String) -> String
+) {
+    if (text == null)
+        return
+
+    constraint(
+        message = { it.message(text) },
+        code = "notContains",
+        predicate = { !it.contains(text) }
+    )
+}
 
 public fun ValidationNode<String>.startsWith(
     prefix: String?,
     message: String = messages.startsWith
 ): Unit = startsWith(
     prefix = prefix,
-    message = { message.replace("{prefix}", "$prefix") }
+    message = { message.filled("prefix" to prefix) }
 )
 
 public fun ValidationNode<String>.startsWith(
     prefix: String?,
-    message: String.(String?) -> String
-): Unit = constraint(
-    message = { it.message(prefix) },
-    code = "startsWith",
-    skipped = prefix == null,
-    predicate = { prefix == null || it.startsWith(prefix) }
-)
+    message: String.(String) -> String
+) {
+    if (prefix == null)
+        return
+
+    constraint(
+        message = { it.message(prefix) },
+        code = "startsWith",
+        predicate = { it.startsWith(prefix) }
+    )
+}
 
 public fun ValidationNode<String>.notStartsWith(
     prefix: String?,
     message: String = messages.notStartsWith
 ): Unit = notStartsWith(
     prefix = prefix,
-    message = { message.replace("{prefix}", "$prefix") }
+    message = { message.filled("prefix" to prefix) }
 )
 
 public fun ValidationNode<String>.notStartsWith(
     prefix: String?,
-    message: String.(String?) -> String
-): Unit = constraint(
-    message = { it.message(prefix) },
-    code = "notStartsWith",
-    skipped = prefix == null,
-    predicate = { prefix == null || !it.startsWith(prefix) }
-)
+    message: String.(String) -> String
+) {
+    if (prefix == null)
+        return
+
+    constraint(
+        message = { it.message(prefix) },
+        code = "notStartsWith",
+        predicate = { !it.startsWith(prefix) }
+    )
+}
 
 public fun ValidationNode<String>.endsWith(
     suffix: String?,
     message: String = messages.endsWith
 ): Unit = endsWith(
     suffix = suffix,
-    message = { message.replace("{suffix}", "$suffix") }
+    message = { message.filled("suffix" to suffix) }
 )
 
 public fun ValidationNode<String>.endsWith(
     suffix: String?,
-    message: String.(String?) -> String
-): Unit = constraint(
-    message = { it.message(suffix) },
-    code = "endsWith",
-    skipped = suffix == null,
-    predicate = { suffix == null || it.endsWith(suffix) }
-)
+    message: String.(String) -> String
+) {
+    if (suffix == null)
+        return
+
+    constraint(
+        message = { it.message(suffix) },
+        code = "endsWith",
+        predicate = { it.endsWith(suffix) }
+    )
+}
 
 public fun ValidationNode<String>.notEndsWith(
     suffix: String?,
     message: String = messages.notEndsWith
 ): Unit = notEndsWith(
     suffix = suffix,
-    message = { message.replace("{suffix}", "$suffix") }
+    message = { message.filled("suffix" to suffix) }
 )
 
 public fun ValidationNode<String>.notEndsWith(
     suffix: String?,
-    message: String.(String?) -> String
-): Unit = constraint(
-    message = { it.message(suffix) },
-    code = "notEndsWith",
-    skipped = suffix == null,
-    predicate = { suffix == null || !it.endsWith(suffix) }
-)
+    message: String.(String) -> String
+) {
+    if (suffix == null)
+        return
+
+    constraint(
+        message = { it.message(suffix) },
+        code = "notEndsWith",
+        predicate = { !it.endsWith(suffix) }
+    )
+}
 
 public fun ValidationNode<String>.uppercase(
     message: String = messages.uppercase
@@ -339,7 +364,7 @@ public fun ValidationNode<String>.containsSymbol(
 public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(
     message: String = messages.enum
 ): Unit = enum<E>(
-    message = { values -> message.replace("{values}", values.joinToString { it.name }) }
+    message = { values -> message.filled("values" to values.map { it.name }) }
 )
 
 public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(

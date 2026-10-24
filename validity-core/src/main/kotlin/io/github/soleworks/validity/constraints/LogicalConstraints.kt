@@ -10,8 +10,6 @@ private const val OR = "or"
 private const val AND = "and"
 private const val NOT = "not"
 
-private val TEMPLATE_PLACEHOLDERS = Regex("\\{left}|\\{right}")
-
 public fun <V> ValidationNode<V>.or(
     block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
@@ -92,8 +90,12 @@ private fun <V> ValidationNode<V>.combine(
             else
                 Violation(
                     path = path,
-                    message = message?.filled(path, value)
-                        ?: branches.described(operator, outer, template.filled(path, value), and.filled(path, value)),
+                    message = message?.filled("path" to path, "value" to value) ?: branches.described(
+                        operator = operator,
+                        outer = outer,
+                        template = template.filled("path" to path, "value" to value),
+                        and = and.filled("path" to path, "value" to value)
+                    ),
                     code = operator
                 )
         }
@@ -106,9 +108,11 @@ private fun List<List<Violation>>.described(
     template: String,
     and: String
 ): String {
-    val failures = filter { it.isNotEmpty() }
-        .map { branch -> branch.described(operator, and) }
+    val failures = asSequence()
+        .filter { it.isNotEmpty() }
+        .map { branch -> branch.described(operator = operator, and = and) }
         .distinct()
+        .toList()
     val text = failures.joined(template)
 
     return if (failures.size > 1 && outer != null && outer != operator)
@@ -132,6 +136,4 @@ private fun List<Violation>.described(
 
 private fun List<String>.joined(
     template: String
-): String = reduceOrNull { left, right ->
-    TEMPLATE_PLACEHOLDERS.replace(template) { if (it.value == "{left}") left else right }
-}.orEmpty()
+): String = reduceOrNull { left, right -> template.filled("left" to left, "right" to right) }.orEmpty()

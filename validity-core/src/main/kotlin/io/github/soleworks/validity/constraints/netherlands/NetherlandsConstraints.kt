@@ -1,12 +1,13 @@
 package io.github.soleworks.validity.constraints.netherlands
 
 import io.github.soleworks.validity.ValidationNode
+import io.github.soleworks.validity.constraints.digits
+import io.github.soleworks.validity.constraints.weightedSum
 import io.github.soleworks.validity.messages
 
 private const val MODULUS = 11
 
-private val BSN_FORMAT = Regex("\\d{9}")
-
+private val BSN_FORMAT = Regex("""\d{9}""")
 private val BSN_WEIGHTS = (9 downTo 2).toList()
 
 public fun ValidationNode<String>.bsn(
@@ -14,11 +15,11 @@ public fun ValidationNode<String>.bsn(
 ): Unit = constraint(
     message = message,
     code = "bsn",
-    predicate = { BSN_FORMAT.matches(it) && it.map(Char::digitToInt).isBsn() }
+    predicate = { BSN_FORMAT.matches(it) && it.digits().isBsn() }
 )
 
 private fun List<Int>.isBsn(): Boolean {
-    val sum = take(BSN_WEIGHTS.size).zip(BSN_WEIGHTS) { digit, weight -> digit * weight }.sum() - last()
+    val sum = weightedSum(BSN_WEIGHTS) - last()
 
     return sum != 0 && sum % MODULUS == 0
 }

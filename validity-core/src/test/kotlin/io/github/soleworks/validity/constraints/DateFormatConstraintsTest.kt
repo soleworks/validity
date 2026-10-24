@@ -15,18 +15,28 @@ class DateFormatConstraintsTest {
     inner class IsoDate {
         @ParameterizedTest
         @ValueSource(strings = ["2026-01-10", "2024-02-29"])
-        fun `given a valid ISO date should accept it`(birthDate: String) {
-            val node = ValidationNode("birthDate", birthDate).apply { isoDate() }
+        fun `given a valid ISO date should accept it`(
+            birthDate: String
+        ) {
+            val node = ValidationNode(path = "birthDate", value = birthDate).apply { isoDate() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["2026-02-29", "2026-1-10", "10/01/2026"])
-        fun `given an invalid ISO date should report it`(birthDate: String) {
-            val node = ValidationNode("birthDate", birthDate).apply { isoDate() }
+        fun `given an invalid ISO date should report it`(
+            birthDate: String
+        ) {
+            val node = ValidationNode(path = "birthDate", value = birthDate).apply { isoDate() }
 
-            node.validate() shouldBe listOf(Violation("birthDate", "must be an ISO 8601 date", "isoDate"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "birthDate", message = "must be an ISO 8601 date", code = "isoDate")
+            )
         }
     }
 
@@ -35,18 +45,28 @@ class DateFormatConstraintsTest {
     inner class IsoTime {
         @ParameterizedTest
         @ValueSource(strings = ["10:15", "10:15:30", "10:15:30.123"])
-        fun `given a valid ISO time should accept it`(openingTime: String) {
-            val node = ValidationNode("openingTime", openingTime).apply { isoTime() }
+        fun `given a valid ISO time should accept it`(
+            openingTime: String
+        ) {
+            val node = ValidationNode(path = "openingTime", value = openingTime).apply { isoTime() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["24:00", "10:60", "10h15"])
-        fun `given an invalid ISO time should report it`(openingTime: String) {
-            val node = ValidationNode("openingTime", openingTime).apply { isoTime() }
+        fun `given an invalid ISO time should report it`(
+            openingTime: String
+        ) {
+            val node = ValidationNode(path = "openingTime", value = openingTime).apply { isoTime() }
 
-            node.validate() shouldBe listOf(Violation("openingTime", "must be an ISO 8601 time", "isoTime"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "openingTime", message = "must be an ISO 8601 time", code = "isoTime")
+            )
         }
     }
 
@@ -55,18 +75,32 @@ class DateFormatConstraintsTest {
     inner class IsoDateTime {
         @ParameterizedTest
         @ValueSource(strings = ["2026-01-10T10:15:30Z", "2026-01-10T10:15:30-03:00"])
-        fun `given a valid ISO date and time should accept it`(createdAt: String) {
-            val node = ValidationNode("createdAt", createdAt).apply { isoDateTime() }
+        fun `given a valid ISO date and time should accept it`(
+            createdAt: String
+        ) {
+            val node = ValidationNode(path = "createdAt", value = createdAt).apply { isoDateTime() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["2026-01-10T10:15:30", "2026-01-10 10:15:30Z"])
-        fun `given an invalid ISO date and time should report it`(createdAt: String) {
-            val node = ValidationNode("createdAt", createdAt).apply { isoDateTime() }
+        fun `given an invalid ISO date and time should report it`(
+            createdAt: String
+        ) {
+            val node = ValidationNode(path = "createdAt", value = createdAt).apply { isoDateTime() }
 
-            node.validate() shouldBe listOf(Violation("createdAt", "must be an ISO 8601 date and time with offset", "isoDateTime"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "createdAt",
+                    message = "must be an ISO 8601 date and time with offset",
+                    code = "isoDateTime"
+                )
+            )
         }
     }
 
@@ -75,18 +109,28 @@ class DateFormatConstraintsTest {
     inner class IsoDuration {
         @ParameterizedTest
         @ValueSource(strings = ["P1Y2M3DT4H5M6S", "PT30M", "P2W", "PT0.5S"])
-        fun `given a valid ISO duration should accept it`(timeout: String) {
-            val node = ValidationNode("timeout", timeout).apply { isoDuration() }
+        fun `given a valid ISO duration should accept it`(
+            timeout: String
+        ) {
+            val node = ValidationNode(path = "timeout", value = timeout).apply { isoDuration() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["P", "PT", "1Y", "P1H"])
-        fun `given an invalid ISO duration should report it`(timeout: String) {
-            val node = ValidationNode("timeout", timeout).apply { isoDuration() }
+        fun `given an invalid ISO duration should report it`(
+            timeout: String
+        ) {
+            val node = ValidationNode(path = "timeout", value = timeout).apply { isoDuration() }
 
-            node.validate() shouldBe listOf(Violation("timeout", "must be an ISO 8601 duration", "isoDuration"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "must be an ISO 8601 duration", code = "isoDuration")
+            )
         }
     }
 
@@ -95,27 +139,41 @@ class DateFormatConstraintsTest {
     inner class DateFormat {
         @ParameterizedTest
         @ValueSource(strings = ["10/01/2026", "29/02/2024"])
-        fun `given a valid date in the format should accept it`(birthDate: String) {
-            val node = ValidationNode("birthDate", birthDate).apply { dateFormat("dd/MM/yyyy") }
+        fun `given a valid date in the format should accept it`(
+            birthDate: String
+        ) {
+            val node = ValidationNode(path = "birthDate", value = birthDate).apply { dateFormat("dd/MM/yyyy") }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["31/02/2026", "2026-01-10", "1/1/2026"])
-        fun `given an invalid date in the format should report it`(birthDate: String) {
-            val node = ValidationNode("birthDate", birthDate).apply { dateFormat("dd/MM/yyyy") }
+        fun `given an invalid date in the format should report it`(
+            birthDate: String
+        ) {
+            val node = ValidationNode(path = "birthDate", value = birthDate).apply { dateFormat("dd/MM/yyyy") }
 
-            node.validate() shouldBe listOf(Violation("birthDate", "must match the date format dd/MM/yyyy", "dateFormat"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "birthDate", message = "must match the date format dd/MM/yyyy", code = "dateFormat")
+            )
         }
 
         @Test
         fun `given a message function should build it from the value and the pattern`() {
-            val node = ValidationNode("birthDate", "2026-01-10").apply {
+            val node = ValidationNode(path = "birthDate", value = "2026-01-10").apply {
                 dateFormat("dd/MM/yyyy") { pattern -> "$this is not $pattern" }
             }
 
-            node.validate() shouldBe listOf(Violation("birthDate", "2026-01-10 is not dd/MM/yyyy", "dateFormat"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "birthDate", message = "2026-01-10 is not dd/MM/yyyy", code = "dateFormat")
+            )
         }
     }
 }

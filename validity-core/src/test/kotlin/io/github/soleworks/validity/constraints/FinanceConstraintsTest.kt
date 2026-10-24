@@ -14,18 +14,28 @@ class FinanceConstraintsTest {
     inner class CreditCard {
         @ParameterizedTest
         @ValueSource(strings = ["4111111111111111", "5555555555554444"])
-        fun `given a valid card number should accept it`(cardNumber: String) {
-            val node = ValidationNode("cardNumber", cardNumber).apply { creditCard() }
+        fun `given a valid card number should accept it`(
+            cardNumber: String
+        ) {
+            val node = ValidationNode(path = "cardNumber", value = cardNumber).apply { creditCard() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["4111111111111112", "4111 1111 1111 1111", "41111111111"])
-        fun `given an invalid card number should report it`(cardNumber: String) {
-            val node = ValidationNode("cardNumber", cardNumber).apply { creditCard() }
+        fun `given an invalid card number should report it`(
+            cardNumber: String
+        ) {
+            val node = ValidationNode(path = "cardNumber", value = cardNumber).apply { creditCard() }
 
-            node.validate() shouldBe listOf(Violation("cardNumber", "must be a valid credit card number", "creditCard"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "cardNumber", message = "must be a valid credit card number", code = "creditCard")
+            )
         }
     }
 
@@ -34,10 +44,14 @@ class FinanceConstraintsTest {
     inner class Iban {
         @ParameterizedTest
         @ValueSource(strings = ["DE89370400440532013000", "GB82WEST12345698765432", "BR1500000000000010932840814P2"])
-        fun `given a valid IBAN should accept it`(iban: String) {
-            val node = ValidationNode("iban", iban).apply { iban() }
+        fun `given a valid IBAN should accept it`(
+            iban: String
+        ) {
+            val node = ValidationNode(path = "iban", value = iban).apply { iban() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
@@ -49,10 +63,16 @@ class FinanceConstraintsTest {
                 "de89370400440532013000"
             ]
         )
-        fun `given an invalid IBAN should report it`(iban: String) {
-            val node = ValidationNode("iban", iban).apply { iban() }
+        fun `given an invalid IBAN should report it`(
+            iban: String
+        ) {
+            val node = ValidationNode(path = "iban", value = iban).apply { iban() }
 
-            node.validate() shouldBe listOf(Violation("iban", "must be a valid IBAN", "iban"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "iban", message = "must be a valid IBAN", code = "iban")
+            )
         }
     }
 
@@ -61,18 +81,28 @@ class FinanceConstraintsTest {
     inner class Bic {
         @ParameterizedTest
         @ValueSource(strings = ["DEUTDEFF", "DEUTDEFF500", "NEDSZAJJXXX", "RBKOXKPR"])
-        fun `given a valid BIC should accept it`(bic: String) {
-            val node = ValidationNode("bic", bic).apply { bic() }
+        fun `given a valid BIC should accept it`(
+            bic: String
+        ) {
+            val node = ValidationNode(path = "bic", value = bic).apply { bic() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["DEUTXXFF", "DEUTDEF", "deutdeff"])
-        fun `given an invalid BIC should report it`(bic: String) {
-            val node = ValidationNode("bic", bic).apply { bic() }
+        fun `given an invalid BIC should report it`(
+            bic: String
+        ) {
+            val node = ValidationNode(path = "bic", value = bic).apply { bic() }
 
-            node.validate() shouldBe listOf(Violation("bic", "must be a valid BIC", "bic"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "bic", message = "must be a valid BIC", code = "bic")
+            )
         }
     }
 
@@ -81,18 +111,28 @@ class FinanceConstraintsTest {
     inner class Isin {
         @ParameterizedTest
         @ValueSource(strings = ["US0378331005", "BRPETRACNPR6"])
-        fun `given a valid ISIN should accept it`(isin: String) {
-            val node = ValidationNode("isin", isin).apply { isin() }
+        fun `given a valid ISIN should accept it`(
+            isin: String
+        ) {
+            val node = ValidationNode(path = "isin", value = isin).apply { isin() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["US0378331006", "US037833100"])
-        fun `given an invalid ISIN should report it`(isin: String) {
-            val node = ValidationNode("isin", isin).apply { isin() }
+        fun `given an invalid ISIN should report it`(
+            isin: String
+        ) {
+            val node = ValidationNode(path = "isin", value = isin).apply { isin() }
 
-            node.validate() shouldBe listOf(Violation("isin", "must be a valid ISIN", "isin"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "isin", message = "must be a valid ISIN", code = "isin")
+            )
         }
     }
 
@@ -101,18 +141,28 @@ class FinanceConstraintsTest {
     inner class CurrencyCode {
         @ParameterizedTest
         @ValueSource(strings = ["BRL", "USD", "EUR"])
-        fun `given a valid currency code should accept it`(currency: String) {
-            val node = ValidationNode("currency", currency).apply { currencyCode() }
+        fun `given a valid currency code should accept it`(
+            currency: String
+        ) {
+            val node = ValidationNode(path = "currency", value = currency).apply { currencyCode() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["XYZ", "brl", "BR"])
-        fun `given an invalid currency code should report it`(currency: String) {
-            val node = ValidationNode("currency", currency).apply { currencyCode() }
+        fun `given an invalid currency code should report it`(
+            currency: String
+        ) {
+            val node = ValidationNode(path = "currency", value = currency).apply { currencyCode() }
 
-            node.validate() shouldBe listOf(Violation("currency", "must be a valid ISO 4217 currency code", "currencyCode"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "currency", message = "must be a valid ISO 4217 currency code", code = "currencyCode")
+            )
         }
     }
 
@@ -128,18 +178,30 @@ class FinanceConstraintsTest {
                 "bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3"
             ]
         )
-        fun `given a valid Bitcoin address should accept it`(wallet: String) {
-            val node = ValidationNode("wallet", wallet).apply { bitcoinAddress() }
+        fun `given a valid Bitcoin address should accept it`(
+            wallet: String
+        ) {
+            val node = ValidationNode(path = "wallet", value = wallet).apply { bitcoinAddress() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["0BoatSLRHtKNngkdXEeobR76b53LETtpyT", "1Boat", "bc1bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"])
-        fun `given an invalid Bitcoin address should report it`(wallet: String) {
-            val node = ValidationNode("wallet", wallet).apply { bitcoinAddress() }
+        @ValueSource(
+            strings = ["0BoatSLRHtKNngkdXEeobR76b53LETtpyT", "1Boat", "bc1bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"]
+        )
+        fun `given an invalid Bitcoin address should report it`(
+            wallet: String
+        ) {
+            val node = ValidationNode(path = "wallet", value = wallet).apply { bitcoinAddress() }
 
-            node.validate() shouldBe listOf(Violation("wallet", "must be a valid Bitcoin address", "bitcoinAddress"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "wallet", message = "must be a valid Bitcoin address", code = "bitcoinAddress")
+            )
         }
     }
 
@@ -148,10 +210,14 @@ class FinanceConstraintsTest {
     inner class EthereumAddress {
         @ParameterizedTest
         @ValueSource(strings = ["0x52908400098527886E0F7030069857D2E4169EE7"])
-        fun `given a valid Ethereum address should accept it`(wallet: String) {
-            val node = ValidationNode("wallet", wallet).apply { ethereumAddress() }
+        fun `given a valid Ethereum address should accept it`(
+            wallet: String
+        ) {
+            val node = ValidationNode(path = "wallet", value = wallet).apply { ethereumAddress() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
@@ -161,10 +227,16 @@ class FinanceConstraintsTest {
                 "0x52908400098527886E0F7030069857D2E4169EE"
             ]
         )
-        fun `given an invalid Ethereum address should report it`(wallet: String) {
-            val node = ValidationNode("wallet", wallet).apply { ethereumAddress() }
+        fun `given an invalid Ethereum address should report it`(
+            wallet: String
+        ) {
+            val node = ValidationNode(path = "wallet", value = wallet).apply { ethereumAddress() }
 
-            node.validate() shouldBe listOf(Violation("wallet", "must be a valid Ethereum address", "ethereumAddress"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "wallet", message = "must be a valid Ethereum address", code = "ethereumAddress")
+            )
         }
     }
 }

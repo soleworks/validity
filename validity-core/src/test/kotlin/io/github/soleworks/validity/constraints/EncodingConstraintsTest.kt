@@ -14,18 +14,28 @@ class EncodingConstraintsTest {
     inner class Base64 {
         @ParameterizedTest
         @ValueSource(strings = ["SGVsbG8=", "SGVsbG8gV29ybGQ=", "YQ=="])
-        fun `given a valid Base64 text should accept it`(content: String) {
-            val node = ValidationNode("content", content).apply { base64() }
+        fun `given a valid Base64 text should accept it`(
+            content: String
+        ) {
+            val node = ValidationNode(path = "content", value = content).apply { base64() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["SGVsbG8", "SGVsbG8==", "SGV-bG8="])
-        fun `given an invalid Base64 text should report it`(content: String) {
-            val node = ValidationNode("content", content).apply { base64() }
+        fun `given an invalid Base64 text should report it`(
+            content: String
+        ) {
+            val node = ValidationNode(path = "content", value = content).apply { base64() }
 
-            node.validate() shouldBe listOf(Violation("content", "must be valid Base64", "base64"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "content", message = "must be valid Base64", code = "base64")
+            )
         }
     }
 
@@ -34,18 +44,28 @@ class EncodingConstraintsTest {
     inner class Base64Url {
         @ParameterizedTest
         @ValueSource(strings = ["SGVsbG8_LQ", "abc-_w"])
-        fun `given a valid URL-safe Base64 text should accept it`(content: String) {
-            val node = ValidationNode("content", content).apply { base64Url() }
+        fun `given a valid URL-safe Base64 text should accept it`(
+            content: String
+        ) {
+            val node = ValidationNode(path = "content", value = content).apply { base64Url() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["SGVsbG8+", "SGVsbG8/", "A", "AAAAA"])
-        fun `given an invalid URL-safe Base64 text should report it`(content: String) {
-            val node = ValidationNode("content", content).apply { base64Url() }
+        fun `given an invalid URL-safe Base64 text should report it`(
+            content: String
+        ) {
+            val node = ValidationNode(path = "content", value = content).apply { base64Url() }
 
-            node.validate() shouldBe listOf(Violation("content", "must be valid URL-safe Base64", "base64Url"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "content", message = "must be valid URL-safe Base64", code = "base64Url")
+            )
         }
     }
 
@@ -54,18 +74,28 @@ class EncodingConstraintsTest {
     inner class Base32 {
         @ParameterizedTest
         @ValueSource(strings = ["JBSWY3DP", "JBSWY3DPEE======"])
-        fun `given a valid Base32 text should accept it`(secret: String) {
-            val node = ValidationNode("secret", secret).apply { base32() }
+        fun `given a valid Base32 text should accept it`(
+            secret: String
+        ) {
+            val node = ValidationNode(path = "secret", value = secret).apply { base32() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["JBSWY3D1", "jbswy3dp", "JBSWY3DPE"])
-        fun `given an invalid Base32 text should report it`(secret: String) {
-            val node = ValidationNode("secret", secret).apply { base32() }
+        fun `given an invalid Base32 text should report it`(
+            secret: String
+        ) {
+            val node = ValidationNode(path = "secret", value = secret).apply { base32() }
 
-            node.validate() shouldBe listOf(Violation("secret", "must be valid Base32", "base32"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "secret", message = "must be valid Base32", code = "base32")
+            )
         }
     }
 
@@ -74,18 +104,28 @@ class EncodingConstraintsTest {
     inner class Base58 {
         @ParameterizedTest
         @ValueSource(strings = ["3mJr7AoUXx2Wqd"])
-        fun `given a valid Base58 text should accept it`(address: String) {
-            val node = ValidationNode("address", address).apply { base58() }
+        fun `given a valid Base58 text should accept it`(
+            address: String
+        ) {
+            val node = ValidationNode(path = "address", value = address).apply { base58() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["3mJr7AoUXx2Wq0", "OIl"])
-        fun `given an invalid Base58 text should report it`(address: String) {
-            val node = ValidationNode("address", address).apply { base58() }
+        fun `given an invalid Base58 text should report it`(
+            address: String
+        ) {
+            val node = ValidationNode(path = "address", value = address).apply { base58() }
 
-            node.validate() shouldBe listOf(Violation("address", "must be valid Base58", "base58"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "address", message = "must be valid Base58", code = "base58")
+            )
         }
     }
 
@@ -94,18 +134,28 @@ class EncodingConstraintsTest {
     inner class Hexadecimal {
         @ParameterizedTest
         @ValueSource(strings = ["deadBEEF", "0123"])
-        fun `given a valid hexadecimal text should accept it`(fingerprint: String) {
-            val node = ValidationNode("fingerprint", fingerprint).apply { hexadecimal() }
+        fun `given a valid hexadecimal text should accept it`(
+            fingerprint: String
+        ) {
+            val node = ValidationNode(path = "fingerprint", value = fingerprint).apply { hexadecimal() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(strings = ["0x1F", "xyz"])
-        fun `given an invalid hexadecimal text should report it`(fingerprint: String) {
-            val node = ValidationNode("fingerprint", fingerprint).apply { hexadecimal() }
+        fun `given an invalid hexadecimal text should report it`(
+            fingerprint: String
+        ) {
+            val node = ValidationNode(path = "fingerprint", value = fingerprint).apply { hexadecimal() }
 
-            node.validate() shouldBe listOf(Violation("fingerprint", "must be hexadecimal", "hexadecimal"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "fingerprint", message = "must be hexadecimal", code = "hexadecimal")
+            )
         }
     }
 
@@ -115,41 +165,51 @@ class EncodingConstraintsTest {
         @ParameterizedTest
         @ValueSource(
             strings = [
-                "{\"name\":\"Ana\",\"tags\":[1,2.5,-3e2,true,null]}",
+                """{"name":"Ana","tags":[1,2.5,-3e2,true,null]}""",
                 "[]",
-                "\"text\"",
+                """"text"""",
                 "42",
                 " { } ",
-                "{\"text\":\"line\\nbreak \\u00e9\"}"
+                """{"text":"line\nbreak \u00e9"}"""
             ]
         )
-        fun `given a valid JSON should accept it`(payload: String) {
-            val node = ValidationNode("payload", payload).apply { json() }
+        fun `given a valid JSON should accept it`(
+            payload: String
+        ) {
+            val node = ValidationNode(path = "payload", value = payload).apply { json() }
 
-            node.validate() shouldBe emptyList()
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
 
         @ParameterizedTest
         @ValueSource(
             strings = [
-                "{name: \"Ana\"}",
+                """{name: "Ana"}""",
                 "[1,2,]",
-                "{\"a\":1,}",
-                "\"unterminated",
+                """{"a":1,}""",
+                """"unterminated""",
                 "01",
-                "{\"a\" 1}",
+                """{"a" 1}""",
                 "tru",
-                "{\"a\":1}}",
-                "\"bad \\x escape\"",
-                "\"tab\there\"",
-                "\"\\u٠٠٤١\"",
-                "\"\\uＡＡＡＡ\""
+                """{"a":1}}""",
+                """"bad \x escape"""",
+                """"tab${'\t'}here"""",
+                """"\u٠٠٤١"""",
+                """"\uＡＡＡＡ""""
             ]
         )
-        fun `given an invalid JSON should report it`(payload: String) {
-            val node = ValidationNode("payload", payload).apply { json() }
+        fun `given an invalid JSON should report it`(
+            payload: String
+        ) {
+            val node = ValidationNode(path = "payload", value = payload).apply { json() }
 
-            node.validate() shouldBe listOf(Violation("payload", "must be valid JSON", "json"))
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "payload", message = "must be valid JSON", code = "json")
+            )
         }
     }
 }
