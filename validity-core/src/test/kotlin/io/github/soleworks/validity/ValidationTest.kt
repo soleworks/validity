@@ -2,7 +2,9 @@ package io.github.soleworks.validity
 
 import io.github.soleworks.validity.samples.Batch
 import io.github.soleworks.validity.samples.Contact
+import io.github.soleworks.validity.samples.Invoice
 import io.github.soleworks.validity.samples.Operation
+import io.github.soleworks.validity.samples.Payout
 import io.github.soleworks.validity.samples.validation
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
@@ -37,6 +39,81 @@ class ValidationTest {
     }
 
     @Nested
+    @DisplayName("When constraint is called")
+    inner class Constraint {
+        @Test
+        fun `given a rule that holds should accept it`() {
+            val invoice = Invoice()
+
+            val result = invoice.validate()
+
+            result.violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a missing pix key should report the broken rule at the property`() {
+            val payout = Payout(pixKey = null)
+
+            val result = payout.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "pixKey", message = "fill the pix key", code = "pixKey")
+            )
+        }
+
+        @Test
+        fun `given a broken rule without a path should report it at the root`() {
+            val invoice = Invoice(total = 5)
+
+            val result = invoice.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "", message = "items must add up to the total", code = "total")
+            )
+        }
+
+        @Test
+        fun `given a broken rule with a path should report it at that path`() {
+            val rules = validation { constraint(path = "bankAccount", message = "fill the bank account") { false } }
+
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "bankAccount", message = "fill the bank account", code = "")
+            )
+        }
+
+        @Test
+        fun `given a broken rule inside a metadata block should report it with the entries`() {
+            val rules = validation {
+                metadata("operationId" to "op-1") { constraint(message = "send at least one field") { false } }
+            }
+
+            val result = rules.validate()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "",
+                    message = "send at least one field",
+                    code = "",
+                    metadata = mapOf("operationId" to "op-1")
+                )
+            )
+        }
+
+        @Test
+        fun `given a message with placeholders should fill the path and the value`() {
+            val payout = Payout(amount = 0)
+
+            val result = payout.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "amount", message = "amount cannot be 0", code = "")
+            )
+        }
+    }
+
+    @Nested
     @DisplayName("When metadata is called")
     inner class Metadata {
         @Test
@@ -47,16 +124,10 @@ class ValidationTest {
 
             result.violations shouldBe listOf(
                 Violation(
-                    path = "email",
+                    path = "",
                     message = "at least one of email, phone is required",
                     code = "atLeastOneOf",
-                    metadata = mapOf("operationId" to "op-1")
-                ),
-                Violation(
-                    path = "phone",
-                    message = "at least one of email, phone is required",
-                    code = "atLeastOneOf",
-                    metadata = mapOf("operationId" to "op-1")
+                    metadata = mapOf("operationId" to "op-1", "fields" to listOf("email", "phone"))
                 )
             )
         }
@@ -64,7 +135,7 @@ class ValidationTest {
         @Test
         fun `given a missing value inside the block should attach the entries to the required violation`() {
             val rules = validation {
-                metadata("operationId" to "op-1") { required<String>(name = "email", value = null) {} }
+                metadata("operationId" to "op-1") { required<String>(path = "email", value = null) {} }
             }
 
             val result = rules.validate()
@@ -114,8 +185,8 @@ class ValidationTest {
         @Test
         fun `given a rule after the block should report it without the entries`() {
             val rules = validation {
-                metadata("operationId" to "op-1") { required<String>(name = "email", value = null) {} }
-                required<String>(name = "phone", value = null) {}
+                metadata("operationId" to "op-1") { required<String>(path = "email", value = null) {} }
+                required<String>(path = "phone", value = null) {}
             }
 
             val result = rules.validate()

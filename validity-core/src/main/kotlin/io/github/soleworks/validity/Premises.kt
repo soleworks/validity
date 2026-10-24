@@ -15,7 +15,7 @@ public fun <V : Any> KProperty0<V?>.required(
     message: String,
     block: ValidationNode<V>.() -> Unit
 ): Unit = required(
-    name = name,
+    path = name,
     value = get(),
     message = message,
     block = block
@@ -23,14 +23,14 @@ public fun <V : Any> KProperty0<V?>.required(
 
 context(validation: Validation)
 public fun <V : Any> required(
-    name: String,
+    path: String,
     value: V?,
     message: String = messages.required,
     block: ValidationNode<V>.() -> Unit
 ) {
     if (value == null)
         return validation.add<V?>(
-            name = name,
+            path = path,
             value = null,
             message = message,
             code = "required",
@@ -38,7 +38,7 @@ public fun <V : Any> required(
         )
 
     validation.add(
-        name = name,
+        path = path,
         value = value,
         block = block
     )
@@ -48,20 +48,20 @@ context(validation: Validation)
 public infix fun <V : Any> KProperty0<V?>.ifPresent(
     block: ValidationNode<V>.() -> Unit
 ): Unit = ifPresent(
-    name = name,
+    path = name,
     value = get(),
     block = block
 )
 
 context(validation: Validation)
 public fun <V : Any> ifPresent(
-    name: String,
+    path: String,
     value: V?,
     block: ValidationNode<V>.() -> Unit
 ) {
     if (value != null)
         validation.add(
-            name = name,
+            path = path,
             value = value,
             block = block
         )
@@ -71,7 +71,7 @@ context(validation: Validation)
 public fun KProperty0<*>.forbidden(
     message: String = messages.forbidden
 ): Unit = validation.add(
-    name = name,
+    path = name,
     value = get(),
     message = message,
     code = "forbidden",
@@ -81,9 +81,11 @@ public fun KProperty0<*>.forbidden(
 context(validation: Validation)
 public fun atLeastOneOf(
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.atLeastOneOf
 ): Unit = presence(
     properties = properties,
+    path = path,
     message = message,
     code = "atLeastOneOf",
     accepts = { filled, _ -> filled >= 1 }
@@ -92,67 +94,123 @@ public fun atLeastOneOf(
 context(validation: Validation)
 public fun atMostOneOf(
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.atMostOneOf
 ): Unit = presence(
     properties = properties,
+    path = path,
     message = message,
     code = "atMostOneOf",
-    accepts = { filled, value -> value == null || filled <= 1 }
+    accepts = { filled, _ -> filled <= 1 }
 )
 
 context(validation: Validation)
 public fun exactlyOneOf(
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.exactlyOneOf
 ): Unit = presence(
     properties = properties,
+    path = path,
     message = message,
     code = "exactlyOneOf",
-    accepts = { filled, value -> filled == 1 || (filled > 1 && value == null) }
+    accepts = { filled, _ -> filled == 1 }
 )
 
 context(validation: Validation)
 public fun allOrNoneOf(
     vararg properties: KProperty0<*>,
+    path: String = "",
     message: String = messages.allOrNoneOf
 ): Unit = presence(
     properties = properties,
+    path = path,
     message = message,
     code = "allOrNoneOf",
-    accepts = { filled, value -> filled == 0 || value != null }
+    accepts = { filled, total -> filled == 0 || filled == total }
 )
+
+context(validation: Validation)
+public fun atLeastOf(
+    count: Int,
+    vararg properties: KProperty0<*>,
+    path: String = "",
+    message: String = messages.atLeastOf
+): Unit = presence(
+    properties = properties.counting(count, code = "atLeastOf"),
+    path = path,
+    message = message.filled("count" to count),
+    code = "atLeastOf",
+    accepts = { filled, _ -> filled >= count }
+)
+
+context(validation: Validation)
+public fun atMostOf(
+    count: Int,
+    vararg properties: KProperty0<*>,
+    path: String = "",
+    message: String = messages.atMostOf
+): Unit = presence(
+    properties = properties.counting(count, code = "atMostOf"),
+    path = path,
+    message = message.filled("count" to count),
+    code = "atMostOf",
+    accepts = { filled, _ -> filled <= count }
+)
+
+context(validation: Validation)
+public fun exactlyOf(
+    count: Int,
+    vararg properties: KProperty0<*>,
+    path: String = "",
+    message: String = messages.exactlyOf
+): Unit = presence(
+    properties = properties.counting(count, code = "exactlyOf"),
+    path = path,
+    message = message.filled("count" to count),
+    code = "exactlyOf",
+    accepts = { filled, _ -> filled == count }
+)
+
+private fun Array<out KProperty0<*>>.counting(
+    count: Int,
+    code: String
+): Array<out KProperty0<*>> = also {
+    require(count in 0..distinct().size) { "$code needs a count between 0 and the number of properties" }
+}
 
 context(validation: Validation)
 private fun presence(
     properties: Array<out KProperty0<*>>,
+    path: String,
     message: String,
     code: String,
-    accepts: (filled: Int, value: Any?) -> Boolean
+    accepts: (filled: Int, total: Int) -> Boolean
 ) {
     require(properties.isNotEmpty()) { "$code needs at least one property" }
 
     val distinct = properties.distinct()
-    val values = distinct.map { it.get() }
-    val filled = values.count { it != null }
-    val text = message.filled("fields" to distinct.map { it.name })
+    val names = distinct.map { it.name }
+    val filled = distinct.filter { it.get() != null }.map { it.name }
+    val isShort = (filled.size + 1..names.size).any { count -> accepts(count, names.size) }
+    val fields = if (isShort) names - filled.toSet() else filled
 
-    distinct.zip(values).forEach { (property, value) ->
-        validation.add(
-            name = property.name,
-            value = value,
-            message = text,
+    validation.metadata("fields" to fields) {
+        constraint(
+            path = path,
+            message = message.filled("fields" to names),
             code = code,
-            predicate = { accepts(filled, it) }
+            predicate = { accepts(filled.size, names.size) }
         )
     }
 }
 
 private fun <V> Validation.add(
-    name: String,
+    path: String,
     value: V,
     block: ValidationNode<V>.() -> Unit
 ) {
-    val node = ValidationNode(path = name, value = value).also { node -> node.metadata = metadata }
+    val node = ValidationNode(path = path, value = value).also { node -> node.metadata = metadata }
 
     add(node)
 
@@ -160,14 +218,14 @@ private fun <V> Validation.add(
 }
 
 private fun <V> Validation.add(
-    name: String,
+    path: String,
     value: V,
     message: String,
     code: String,
     predicate: (V) -> Boolean
 ) {
     add(
-        name = name,
+        path = path,
         value = value,
         block = {
             constraint(
