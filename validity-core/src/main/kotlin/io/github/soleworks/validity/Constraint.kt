@@ -1,6 +1,6 @@
 package io.github.soleworks.validity
 
-private val PLACEHOLDER = Regex("""\{(\w+)}""")
+private val PLACEHOLDER_FORMAT = Regex("""\{(\w+)}""")
 
 internal class Constraint<V>(
     private val check: (path: String, value: V) -> Violation?
@@ -17,7 +17,7 @@ internal fun String.filled(
 ): String {
     val values = placeholders.toMap()
 
-    return PLACEHOLDER.replace(this) { match ->
+    return PLACEHOLDER_FORMAT.replace(this) { match ->
         val name = match.groupValues[1]
 
         if (name in values)

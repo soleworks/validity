@@ -15,14 +15,14 @@ class ValidationResultTest {
         @Test
         fun `given no violations should not throw`() {
             val customer = Customer()
+            val result = customer.validate()
 
-            shouldNotThrowAny { customer.validate().orThrow() }
+            shouldNotThrowAny { result.orThrow() }
         }
 
         @Test
         fun `given violations should describe each one in the message`() {
             val customer = Customer(name = "A", email = null)
-
             val result = customer.validate()
 
             val error = shouldThrow<ValidationException> { result.orThrow() }
@@ -33,7 +33,6 @@ class ValidationResultTest {
         @Test
         fun `given violations should throw them in the exception`() {
             val customer = Customer(name = "A", email = null)
-
             val result = customer.validate()
 
             val error = shouldThrow<ValidationException> { result.orThrow() }

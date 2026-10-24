@@ -154,7 +154,10 @@ class MapConstraintsTest {
 
         @Test
         fun `given prices below the range should report it`() {
-            val node = ValidationNode("prices", emptyMap<String, Int>()).apply { sizeBetween(min = 1, max = 2) }
+            val node = ValidationNode(
+                path = "prices",
+                value = emptyMap<String, Int>()
+            ).apply { sizeBetween(min = 1, max = 2) }
 
             val violations = node.validate()
 
@@ -181,7 +184,7 @@ class MapConstraintsTest {
 
         @Test
         fun `given a message function should build it from the value and the limits`() {
-            val node = ValidationNode("prices", emptyMap<String, Int>()).apply {
+            val node = ValidationNode(path = "prices", value = emptyMap<String, Int>()).apply {
                 sizeBetween(min = 1, max = 2) { min, max -> "has $size prices, needs from $min to $max" }
             }
 
@@ -207,7 +210,7 @@ class MapConstraintsTest {
 
         @Test
         fun `given no prices should report it`() {
-            val node = ValidationNode("prices", emptyMap<String, Int>()).apply { notEmpty() }
+            val node = ValidationNode(path = "prices", value = emptyMap<String, Int>()).apply { notEmpty() }
 
             val violations = node.validate()
 

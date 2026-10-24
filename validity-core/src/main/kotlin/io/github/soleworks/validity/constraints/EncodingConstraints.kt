@@ -12,7 +12,7 @@ private val BASE64_URL_FORMAT = Regex("(?:[A-Za-z0-9_-]{4})*(?:[A-Za-z0-9_-]{2,3
 private val BASE32_FORMAT = Regex("(?:[A-Z2-7]{8})*(?:[A-Z2-7]{2}={6}|[A-Z2-7]{4}={4}|[A-Z2-7]{5}={3}|[A-Z2-7]{7}=)?")
 private val BASE58_FORMAT = Regex("[1-9A-HJ-NP-Za-km-z]+")
 internal val HEXADECIMAL_FORMAT = Regex("[0-9a-fA-F]+")
-private val JSON_NUMBER = Regex("""-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?""")
+private val JSON_NUMBER_FORMAT = Regex("""-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?""")
 private val JSON_WHITESPACE = setOf(' ', '\t', '\n', '\r')
 private val JSON_ESCAPES = setOf('"', '\\', '/', 'b', 'f', 'n', 'r', 't')
 
@@ -147,7 +147,7 @@ private class JsonReader(
     }
 
     private fun readNumber() {
-        val match = JSON_NUMBER.matchAt(text, position)
+        val match = JSON_NUMBER_FORMAT.matchAt(text, position)
 
         requireNotNull(match)
 

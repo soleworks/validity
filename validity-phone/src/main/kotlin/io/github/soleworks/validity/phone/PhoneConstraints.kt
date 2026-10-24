@@ -2,7 +2,7 @@ package io.github.soleworks.validity.phone
 
 import io.github.soleworks.validity.ValidationNode
 
-private val PLACEHOLDER = Regex("""\{(\w+)}""")
+private val PLACEHOLDER_FORMAT = Regex("""\{(\w+)}""")
 
 public fun ValidationNode<String>.phone(
     countryCode: String? = null,
@@ -80,7 +80,7 @@ private fun String.filled(
 ): String {
     val values = placeholders.toMap()
 
-    return PLACEHOLDER.replace(this) { match ->
+    return PLACEHOLDER_FORMAT.replace(this) { match ->
         val name = match.groupValues[1]
 
         if (name in values)
