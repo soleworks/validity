@@ -82,7 +82,8 @@ Violation(path=iban, message=is required, code=required)
 - **Nested objects and collections.** `valid()` and `each` follow the data, and every violation says where it is:
   `shipping.zipCode`, `items[1].quantity`, `prices[USD]`.
 - **Every error at once, for two audiences.** A `message` for people, configurable and translatable, and a stable
-  `code` for programs, plus the `metadata` you attach.
+  `code` for programs, plus the `metadata` you attach. Where a rule only makes sense after another, such as a lookup
+  after a format check, `failFast { }` stops at the first failure of its block.
 - **Batteries included.** More than 140 constraints, postal codes of 72 countries, national documents of 14, and phone
   numbers in their own module.
 - **Nothing hidden.** No annotations, no code generation, no `kotlin-reflect`. `validity-core` depends on nothing but
