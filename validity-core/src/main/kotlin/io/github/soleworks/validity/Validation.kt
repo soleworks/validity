@@ -1,5 +1,7 @@
 package io.github.soleworks.validity
 
+import kotlin.reflect.KProperty0
+
 @ValidityDsl
 public class Validation internal constructor() {
     internal val nodes = mutableListOf<ValidationNode<*>>()
@@ -11,6 +13,32 @@ public class Validation internal constructor() {
     ) {
         nodes += node
     }
+
+    public fun constraint(
+        property: KProperty0<*>,
+        message: String,
+        code: String = "",
+        predicate: () -> Boolean
+    ): Unit = constraint(
+        path = property.name,
+        value = property.get(),
+        message = message,
+        code = code,
+        predicate = predicate
+    )
+
+    public fun constraint(
+        path: String = "",
+        message: String,
+        code: String = "",
+        predicate: () -> Boolean
+    ): Unit = constraint(
+        path = path,
+        value = null,
+        message = message,
+        code = code,
+        predicate = predicate
+    )
 
     public fun metadata(
         vararg entries: Pair<String, Any?>,
@@ -30,6 +58,24 @@ public class Validation internal constructor() {
     public fun validate(): ValidationResult = ValidationResult(
         violations = nodes.flatMap { it.validate() }
     )
+
+    private fun constraint(
+        path: String,
+        value: Any?,
+        message: String,
+        code: String,
+        predicate: () -> Boolean
+    ) {
+        val node = ValidationNode(path = path, value = value).also { node -> node.metadata = metadata }
+
+        add(node)
+
+        node.constraint(
+            message = message,
+            code = code,
+            predicate = { predicate() }
+        )
+    }
 }
 
 public fun validation(

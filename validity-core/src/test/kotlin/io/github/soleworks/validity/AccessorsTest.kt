@@ -3,6 +3,8 @@ package io.github.soleworks.validity
 import io.github.soleworks.validity.samples.Address
 import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Customer
+import io.github.soleworks.validity.samples.Invoice
+import io.github.soleworks.validity.samples.Ledger
 import io.github.soleworks.validity.samples.Order
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
@@ -182,6 +184,28 @@ class AccessorsTest {
 
             result.violations shouldBe listOf(
                 Violation(path = "contact", message = "is required", code = "required")
+            )
+        }
+
+        @Test
+        fun `given an invoice that does not add up should report it at the invoice`() {
+            val ledger = Ledger(invoice = Invoice(total = 5))
+
+            val result = ledger.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "invoice", message = "items must add up to the total", code = "total")
+            )
+        }
+
+        @Test
+        fun `given a list of invoices should report each one at its index`() {
+            val ledger = Ledger(invoices = listOf(Invoice(), Invoice(total = 5)))
+
+            val result = ledger.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "invoices[1]", message = "items must add up to the total", code = "total")
             )
         }
     }

@@ -41,7 +41,7 @@ public fun <V : Validatable> ValidationNode<V>.valid(): Unit = valid(
 public fun <V> ValidationNode<V>.valid(
     validation: (V) -> Validation
 ): Unit = add(
-    validation(value).nodes.map { node -> node.relocated("$path.${node.path}", metadata) }
+    validation(value).nodes.map { node -> node.relocated(path.nested(node.path), metadata) }
 )
 
 private fun <T> ValidationNode<*>.child(
@@ -56,6 +56,13 @@ private fun <T> ValidationNode<*>.child(
 
     return child.apply(block)
 }
+
+private fun String.nested(
+    path: String
+): String = if (path.isEmpty())
+    this
+else
+    "$this.$path"
 
 private fun String.indexed(
     key: Any?
