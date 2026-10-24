@@ -15,6 +15,7 @@ Every broken rule at once, each with a path, a message for people and a code for
 <br>
 
 [![Build](https://img.shields.io/github/actions/workflow/status/soleworks/validity/ci.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=build)](https://github.com/soleworks/validity/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/soleworks/validity?style=flat-square&logo=codecov&logoColor=white&label=coverage)](https://codecov.io/gh/soleworks/validity)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.20-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Java](https://img.shields.io/badge/Java-17%2B-E76F00?style=flat-square&logo=openjdk&logoColor=white)](https://adoptium.net)
 [![License](https://img.shields.io/badge/license-Apache%202.0-2F81F7?style=flat-square)](LICENSE)
@@ -170,7 +171,9 @@ A documentation site is on its way, with every concept, the full list of constra
 - **Detekt** runs every rule it has, the ktlint and libraries rule sets included. [config/detekt/detekt.yml](config/detekt/detekt.yml) lists the few rules this project tunes, each with its reason. `./gradlew detektMain detektTest -PautoCorrect=true` fixes the formatting it can.
 - **Konsist**, in the internal `harness` module, checks the conventions Detekt cannot see: how a constraint is declared, how values are named, and that every test is a Given, a When and a Then, ordered by what it checks.
 
-Neither tool, nor Kotest, is a dependency of a published module.
+**Kover** measures what the tests cover in `validity-core` and `validity-phone`. `./gradlew :koverHtmlReport` writes the report to `build/reports/kover/html`, and CI uploads it to [Codecov](https://codecov.io/gh/soleworks/validity).
+
+None of these tools, nor Kotest, is a dependency of a published module.
 
 The examples in this README are samples in
 [validity-core/src/test/.../samples/readme](validity-core/src/test/kotlin/io/github/soleworks/validity/samples/readme),
