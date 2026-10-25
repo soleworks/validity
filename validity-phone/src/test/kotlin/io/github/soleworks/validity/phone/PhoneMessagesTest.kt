@@ -3,6 +3,8 @@ package io.github.soleworks.validity.phone
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Validity
 import io.github.soleworks.validity.Violation
+import io.github.soleworks.validity.phone.samples.Contact
+import io.github.soleworks.validity.validate
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -77,6 +79,19 @@ class PhoneMessagesTest {
             val violations = node.validate()
 
             violations shouldBe listOf(
+                Violation(path = "phone", message = "must be a valid phone number", code = "phone")
+            )
+        }
+
+        @Test
+        fun `given the phone messages in a Validity should report them only in its validations`() {
+            val validity = Validity { messages { phone { phone = "telefone inválido" } } }
+            val contact = Contact(phone = "1")
+
+            val violations = listOf(contact.validate(validity), contact.validate()).flatMap { it.violations }
+
+            violations shouldBe listOf(
+                Violation(path = "phone", message = "telefone inválido", code = "phone"),
                 Violation(path = "phone", message = "must be a valid phone number", code = "phone")
             )
         }

@@ -1,11 +1,17 @@
 package io.github.soleworks.validity
 
+import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Customer
+import io.github.soleworks.validity.samples.Subscription
 import io.github.soleworks.validity.samples.readme.Payment
 import io.github.soleworks.validity.samples.readme.User
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset.UTC
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -49,6 +55,41 @@ class ValidatableTest {
                 Violation(path = "age", message = "must be at least 18", code = "min")
             )
         }
+
+        @Test
+        fun `given a Validity with a clock in 2000 should treat 2010 as the future`() {
+            val validity = Validity { clock = Clock.fixed(Instant.parse("2000-06-15T12:00:00Z"), UTC) }
+            val subscription = Subscription(startsOn = LocalDate.of(2010, 1, 1))
+
+            val result = subscription.validate(validity)
+
+            result.isValid shouldBe true
+        }
+
+        @Test
+        fun `given a Validity with a clock in 2020 should report 2010 as not in the future`() {
+            val validity = Validity { clock = Clock.fixed(Instant.parse("2020-06-15T12:00:00Z"), UTC) }
+            val subscription = Subscription(startsOn = LocalDate.of(2010, 1, 1))
+
+            val result = subscription.validate(validity)
+
+            result.violations shouldBe listOf(
+                Violation(path = "startsOn", message = "must be in the future", code = "future")
+            )
+        }
+
+        @Test
+        fun `given a Validity with messages should report them in nested objects too`() {
+            val validity = Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
+            val customer = Customer(name = "A", contact = Contact(phone = "123"))
+
+            val result = customer.validate(validity)
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength"),
+                Violation(path = "contact.phone", message = "deve ter pelo menos 8 caracteres", code = "minLength")
+            )
+        }
     }
 
     @Nested
@@ -82,6 +123,18 @@ class ValidatableTest {
                 Violation(path = "name", message = "must have at least 2 characters", code = "minLength"),
                 Violation(path = "email", message = "must be a valid email", code = "email"),
                 Violation(path = "age", message = "must be at least 18", code = "min")
+            )
+        }
+
+        @Test
+        fun `given a Validity with messages should throw its violations with them`() {
+            val validity = Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
+            val customer = Customer(name = "A")
+
+            val error = shouldThrow<ValidationException> { customer.validateOrThrow(validity) }
+
+            error.violations shouldBe listOf(
+                Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength")
             )
         }
     }

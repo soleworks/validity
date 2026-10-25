@@ -1,5 +1,7 @@
 package io.github.soleworks.validity
 
+import java.util.concurrent.ConcurrentHashMap
+
 @ValidityDsl
 public class Messages internal constructor() {
     public var required: String = "is required"
@@ -97,6 +99,13 @@ public class Messages internal constructor() {
     public var afterOrEqual: String = "must be after or equal to {other}"
     public var beforeOrEqual: String = "must be before or equal to {other}"
     public var betweenDates: String = "must be between {start} and {end}"
+    public var minAge: String = "must be at least {min} years old"
+    public var maxAge: String = "must be at most {max} years old"
+    public var withinNext: String = "must be within the next {duration}"
+    public var withinLast: String = "must be within the last {duration}"
+    public var today: String = "must be today"
+    public var weekday: String = "must be a weekday"
+    public var weekend: String = "must be on a weekend"
 
     public var minSize: String = "must have at least {min} items"
     public var maxSize: String = "must have at most {max} items"
@@ -191,6 +200,8 @@ public class Messages internal constructor() {
     public var isoDuration: String = "must be an ISO 8601 duration"
     public var dateFormat: String = "must match the date format {pattern}"
 
+    private val modules = ConcurrentHashMap<MessagesKey<*>, Any>()
+
     internal val brazil: BrazilMessages = BrazilMessages()
     internal val bulgaria: BulgariaMessages = BulgariaMessages()
     internal val canada: CanadaMessages = CanadaMessages()
@@ -261,6 +272,11 @@ public class Messages internal constructor() {
     public fun unitedStates(
         block: UnitedStatesMessages.() -> Unit
     ): Unit = unitedStates.block()
+
+    @Suppress("UNCHECKED_CAST")
+    public fun <T : Any> module(
+        key: MessagesKey<T>
+    ): T = modules.computeIfAbsent(key) { key.create() } as T
 }
 
 @ValidityDsl
