@@ -67,6 +67,13 @@ public class Messages internal constructor() {
     public var afterOrEqual: String = "must be after or equal to {other}"
     public var beforeOrEqual: String = "must be before or equal to {other}"
     public var betweenDates: String = "must be between {start} and {end}"
+    public var minAge: String = "must be at least {min} years old"
+    public var maxAge: String = "must be at most {max} years old"
+    public var withinNext: String = "must be within the next {duration}"
+    public var withinLast: String = "must be within the last {duration}"
+    public var today: String = "must be today"
+    public var weekday: String = "must be a weekday"
+    public var weekend: String = "must be on a weekend"
 
     public var minSize: String = "must have at least {min} items"
     public var maxSize: String = "must have at most {max} items"
