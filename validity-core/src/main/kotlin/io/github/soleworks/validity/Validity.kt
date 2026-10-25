@@ -54,3 +54,7 @@ internal val messages: Messages
 
 internal val clock: Clock
     get() = Validity.current.configuration.clock
+
+public fun <T> now(
+    of: (Clock) -> T
+): T = of(clock)
