@@ -1,5 +1,7 @@
 package io.github.soleworks.validity
 
+import java.util.concurrent.ConcurrentHashMap
+
 @ValidityDsl
 public class Messages internal constructor() {
     public var required: String = "is required"
@@ -150,6 +152,8 @@ public class Messages internal constructor() {
     public var isoDuration: String = "must be an ISO 8601 duration"
     public var dateFormat: String = "must match the date format {pattern}"
 
+    private val modules = ConcurrentHashMap<MessagesKey<*>, Any>()
+
     internal val brazil: BrazilMessages = BrazilMessages()
     internal val bulgaria: BulgariaMessages = BulgariaMessages()
     internal val canada: CanadaMessages = CanadaMessages()
@@ -220,6 +224,11 @@ public class Messages internal constructor() {
     public fun unitedStates(
         block: UnitedStatesMessages.() -> Unit
     ): Unit = unitedStates.block()
+
+    @Suppress("UNCHECKED_CAST")
+    public fun <T : Any> module(
+        key: MessagesKey<T>
+    ): T = modules.computeIfAbsent(key) { key.create() } as T
 }
 
 @ValidityDsl
