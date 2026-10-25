@@ -12,6 +12,15 @@ class CollectionConstraintsTest {
     @DisplayName("When minSize is called")
     inner class MinSize {
         @Test
+        fun `given a file with at least the minimum bytes should accept it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(2)).apply { minSize(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
         fun `given a list with at least the minimum of tags should accept it`() {
             val node = ValidationNode(path = "tags", value = listOf("gift", "sale")).apply { minSize(2) }
 
@@ -52,6 +61,17 @@ class CollectionConstraintsTest {
         }
 
         @Test
+        fun `given a file with fewer bytes than the minimum should report it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(1)).apply { minSize(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "file", message = "must have at least 2 items", code = "minSize")
+            )
+        }
+
+        @Test
         fun `given a message function for a list should build it from the value and the parameters`() {
             val node = ValidationNode(path = "tags", value = listOf("gift")).apply {
                 minSize(2) { min -> "has $size tags, needs at least $min" }
@@ -81,6 +101,15 @@ class CollectionConstraintsTest {
     @Nested
     @DisplayName("When maxSize is called")
     inner class MaxSize {
+        @Test
+        fun `given a file within the maximum bytes should accept it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(2)).apply { maxSize(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
         @Test
         fun `given a list with at most the maximum of tags should accept it`() {
             val node = ValidationNode(path = "tags", value = listOf("gift", "sale", "new")).apply { maxSize(3) }
@@ -128,6 +157,17 @@ class CollectionConstraintsTest {
         }
 
         @Test
+        fun `given a file with more bytes than the maximum should report it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(3)).apply { maxSize(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "file", message = "must have at most 2 items", code = "maxSize")
+            )
+        }
+
+        @Test
         fun `given a message function for a list should build it from the value and the parameters`() {
             val node = ValidationNode(path = "tags", value = listOf("gift", "sale", "new", "summer")).apply {
                 maxSize(3) { max -> "has $size tags, allows at most $max" }
@@ -157,6 +197,15 @@ class CollectionConstraintsTest {
     @Nested
     @DisplayName("When size is called")
     inner class Size {
+        @Test
+        fun `given a file with exactly the expected bytes should accept it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(16)).apply { size(16) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
         @Test
         fun `given a list of coordinates with exactly 2 values should accept it`() {
             val node = ValidationNode(path = "coordinates", value = listOf(-23.55, -46.63)).apply { size(2) }
@@ -198,6 +247,17 @@ class CollectionConstraintsTest {
         }
 
         @Test
+        fun `given a file with other than the expected bytes should report it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(15)).apply { size(16) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "file", message = "must have exactly 16 items", code = "size")
+            )
+        }
+
+        @Test
         fun `given a message function for a list should build it from the value and the parameters`() {
             val node = ValidationNode(path = "coordinates", value = listOf(-23.55)).apply {
                 size(2) { size -> "has ${this.size} values, needs $size" }
@@ -227,6 +287,15 @@ class CollectionConstraintsTest {
     @Nested
     @DisplayName("When sizeBetween is called")
     inner class SizeBetween {
+        @Test
+        fun `given a file with bytes within the range should accept it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(2)).apply { sizeBetween(min = 1, max = 3) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
         @Test
         fun `given a list of phones at the lower limit should accept it`() {
             val node = ValidationNode(
@@ -324,6 +393,17 @@ class CollectionConstraintsTest {
         }
 
         @Test
+        fun `given a file with bytes out of the range should report it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(4)).apply { sizeBetween(min = 1, max = 3) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "file", message = "must have between 1 and 3 items", code = "sizeBetween")
+            )
+        }
+
+        @Test
         fun `given a message function for a list should build it from the value and the parameters`() {
             val node = ValidationNode(path = "phones", value = emptyList<String>()).apply {
                 sizeBetween(min = 1, max = 3) { min, max -> "has $size phones, needs from $min to $max" }
@@ -353,6 +433,15 @@ class CollectionConstraintsTest {
     @Nested
     @DisplayName("When notEmpty is called")
     inner class NotEmpty {
+        @Test
+        fun `given a file with bytes should accept it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(1)).apply { notEmpty() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
         @Test
         fun `given a list with one item should accept it`() {
             val node = ValidationNode(path = "items", value = listOf("SKU-123")).apply { notEmpty() }
@@ -392,11 +481,31 @@ class CollectionConstraintsTest {
                 Violation(path = "items", message = "must not be empty", code = "notEmpty")
             )
         }
+
+        @Test
+        fun `given a file without bytes should report it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(0)).apply { notEmpty() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "file", message = "must not be empty", code = "notEmpty")
+            )
+        }
     }
 
     @Nested
     @DisplayName("When empty is called")
     inner class Empty {
+        @Test
+        fun `given a file without bytes should accept it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(0)).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
         @Test
         fun `given a list without warnings should accept it`() {
             val node = ValidationNode(path = "warnings", value = emptyList<String>()).apply { empty() }
@@ -434,6 +543,17 @@ class CollectionConstraintsTest {
 
             violations shouldBe listOf(
                 Violation(path = "warnings", message = "must be empty", code = "empty")
+            )
+        }
+
+        @Test
+        fun `given a file with bytes should report it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(1)).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "file", message = "must be empty", code = "empty")
             )
         }
     }

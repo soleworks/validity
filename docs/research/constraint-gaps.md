@@ -19,6 +19,12 @@ Implemented on branch `claude/dazzling-dubinsky-d76ab9`, to ship in one PR:
 | 4, 5, 7, 6 | `empty`, `blank`, `trimmed`; `ignoreCase` on `contains`, `notContains`, `startsWith`, `notStartsWith`, `endsWith`, `notEndsWith`, `enum`; `String` overloads of `equalTo` and `oneOf` | `StringConstraints.kt` |
 | 40, 41 | `integer` on `Double`/`Float`/`BigDecimal`; `multipleOf` on `Double`/`Float` | `NumberConstraints.kt` |
 | 18, 19 | `domain`; `port` on `Int` and `String` | `InternetConstraints.kt` |
+| 8, 9, 10, 12 | `containsOnly`, `minBytes`/`maxBytes` (UTF-8 by default), `normalized` (NFC by default), `boolean` | `StringConstraints.kt` |
+| 42, 44, 45 | `minDigits`/`maxDigits`/`digitCount` on `Int`, `Long`, `Short`, `Byte`, `BigInteger`; `decimalPlaces`/`minDecimalPlaces` on `BigDecimal`; `maxDecimalPlaces` on `Double`/`Float` | `NumberConstraints.kt` |
+| 47 | `min`, `max`, `greaterThan`, `lessThan`, `between` on `UInt`, `ULong`, `UShort`, `UByte` | new `UnsignedConstraints.kt` |
+| 52, 53, 54 | `containsValue`, `notContainsKey`, `onlyKeys` | `MapConstraints.kt` |
+| 55 | `minSize`, `maxSize`, `size`, `sizeBetween`, `notEmpty`, `empty` on `ByteArray` | `CollectionConstraints.kt` |
+| 20 | `coordinates` | `LocationConstraints.kt` |
 
 Decisions taken along the way:
 
@@ -33,6 +39,12 @@ Decisions taken along the way:
   `LocationConstraints.kt`.
 - **Q12**: `requiredWith`/`forbiddenWith` (#59, #60) are dropped. A plain `if` around `required`/`forbidden` says the same
   thing.
+- **Q6**: digit counts are `minDigits`/`maxDigits`/`digitCount` on integral types only; the sign does not count.
+- **Q7**: unsigned types get per-type overloads in their own file, not a generic `Comparable` set.
+- **Q8**: only `ByteArray` gets the size rules, with the collection messages ("items").
+- `decimalPlaces`/`minDecimalPlaces` read the scale as written (`10.50` has 2 places), while `maxDecimalPlaces` ignores
+  trailing zeros, so a stricter check never rejects a value only for its trailing zeros.
+- `containsValue` fills `{other}`, not `{value}`, since `{value}` already means the validated value in every message.
 
 ## 1. What validity has today
 

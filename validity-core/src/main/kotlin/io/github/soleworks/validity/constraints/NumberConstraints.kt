@@ -1438,3 +1438,354 @@ public fun ValidationNode<BigDecimal>.maxIntegerDigits(
     code = "maxIntegerDigits",
     predicate = { it.stripTrailingZeros().run { precision() - scale() } <= max }
 )
+
+public fun ValidationNode<Int>.minDigits(
+    min: Int,
+    message: String = messages.minDigits
+): Unit = minDigits(
+    min = min,
+    message = { message.filled("min" to min) }
+)
+
+public fun ValidationNode<Int>.minDigits(
+    min: Int,
+    message: Int.(Int) -> String
+): Unit = constraint(
+    message = { it.message(min) },
+    code = "minDigits",
+    predicate = { it.toString().removePrefix("-").length >= min }
+)
+
+@JvmName("minDigitsLong")
+public fun ValidationNode<Long>.minDigits(
+    min: Int,
+    message: String = messages.minDigits
+): Unit = minDigits(
+    min = min,
+    message = { message.filled("min" to min) }
+)
+
+@JvmName("minDigitsLong")
+public fun ValidationNode<Long>.minDigits(
+    min: Int,
+    message: Long.(Int) -> String
+): Unit = constraint(
+    message = { it.message(min) },
+    code = "minDigits",
+    predicate = { it.toString().removePrefix("-").length >= min }
+)
+
+@JvmName("minDigitsShort")
+public fun ValidationNode<Short>.minDigits(
+    min: Int,
+    message: String = messages.minDigits
+): Unit = minDigits(
+    min = min,
+    message = { message.filled("min" to min) }
+)
+
+@JvmName("minDigitsShort")
+public fun ValidationNode<Short>.minDigits(
+    min: Int,
+    message: Short.(Int) -> String
+): Unit = constraint(
+    message = { it.message(min) },
+    code = "minDigits",
+    predicate = { it.toString().removePrefix("-").length >= min }
+)
+
+@JvmName("minDigitsByte")
+public fun ValidationNode<Byte>.minDigits(
+    min: Int,
+    message: String = messages.minDigits
+): Unit = minDigits(
+    min = min,
+    message = { message.filled("min" to min) }
+)
+
+@JvmName("minDigitsByte")
+public fun ValidationNode<Byte>.minDigits(
+    min: Int,
+    message: Byte.(Int) -> String
+): Unit = constraint(
+    message = { it.message(min) },
+    code = "minDigits",
+    predicate = { it.toString().removePrefix("-").length >= min }
+)
+
+@JvmName("minDigitsBigInteger")
+public fun ValidationNode<BigInteger>.minDigits(
+    min: Int,
+    message: String = messages.minDigits
+): Unit = minDigits(
+    min = min,
+    message = { message.filled("min" to min) }
+)
+
+@JvmName("minDigitsBigInteger")
+public fun ValidationNode<BigInteger>.minDigits(
+    min: Int,
+    message: BigInteger.(Int) -> String
+): Unit = constraint(
+    message = { it.message(min) },
+    code = "minDigits",
+    predicate = { it.toString().removePrefix("-").length >= min }
+)
+
+public fun ValidationNode<Int>.maxDigits(
+    max: Int,
+    message: String = messages.maxDigits
+): Unit = maxDigits(
+    max = max,
+    message = { message.filled("max" to max) }
+)
+
+public fun ValidationNode<Int>.maxDigits(
+    max: Int,
+    message: Int.(Int) -> String
+): Unit = constraint(
+    message = { it.message(max) },
+    code = "maxDigits",
+    predicate = { it.toString().removePrefix("-").length <= max }
+)
+
+@JvmName("maxDigitsLong")
+public fun ValidationNode<Long>.maxDigits(
+    max: Int,
+    message: String = messages.maxDigits
+): Unit = maxDigits(
+    max = max,
+    message = { message.filled("max" to max) }
+)
+
+@JvmName("maxDigitsLong")
+public fun ValidationNode<Long>.maxDigits(
+    max: Int,
+    message: Long.(Int) -> String
+): Unit = constraint(
+    message = { it.message(max) },
+    code = "maxDigits",
+    predicate = { it.toString().removePrefix("-").length <= max }
+)
+
+@JvmName("maxDigitsShort")
+public fun ValidationNode<Short>.maxDigits(
+    max: Int,
+    message: String = messages.maxDigits
+): Unit = maxDigits(
+    max = max,
+    message = { message.filled("max" to max) }
+)
+
+@JvmName("maxDigitsShort")
+public fun ValidationNode<Short>.maxDigits(
+    max: Int,
+    message: Short.(Int) -> String
+): Unit = constraint(
+    message = { it.message(max) },
+    code = "maxDigits",
+    predicate = { it.toString().removePrefix("-").length <= max }
+)
+
+@JvmName("maxDigitsByte")
+public fun ValidationNode<Byte>.maxDigits(
+    max: Int,
+    message: String = messages.maxDigits
+): Unit = maxDigits(
+    max = max,
+    message = { message.filled("max" to max) }
+)
+
+@JvmName("maxDigitsByte")
+public fun ValidationNode<Byte>.maxDigits(
+    max: Int,
+    message: Byte.(Int) -> String
+): Unit = constraint(
+    message = { it.message(max) },
+    code = "maxDigits",
+    predicate = { it.toString().removePrefix("-").length <= max }
+)
+
+@JvmName("maxDigitsBigInteger")
+public fun ValidationNode<BigInteger>.maxDigits(
+    max: Int,
+    message: String = messages.maxDigits
+): Unit = maxDigits(
+    max = max,
+    message = { message.filled("max" to max) }
+)
+
+@JvmName("maxDigitsBigInteger")
+public fun ValidationNode<BigInteger>.maxDigits(
+    max: Int,
+    message: BigInteger.(Int) -> String
+): Unit = constraint(
+    message = { it.message(max) },
+    code = "maxDigits",
+    predicate = { it.toString().removePrefix("-").length <= max }
+)
+
+public fun ValidationNode<Int>.digitCount(
+    count: Int,
+    message: String = messages.digitCount
+): Unit = digitCount(
+    count = count,
+    message = { message.filled("count" to count) }
+)
+
+public fun ValidationNode<Int>.digitCount(
+    count: Int,
+    message: Int.(Int) -> String
+): Unit = constraint(
+    message = { it.message(count) },
+    code = "digitCount",
+    predicate = { it.toString().removePrefix("-").length == count }
+)
+
+@JvmName("digitCountLong")
+public fun ValidationNode<Long>.digitCount(
+    count: Int,
+    message: String = messages.digitCount
+): Unit = digitCount(
+    count = count,
+    message = { message.filled("count" to count) }
+)
+
+@JvmName("digitCountLong")
+public fun ValidationNode<Long>.digitCount(
+    count: Int,
+    message: Long.(Int) -> String
+): Unit = constraint(
+    message = { it.message(count) },
+    code = "digitCount",
+    predicate = { it.toString().removePrefix("-").length == count }
+)
+
+@JvmName("digitCountShort")
+public fun ValidationNode<Short>.digitCount(
+    count: Int,
+    message: String = messages.digitCount
+): Unit = digitCount(
+    count = count,
+    message = { message.filled("count" to count) }
+)
+
+@JvmName("digitCountShort")
+public fun ValidationNode<Short>.digitCount(
+    count: Int,
+    message: Short.(Int) -> String
+): Unit = constraint(
+    message = { it.message(count) },
+    code = "digitCount",
+    predicate = { it.toString().removePrefix("-").length == count }
+)
+
+@JvmName("digitCountByte")
+public fun ValidationNode<Byte>.digitCount(
+    count: Int,
+    message: String = messages.digitCount
+): Unit = digitCount(
+    count = count,
+    message = { message.filled("count" to count) }
+)
+
+@JvmName("digitCountByte")
+public fun ValidationNode<Byte>.digitCount(
+    count: Int,
+    message: Byte.(Int) -> String
+): Unit = constraint(
+    message = { it.message(count) },
+    code = "digitCount",
+    predicate = { it.toString().removePrefix("-").length == count }
+)
+
+@JvmName("digitCountBigInteger")
+public fun ValidationNode<BigInteger>.digitCount(
+    count: Int,
+    message: String = messages.digitCount
+): Unit = digitCount(
+    count = count,
+    message = { message.filled("count" to count) }
+)
+
+@JvmName("digitCountBigInteger")
+public fun ValidationNode<BigInteger>.digitCount(
+    count: Int,
+    message: BigInteger.(Int) -> String
+): Unit = constraint(
+    message = { it.message(count) },
+    code = "digitCount",
+    predicate = { it.toString().removePrefix("-").length == count }
+)
+
+public fun ValidationNode<BigDecimal>.decimalPlaces(
+    count: Int,
+    message: String = messages.decimalPlaces
+): Unit = decimalPlaces(
+    count = count,
+    message = { message.filled("count" to count) }
+)
+
+public fun ValidationNode<BigDecimal>.decimalPlaces(
+    count: Int,
+    message: BigDecimal.(Int) -> String
+): Unit = constraint(
+    message = { it.message(count) },
+    code = "decimalPlaces",
+    predicate = { it.scale().coerceAtLeast(0) == count }
+)
+
+public fun ValidationNode<BigDecimal>.minDecimalPlaces(
+    min: Int,
+    message: String = messages.minDecimalPlaces
+): Unit = minDecimalPlaces(
+    min = min,
+    message = { message.filled("min" to min) }
+)
+
+public fun ValidationNode<BigDecimal>.minDecimalPlaces(
+    min: Int,
+    message: BigDecimal.(Int) -> String
+): Unit = constraint(
+    message = { it.message(min) },
+    code = "minDecimalPlaces",
+    predicate = { it.scale() >= min }
+)
+
+@JvmName("maxDecimalPlacesDouble")
+public fun ValidationNode<Double>.maxDecimalPlaces(
+    max: Int,
+    message: String = messages.maxDecimalPlaces
+): Unit = maxDecimalPlaces(
+    max = max,
+    message = { message.filled("max" to max) }
+)
+
+@JvmName("maxDecimalPlacesDouble")
+public fun ValidationNode<Double>.maxDecimalPlaces(
+    max: Int,
+    message: Double.(Int) -> String
+): Unit = constraint(
+    message = { it.message(max) },
+    code = "maxDecimalPlaces",
+    predicate = { it.isFinite() && it.toBigDecimal().stripTrailingZeros().scale() <= max }
+)
+
+@JvmName("maxDecimalPlacesFloat")
+public fun ValidationNode<Float>.maxDecimalPlaces(
+    max: Int,
+    message: String = messages.maxDecimalPlaces
+): Unit = maxDecimalPlaces(
+    max = max,
+    message = { message.filled("max" to max) }
+)
+
+@JvmName("maxDecimalPlacesFloat")
+public fun ValidationNode<Float>.maxDecimalPlaces(
+    max: Int,
+    message: Float.(Int) -> String
+): Unit = constraint(
+    message = { it.message(max) },
+    code = "maxDecimalPlaces",
+    predicate = { it.isFinite() && it.toBigDecimal().stripTrailingZeros().scale() <= max }
+)

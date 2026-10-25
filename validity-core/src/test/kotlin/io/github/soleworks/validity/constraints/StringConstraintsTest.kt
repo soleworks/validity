@@ -4,6 +4,7 @@ import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Violation
 import io.github.soleworks.validity.samples.PaymentMethod
 import io.kotest.matchers.shouldBe
+import java.text.Normalizer
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -1394,6 +1395,237 @@ class StringConstraintsTest {
 
             violations shouldBe listOf(
                 Violation(path = "method", message = "DOC is not one of 3 methods", code = "enum")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When minBytes is called")
+    inner class MinBytes {
+        @Test
+        fun `given a note whose UTF-8 bytes reach the minimum should accept it`() {
+            val node = ValidationNode(path = "note", value = "é").apply { minBytes(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a note with fewer bytes than the minimum should report it`() {
+            val node = ValidationNode(path = "note", value = "ab").apply { minBytes(3) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "note", message = "must have at least 3 bytes", code = "minBytes")
+            )
+        }
+
+        @Test
+        fun `given a note measured in ISO-8859-1 with fewer bytes than the minimum should report it`() {
+            val node = ValidationNode(path = "note", value = "éé").apply { minBytes(3, Charsets.ISO_8859_1) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "note", message = "must have at least 3 bytes", code = "minBytes")
+            )
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the minimum`() {
+            val node = ValidationNode(path = "note", value = "ab").apply {
+                minBytes(3) { min -> "'$this' needs $min bytes" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "note", message = "'ab' needs 3 bytes", code = "minBytes")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When maxBytes is called")
+    inner class MaxBytes {
+        @Test
+        fun `given a bio within the maximum bytes should accept it`() {
+            val node = ValidationNode(path = "bio", value = "abc").apply { maxBytes(3) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a bio measured in ISO-8859-1 within the maximum bytes should accept it`() {
+            val node = ValidationNode(path = "bio", value = "café").apply { maxBytes(4, Charsets.ISO_8859_1) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a bio whose UTF-8 bytes pass the maximum should report it`() {
+            val node = ValidationNode(path = "bio", value = "café").apply { maxBytes(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "bio", message = "must have at most 4 bytes", code = "maxBytes")
+            )
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the maximum`() {
+            val node = ValidationNode(path = "bio", value = "café").apply {
+                maxBytes(4) { max -> "'$this' passes $max bytes" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "bio", message = "'café' passes 4 bytes", code = "maxBytes")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When containsOnly is called")
+    inner class ContainsOnly {
+        @ParameterizedTest
+        @ValueSource(strings = ["01310-100", "01310100"])
+        fun `given a zip code with only digits and dashes should accept it`(
+            zipCode: String
+        ) {
+            val node = ValidationNode(path = "zipCode", value = zipCode).apply { containsOnly("0123456789-") }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["01310 100", "abc", ""])
+        fun `given a zip code with other characters or empty should report it`(
+            zipCode: String
+        ) {
+            val node = ValidationNode(path = "zipCode", value = zipCode).apply { containsOnly("0123456789-") }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "zipCode",
+                    message = "must contain only the characters 0123456789-",
+                    code = "containsOnly"
+                )
+            )
+        }
+
+        @Test
+        fun `given no allowed characters should skip the check`() {
+            val allowed: String? = null
+            val node = ValidationNode(path = "zipCode", value = "abc").apply { containsOnly(allowed) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the characters`() {
+            val node = ValidationNode(path = "zipCode", value = "abc").apply {
+                containsOnly("0123456789-") { characters -> "'$this' has characters outside $characters" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "zipCode", message = "'abc' has characters outside 0123456789-", code = "containsOnly")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When normalized is called")
+    inner class Normalized {
+        @Test
+        fun `given a composed name should accept it`() {
+            val name = Normalizer.normalize("José", Normalizer.Form.NFC)
+            val node = ValidationNode(path = "name", value = name).apply { normalized() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a decomposed name checked for NFD should accept it`() {
+            val name = Normalizer.normalize("José", Normalizer.Form.NFD)
+            val node = ValidationNode(path = "name", value = name).apply { normalized(Normalizer.Form.NFD) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a decomposed name should report it`() {
+            val name = Normalizer.normalize("José", Normalizer.Form.NFD)
+            val node = ValidationNode(path = "name", value = name).apply { normalized() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "name", message = "must be in Unicode NFC form", code = "normalized")
+            )
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the form`() {
+            val name = Normalizer.normalize("José", Normalizer.Form.NFD)
+            val node = ValidationNode(path = "name", value = name).apply {
+                normalized { form -> "is not in $form" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "name", message = "is not in NFC", code = "normalized")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When boolean is called")
+    inner class Boolean {
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun `given a flag written as true or false should accept it`(
+            flag: String
+        ) {
+            val node = ValidationNode(path = "newsletter", value = flag).apply { boolean() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["TRUE", "yes", "1", ""])
+        fun `given a flag written another way should report it`(
+            flag: String
+        ) {
+            val node = ValidationNode(path = "newsletter", value = flag).apply { boolean() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "newsletter", message = "must be true or false", code = "boolean")
             )
         }
     }

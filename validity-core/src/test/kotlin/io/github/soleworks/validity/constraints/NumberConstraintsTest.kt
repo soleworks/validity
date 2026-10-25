@@ -3467,11 +3467,63 @@ class NumberConstraintsTest {
         }
 
         @ParameterizedTest
+        @ValueSource(doubles = [10.0, 10.5, 10.25])
+        fun `given a Double amount with at most the maximum decimal places should accept it`(
+            amount: Double
+        ) {
+            val node = ValidationNode(path = "amount", value = amount).apply { maxDecimalPlaces(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [10f, 10.5f, 10.25f])
+        fun `given a Float amount with at most the maximum decimal places should accept it`(
+            amount: Float
+        ) {
+            val node = ValidationNode(path = "amount", value = amount).apply { maxDecimalPlaces(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
         @ValueSource(strings = ["10.001", "0.125"])
         fun `given an amount with more decimal places than the maximum should report it`(
             amount: String
         ) {
             val node = ValidationNode(path = "amount", value = amount.toBigDecimal()).apply { maxDecimalPlaces(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "amount", message = "must have at most 2 decimal places", code = "maxDecimalPlaces")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(doubles = [10.001, 0.125, Double.NaN, Double.POSITIVE_INFINITY])
+        fun `given a Double amount with more decimal places than the maximum or not finite should report it`(
+            amount: Double
+        ) {
+            val node = ValidationNode(path = "amount", value = amount).apply { maxDecimalPlaces(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "amount", message = "must have at most 2 decimal places", code = "maxDecimalPlaces")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [10.001f, Float.NaN])
+        fun `given a Float amount with more decimal places than the maximum or not finite should report it`(
+            amount: Float
+        ) {
+            val node = ValidationNode(path = "amount", value = amount).apply { maxDecimalPlaces(2) }
 
             val violations = node.validate()
 
@@ -3547,6 +3599,417 @@ class NumberConstraintsTest {
                     message = "1000 has more than 3 integer digits",
                     code = "maxIntegerDigits"
                 )
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When decimalPlaces is called")
+    inner class DecimalPlaces {
+        @ParameterizedTest
+        @ValueSource(strings = ["10.50", "0.99", "-3.00"])
+        fun `given a price written with exactly two decimal places should accept it`(
+            price: String
+        ) {
+            val node = ValidationNode(path = "price", value = price.toBigDecimal()).apply { decimalPlaces(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["10.5", "10", "10.500", "1E+3"])
+        fun `given a price written with another number of decimal places should report it`(
+            price: String
+        ) {
+            val node = ValidationNode(path = "price", value = price.toBigDecimal()).apply { decimalPlaces(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "price", message = "must have exactly 2 decimal places", code = "decimalPlaces")
+            )
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the count`() {
+            val node = ValidationNode(path = "price", value = "10.5".toBigDecimal()).apply {
+                decimalPlaces(2) { count -> "$this needs $count decimal places" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "price", message = "10.5 needs 2 decimal places", code = "decimalPlaces")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When minDecimalPlaces is called")
+    inner class MinDecimalPlaces {
+        @ParameterizedTest
+        @ValueSource(strings = ["10.5", "10.50", "0.125"])
+        fun `given a rate written with at least one decimal place should accept it`(
+            rate: String
+        ) {
+            val node = ValidationNode(path = "rate", value = rate.toBigDecimal()).apply { minDecimalPlaces(1) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["10", "1E+3"])
+        fun `given a rate written without decimal places should report it`(
+            rate: String
+        ) {
+            val node = ValidationNode(path = "rate", value = rate.toBigDecimal()).apply { minDecimalPlaces(1) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "rate", message = "must have at least 1 decimal places", code = "minDecimalPlaces")
+            )
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the minimum`() {
+            val node = ValidationNode(path = "rate", value = "10".toBigDecimal()).apply {
+                minDecimalPlaces(1) { min -> "$this needs $min decimal place" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "rate", message = "10 needs 1 decimal place", code = "minDecimalPlaces")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When minDigits is called")
+    inner class MinDigits {
+        @ParameterizedTest
+        @ValueSource(ints = [1000, 99_999, -1000])
+        fun `given an Int code with at least four digits should accept it`(
+            code: Int
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { minDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(longs = [1000L, 99_999L, -1000L])
+        fun `given an Long code with at least four digits should accept it`(
+            code: Long
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { minDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Short code with at least four digits should accept it`() {
+            val node = ValidationNode(path = "code", value = 1000.toShort()).apply { minDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a BigInteger code with at least four digits should accept it`() {
+            val node = ValidationNode(path = "code", value = BigInteger("1000")).apply { minDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [12, -999])
+        fun `given an Int code without at least four digits should report it`(
+            code: Int
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { minDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at least 4 digits", code = "minDigits")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(longs = [12L, -999L])
+        fun `given an Long code without at least four digits should report it`(
+            code: Long
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { minDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at least 4 digits", code = "minDigits")
+            )
+        }
+
+        @Test
+        fun `given a Byte code without at least four digits should report it`() {
+            val node = ValidationNode(path = "code", value = 12.toByte()).apply { minDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at least 4 digits", code = "minDigits")
+            )
+        }
+
+        @Test
+        fun `given a BigInteger code without at least four digits should report it`() {
+            val node = ValidationNode(path = "code", value = BigInteger("-999")).apply { minDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at least 4 digits", code = "minDigits")
+            )
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the digits`() {
+            val node = ValidationNode(path = "code", value = 12).apply {
+                minDigits(4) { digits -> "$this does not fit $digits digits" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "12 does not fit 4 digits", code = "minDigits")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When maxDigits is called")
+    inner class MaxDigits {
+        @ParameterizedTest
+        @ValueSource(ints = [1234, 7, -9999])
+        fun `given an Int code with at most four digits should accept it`(
+            code: Int
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { maxDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(longs = [1234L, 7L, -9999L])
+        fun `given an Long code with at most four digits should accept it`(
+            code: Long
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { maxDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Short code with at most four digits should accept it`() {
+            val node = ValidationNode(path = "code", value = 1234.toShort()).apply { maxDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a BigInteger code with at most four digits should accept it`() {
+            val node = ValidationNode(path = "code", value = BigInteger("1234")).apply { maxDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given any Byte code should accept it`() {
+            val node = ValidationNode(path = "code", value = Byte.MIN_VALUE).apply { maxDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [12_345, -10_000])
+        fun `given an Int code without at most four digits should report it`(
+            code: Int
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { maxDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at most 4 digits", code = "maxDigits")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(longs = [12_345L, -10_000L])
+        fun `given an Long code without at most four digits should report it`(
+            code: Long
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { maxDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at most 4 digits", code = "maxDigits")
+            )
+        }
+
+        @Test
+        fun `given a BigInteger code without at most four digits should report it`() {
+            val node = ValidationNode(path = "code", value = BigInteger("-10000")).apply { maxDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at most 4 digits", code = "maxDigits")
+            )
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the digits`() {
+            val node = ValidationNode(path = "code", value = 12_345).apply {
+                maxDigits(4) { digits -> "$this does not fit $digits digits" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "12345 does not fit 4 digits", code = "maxDigits")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When digitCount is called")
+    inner class DigitCount {
+        @ParameterizedTest
+        @ValueSource(ints = [1234, 1000, -9999])
+        fun `given an Int code with exactly four digits should accept it`(
+            code: Int
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { digitCount(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(longs = [1234L, 1000L, -9999L])
+        fun `given an Long code with exactly four digits should accept it`(
+            code: Long
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { digitCount(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a Short code with exactly four digits should accept it`() {
+            val node = ValidationNode(path = "code", value = 1234.toShort()).apply { digitCount(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a BigInteger code with exactly four digits should accept it`() {
+            val node = ValidationNode(path = "code", value = BigInteger("1234")).apply { digitCount(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [123, 12_345])
+        fun `given an Int code without exactly four digits should report it`(
+            code: Int
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { digitCount(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have exactly 4 digits", code = "digitCount")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(longs = [123L, 12_345L])
+        fun `given an Long code without exactly four digits should report it`(
+            code: Long
+        ) {
+            val node = ValidationNode(path = "code", value = code).apply { digitCount(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have exactly 4 digits", code = "digitCount")
+            )
+        }
+
+        @Test
+        fun `given a Byte code without exactly four digits should report it`() {
+            val node = ValidationNode(path = "code", value = 123.toByte()).apply { digitCount(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have exactly 4 digits", code = "digitCount")
+            )
+        }
+
+        @Test
+        fun `given a BigInteger code without exactly four digits should report it`() {
+            val node = ValidationNode(path = "code", value = BigInteger("12345")).apply { digitCount(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have exactly 4 digits", code = "digitCount")
+            )
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the digits`() {
+            val node = ValidationNode(path = "code", value = 123).apply {
+                digitCount(4) { digits -> "$this does not fit $digits digits" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "123 does not fit 4 digits", code = "digitCount")
             )
         }
     }

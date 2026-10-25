@@ -865,4 +865,38 @@ class LocationConstraintsTest {
             )
         }
     }
+
+    @Nested
+    @DisplayName("When coordinates is called")
+    inner class Coordinates {
+        @ParameterizedTest
+        @ValueSource(strings = ["-23.55,-46.63", "-23.55, -46.63", "90,180", "+0.0,-180.0"])
+        fun `given a latitude and longitude pair should accept it`(
+            location: String
+        ) {
+            val node = ValidationNode(path = "location", value = location).apply { coordinates() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["91,0", "0,181", "-23.55", "-23.55;-46.63", "a,b", ""])
+        fun `given a text that is not a latitude and longitude pair should report it`(
+            location: String
+        ) {
+            val node = ValidationNode(path = "location", value = location).apply { coordinates() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "location",
+                    message = "must be a valid latitude and longitude pair",
+                    code = "coordinates"
+                )
+            )
+        }
+    }
 }

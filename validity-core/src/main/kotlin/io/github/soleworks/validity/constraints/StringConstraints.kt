@@ -3,6 +3,8 @@ package io.github.soleworks.validity.constraints
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
+import java.nio.charset.Charset
+import java.text.Normalizer
 import kotlin.enums.enumEntries
 
 private const val ASCII_LIMIT = 128
@@ -81,6 +83,46 @@ public fun ValidationNode<String>.lengthBetween(
     message = { it.message(min, max) },
     code = "lengthBetween",
     predicate = { it.length in min..max }
+)
+
+public fun ValidationNode<String>.minBytes(
+    min: Int,
+    charset: Charset = Charsets.UTF_8,
+    message: String = messages.minBytes
+): Unit = minBytes(
+    min = min,
+    charset = charset,
+    message = { message.filled("min" to min) }
+)
+
+public fun ValidationNode<String>.minBytes(
+    min: Int,
+    charset: Charset = Charsets.UTF_8,
+    message: String.(Int) -> String
+): Unit = constraint(
+    message = { it.message(min) },
+    code = "minBytes",
+    predicate = { it.toByteArray(charset).size >= min }
+)
+
+public fun ValidationNode<String>.maxBytes(
+    max: Int,
+    charset: Charset = Charsets.UTF_8,
+    message: String = messages.maxBytes
+): Unit = maxBytes(
+    max = max,
+    charset = charset,
+    message = { message.filled("max" to max) }
+)
+
+public fun ValidationNode<String>.maxBytes(
+    max: Int,
+    charset: Charset = Charsets.UTF_8,
+    message: String.(Int) -> String
+): Unit = constraint(
+    message = { it.message(max) },
+    code = "maxBytes",
+    predicate = { it.toByteArray(charset).size <= max }
 )
 
 public fun ValidationNode<String>.notEmpty(
@@ -405,6 +447,45 @@ public fun ValidationNode<String>.ascii(
     predicate = { it.isNotEmpty() && it.all { char -> char.code < ASCII_LIMIT } }
 )
 
+public fun ValidationNode<String>.containsOnly(
+    characters: String?,
+    message: String = messages.containsOnly
+): Unit = containsOnly(
+    characters = characters,
+    message = { message.filled("characters" to characters) }
+)
+
+public fun ValidationNode<String>.containsOnly(
+    characters: String?,
+    message: String.(String) -> String
+) {
+    if (characters == null)
+        return
+
+    constraint(
+        message = { it.message(characters) },
+        code = "containsOnly",
+        predicate = { it.isNotEmpty() && it.all { char -> char in characters } }
+    )
+}
+
+public fun ValidationNode<String>.normalized(
+    form: Normalizer.Form = Normalizer.Form.NFC,
+    message: String = messages.normalized
+): Unit = normalized(
+    form = form,
+    message = { message.filled("form" to form) }
+)
+
+public fun ValidationNode<String>.normalized(
+    form: Normalizer.Form = Normalizer.Form.NFC,
+    message: String.(Normalizer.Form) -> String
+): Unit = constraint(
+    message = { it.message(form) },
+    code = "normalized",
+    predicate = { Normalizer.isNormalized(it, form) }
+)
+
 public fun ValidationNode<String>.numeric(
     message: String = messages.numeric
 ): Unit = constraint(
@@ -419,6 +500,14 @@ public fun ValidationNode<String>.integer(
     message = message,
     code = "integer",
     predicate = { INTEGER_FORMAT.matches(it) }
+)
+
+public fun ValidationNode<String>.boolean(
+    message: String = messages.boolean
+): Unit = constraint(
+    message = message,
+    code = "boolean",
+    predicate = { it.toBooleanStrictOrNull() != null }
 )
 
 public fun ValidationNode<String>.containsUppercase(
