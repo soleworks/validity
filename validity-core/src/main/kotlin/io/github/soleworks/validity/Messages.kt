@@ -20,6 +20,9 @@ public class Messages internal constructor() {
     public var and: String = "{left} and {right}"
     public var not: String = "is not allowed"
 
+    public var mustBeTrue: String = "must be true"
+    public var mustBeFalse: String = "must be false"
+
     public var min: String = "must be at least {min}"
     public var max: String = "must be at most {max}"
     public var greaterThan: String = "must be greater than {other}"

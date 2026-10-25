@@ -84,8 +84,8 @@ removed that rule so the Boolean constraints can be `isTrue`/`isFalse` (see Q1).
 
 | # | Constraint | Types | Libraries (n) | Proposed signature | Default message (`Messages.kt`) | Pri. |
 |---|---|---|---|---|---|---|
-| 1 | Must be `true` | `Boolean` | HV `@AssertTrue`, Ak `isTrue`, Vk `isTrue`, Lv `accepted` (4) | `fun ValidationNode<Boolean>.isTrue(message: String = messages.isTrue)` (decided) | `isTrue = "must be true"` | P1 |
-| 2 | Must be `false` | `Boolean` | HV `@AssertFalse`, Ak `isFalse`, Vk `isFalse`, Lv `declined` (4) | `fun ValidationNode<Boolean>.isFalse(message: String = messages.isFalse)` (decided) | `isFalse = "must be false"` | P1 |
+| 1 | Must be `true` | `Boolean` | HV `@AssertTrue`, Ak `isTrue`, Vk `isTrue`, Lv `accepted` (4) | `fun ValidationNode<Boolean>.isTrue(message: String = messages.mustBeTrue)` (implemented) | `mustBeTrue = "must be true"` | P1 |
+| 2 | Must be `false` | `Boolean` | HV `@AssertFalse`, Ak `isFalse`, Vk `isFalse`, Lv `declined` (4) | `fun ValidationNode<Boolean>.isFalse(message: String = messages.mustBeFalse)` (implemented) | `mustBeFalse = "must be false"` | P1 |
 | 3 | Instance of a type | any `V` | Ak `isInstanceOf`, CV `@IsInstance`, Zod `z.instanceof`, Joi `object.instance` (4) | `fun <V> ValidationNode<V>.instanceOf(type: KClass<*>, message: String = messages.instanceOf)` **+λ** | `instanceOf = "must be an instance of {type}"` | P3 (types make it rare; useful with sealed hierarchies) |
 
 ### 3.2 String
@@ -235,7 +235,9 @@ earlier phase, so they follow it.
 
 1. **Boolean names: decided.** The rules are `isTrue`/`isFalse`, because they must fit any Boolean, not just consent
    (`accepted`/`declined` was dropped). The harness rule *every function named is or has should return Boolean* has been
-   removed, so nothing blocks these names.
+   removed, so nothing blocks these names. Detekt's `NonBooleanPropertyPrefixedWithIs` still bars `String` properties
+   named `is…`, so their message keys are `mustBeTrue`/`mustBeFalse`, the way `contains` on collections uses
+   `containsElement`. Both rules are now implemented in `BooleanConstraints.kt`.
 2. **One `empty` key for strings, collections and maps?** Messages today split by value type (`minLength` vs `minSize`
    vs `minEntries`), but `notEmpty` is a single key shared by all of them. The proposal follows `notEmpty` and uses one
    `empty`.
