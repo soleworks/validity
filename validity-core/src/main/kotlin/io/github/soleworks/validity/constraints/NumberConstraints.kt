@@ -1320,6 +1320,74 @@ public fun ValidationNode<BigDecimal>.multipleOf(
     )
 }
 
+public fun ValidationNode<Double>.multipleOf(
+    factor: Double,
+    message: String = messages.multipleOf
+): Unit = multipleOf(
+    factor = factor,
+    message = { message.filled("factor" to factor) }
+)
+
+public fun ValidationNode<Double>.multipleOf(
+    factor: Double,
+    message: Double.(Double) -> String
+) {
+    require(factor.isFinite() && factor != 0.0) { "multipleOf needs a finite factor other than 0" }
+
+    constraint(
+        message = { it.message(factor) },
+        code = "multipleOf",
+        predicate = { it.isFinite() && it.toBigDecimal().remainder(factor.toBigDecimal()).signum() == 0 }
+    )
+}
+
+public fun ValidationNode<Float>.multipleOf(
+    factor: Float,
+    message: String = messages.multipleOf
+): Unit = multipleOf(
+    factor = factor,
+    message = { message.filled("factor" to factor) }
+)
+
+public fun ValidationNode<Float>.multipleOf(
+    factor: Float,
+    message: Float.(Float) -> String
+) {
+    require(factor.isFinite() && factor != 0f) { "multipleOf needs a finite factor other than 0" }
+
+    constraint(
+        message = { it.message(factor) },
+        code = "multipleOf",
+        predicate = { it.isFinite() && it.toBigDecimal().remainder(factor.toBigDecimal()).signum() == 0 }
+    )
+}
+
+public fun ValidationNode<Double>.integer(
+    message: String = messages.integer
+): Unit = constraint(
+    message = message,
+    code = "integer",
+    predicate = { it.isFinite() && it % 1.0 == 0.0 }
+)
+
+@JvmName("integerFloat")
+public fun ValidationNode<Float>.integer(
+    message: String = messages.integer
+): Unit = constraint(
+    message = message,
+    code = "integer",
+    predicate = { it.isFinite() && it % 1f == 0f }
+)
+
+@JvmName("integerBigDecimal")
+public fun ValidationNode<BigDecimal>.integer(
+    message: String = messages.integer
+): Unit = constraint(
+    message = message,
+    code = "integer",
+    predicate = { it.signum() == 0 || it.stripTrailingZeros().scale() <= 0 }
+)
+
 public fun ValidationNode<Double>.finite(
     message: String = messages.finite
 ): Unit = constraint(

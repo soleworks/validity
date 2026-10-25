@@ -395,6 +395,50 @@ class CollectionConstraintsTest {
     }
 
     @Nested
+    @DisplayName("When empty is called")
+    inner class Empty {
+        @Test
+        fun `given a list without warnings should accept it`() {
+            val node = ValidationNode(path = "warnings", value = emptyList<String>()).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an array without warnings should accept it`() {
+            val node = ValidationNode(path = "warnings", value = emptyArray<String>()).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a list with a warning should report it`() {
+            val node = ValidationNode(path = "warnings", value = listOf("low stock")).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "warnings", message = "must be empty", code = "empty")
+            )
+        }
+
+        @Test
+        fun `given an array with a warning should report it`() {
+            val node = ValidationNode(path = "warnings", value = arrayOf("low stock")).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "warnings", message = "must be empty", code = "empty")
+            )
+        }
+    }
+
+    @Nested
     @DisplayName("When distinct is called")
     inner class Distinct {
         @Test
@@ -679,6 +723,139 @@ class CollectionConstraintsTest {
 
             violations shouldBe listOf(
                 Violation(path = "roles", message = "has no ADMIN among 1 roles", code = "contains")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When notContains is called")
+    inner class NotContains {
+        @Test
+        fun `given a list of roles without the root role should accept it`() {
+            val node = ValidationNode(path = "roles", value = listOf("USER", "ADMIN")).apply { notContains("ROOT") }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a set of roles without the root role should accept it`() {
+            val node = ValidationNode(path = "roles", value = setOf("USER", "ADMIN")).apply { notContains("ROOT") }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an array of roles without the root role should accept it`() {
+            val node = ValidationNode(path = "roles", value = arrayOf("USER", "ADMIN")).apply { notContains("ROOT") }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a list of roles with the root role should report it`() {
+            val node = ValidationNode(path = "roles", value = listOf("USER", "ROOT")).apply { notContains("ROOT") }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "roles", message = "must not contain ROOT", code = "notContains")
+            )
+        }
+
+        @Test
+        fun `given a set of roles with the root role should report it`() {
+            val node = ValidationNode(path = "roles", value = setOf("USER", "ROOT")).apply { notContains("ROOT") }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "roles", message = "must not contain ROOT", code = "notContains")
+            )
+        }
+
+        @Test
+        fun `given an array of roles with the root role should report it`() {
+            val node = ValidationNode(path = "roles", value = arrayOf("USER", "ROOT")).apply { notContains("ROOT") }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "roles", message = "must not contain ROOT", code = "notContains")
+            )
+        }
+
+        @Test
+        fun `given a list checked without a forbidden role should skip the check`() {
+            val forbiddenRole: String? = null
+            val node = ValidationNode(path = "roles", value = listOf("ROOT")).apply { notContains(forbiddenRole) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a set checked without a forbidden role should skip the check`() {
+            val forbiddenRole: String? = null
+            val node = ValidationNode(path = "roles", value = setOf("ROOT")).apply { notContains(forbiddenRole) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an array checked without a forbidden role should skip the check`() {
+            val forbiddenRole: String? = null
+            val node = ValidationNode(path = "roles", value = arrayOf("ROOT")).apply { notContains(forbiddenRole) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function for a list should build it from the value and the parameters`() {
+            val node = ValidationNode(path = "roles", value = listOf("ROOT")).apply {
+                notContains("ROOT") { element -> "has $element among $size roles" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "roles", message = "has ROOT among 1 roles", code = "notContains")
+            )
+        }
+
+        @Test
+        fun `given a message function for a set should build it from the value and the parameters`() {
+            val node = ValidationNode(path = "roles", value = setOf("ROOT")).apply {
+                notContains("ROOT") { element -> "has $element among $size roles" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "roles", message = "has ROOT among 1 roles", code = "notContains")
+            )
+        }
+
+        @Test
+        fun `given a message function for an array should build it from the value and the parameters`() {
+            val node = ValidationNode(path = "roles", value = arrayOf("ROOT")).apply {
+                notContains("ROOT") { element -> "has $element among $size roles" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "roles", message = "has ROOT among 1 roles", code = "notContains")
             )
         }
     }
@@ -1005,6 +1182,151 @@ class CollectionConstraintsTest {
 
             violations shouldBe listOf(
                 Violation(path = "paymentMethods", message = "needs any of [PIX, TED]", code = "containsAny")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When containsNone is called")
+    inner class ContainsNone {
+        @Test
+        fun `given a list of tags without blocked tags should accept it`() {
+            val node = ValidationNode(path = "tags", value = listOf("gift", "sale")).apply {
+                containsNone(listOf("spam", "scam"))
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a set of tags without blocked tags should accept it`() {
+            val node = ValidationNode(path = "tags", value = setOf("gift", "sale")).apply {
+                containsNone(listOf("spam", "scam"))
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an array of tags without blocked tags should accept it`() {
+            val node = ValidationNode(path = "tags", value = arrayOf("gift", "sale")).apply {
+                containsNone(listOf("spam", "scam"))
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a list of tags with a blocked tag should report it`() {
+            val node = ValidationNode(path = "tags", value = listOf("gift", "spam")).apply {
+                containsNone(listOf("spam", "scam"))
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "tags", message = "must not contain any of spam, scam", code = "containsNone")
+            )
+        }
+
+        @Test
+        fun `given a set of tags with a blocked tag should report it`() {
+            val node = ValidationNode(path = "tags", value = setOf("gift", "spam")).apply {
+                containsNone(listOf("spam", "scam"))
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "tags", message = "must not contain any of spam, scam", code = "containsNone")
+            )
+        }
+
+        @Test
+        fun `given an array of tags with a blocked tag should report it`() {
+            val node = ValidationNode(path = "tags", value = arrayOf("gift", "spam")).apply {
+                containsNone(listOf("spam", "scam"))
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "tags", message = "must not contain any of spam, scam", code = "containsNone")
+            )
+        }
+
+        @Test
+        fun `given a list checked without blocked tags should skip the check`() {
+            val blockedTags: List<String>? = null
+            val node = ValidationNode(path = "tags", value = listOf("spam")).apply { containsNone(blockedTags) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a set checked without blocked tags should skip the check`() {
+            val blockedTags: List<String>? = null
+            val node = ValidationNode(path = "tags", value = setOf("spam")).apply { containsNone(blockedTags) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an array checked without blocked tags should skip the check`() {
+            val blockedTags: List<String>? = null
+            val node = ValidationNode(path = "tags", value = arrayOf("spam")).apply { containsNone(blockedTags) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function for a list should build it from the value and the parameters`() {
+            val node = ValidationNode(path = "tags", value = listOf("spam")).apply {
+                containsNone(listOf("spam", "scam")) { elements -> "has one of $elements among $size tags" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "tags", message = "has one of [spam, scam] among 1 tags", code = "containsNone")
+            )
+        }
+
+        @Test
+        fun `given a message function for a set should build it from the value and the parameters`() {
+            val node = ValidationNode(path = "tags", value = setOf("spam")).apply {
+                containsNone(listOf("spam", "scam")) { elements -> "has one of $elements among $size tags" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "tags", message = "has one of [spam, scam] among 1 tags", code = "containsNone")
+            )
+        }
+
+        @Test
+        fun `given a message function for an array should build it from the value and the parameters`() {
+            val node = ValidationNode(path = "tags", value = arrayOf("spam")).apply {
+                containsNone(listOf("spam", "scam")) { elements -> "has one of $elements among $size tags" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "tags", message = "has one of [spam, scam] among 1 tags", code = "containsNone")
             )
         }
     }

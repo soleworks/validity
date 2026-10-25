@@ -221,6 +221,30 @@ class MapConstraintsTest {
     }
 
     @Nested
+    @DisplayName("When empty is called")
+    inner class Empty {
+        @Test
+        fun `given no overrides should accept them`() {
+            val node = ValidationNode(path = "overrides", value = emptyMap<String, Int>()).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given one override should report it`() {
+            val node = ValidationNode(path = "overrides", value = mapOf("USD" to 1000)).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "overrides", message = "must be empty", code = "empty")
+            )
+        }
+    }
+
+    @Nested
     @DisplayName("When containsKey is called")
     inner class ContainsKey {
         @Test

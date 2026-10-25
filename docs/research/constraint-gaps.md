@@ -8,6 +8,32 @@ to accept, rename or drop.
 - Out of scope: the "now"-based temporal rules being built in another session (`minAge`/`maxAge`,
   `withinNext`/`withinLast`, `today`, `weekday`/`weekend`) and the rework of how the clock reaches rules.
 
+## Status
+
+Implemented on branch `claude/dazzling-dubinsky-d76ab9`, to ship in one PR:
+
+| # | Rules | File |
+|---|---|---|
+| 1, 2 | `isTrue`, `isFalse` (message keys `mustBeTrue`, `mustBeFalse`) | `BooleanConstraints.kt` |
+| 49, 50, 51 | `notContains`, `containsNone`, `empty` on `List`/`Set`/`Array`; `empty` on `Map` | `CollectionConstraints.kt`, `MapConstraints.kt` |
+| 4, 5, 7, 6 | `empty`, `blank`, `trimmed`; `ignoreCase` on `contains`, `notContains`, `startsWith`, `notStartsWith`, `endsWith`, `notEndsWith`, `enum`; `String` overloads of `equalTo` and `oneOf` | `StringConstraints.kt` |
+| 40, 41 | `integer` on `Double`/`Float`/`BigDecimal`; `multipleOf` on `Double`/`Float` | `NumberConstraints.kt` |
+| 18, 19 | `domain`; `port` on `Int` and `String` | `InternetConstraints.kt` |
+
+Decisions taken along the way:
+
+- **Q1**: `isTrue`/`isFalse`. The harness rule on `is`/`has` names was removed.
+- **Q2**: one `empty` key for strings, collections, arrays and maps.
+- **Q3**: `ignoreCase: Boolean = false` as a parameter before `message` (stdlib style). On the `String` overloads of
+  `equalTo`/`oneOf`, `ignoreCase` has no default, so a call without it still resolves to the generic rule. Positional
+  messages on the changed rules now need `message =`.
+- **Q5**: `multipleOf` on `Double`/`Float` compares through `toBigDecimal()`, so `0.3` is a multiple of `0.1`; a computed
+  `0.1 + 0.2` (`0.30000000000000004`) is not. The factor must be finite and non-zero.
+- **Q11**: `port` keeps both overloads in `InternetConstraints.kt`, by topic, as `latitude` does in
+  `LocationConstraints.kt`.
+- **Q12**: `requiredWith`/`forbiddenWith` (#59, #60) are dropped. A plain `if` around `required`/`forbidden` says the same
+  thing.
+
 ## 1. What validity has today
 
 Every `public fun ValidationNode<T>.name(...)` in `validity-core/.../constraints/` (country packages included) and in

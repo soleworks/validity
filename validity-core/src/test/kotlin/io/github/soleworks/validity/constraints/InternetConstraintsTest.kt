@@ -153,6 +153,101 @@ class InternetConstraintsTest {
     }
 
     @Nested
+    @DisplayName("When domain is called")
+    inner class Domain {
+        @ParameterizedTest
+        @ValueSource(strings = ["example.com", "loja.empresa.com.br", "EXAMPLE.ORG", "xn--80ak6aa92e.xn--p1ai"])
+        fun `given a domain name with a top-level domain should accept it`(
+            domain: String
+        ) {
+            val node = ValidationNode(path = "domain", value = domain).apply { domain() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(
+            strings = [
+                "localhost",
+                "example.c",
+                "example.123",
+                "-example.com",
+                "example..com",
+                "example.com."
+            ]
+        )
+        fun `given a host that is not a domain name should report it`(
+            domain: String
+        ) {
+            val node = ValidationNode(path = "domain", value = domain).apply { domain() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "domain", message = "must be a valid domain name", code = "domain")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When port is called")
+    inner class Port {
+        @ParameterizedTest
+        @ValueSource(ints = [0, 80, 8080, 65_535])
+        fun `given a port number in range should accept it`(
+            port: Int
+        ) {
+            val node = ValidationNode(path = "port", value = port).apply { port() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["0", "443", "65535"])
+        fun `given a port text in range should accept it`(
+            port: String
+        ) {
+            val node = ValidationNode(path = "port", value = port).apply { port() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(ints = [-1, 65_536])
+        fun `given a port number out of range should report it`(
+            port: Int
+        ) {
+            val node = ValidationNode(path = "port", value = port).apply { port() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "port", message = "must be a valid port number", code = "port")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["65536", "99999", "080", "-1", "", "http"])
+        fun `given a port text out of range or not a number should report it`(
+            port: String
+        ) {
+            val node = ValidationNode(path = "port", value = port).apply { port() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "port", message = "must be a valid port number", code = "port")
+            )
+        }
+    }
+
+    @Nested
     @DisplayName("When ipv4 is called")
     inner class Ipv4 {
         @ParameterizedTest

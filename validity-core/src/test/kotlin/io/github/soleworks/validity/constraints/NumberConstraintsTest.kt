@@ -2919,6 +2919,30 @@ class NumberConstraintsTest {
     @DisplayName("When multipleOf is called")
     inner class MultipleOf {
         @ParameterizedTest
+        @ValueSource(doubles = [0.3, 10.05, -0.15, 0.0])
+        fun `given a Double price in steps of five cents should accept it`(
+            price: Double
+        ) {
+            val node = ValidationNode(path = "price", value = price).apply { multipleOf(0.05) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [0.3f, 10.05f, -0.15f])
+        fun `given a Float price in steps of five cents should accept it`(
+            price: Float
+        ) {
+            val node = ValidationNode(path = "price", value = price).apply { multipleOf(0.05f) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
         @ValueSource(ints = [6, 12])
         fun `given an Int quantity that is a multiple of the factor should accept it`(
             quantity: Int
@@ -3158,6 +3182,58 @@ class NumberConstraintsTest {
             error.message shouldBe "multipleOf needs a factor other than 0"
         }
 
+        @ParameterizedTest
+        @ValueSource(doubles = [10.03, Double.NaN, Double.POSITIVE_INFINITY])
+        fun `given a Double price off the steps of five cents should report it`(
+            price: Double
+        ) {
+            val node = ValidationNode(path = "price", value = price).apply { multipleOf(0.05) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "price", message = "must be a multiple of 0.05", code = "multipleOf")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [10.03f, Float.NaN])
+        fun `given a Float price off the steps of five cents should report it`(
+            price: Float
+        ) {
+            val node = ValidationNode(path = "price", value = price).apply { multipleOf(0.05f) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "price", message = "must be a multiple of 0.05", code = "multipleOf")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(doubles = [0.0, Double.NaN, Double.POSITIVE_INFINITY])
+        fun `given a Double factor that is zero or not finite should fail when the rule is declared`(
+            factor: Double
+        ) {
+            val error = shouldThrow<IllegalArgumentException> {
+                ValidationNode(path = "price", value = 1.0).apply { multipleOf(factor) }
+            }
+
+            error.message shouldBe "multipleOf needs a finite factor other than 0"
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [0f, Float.NaN])
+        fun `given a Float factor that is zero or not finite should fail when the rule is declared`(
+            factor: Float
+        ) {
+            val error = shouldThrow<IllegalArgumentException> {
+                ValidationNode(path = "price", value = 1f).apply { multipleOf(factor) }
+            }
+
+            error.message shouldBe "multipleOf needs a finite factor other than 0"
+        }
+
         @Test
         fun `given a message function for an Int should build it from the value and the factor`() {
             val node = ValidationNode(path = "quantity", value = 7).apply {
@@ -3233,6 +3309,88 @@ class NumberConstraintsTest {
 
             violations shouldBe listOf(
                 Violation(path = "amount", message = "10.03 is not a multiple of 0.05", code = "multipleOf")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When integer is called")
+    inner class Integer {
+        @ParameterizedTest
+        @ValueSource(doubles = [0.0, 3.0, -12.0, 1e20])
+        fun `given a whole Double quantity should accept it`(
+            quantity: Double
+        ) {
+            val node = ValidationNode(path = "quantity", value = quantity).apply { integer() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [0f, 3f, -12f])
+        fun `given a whole Float quantity should accept it`(
+            quantity: Float
+        ) {
+            val node = ValidationNode(path = "quantity", value = quantity).apply { integer() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["0", "3", "3.000", "-12", "1E+3", "0.00"])
+        fun `given a whole BigDecimal quantity should accept it`(
+            quantity: String
+        ) {
+            val node = ValidationNode(path = "quantity", value = quantity.toBigDecimal()).apply { integer() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(doubles = [2.5, -0.1, Double.NaN, Double.POSITIVE_INFINITY])
+        fun `given a Double quantity with a fraction or not finite should report it`(
+            quantity: Double
+        ) {
+            val node = ValidationNode(path = "quantity", value = quantity).apply { integer() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "quantity", message = "must be an integer", code = "integer")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(floats = [2.5f, Float.NaN, Float.NEGATIVE_INFINITY])
+        fun `given a Float quantity with a fraction or not finite should report it`(
+            quantity: Float
+        ) {
+            val node = ValidationNode(path = "quantity", value = quantity).apply { integer() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "quantity", message = "must be an integer", code = "integer")
+            )
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["2.5", "-0.10", "0.001"])
+        fun `given a BigDecimal quantity with a fraction should report it`(
+            quantity: String
+        ) {
+            val node = ValidationNode(path = "quantity", value = quantity.toBigDecimal()).apply { integer() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "quantity", message = "must be an integer", code = "integer")
             )
         }
     }

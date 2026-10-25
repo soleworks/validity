@@ -226,6 +226,33 @@ class StringConstraintsTest {
     }
 
     @Nested
+    @DisplayName("When empty is called")
+    inner class Empty {
+        @Test
+        fun `given an empty honeypot field should accept it`() {
+            val node = ValidationNode(path = "website", value = "").apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = [" ", "http://spam.example"])
+        fun `given a filled honeypot field should report it`(
+            website: String
+        ) {
+            val node = ValidationNode(path = "website", value = website).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "website", message = "must be empty", code = "empty")
+            )
+        }
+    }
+
+    @Nested
     @DisplayName("When notBlank is called")
     inner class NotBlank {
         @ParameterizedTest
@@ -251,6 +278,63 @@ class StringConstraintsTest {
 
             violations shouldBe listOf(
                 Violation(path = "name", message = "must not be blank", code = "notBlank")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When blank is called")
+    inner class Blank {
+        @ParameterizedTest
+        @ValueSource(strings = ["", "   "])
+        fun `given a note without visible characters should accept it`(
+            note: String
+        ) {
+            val node = ValidationNode(path = "note", value = note).apply { blank() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a note with visible characters should report it`() {
+            val node = ValidationNode(path = "note", value = " gift ").apply { blank() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "note", message = "must be blank", code = "blank")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When trimmed is called")
+    inner class Trimmed {
+        @ParameterizedTest
+        @ValueSource(strings = ["", "Ana", "Ana Souza"])
+        fun `given a name without surrounding whitespace should accept it`(
+            name: String
+        ) {
+            val node = ValidationNode(path = "name", value = name).apply { trimmed() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = [" Ana", "Ana ", " "])
+        fun `given a name with surrounding whitespace should report it`(
+            name: String
+        ) {
+            val node = ValidationNode(path = "name", value = name).apply { trimmed() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "name", message = "must not start or end with whitespace", code = "trimmed")
             )
         }
     }
@@ -348,6 +432,17 @@ class StringConstraintsTest {
         }
 
         @Test
+        fun `given an email with the domain in another case and ignoreCase should accept it`() {
+            val node = ValidationNode(path = "email", value = "ana@Mail.com").apply {
+                contains("mail.com", ignoreCase = true)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
         fun `given an email without the at sign should report it`() {
             val node = ValidationNode(path = "email", value = "ana.mail.com").apply { contains("@") }
 
@@ -409,6 +504,19 @@ class StringConstraintsTest {
         }
 
         @Test
+        fun `given a password with the username in another case and ignoreCase should report it`() {
+            val node = ValidationNode(path = "password", value = "ANA12345").apply {
+                notContains("ana", ignoreCase = true)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "password", message = "must not contain ana", code = "notContains")
+            )
+        }
+
+        @Test
         fun `given an account without a username should skip the check`() {
             val username: String? = null
             val node = ValidationNode(path = "password", value = "ana12345").apply { notContains(username) }
@@ -438,6 +546,17 @@ class StringConstraintsTest {
         @Test
         fun `given a Brazilian IBAN should accept it`() {
             val node = ValidationNode(path = "iban", value = "BR1500000000000010932840814P2").apply { startsWith("BR") }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a lowercase Brazilian IBAN and ignoreCase should accept it`() {
+            val node = ValidationNode(path = "iban", value = "br1500000000000010932840814p2").apply {
+                startsWith("BR", ignoreCase = true)
+            }
 
             val violations = node.validate()
 
@@ -503,6 +622,19 @@ class StringConstraintsTest {
         }
 
         @Test
+        fun `given an account number with a lowercase test prefix and ignoreCase should report it`() {
+            val node = ValidationNode(path = "accountNumber", value = "test-123").apply {
+                notStartsWith("TEST-", ignoreCase = true)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "accountNumber", message = "must not start with TEST-", code = "notStartsWith")
+            )
+        }
+
+        @Test
         fun `given no prefix should skip the check`() {
             val forbiddenPrefix: String? = null
             val node = ValidationNode(path = "accountNumber", value = "0123").apply { notStartsWith(forbiddenPrefix) }
@@ -532,6 +664,17 @@ class StringConstraintsTest {
         @Test
         fun `given a PDF file should accept it`() {
             val node = ValidationNode(path = "fileName", value = "contract.pdf").apply { endsWith(".pdf") }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given an uppercase PDF extension and ignoreCase should accept it`() {
+            val node = ValidationNode(path = "fileName", value = "contract.PDF").apply {
+                endsWith(".pdf", ignoreCase = true)
+            }
 
             val violations = node.validate()
 
@@ -588,6 +731,19 @@ class StringConstraintsTest {
         @Test
         fun `given an executable file should report it`() {
             val node = ValidationNode(path = "fileName", value = "setup.exe").apply { notEndsWith(".exe") }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "fileName", message = "must not end with .exe", code = "notEndsWith")
+            )
+        }
+
+        @Test
+        fun `given an uppercase executable extension and ignoreCase should report it`() {
+            val node = ValidationNode(path = "fileName", value = "setup.EXE").apply {
+                notEndsWith(".exe", ignoreCase = true)
+            }
 
             val violations = node.validate()
 
@@ -1050,6 +1206,134 @@ class StringConstraintsTest {
     }
 
     @Nested
+    @DisplayName("When equalTo is called")
+    inner class EqualTo {
+        @ParameterizedTest
+        @ValueSource(strings = ["active", "ACTIVE", "Active"])
+        fun `given the status in any case and ignoreCase should accept it`(
+            status: String
+        ) {
+            val node = ValidationNode(path = "status", value = status).apply { equalTo("active", ignoreCase = true) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given the status in another case without ignoreCase should report it`() {
+            val node = ValidationNode(path = "status", value = "ACTIVE").apply { equalTo("active", ignoreCase = false) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "status", message = "must be equal to active", code = "equalTo")
+            )
+        }
+
+        @Test
+        fun `given another status and ignoreCase should report it`() {
+            val node = ValidationNode(path = "status", value = "blocked").apply { equalTo("active", ignoreCase = true) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "status", message = "must be equal to active", code = "equalTo")
+            )
+        }
+
+        @Test
+        fun `given no expected status should skip the check`() {
+            val expected: String? = null
+            val node = ValidationNode(path = "status", value = "blocked").apply { equalTo(expected, ignoreCase = true) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the expected status`() {
+            val node = ValidationNode(path = "status", value = "blocked").apply {
+                equalTo("active", ignoreCase = true) { other -> "$this is not $other" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "status", message = "blocked is not active", code = "equalTo")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When oneOf is called")
+    inner class OneOf {
+        @ParameterizedTest
+        @ValueSource(strings = ["br", "BR", "Pt"])
+        fun `given a listed country in any case and ignoreCase should accept it`(
+            country: String
+        ) {
+            val node = ValidationNode(path = "country", value = country).apply {
+                oneOf(listOf("BR", "PT"), ignoreCase = true)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a listed country in another case without ignoreCase should report it`() {
+            val node = ValidationNode(path = "country", value = "br").apply {
+                oneOf(listOf("BR", "PT"), ignoreCase = false)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "country", message = "must be one of BR, PT", code = "oneOf")
+            )
+        }
+
+        @Test
+        fun `given a country that is not listed and ignoreCase should report it`() {
+            val node = ValidationNode(path = "country", value = "us").apply {
+                oneOf(listOf("BR", "PT"), ignoreCase = true)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "country", message = "must be one of BR, PT", code = "oneOf")
+            )
+        }
+
+        @Test
+        fun `given no list of countries should skip the check`() {
+            val countries: List<String>? = null
+            val node = ValidationNode(path = "country", value = "us").apply { oneOf(countries, ignoreCase = true) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the countries`() {
+            val node = ValidationNode(path = "country", value = "us").apply {
+                oneOf(listOf("BR", "PT"), ignoreCase = true) { values -> "$this is not in $values" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "country", message = "us is not in [BR, PT]", code = "oneOf")
+            )
+        }
+    }
+
+    @Nested
     @DisplayName("When enum is called")
     inner class Enum {
         @ParameterizedTest
@@ -1058,6 +1342,15 @@ class StringConstraintsTest {
             method: String
         ) {
             val node = ValidationNode(path = "method", value = method).apply { enum<PaymentMethod>() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given the name of a constant in another case and ignoreCase should accept it`() {
+            val node = ValidationNode(path = "method", value = "pix").apply { enum<PaymentMethod>(ignoreCase = true) }
 
             val violations = node.validate()
 
@@ -1080,7 +1373,9 @@ class StringConstraintsTest {
 
         @Test
         fun `given a custom message with the values placeholder should replace it`() {
-            val node = ValidationNode(path = "method", value = "DOC").apply { enum<PaymentMethod>("use {values}") }
+            val node = ValidationNode(path = "method", value = "DOC").apply {
+                enum<PaymentMethod>(message = "use {values}")
+            }
 
             val violations = node.validate()
 

@@ -83,6 +83,14 @@ public fun ValidationNode<out Map<*, *>>.notEmpty(
     predicate = { it.isNotEmpty() }
 )
 
+public fun ValidationNode<out Map<*, *>>.empty(
+    message: String = messages.empty
+): Unit = constraint(
+    message = message,
+    code = "empty",
+    predicate = { it.isEmpty() }
+)
+
 public fun <K> ValidationNode<out Map<K, *>>.containsKey(
     key: K?,
     message: String = messages.containsKey
