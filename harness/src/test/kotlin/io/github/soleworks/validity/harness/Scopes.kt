@@ -18,6 +18,11 @@ val tests: KoScope = MODULES
 val KoPackageProvider.packageName: String
     get() = packagee?.name.orEmpty()
 
+val KoFileDeclaration.topLevelTypes: Int
+    get() = classes(includeNested = false).size +
+        interfaces(includeNested = false).size +
+        objects(includeNested = false).size
+
 fun KoScope.sourceOf(
     testFile: KoFileDeclaration
 ): KoFileDeclaration? = files.firstOrNull { file ->
