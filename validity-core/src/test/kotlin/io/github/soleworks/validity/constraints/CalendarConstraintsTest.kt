@@ -184,25 +184,31 @@ class CalendarConstraintsTest {
         }
 
         @Test
-        fun `given a time outside the window of every date and time should report it`() {
-            val nodes = listOf(
-                ValidationNode(path = "localDateTime", value = now.plusHours(13)).apply { withinNext(12.hours) },
-                ValidationNode(
-                    path = "zonedDateTime",
-                    value = ZonedDateTime.of(now.minusHours(1), UTC)
-                ).apply { withinNext(12.hours) },
-                ValidationNode(
-                    path = "offsetDateTime",
-                    value = OffsetDateTime.of(now.plusHours(13), UTC)
-                ).apply { withinNext(12.hours) },
-                ValidationNode(path = "instant", value = monday.minusSeconds(1)).apply { withinNext(12.hours) }
-            )
+        fun `given a time before and after the window of every date and time should report it`() {
+            val nodes = listOf(-1L, 13L).flatMap { hours ->
+                val time = now.plusHours(hours)
+                listOf(
+                    ValidationNode(path = "localDateTime", value = time).apply { withinNext(12.hours) },
+                    ValidationNode(
+                        path = "zonedDateTime",
+                        value = ZonedDateTime.of(time, UTC)
+                    ).apply { withinNext(12.hours) },
+                    ValidationNode(
+                        path = "offsetDateTime",
+                        value = OffsetDateTime.of(time, UTC)
+                    ).apply { withinNext(12.hours) },
+                    ValidationNode(
+                        path = "instant",
+                        value = monday.plusSeconds(hours * 3600)
+                    ).apply { withinNext(12.hours) }
+                )
+            }
 
             val violations = nodes.flatMap { node -> node.validate() }
 
-            violations shouldBe listOf("localDateTime", "zonedDateTime", "offsetDateTime", "instant").map { path ->
-                Violation(path = path, message = "must be within the next 12h", code = "withinNext")
-            }
+            violations shouldBe List(2) { listOf("localDateTime", "zonedDateTime", "offsetDateTime", "instant") }
+                .flatten()
+                .map { path -> Violation(path = path, message = "must be within the next 12h", code = "withinNext") }
         }
 
         @Test
@@ -286,25 +292,31 @@ class CalendarConstraintsTest {
         }
 
         @Test
-        fun `given a time outside the window of every date and time should report it`() {
-            val nodes = listOf(
-                ValidationNode(path = "localDateTime", value = now.minusHours(13)).apply { withinLast(12.hours) },
-                ValidationNode(
-                    path = "zonedDateTime",
-                    value = ZonedDateTime.of(now.plusHours(1), UTC)
-                ).apply { withinLast(12.hours) },
-                ValidationNode(
-                    path = "offsetDateTime",
-                    value = OffsetDateTime.of(now.minusHours(13), UTC)
-                ).apply { withinLast(12.hours) },
-                ValidationNode(path = "instant", value = monday.plusSeconds(1)).apply { withinLast(12.hours) }
-            )
+        fun `given a time before and after the window of every date and time should report it`() {
+            val nodes = listOf(-13L, 1L).flatMap { hours ->
+                val time = now.plusHours(hours)
+                listOf(
+                    ValidationNode(path = "localDateTime", value = time).apply { withinLast(12.hours) },
+                    ValidationNode(
+                        path = "zonedDateTime",
+                        value = ZonedDateTime.of(time, UTC)
+                    ).apply { withinLast(12.hours) },
+                    ValidationNode(
+                        path = "offsetDateTime",
+                        value = OffsetDateTime.of(time, UTC)
+                    ).apply { withinLast(12.hours) },
+                    ValidationNode(
+                        path = "instant",
+                        value = monday.plusSeconds(hours * 3600)
+                    ).apply { withinLast(12.hours) }
+                )
+            }
 
             val violations = nodes.flatMap { node -> node.validate() }
 
-            violations shouldBe listOf("localDateTime", "zonedDateTime", "offsetDateTime", "instant").map { path ->
-                Violation(path = path, message = "must be within the last 12h", code = "withinLast")
-            }
+            violations shouldBe List(2) { listOf("localDateTime", "zonedDateTime", "offsetDateTime", "instant") }
+                .flatten()
+                .map { path -> Violation(path = path, message = "must be within the last 12h", code = "withinLast") }
         }
 
         @Test

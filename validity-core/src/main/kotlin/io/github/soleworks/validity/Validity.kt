@@ -19,10 +19,7 @@ public class Validity private constructor(
         try {
             return block()
         } finally {
-            if (outer == null)
-                active.remove()
-            else
-                active.set(outer)
+            active.set(outer)
         }
     }
 
