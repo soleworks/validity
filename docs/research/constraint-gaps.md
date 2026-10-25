@@ -25,6 +25,7 @@ Implemented on branch `claude/dazzling-dubinsky-d76ab9`, to ship in one PR:
 | 52, 53, 54 | `containsValue`, `notContainsKey`, `onlyKeys` | `MapConstraints.kt` |
 | 55 | `minSize`, `maxSize`, `size`, `sizeBetween`, `notEmpty`, `empty` on `ByteArray` | `CollectionConstraints.kt` |
 | 20 | `coordinates` | `LocationConstraints.kt` |
+| new | `convert(converter) { }` and `convertToBigDecimal`, `convertToInt`, `convertToLong`, `convertToLocalDate` | `Accessors.kt` |
 
 Decisions taken along the way:
 
@@ -45,6 +46,13 @@ Decisions taken along the way:
 - `decimalPlaces`/`minDecimalPlaces` read the scale as written (`10.50` has 2 places), while `maxDecimalPlaces` ignores
   trailing zeros, so a stricter check never rejects a value only for its trailing zeros.
 - `containsValue` fills `{other}`, not `{value}`, since `{value}` already means the validated value in every message.
+- **Converting before validating** (not in the original survey; asked for HTTP requests that carry numbers and dates as
+  text). Peers do it as Zod `z.coerce` / `.transform()` / `.pipe()`, Konform `required("name", { transform }) { }`,
+  FluentValidation `Transform` (deprecated in 12) and Hibernate's `@DecimalMin`/`@Digits` on `CharSequence`. validity
+  adds an accessor, named with a verb: `convert(converter) { }` runs the block on the converted value at the same path,
+  or reports `convert` ("has an invalid format") when the converter returns `null`. The shortcuts use the Kotlin
+  parsers (`toBigDecimalOrNull`, `toIntOrNull`, `toLongOrNull`, `LocalDate.parse`), so blank text is invalid and a later
+  `value!!.toBigDecimal()` cannot throw. Exceptions thrown by a custom converter are not caught.
 
 ## 1. What validity has today
 

@@ -20,6 +20,12 @@ public class Messages internal constructor() {
     public var and: String = "{left} and {right}"
     public var not: String = "is not allowed"
 
+    public var convert: String = "has an invalid format"
+    public var convertToBigDecimal: String = "must be a valid number"
+    public var convertToInt: String = "must be a valid integer"
+    public var convertToLong: String = "must be a valid integer"
+    public var convertToLocalDate: String = "must be a valid ISO 8601 date"
+
     public var mustBeTrue: String = "must be true"
     public var mustBeFalse: String = "must be false"
 

@@ -1,5 +1,8 @@
 package io.github.soleworks.validity
 
+import java.math.BigDecimal
+import java.time.LocalDate
+
 private const val NULL_KEY = "null"
 
 public fun <T> ValidationNode<out Iterable<T>>.each(
@@ -43,6 +46,75 @@ public fun <V> ValidationNode<V>.valid(
 ): Unit = add(
     validation(value).nodes.map { node -> node.relocated(path.nested(node.path), metadata) }
 )
+
+public fun <V, T : Any> ValidationNode<V>.convert(
+    converter: (V) -> T?,
+    message: String = messages.convert,
+    block: ValidationNode<T>.() -> Unit
+): Unit = convert(
+    converter = converter,
+    message = message,
+    code = "convert",
+    block = block
+)
+
+public fun ValidationNode<String>.convertToBigDecimal(
+    message: String = messages.convertToBigDecimal,
+    block: ValidationNode<BigDecimal>.() -> Unit
+): Unit = convert(
+    converter = String::toBigDecimalOrNull,
+    message = message,
+    code = "convertToBigDecimal",
+    block = block
+)
+
+public fun ValidationNode<String>.convertToInt(
+    message: String = messages.convertToInt,
+    block: ValidationNode<Int>.() -> Unit
+): Unit = convert(
+    converter = String::toIntOrNull,
+    message = message,
+    code = "convertToInt",
+    block = block
+)
+
+public fun ValidationNode<String>.convertToLong(
+    message: String = messages.convertToLong,
+    block: ValidationNode<Long>.() -> Unit
+): Unit = convert(
+    converter = String::toLongOrNull,
+    message = message,
+    code = "convertToLong",
+    block = block
+)
+
+public fun ValidationNode<String>.convertToLocalDate(
+    message: String = messages.convertToLocalDate,
+    block: ValidationNode<LocalDate>.() -> Unit
+): Unit = convert(
+    converter = { text -> runCatching { LocalDate.parse(text) }.getOrNull() },
+    message = message,
+    code = "convertToLocalDate",
+    block = block
+)
+
+private fun <V, T : Any> ValidationNode<V>.convert(
+    converter: (V) -> T?,
+    message: String,
+    code: String,
+    block: ValidationNode<T>.() -> Unit
+) {
+    val converted = converter(value)
+
+    constraint(
+        message = message,
+        code = code,
+        predicate = { converted != null }
+    )
+
+    if (converted != null)
+        add(listOf(child(path, converted, block)))
+}
 
 private fun <T> ValidationNode<*>.child(
     path: String,
