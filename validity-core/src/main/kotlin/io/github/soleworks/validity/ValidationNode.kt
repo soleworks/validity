@@ -11,8 +11,6 @@ public class ValidationNode<V>(
 
     internal var metadata: Map<String, Any?> = emptyMap()
 
-    private var isFailFast: Boolean = false
-
     public fun constraint(
         message: String,
         code: String = "",
@@ -66,7 +64,6 @@ public class ValidationNode<V>(
         val rules = ValidationNode(path, value).also { rules ->
             rules.operator = operator
             rules.metadata = metadata
-            rules.isFailFast = true
         }
 
         this.rules += Rule.Chain(rules.apply(block))
@@ -84,14 +81,13 @@ public class ValidationNode<V>(
         rules += Rule.Group(nodes)
     }
 
-    internal fun validate(): List<Violation> = if (isFailFast)
-        rules
-            .asSequence()
-            .map { rule -> rule.validate(path, value) }
-            .firstOrNull { violations -> violations.isNotEmpty() }
-            .orEmpty()
-    else
-        branches().flatten()
+    internal fun validate(): List<Violation> = branches().flatten()
+
+    internal fun firstFailure(): List<Violation> = rules
+        .asSequence()
+        .map { rule -> rule.validate(path, value) }
+        .firstOrNull { violations -> violations.isNotEmpty() }
+        .orEmpty()
 
     internal fun branches(): List<List<Violation>> =
         rules.filterNot { rule -> rule is Rule.Group }.map { rule -> rule.validate(path, value) } +
@@ -104,7 +100,6 @@ public class ValidationNode<V>(
         this
     else
         ValidationNode(path, value).also { relocated ->
-            relocated.isFailFast = isFailFast
             relocated.rules += rules.map { rule -> rule.relocated(from = this.path, to = path, metadata = metadata) }
         }
 
@@ -141,7 +136,7 @@ public class ValidationNode<V>(
             override fun validate(
                 path: String,
                 value: V
-            ): List<Violation> = node.validate()
+            ): List<Violation> = node.firstFailure()
 
             override fun relocated(
                 from: String,
