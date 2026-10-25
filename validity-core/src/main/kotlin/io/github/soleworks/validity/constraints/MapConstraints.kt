@@ -83,6 +83,14 @@ public fun ValidationNode<out Map<*, *>>.notEmpty(
     predicate = { it.isNotEmpty() }
 )
 
+public fun ValidationNode<out Map<*, *>>.empty(
+    message: String = messages.empty
+): Unit = constraint(
+    message = message,
+    code = "empty",
+    predicate = { it.isEmpty() }
+)
+
 public fun <K> ValidationNode<out Map<K, *>>.containsKey(
     key: K?,
     message: String = messages.containsKey
@@ -124,5 +132,71 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
         message = { it.message(keys) },
         code = "containsKeys",
         predicate = { keys.all { key -> key in it } }
+    )
+}
+
+public fun <K> ValidationNode<out Map<K, *>>.notContainsKey(
+    key: K?,
+    message: String = messages.notContainsKey
+): Unit = notContainsKey(
+    key = key,
+    message = { message.filled("key" to key) }
+)
+
+public fun <K> ValidationNode<out Map<K, *>>.notContainsKey(
+    key: K?,
+    message: Map<K, *>.(K) -> String
+) {
+    if (key == null)
+        return
+
+    constraint(
+        message = { it.message(key) },
+        code = "notContainsKey",
+        predicate = { key !in it }
+    )
+}
+
+public fun <K> ValidationNode<out Map<K, *>>.onlyKeys(
+    keys: Iterable<K>?,
+    message: String = messages.onlyKeys
+): Unit = onlyKeys(
+    keys = keys,
+    message = { message.filled("keys" to keys) }
+)
+
+public fun <K> ValidationNode<out Map<K, *>>.onlyKeys(
+    keys: Iterable<K>?,
+    message: Map<K, *>.(Iterable<K>) -> String
+) {
+    if (keys == null)
+        return
+
+    constraint(
+        message = { it.message(keys) },
+        code = "onlyKeys",
+        predicate = { it.keys.all { key -> key in keys } }
+    )
+}
+
+public fun <V> ValidationNode<out Map<*, V>>.containsValue(
+    value: V?,
+    message: String = messages.containsValue
+): Unit = containsValue(
+    value = value,
+    message = { message.filled("other" to value) }
+)
+
+public fun <V> ValidationNode<out Map<*, V>>.containsValue(
+    value: V?,
+    message: Map<*, V>.(V) -> String
+) {
+    if (value == null)
+        return
+
+    constraint(
+        message = { it.message(value) },
+        code = "containsValue",
+        predicate = { value in it.values }
     )
 }

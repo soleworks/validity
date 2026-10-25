@@ -8,6 +8,7 @@ import java.net.URI
 private const val IPV4_PREFIX_LENGTH = 32
 private const val IPV6_PREFIX_LENGTH = 128
 private const val IPV6_GROUPS = 8
+private const val MAX_PORT = 65_535
 
 private const val DOMAIN_LABEL = "[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?"
 private const val IPV4_OCTET = """(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)"""
@@ -15,6 +16,8 @@ private const val IPV4_OCTET = """(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)"""
 private val WEB_SCHEMES = setOf("http", "https")
 private val EMAIL_FORMAT = Regex("""[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@$DOMAIN_LABEL(?:\.$DOMAIN_LABEL)+""")
 private val HOSTNAME_FORMAT = Regex("""(?=.{1,253}$)$DOMAIN_LABEL(?:\.$DOMAIN_LABEL)*""")
+private val DOMAIN_FORMAT = Regex("""(?=.{1,253}$)(?:$DOMAIN_LABEL\.)+(?:[A-Za-z]{2,63}|xn--[A-Za-z0-9-]{1,59})""")
+private val PORT_FORMAT = Regex("""0|[1-9]\d{0,4}""")
 private val IPV4_FORMAT = Regex("""$IPV4_OCTET(?:\.$IPV4_OCTET){3}""")
 private val IPV6_GROUP_FORMAT = Regex("[0-9A-Fa-f]{1,4}")
 private val MAC_ADDRESS_FORMAT = Regex("""[0-9A-Fa-f]{2}([:-])(?:[0-9A-Fa-f]{2}\1){4}[0-9A-Fa-f]{2}""")
@@ -61,6 +64,31 @@ public fun ValidationNode<String>.hostname(
     message = message,
     code = "hostname",
     predicate = { HOSTNAME_FORMAT.matches(it) }
+)
+
+public fun ValidationNode<String>.domain(
+    message: String = messages.domain
+): Unit = constraint(
+    message = message,
+    code = "domain",
+    predicate = { DOMAIN_FORMAT.matches(it) }
+)
+
+public fun ValidationNode<Int>.port(
+    message: String = messages.port
+): Unit = constraint(
+    message = message,
+    code = "port",
+    predicate = { it in 0..MAX_PORT }
+)
+
+@JvmName("portText")
+public fun ValidationNode<String>.port(
+    message: String = messages.port
+): Unit = constraint(
+    message = message,
+    code = "port",
+    predicate = { PORT_FORMAT.matches(it) && it.toInt() <= MAX_PORT }
 )
 
 public fun ValidationNode<String>.ipv4(

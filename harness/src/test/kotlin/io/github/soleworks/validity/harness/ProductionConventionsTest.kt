@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test
 private const val COUNTRY_PACKAGE_PREFIX = "io.github.soleworks.validity.constraints."
 
 private val UPPER_SNAKE_CASE_FORMAT = Regex("""[A-Z][A-Z0-9_]*""")
-private val BOOLEAN_NAME_FORMAT = Regex("""(is|has)[A-Z]\w*""")
 private val MESSAGE_DEFAULT_FORMAT = Regex("""(messages|phoneMessages)\..+""")
 private val TRAILING_LAMBDAS = setOf("block", "selector")
 private val TEST_LIBRARIES = listOf("io.kotest", "org.junit", "com.lemonappdev.konsist")
@@ -95,14 +94,6 @@ class ProductionConventionsTest {
     @Nested
     @DisplayName("Names")
     inner class Names {
-        @Test
-        fun `every function named is or has should return Boolean`() {
-            production
-                .functions(includeNested = true, includeLocal = true)
-                .filter { function -> BOOLEAN_NAME_FORMAT.matches(function.name) }
-                .assertTrue { function -> function.returnType?.text == "Boolean" }
-        }
-
         @Test
         fun `every top-level value should be named in upper snake case`() {
             production

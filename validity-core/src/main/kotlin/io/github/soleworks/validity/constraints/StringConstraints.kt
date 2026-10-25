@@ -3,6 +3,8 @@ package io.github.soleworks.validity.constraints
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
+import java.nio.charset.Charset
+import java.text.Normalizer
 import kotlin.enums.enumEntries
 
 private const val ASCII_LIMIT = 128
@@ -83,12 +85,60 @@ public fun ValidationNode<String>.lengthBetween(
     predicate = { it.length in min..max }
 )
 
+public fun ValidationNode<String>.minBytes(
+    min: Int,
+    charset: Charset = Charsets.UTF_8,
+    message: String = messages.minBytes
+): Unit = minBytes(
+    min = min,
+    charset = charset,
+    message = { message.filled("min" to min) }
+)
+
+public fun ValidationNode<String>.minBytes(
+    min: Int,
+    charset: Charset = Charsets.UTF_8,
+    message: String.(Int) -> String
+): Unit = constraint(
+    message = { it.message(min) },
+    code = "minBytes",
+    predicate = { it.toByteArray(charset).size >= min }
+)
+
+public fun ValidationNode<String>.maxBytes(
+    max: Int,
+    charset: Charset = Charsets.UTF_8,
+    message: String = messages.maxBytes
+): Unit = maxBytes(
+    max = max,
+    charset = charset,
+    message = { message.filled("max" to max) }
+)
+
+public fun ValidationNode<String>.maxBytes(
+    max: Int,
+    charset: Charset = Charsets.UTF_8,
+    message: String.(Int) -> String
+): Unit = constraint(
+    message = { it.message(max) },
+    code = "maxBytes",
+    predicate = { it.toByteArray(charset).size <= max }
+)
+
 public fun ValidationNode<String>.notEmpty(
     message: String = messages.notEmpty
 ): Unit = constraint(
     message = message,
     code = "notEmpty",
     predicate = { it.isNotEmpty() }
+)
+
+public fun ValidationNode<String>.empty(
+    message: String = messages.empty
+): Unit = constraint(
+    message = message,
+    code = "empty",
+    predicate = { it.isEmpty() }
 )
 
 public fun ValidationNode<String>.notBlank(
@@ -98,6 +148,72 @@ public fun ValidationNode<String>.notBlank(
     code = "notBlank",
     predicate = { it.isNotBlank() }
 )
+
+public fun ValidationNode<String>.blank(
+    message: String = messages.blank
+): Unit = constraint(
+    message = message,
+    code = "blank",
+    predicate = { it.isBlank() }
+)
+
+public fun ValidationNode<String>.trimmed(
+    message: String = messages.trimmed
+): Unit = constraint(
+    message = message,
+    code = "trimmed",
+    predicate = { it == it.trim() }
+)
+
+public fun ValidationNode<String>.equalTo(
+    other: String?,
+    ignoreCase: Boolean,
+    message: String = messages.equalTo
+): Unit = equalTo(
+    other = other,
+    ignoreCase = ignoreCase,
+    message = { message.filled("other" to other) }
+)
+
+public fun ValidationNode<String>.equalTo(
+    other: String?,
+    ignoreCase: Boolean,
+    message: String.(String) -> String
+) {
+    if (other == null)
+        return
+
+    constraint(
+        message = { it.message(other) },
+        code = "equalTo",
+        predicate = { it.equals(other, ignoreCase) }
+    )
+}
+
+public fun ValidationNode<String>.oneOf(
+    values: Iterable<String>?,
+    ignoreCase: Boolean,
+    message: String = messages.oneOf
+): Unit = oneOf(
+    values = values,
+    ignoreCase = ignoreCase,
+    message = { message.filled("values" to values) }
+)
+
+public fun ValidationNode<String>.oneOf(
+    values: Iterable<String>?,
+    ignoreCase: Boolean,
+    message: String.(Iterable<String>) -> String
+) {
+    if (values == null)
+        return
+
+    constraint(
+        message = { it.message(values) },
+        code = "oneOf",
+        predicate = { value -> values.any { it.equals(value, ignoreCase) } }
+    )
+}
 
 public fun ValidationNode<String>.matches(
     regex: Regex,
@@ -135,14 +251,17 @@ public fun ValidationNode<String>.notMatches(
 
 public fun ValidationNode<String>.contains(
     text: String?,
+    ignoreCase: Boolean = false,
     message: String = messages.contains
 ): Unit = contains(
     text = text,
+    ignoreCase = ignoreCase,
     message = { message.filled("text" to text) }
 )
 
 public fun ValidationNode<String>.contains(
     text: String?,
+    ignoreCase: Boolean = false,
     message: String.(String) -> String
 ) {
     if (text == null)
@@ -151,20 +270,23 @@ public fun ValidationNode<String>.contains(
     constraint(
         message = { it.message(text) },
         code = "contains",
-        predicate = { it.contains(text) }
+        predicate = { it.contains(text, ignoreCase) }
     )
 }
 
 public fun ValidationNode<String>.notContains(
     text: String?,
+    ignoreCase: Boolean = false,
     message: String = messages.notContains
 ): Unit = notContains(
     text = text,
+    ignoreCase = ignoreCase,
     message = { message.filled("text" to text) }
 )
 
 public fun ValidationNode<String>.notContains(
     text: String?,
+    ignoreCase: Boolean = false,
     message: String.(String) -> String
 ) {
     if (text == null)
@@ -173,20 +295,23 @@ public fun ValidationNode<String>.notContains(
     constraint(
         message = { it.message(text) },
         code = "notContains",
-        predicate = { !it.contains(text) }
+        predicate = { !it.contains(text, ignoreCase) }
     )
 }
 
 public fun ValidationNode<String>.startsWith(
     prefix: String?,
+    ignoreCase: Boolean = false,
     message: String = messages.startsWith
 ): Unit = startsWith(
     prefix = prefix,
+    ignoreCase = ignoreCase,
     message = { message.filled("prefix" to prefix) }
 )
 
 public fun ValidationNode<String>.startsWith(
     prefix: String?,
+    ignoreCase: Boolean = false,
     message: String.(String) -> String
 ) {
     if (prefix == null)
@@ -195,20 +320,23 @@ public fun ValidationNode<String>.startsWith(
     constraint(
         message = { it.message(prefix) },
         code = "startsWith",
-        predicate = { it.startsWith(prefix) }
+        predicate = { it.startsWith(prefix, ignoreCase) }
     )
 }
 
 public fun ValidationNode<String>.notStartsWith(
     prefix: String?,
+    ignoreCase: Boolean = false,
     message: String = messages.notStartsWith
 ): Unit = notStartsWith(
     prefix = prefix,
+    ignoreCase = ignoreCase,
     message = { message.filled("prefix" to prefix) }
 )
 
 public fun ValidationNode<String>.notStartsWith(
     prefix: String?,
+    ignoreCase: Boolean = false,
     message: String.(String) -> String
 ) {
     if (prefix == null)
@@ -217,20 +345,23 @@ public fun ValidationNode<String>.notStartsWith(
     constraint(
         message = { it.message(prefix) },
         code = "notStartsWith",
-        predicate = { !it.startsWith(prefix) }
+        predicate = { !it.startsWith(prefix, ignoreCase) }
     )
 }
 
 public fun ValidationNode<String>.endsWith(
     suffix: String?,
+    ignoreCase: Boolean = false,
     message: String = messages.endsWith
 ): Unit = endsWith(
     suffix = suffix,
+    ignoreCase = ignoreCase,
     message = { message.filled("suffix" to suffix) }
 )
 
 public fun ValidationNode<String>.endsWith(
     suffix: String?,
+    ignoreCase: Boolean = false,
     message: String.(String) -> String
 ) {
     if (suffix == null)
@@ -239,20 +370,23 @@ public fun ValidationNode<String>.endsWith(
     constraint(
         message = { it.message(suffix) },
         code = "endsWith",
-        predicate = { it.endsWith(suffix) }
+        predicate = { it.endsWith(suffix, ignoreCase) }
     )
 }
 
 public fun ValidationNode<String>.notEndsWith(
     suffix: String?,
+    ignoreCase: Boolean = false,
     message: String = messages.notEndsWith
 ): Unit = notEndsWith(
     suffix = suffix,
+    ignoreCase = ignoreCase,
     message = { message.filled("suffix" to suffix) }
 )
 
 public fun ValidationNode<String>.notEndsWith(
     suffix: String?,
+    ignoreCase: Boolean = false,
     message: String.(String) -> String
 ) {
     if (suffix == null)
@@ -261,7 +395,7 @@ public fun ValidationNode<String>.notEndsWith(
     constraint(
         message = { it.message(suffix) },
         code = "notEndsWith",
-        predicate = { !it.endsWith(suffix) }
+        predicate = { !it.endsWith(suffix, ignoreCase) }
     )
 }
 
@@ -313,6 +447,45 @@ public fun ValidationNode<String>.ascii(
     predicate = { it.isNotEmpty() && it.all { char -> char.code < ASCII_LIMIT } }
 )
 
+public fun ValidationNode<String>.containsOnly(
+    characters: String?,
+    message: String = messages.containsOnly
+): Unit = containsOnly(
+    characters = characters,
+    message = { message.filled("characters" to characters) }
+)
+
+public fun ValidationNode<String>.containsOnly(
+    characters: String?,
+    message: String.(String) -> String
+) {
+    if (characters == null)
+        return
+
+    constraint(
+        message = { it.message(characters) },
+        code = "containsOnly",
+        predicate = { it.isNotEmpty() && it.all { char -> char in characters } }
+    )
+}
+
+public fun ValidationNode<String>.normalized(
+    form: Normalizer.Form = Normalizer.Form.NFC,
+    message: String = messages.normalized
+): Unit = normalized(
+    form = form,
+    message = { message.filled("form" to form) }
+)
+
+public fun ValidationNode<String>.normalized(
+    form: Normalizer.Form = Normalizer.Form.NFC,
+    message: String.(Normalizer.Form) -> String
+): Unit = constraint(
+    message = { it.message(form) },
+    code = "normalized",
+    predicate = { Normalizer.isNormalized(it, form) }
+)
+
 public fun ValidationNode<String>.numeric(
     message: String = messages.numeric
 ): Unit = constraint(
@@ -327,6 +500,14 @@ public fun ValidationNode<String>.integer(
     message = message,
     code = "integer",
     predicate = { INTEGER_FORMAT.matches(it) }
+)
+
+public fun ValidationNode<String>.boolean(
+    message: String = messages.boolean
+): Unit = constraint(
+    message = message,
+    code = "boolean",
+    predicate = { it.toBooleanStrictOrNull() != null }
 )
 
 public fun ValidationNode<String>.containsUppercase(
@@ -362,15 +543,18 @@ public fun ValidationNode<String>.containsSymbol(
 )
 
 public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(
+    ignoreCase: Boolean = false,
     message: String = messages.enum
 ): Unit = enum<E>(
+    ignoreCase = ignoreCase,
     message = { values -> message.filled("values" to values.map { it.name }) }
 )
 
 public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(
+    ignoreCase: Boolean = false,
     noinline message: String.(List<E>) -> String
 ): Unit = constraint(
     message = { it.message(enumEntries<E>()) },
     code = "enum",
-    predicate = { value -> enumEntries<E>().any { it.name == value } }
+    predicate = { value -> enumEntries<E>().any { it.name.equals(value, ignoreCase) } }
 )
