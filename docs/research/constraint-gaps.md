@@ -25,7 +25,7 @@ Implemented on branch `claude/dazzling-dubinsky-d76ab9`, to ship in one PR:
 | 52, 53, 54 | `containsValue`, `notContainsKey`, `onlyKeys` | `MapConstraints.kt` |
 | 55 | `minSize`, `maxSize`, `size`, `sizeBetween`, `notEmpty`, `empty` on `ByteArray` | `CollectionConstraints.kt` |
 | 20 | `coordinates` | `LocationConstraints.kt` |
-| new | `convert(converter) { }` and `convertToBigDecimal`, `convertToInt`, `convertToLong`, `convertToLocalDate` | `Accessors.kt` |
+| new | `convert(converter) { }`; text shortcuts `convertToBigDecimal`, `convertToBigInteger`, `convertToInt`, `convertToLong`, `convertToDouble`, `convertToBoolean`, `convertToUuid`, `convertToEnum<E>(ignoreCase)`, `convertToLocalDate`, `convertToLocalDateTime`, `convertToLocalTime`, `convertToOffsetDateTime`, `convertToInstant`, `convertToYearMonth`, `convertToDuration` (`java.time`) | `Accessors.kt` |
 
 Decisions taken along the way:
 

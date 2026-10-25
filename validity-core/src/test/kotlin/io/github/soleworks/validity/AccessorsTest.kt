@@ -1,8 +1,12 @@
 package io.github.soleworks.validity
 
+import io.github.soleworks.validity.constraints.after
 import io.github.soleworks.validity.constraints.before
+import io.github.soleworks.validity.constraints.isTrue
+import io.github.soleworks.validity.constraints.max
 import io.github.soleworks.validity.constraints.maxDecimalPlaces
 import io.github.soleworks.validity.constraints.min
+import io.github.soleworks.validity.constraints.notEqualTo
 import io.github.soleworks.validity.constraints.positive
 import io.github.soleworks.validity.samples.Address
 import io.github.soleworks.validity.samples.Contact
@@ -10,9 +14,16 @@ import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Invoice
 import io.github.soleworks.validity.samples.Ledger
 import io.github.soleworks.validity.samples.Order
+import io.github.soleworks.validity.samples.PaymentMethod
 import io.kotest.matchers.shouldBe
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.OffsetDateTime
+import java.time.YearMonth
+import java.util.UUID
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -430,6 +441,435 @@ class AccessorsTest {
 
             violations shouldBe listOf(
                 Violation(path = "birthDate", message = "must be before 2000-01-01", code = "before")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToBigInteger is called")
+    inner class ConvertToBigInteger {
+        @Test
+        fun `given a balance in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "balance", value = "123456789012345678901234567890").apply {
+                convertToBigInteger { positive() }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["1.5", "abc", ""])
+        fun `given a balance in another format should report it`(
+            balance: String
+        ) {
+            val node = ValidationNode(path = "balance", value = balance).apply {
+                convertToBigInteger { positive() }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "balance", message = "must be a valid integer", code = "convertToBigInteger")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToDouble is called")
+    inner class ConvertToDouble {
+        @Test
+        fun `given a weight in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "weight", value = "1.5").apply {
+                convertToDouble { positive() }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["abc", "1,5", ""])
+        fun `given a weight in another format should report it`(
+            weight: String
+        ) {
+            val node = ValidationNode(path = "weight", value = weight).apply {
+                convertToDouble { positive() }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "weight", message = "must be a valid number", code = "convertToDouble")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToBoolean is called")
+    inner class ConvertToBoolean {
+        @Test
+        fun `given a terms in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "terms", value = "true").apply {
+                convertToBoolean { isTrue() }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["yes", "TRUE", "1", ""])
+        fun `given a terms in another format should report it`(
+            terms: String
+        ) {
+            val node = ValidationNode(path = "terms", value = terms).apply {
+                convertToBoolean { isTrue() }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "terms", message = "must be true or false", code = "convertToBoolean")
+            )
+        }
+
+        @Test
+        fun `given a converted terms that breaks a rule should report it at the same path`() {
+            val node = ValidationNode(path = "terms", value = "false").apply {
+                convertToBoolean { isTrue() }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "terms", message = "must be true", code = "isTrue")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToUuid is called")
+    inner class ConvertToUuid {
+        @Test
+        fun `given a orderId in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "orderId", value = "123e4567-e89b-12d3-a456-426614174000").apply {
+                convertToUuid { notEqualTo(UUID(0, 0)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["1-1-1-1-1", "123e4567e89b12d3a456426614174000", "abc", ""])
+        fun `given a orderId in another format should report it`(
+            orderId: String
+        ) {
+            val node = ValidationNode(path = "orderId", value = orderId).apply {
+                convertToUuid { notEqualTo(UUID(0, 0)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "orderId", message = "must be a valid UUID", code = "convertToUuid")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToLocalDateTime is called")
+    inner class ConvertToLocalDateTime {
+        @Test
+        fun `given a startsAt in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "startsAt", value = "2026-10-25T10:15:30").apply {
+                convertToLocalDateTime { before(LocalDateTime.of(2030, 1, 1, 0, 0)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["2026-10-25 10:15", "2026-10-25", ""])
+        fun `given a startsAt in another format should report it`(
+            startsAt: String
+        ) {
+            val node = ValidationNode(path = "startsAt", value = startsAt).apply {
+                convertToLocalDateTime { before(LocalDateTime.of(2030, 1, 1, 0, 0)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "startsAt",
+                    message = "must be a valid ISO 8601 date and time",
+                    code = "convertToLocalDateTime"
+                )
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToLocalTime is called")
+    inner class ConvertToLocalTime {
+        @Test
+        fun `given a opensAt in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "opensAt", value = "10:15").apply {
+                convertToLocalTime { after(LocalTime.of(8, 0)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["25:00", "10h15", ""])
+        fun `given a opensAt in another format should report it`(
+            opensAt: String
+        ) {
+            val node = ValidationNode(path = "opensAt", value = opensAt).apply {
+                convertToLocalTime { after(LocalTime.of(8, 0)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "opensAt", message = "must be a valid ISO 8601 time", code = "convertToLocalTime")
+            )
+        }
+
+        @Test
+        fun `given a converted opensAt that breaks a rule should report it at the same path`() {
+            val node = ValidationNode(path = "opensAt", value = "07:30").apply {
+                convertToLocalTime { after(LocalTime.of(8, 0)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "opensAt", message = "must be after 08:00", code = "after")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToOffsetDateTime is called")
+    inner class ConvertToOffsetDateTime {
+        @Test
+        fun `given a paidAt in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "paidAt", value = "2026-10-25T10:15:30-03:00").apply {
+                convertToOffsetDateTime { before(OffsetDateTime.parse("2030-01-01T00:00Z")) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["2026-10-25T10:15:30", "2026-10-25", ""])
+        fun `given a paidAt in another format should report it`(
+            paidAt: String
+        ) {
+            val node = ValidationNode(path = "paidAt", value = paidAt).apply {
+                convertToOffsetDateTime { before(OffsetDateTime.parse("2030-01-01T00:00Z")) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "paidAt",
+                    message = "must be a valid ISO 8601 date and time with offset",
+                    code = "convertToOffsetDateTime"
+                )
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToInstant is called")
+    inner class ConvertToInstant {
+        @Test
+        fun `given a createdAt in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "createdAt", value = "2026-10-25T13:15:30Z").apply {
+                convertToInstant { before(Instant.parse("2030-01-01T00:00:00Z")) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["2026-10-25T13:15:30", "1761398130", ""])
+        fun `given a createdAt in another format should report it`(
+            createdAt: String
+        ) {
+            val node = ValidationNode(path = "createdAt", value = createdAt).apply {
+                convertToInstant { before(Instant.parse("2030-01-01T00:00:00Z")) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "createdAt", message = "must be a valid ISO 8601 instant", code = "convertToInstant")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToYearMonth is called")
+    inner class ConvertToYearMonth {
+        @Test
+        fun `given a cardExpiry in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "cardExpiry", value = "2026-10").apply {
+                convertToYearMonth { after(YearMonth.of(2020, 1)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["10/2026", "2026-13", ""])
+        fun `given a cardExpiry in another format should report it`(
+            cardExpiry: String
+        ) {
+            val node = ValidationNode(path = "cardExpiry", value = cardExpiry).apply {
+                convertToYearMonth { after(YearMonth.of(2020, 1)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(
+                    path = "cardExpiry",
+                    message = "must be a valid ISO 8601 year and month",
+                    code = "convertToYearMonth"
+                )
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToDuration is called")
+    inner class ConvertToDuration {
+        @Test
+        fun `given a timeout in the expected format should check the converted value`() {
+            val node = ValidationNode(path = "timeout", value = "PT15M").apply {
+                convertToDuration { max(Duration.ofHours(1)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["15 minutes", "15m", ""])
+        fun `given a timeout in another format should report it`(
+            timeout: String
+        ) {
+            val node = ValidationNode(path = "timeout", value = timeout).apply {
+                convertToDuration { max(Duration.ofHours(1)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "must be a valid ISO 8601 duration", code = "convertToDuration")
+            )
+        }
+
+        @Test
+        fun `given a converted timeout that breaks a rule should report it at the same path`() {
+            val node = ValidationNode(path = "timeout", value = "PT2H").apply {
+                convertToDuration { max(Duration.ofHours(1)) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "timeout", message = "must be at most PT1H", code = "max")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When convertToEnum is called")
+    inner class ConvertToEnum {
+        @Test
+        fun `given the name of a payment method should check it as the enum constant`() {
+            val node = ValidationNode(path = "method", value = "PIX").apply {
+                convertToEnum<PaymentMethod> { notEqualTo(PaymentMethod.BOLETO) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given the name in another case and ignoreCase should accept it`() {
+            val node = ValidationNode(path = "method", value = "pix").apply {
+                convertToEnum<PaymentMethod>(ignoreCase = true) { notEqualTo(PaymentMethod.BOLETO) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["pix", "DOC", ""])
+        fun `given a text that is not the name of a payment method should report it with the names`(
+            method: String
+        ) {
+            val node = ValidationNode(path = "method", value = method).apply {
+                convertToEnum<PaymentMethod> { notEqualTo(PaymentMethod.BOLETO) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "method", message = "must be one of PIX, TED, BOLETO", code = "convertToEnum")
+            )
+        }
+
+        @Test
+        fun `given a converted payment method that breaks a rule should report it at the same path`() {
+            val node = ValidationNode(path = "method", value = "BOLETO").apply {
+                convertToEnum<PaymentMethod> { notEqualTo(PaymentMethod.BOLETO) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "method", message = "must not be equal to Boleto", code = "notEqualTo")
+            )
+        }
+
+        @Test
+        fun `given a custom message with the values placeholder should replace it`() {
+            val node = ValidationNode(path = "method", value = "DOC").apply {
+                convertToEnum<PaymentMethod>(message = "use {values}") { notEqualTo(PaymentMethod.BOLETO) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "method", message = "use PIX, TED, BOLETO", code = "convertToEnum")
             )
         }
     }
