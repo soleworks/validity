@@ -1,5 +1,7 @@
 package io.github.soleworks.validity
 
+import java.util.concurrent.ConcurrentHashMap
+
 @ValidityDsl
 public class Messages internal constructor() {
     public var required: String = "is required"
@@ -20,6 +22,26 @@ public class Messages internal constructor() {
     public var and: String = "{left} and {right}"
     public var not: String = "is not allowed"
 
+    public var convert: String = "has an invalid format"
+    public var convertToBigDecimal: String = "must be a valid number"
+    public var convertToInt: String = "must be a valid integer"
+    public var convertToLong: String = "must be a valid integer"
+    public var convertToBigInteger: String = "must be a valid integer"
+    public var convertToDouble: String = "must be a valid number"
+    public var convertToBoolean: String = "must be true or false"
+    public var convertToUuid: String = "must be a valid UUID"
+    public var convertToEnum: String = "must be one of {values}"
+    public var convertToLocalDate: String = "must be a valid ISO 8601 date"
+    public var convertToLocalDateTime: String = "must be a valid ISO 8601 date and time"
+    public var convertToLocalTime: String = "must be a valid ISO 8601 time"
+    public var convertToOffsetDateTime: String = "must be a valid ISO 8601 date and time with offset"
+    public var convertToInstant: String = "must be a valid ISO 8601 instant"
+    public var convertToYearMonth: String = "must be a valid ISO 8601 year and month"
+    public var convertToDuration: String = "must be a valid ISO 8601 duration"
+
+    public var mustBeTrue: String = "must be true"
+    public var mustBeFalse: String = "must be false"
+
     public var min: String = "must be at least {min}"
     public var max: String = "must be at most {max}"
     public var greaterThan: String = "must be greater than {other}"
@@ -30,8 +52,13 @@ public class Messages internal constructor() {
     public var maxLength: String = "must have at most {max} characters"
     public var length: String = "must have exactly {length} characters"
     public var lengthBetween: String = "must have between {min} and {max} characters"
+    public var minBytes: String = "must have at least {min} bytes"
+    public var maxBytes: String = "must have at most {max} bytes"
     public var notEmpty: String = "must not be empty"
+    public var empty: String = "must be empty"
     public var notBlank: String = "must not be blank"
+    public var blank: String = "must be blank"
+    public var trimmed: String = "must not start or end with whitespace"
     public var matches: String = "must match {regex}"
     public var notMatches: String = "must not match {regex}"
     public var contains: String = "must contain {text}"
@@ -46,6 +73,8 @@ public class Messages internal constructor() {
     public var digits: String = "must contain only digits"
     public var lettersOrDigits: String = "must contain only letters or digits"
     public var ascii: String = "must contain only ASCII characters"
+    public var containsOnly: String = "must contain only the characters {characters}"
+    public var normalized: String = "must be in Unicode {form} form"
 
     public var positive: String = "must be positive"
     public var negative: String = "must be negative"
@@ -55,6 +84,11 @@ public class Messages internal constructor() {
     public var finite: String = "must be finite"
     public var maxDecimalPlaces: String = "must have at most {max} decimal places"
     public var maxIntegerDigits: String = "must have at most {max} integer digits"
+    public var decimalPlaces: String = "must have exactly {count} decimal places"
+    public var minDecimalPlaces: String = "must have at least {min} decimal places"
+    public var minDigits: String = "must have at least {min} digits"
+    public var maxDigits: String = "must have at most {max} digits"
+    public var digitCount: String = "must have exactly {count} digits"
 
     public var past: String = "must be in the past"
     public var future: String = "must be in the future"
@@ -65,6 +99,13 @@ public class Messages internal constructor() {
     public var afterOrEqual: String = "must be after or equal to {other}"
     public var beforeOrEqual: String = "must be before or equal to {other}"
     public var betweenDates: String = "must be between {start} and {end}"
+    public var minAge: String = "must be at least {min} years old"
+    public var maxAge: String = "must be at most {max} years old"
+    public var withinNext: String = "must be within the next {duration}"
+    public var withinLast: String = "must be within the last {duration}"
+    public var today: String = "must be today"
+    public var weekday: String = "must be a weekday"
+    public var weekend: String = "must be on a weekend"
 
     public var minSize: String = "must have at least {min} items"
     public var maxSize: String = "must have at most {max} items"
@@ -72,8 +113,10 @@ public class Messages internal constructor() {
     public var sizeBetween: String = "must have between {min} and {max} items"
     public var distinct: String = "must not contain duplicates"
     public var containsElement: String = "must contain {element}"
+    public var notContainsElement: String = "must not contain {element}"
     public var containsAll: String = "must contain all of {elements}"
     public var containsAny: String = "must contain any of {elements}"
+    public var containsNone: String = "must not contain any of {elements}"
 
     public var minEntries: String = "must have at least {min} entries"
     public var maxEntries: String = "must have at most {max} entries"
@@ -81,10 +124,15 @@ public class Messages internal constructor() {
     public var entriesBetween: String = "must have between {min} and {max} entries"
     public var containsKey: String = "must contain the key {key}"
     public var containsKeys: String = "must contain the keys {keys}"
+    public var notContainsKey: String = "must not contain the key {key}"
+    public var onlyKeys: String = "must contain only the keys {keys}"
+    public var containsValue: String = "must contain the value {other}"
 
     public var email: String = "must be a valid email"
     public var url: String = "must be a valid URL"
     public var hostname: String = "must be a valid hostname"
+    public var domain: String = "must be a valid domain name"
+    public var port: String = "must be a valid port number"
     public var ipv4: String = "must be a valid IPv4 address"
     public var ipv6: String = "must be a valid IPv6 address"
     public var ip: String = "must be a valid IP address"
@@ -135,10 +183,12 @@ public class Messages internal constructor() {
     public var timeZone: String = "must be a valid time zone"
     public var latitude: String = "must be a valid latitude"
     public var longitude: String = "must be a valid longitude"
+    public var coordinates: String = "must be a valid latitude and longitude pair"
     public var postalCode: String = "must be a valid postal code for {country}"
 
     public var numeric: String = "must be numeric"
     public var integer: String = "must be an integer"
+    public var boolean: String = "must be true or false"
     public var containsUppercase: String = "must contain an uppercase letter"
     public var containsLowercase: String = "must contain a lowercase letter"
     public var containsDigit: String = "must contain a digit"
@@ -149,6 +199,8 @@ public class Messages internal constructor() {
     public var isoDateTime: String = "must be an ISO 8601 date and time with offset"
     public var isoDuration: String = "must be an ISO 8601 duration"
     public var dateFormat: String = "must match the date format {pattern}"
+
+    private val modules = ConcurrentHashMap<MessagesKey<*>, Any>()
 
     internal val brazil: BrazilMessages = BrazilMessages()
     internal val bulgaria: BulgariaMessages = BulgariaMessages()
@@ -220,4 +272,9 @@ public class Messages internal constructor() {
     public fun unitedStates(
         block: UnitedStatesMessages.() -> Unit
     ): Unit = unitedStates.block()
+
+    @Suppress("UNCHECKED_CAST")
+    public fun <T : Any> module(
+        key: MessagesKey<T>
+    ): T = modules.computeIfAbsent(key) { key.create() } as T
 }

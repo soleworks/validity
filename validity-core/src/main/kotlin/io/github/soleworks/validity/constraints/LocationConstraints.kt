@@ -19,6 +19,7 @@ private val LATITUDES = -MAX_LATITUDE..MAX_LATITUDE
 private val LONGITUDES = -MAX_LONGITUDE..MAX_LONGITUDE
 private val DECIMAL_LATITUDES = BigDecimal.valueOf(-MAX_LATITUDE)..BigDecimal.valueOf(MAX_LATITUDE)
 private val DECIMAL_LONGITUDES = BigDecimal.valueOf(-MAX_LONGITUDE)..BigDecimal.valueOf(MAX_LONGITUDE)
+private val COORDINATES_FORMAT = Regex("""([+-]?\d+(?:\.\d+)?)\s*,\s*([+-]?\d+(?:\.\d+)?)""")
 private val THREE_DIGITS_FORMAT = Regex("""\d{3}""")
 private val FOUR_DIGITS_FORMAT = Regex("""\d{4}""")
 private val FIVE_DIGITS_FORMAT = Regex("""\d{5}""")
@@ -213,6 +214,14 @@ public fun ValidationNode<String>.longitude(
     predicate = { NUMERIC_FORMAT.matches(it) && it.toBigDecimal() in DECIMAL_LONGITUDES }
 )
 
+public fun ValidationNode<String>.coordinates(
+    message: String = messages.coordinates
+): Unit = constraint(
+    message = message,
+    code = "coordinates",
+    predicate = { it.isCoordinates() }
+)
+
 public fun ValidationNode<String>.postalCode(
     country: String?,
     message: String = messages.postalCode
@@ -235,4 +244,10 @@ public fun ValidationNode<String>.postalCode(
         code = "postalCode",
         predicate = { format.matches(it) }
     )
+}
+
+private fun String.isCoordinates(): Boolean {
+    val (latitude, longitude) = COORDINATES_FORMAT.groups(this) ?: return false
+
+    return latitude.toBigDecimal() in DECIMAL_LATITUDES && longitude.toBigDecimal() in DECIMAL_LONGITUDES
 }

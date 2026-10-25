@@ -8,6 +8,8 @@ import io.github.soleworks.validity.constraints.pastOrPresent
 import io.github.soleworks.validity.samples.Address
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Recipient
+import io.github.soleworks.validity.samples.Report
+import io.github.soleworks.validity.samples.Subscription
 import io.kotest.matchers.shouldBe
 import java.time.Clock
 import java.time.Instant
@@ -16,6 +18,7 @@ import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.Year
 import java.time.YearMonth
+import java.time.ZoneId
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.util.Date
@@ -359,6 +362,110 @@ class ValidityTest {
                     code = "minLength"
                 ),
                 Violation(path = "address.street", message = "address.street é obrigatório", code = "required")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When invoke is called")
+    inner class Invoke {
+        @Test
+        fun `given no changes should report the configured messages`() {
+            Validity.configure { messages { minLength = "deve ter pelo menos {min} caracteres" } }
+            val validity = Validity { }
+            val customer = Customer(name = "A")
+
+            val result = customer.validate(validity)
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength")
+            )
+        }
+
+        @Test
+        fun `given a clock should report with the configured messages`() {
+            Validity.configure { messages { future = "deve estar no futuro" } }
+            val validity = Validity { clock = Clock.fixed(Instant.parse("2020-06-15T12:00:00Z"), UTC) }
+            val subscription = Subscription(startsOn = LocalDate.of(2010, 1, 1))
+
+            val result = subscription.validate(validity)
+
+            result.violations shouldBe listOf(
+                Violation(path = "startsOn", message = "deve estar no futuro", code = "future")
+            )
+        }
+
+        @Test
+        fun `given messages should report the configured ones in validations without it`() {
+            Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
+            val customer = Customer(name = "A")
+
+            val result = customer.validate()
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "must have at least 2 characters", code = "minLength")
+            )
+        }
+
+        @Test
+        fun `given a later configuration should report the messages it copied`() {
+            Validity.configure { messages { minLength = "deve ter pelo menos {min} caracteres" } }
+            val validity = Validity { }
+            Validity.configure { }
+            val customer = Customer(name = "A")
+
+            val result = customer.validate(validity)
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When now is called")
+    inner class Now {
+        @Test
+        fun `given no Validity should accept a date of this year on the system clock`() {
+            val report = Report(issuedOn = LocalDate.now())
+
+            val result = report.validate()
+
+            result.isValid shouldBe true
+        }
+
+        @Test
+        fun `given a Validity with a clock in 2026 should accept a date of 2026`() {
+            val validity = Validity { clock = Clock.fixed(Instant.parse("2026-10-24T12:00:00Z"), UTC) }
+            val report = Report(issuedOn = LocalDate.of(2026, 3, 1))
+
+            val result = report.validate(validity)
+
+            result.isValid shouldBe true
+        }
+
+        @Test
+        fun `given a Validity with a clock in 2030 should report a date of 2026`() {
+            val validity = Validity { clock = Clock.fixed(Instant.parse("2030-01-01T12:00:00Z"), UTC) }
+            val report = Report(issuedOn = LocalDate.of(2026, 3, 1))
+
+            val result = report.validate(validity)
+
+            result.violations shouldBe listOf(
+                Violation(path = "issuedOn", message = "must be issued this year", code = "")
+            )
+        }
+
+        @Test
+        fun `given a Validity with a clock in another zone should report a time in UTC`() {
+            val zone = ZoneId.of("America/Sao_Paulo")
+            val validity = Validity { clock = Clock.fixed(Instant.parse("2026-10-24T12:00:00Z"), zone) }
+            val report = Report(sentAt = ZonedDateTime.of(2026, 10, 24, 12, 0, 0, 0, UTC))
+
+            val result = report.validate(validity)
+
+            result.violations shouldBe listOf(
+                Violation(path = "sentAt", message = "must be sent in the zone of the clock", code = "")
             )
         }
     }

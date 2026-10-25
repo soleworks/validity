@@ -221,6 +221,30 @@ class MapConstraintsTest {
     }
 
     @Nested
+    @DisplayName("When empty is called")
+    inner class Empty {
+        @Test
+        fun `given no overrides should accept them`() {
+            val node = ValidationNode(path = "overrides", value = emptyMap<String, Int>()).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given one override should report it`() {
+            val node = ValidationNode(path = "overrides", value = mapOf("USD" to 1000)).apply { empty() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "overrides", message = "must be empty", code = "empty")
+            )
+        }
+    }
+
+    @Nested
     @DisplayName("When containsKey is called")
     inner class ContainsKey {
         @Test
@@ -327,6 +351,159 @@ class MapConstraintsTest {
 
             violations shouldBe listOf(
                 Violation(path = "prices", message = "needs prices in [BRL, USD]", code = "containsKeys")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When notContainsKey is called")
+    inner class NotContainsKey {
+        @Test
+        fun `given headers without the authorization key should accept them`() {
+            val node = ValidationNode(path = "headers", value = mapOf("Accept" to "json")).apply {
+                notContainsKey("Authorization")
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given headers with the authorization key should report them`() {
+            val node = ValidationNode(path = "headers", value = mapOf("Authorization" to "token")).apply {
+                notContainsKey("Authorization")
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "headers", message = "must not contain the key Authorization", code = "notContainsKey")
+            )
+        }
+
+        @Test
+        fun `given no forbidden key should skip the check`() {
+            val forbidden: String? = null
+            val node = ValidationNode(path = "headers", value = mapOf("Authorization" to "token")).apply {
+                notContainsKey(forbidden)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the key`() {
+            val node = ValidationNode(path = "headers", value = mapOf("Authorization" to "token")).apply {
+                notContainsKey("Authorization") { key -> "has $key among $size headers" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "headers", message = "has Authorization among 1 headers", code = "notContainsKey")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When onlyKeys is called")
+    inner class OnlyKeys {
+        @Test
+        fun `given settings with allowed keys only should accept them`() {
+            val node = ValidationNode(path = "settings", value = mapOf("theme" to "dark")).apply {
+                onlyKeys(listOf("theme", "language"))
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given settings with an unknown key should report them`() {
+            val node = ValidationNode(path = "settings", value = mapOf("theme" to "dark", "debug" to "on")).apply {
+                onlyKeys(listOf("theme", "language"))
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "settings", message = "must contain only the keys theme, language", code = "onlyKeys")
+            )
+        }
+
+        @Test
+        fun `given no allowed keys should skip the check`() {
+            val allowed: List<String>? = null
+            val node = ValidationNode(path = "settings", value = mapOf("debug" to "on")).apply { onlyKeys(allowed) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the keys`() {
+            val node = ValidationNode(path = "settings", value = mapOf("debug" to "on")).apply {
+                onlyKeys(listOf("theme")) { keys -> "has keys outside $keys" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "settings", message = "has keys outside [theme]", code = "onlyKeys")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When containsValue is called")
+    inner class ContainsValue {
+        @Test
+        fun `given prices with a free item should accept them`() {
+            val node = ValidationNode(path = "prices", value = mapOf("gift" to 0, "shirt" to 50)).apply {
+                containsValue(0)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given prices without a free item should report them`() {
+            val node = ValidationNode(path = "prices", value = mapOf("shirt" to 50)).apply { containsValue(0) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "must contain the value 0", code = "containsValue")
+            )
+        }
+
+        @Test
+        fun `given no expected value should skip the check`() {
+            val expected: Int? = null
+            val node = ValidationNode(path = "prices", value = mapOf("shirt" to 50)).apply { containsValue(expected) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function should build it from the value and the expected value`() {
+            val node = ValidationNode(path = "prices", value = mapOf("shirt" to 50)).apply {
+                containsValue(0) { other -> "has no $other among $size prices" }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "prices", message = "has no 0 among 1 prices", code = "containsValue")
             )
         }
     }

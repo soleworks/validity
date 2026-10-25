@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.phone
 
 import io.github.soleworks.validity.Messages
+import io.github.soleworks.validity.MessagesKey
 import io.github.soleworks.validity.ValidityDsl
 
 @ValidityDsl
@@ -11,11 +12,11 @@ public class PhoneMessages internal constructor() {
     public var areaCode: String = "must be a valid area code"
 }
 
-@Volatile
-internal var phoneMessages: PhoneMessages = PhoneMessages()
+private val PHONE_MESSAGES = MessagesKey(::PhoneMessages)
+
+internal val phoneMessages: PhoneMessages
+    get() = PHONE_MESSAGES.current
 
 public fun Messages.phone(
     block: PhoneMessages.() -> Unit
-) {
-    phoneMessages = PhoneMessages().apply(block)
-}
+): Unit = module(PHONE_MESSAGES).block()
