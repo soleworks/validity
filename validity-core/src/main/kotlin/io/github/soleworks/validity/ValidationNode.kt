@@ -5,7 +5,7 @@ public class ValidationNode<V>(
     internal val path: String,
     internal val value: V
 ) {
-    private val rules = mutableListOf<Rule<V>>()
+    private val rules = mutableListOf<ValidationNodeRule<V>>()
 
     internal var operator: String? = null
 
@@ -66,19 +66,19 @@ public class ValidationNode<V>(
             rules.metadata = metadata
         }
 
-        this.rules += Rule.Chain(rules.apply(block))
+        this.rules += ValidationNodeRule.Chain(rules.apply(block))
     }
 
     internal fun add(
         constraint: Constraint<V>
     ) {
-        rules += Rule.Check(constraint)
+        rules += ValidationNodeRule.Check(constraint)
     }
 
     internal fun add(
         nodes: List<ValidationNode<*>>
     ) {
-        rules += Rule.Group(nodes)
+        rules += ValidationNodeRule.Group(nodes)
     }
 
     internal fun validate(): List<Violation> = branches().flatten()
@@ -90,8 +90,8 @@ public class ValidationNode<V>(
         .orEmpty()
 
     internal fun branches(): List<List<Violation>> =
-        rules.filterNot { rule -> rule is Rule.Group }.map { rule -> rule.validate(path, value) } +
-            rules.filterIsInstance<Rule.Group<V>>().map { rule -> rule.validate(path, value) }
+        rules.filterNot { rule -> rule is ValidationNodeRule.Group }.map { rule -> rule.validate(path, value) } +
+            rules.filterIsInstance<ValidationNodeRule.Group<V>>().map { rule -> rule.validate(path, value) }
 
     internal fun relocated(
         path: String,
@@ -102,62 +102,4 @@ public class ValidationNode<V>(
         ValidationNode(path, value).also { relocated ->
             relocated.rules += rules.map { rule -> rule.relocated(from = this.path, to = path, metadata = metadata) }
         }
-
-    private sealed interface Rule<V> {
-        fun validate(
-            path: String,
-            value: V
-        ): List<Violation>
-
-        fun relocated(
-            from: String,
-            to: String,
-            metadata: Map<String, Any?>
-        ): Rule<V>
-
-        class Check<V>(
-            private val constraint: Constraint<V>
-        ) : Rule<V> {
-            override fun validate(
-                path: String,
-                value: V
-            ): List<Violation> = constraint.validate(path, value)
-
-            override fun relocated(
-                from: String,
-                to: String,
-                metadata: Map<String, Any?>
-            ): Rule<V> = Check(constraint.inheriting(metadata))
-        }
-
-        class Chain<V>(
-            private val node: ValidationNode<V>
-        ) : Rule<V> {
-            override fun validate(
-                path: String,
-                value: V
-            ): List<Violation> = node.firstFailure()
-
-            override fun relocated(
-                from: String,
-                to: String,
-                metadata: Map<String, Any?>
-            ): Rule<V> = Chain(node.relocated(to + node.path.removePrefix(from), metadata))
-        }
-
-        class Group<V>(
-            private val nodes: List<ValidationNode<*>>
-        ) : Rule<V> {
-            override fun validate(
-                path: String,
-                value: V
-            ): List<Violation> = nodes.flatMap { node -> node.validate() }
-
-            override fun relocated(
-                from: String,
-                to: String,
-                metadata: Map<String, Any?>
-            ): Rule<V> = Group(nodes.map { node -> node.relocated(to + node.path.removePrefix(from), metadata) })
-        }
-    }
 }
