@@ -36,6 +36,18 @@ class ValidationTest {
                 Violation(path = "phone", message = "must have at least 8 characters", code = "minLength")
             )
         }
+
+        @Test
+        fun `given a Validity with messages should report the rules declared before with them`() {
+            val validity = Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
+            val rules = Contact(phone = "123").validation()
+
+            val result = rules.validate(validity)
+
+            result.violations shouldBe listOf(
+                Violation(path = "phone", message = "deve ter pelo menos 8 caracteres", code = "minLength")
+            )
+        }
     }
 
     @Nested
