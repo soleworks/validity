@@ -78,14 +78,15 @@ Priority is how common the rule is across the 12 libraries and how much it fits 
 - **P3**: niche (1 library, locale-specific, or easy to compose from what exists).
 
 Note on names: the harness rule *every function named is or has should return Boolean* rules out `isTrue`, `hasDigits`
-and similar peer names for constraints.
+and similar peer names for constraints. The maintainer has decided that the Boolean rules are `isTrue`/`isFalse`, so
+that rule must stop applying to constraints (see Q1).
 
 ### 3.1 Boolean and any value
 
 | # | Constraint | Types | Libraries (n) | Proposed signature | Default message (`Messages.kt`) | Pri. |
 |---|---|---|---|---|---|---|
-| 1 | Must be `true` | `Boolean` | HV `@AssertTrue`, Ak `isTrue`, Vk `isTrue`, Lv `accepted` (4) | `fun ValidationNode<Boolean>.accepted(message: String = messages.accepted)` | `accepted = "must be accepted"` | P1 |
-| 2 | Must be `false` | `Boolean` | HV `@AssertFalse`, Ak `isFalse`, Vk `isFalse`, Lv `declined` (4) | `fun ValidationNode<Boolean>.declined(message: String = messages.declined)` | `declined = "must be declined"` | P1 |
+| 1 | Must be `true` | `Boolean` | HV `@AssertTrue`, Ak `isTrue`, Vk `isTrue`, Lv `accepted` (4) | `fun ValidationNode<Boolean>.isTrue(message: String = messages.isTrue)` (decided) | `isTrue = "must be true"` | P1 |
+| 2 | Must be `false` | `Boolean` | HV `@AssertFalse`, Ak `isFalse`, Vk `isFalse`, Lv `declined` (4) | `fun ValidationNode<Boolean>.isFalse(message: String = messages.isFalse)` (decided) | `isFalse = "must be false"` | P1 |
 | 3 | Instance of a type | any `V` | Ak `isInstanceOf`, CV `@IsInstance`, Zod `z.instanceof`, Joi `object.instance` (4) | `fun <V> ValidationNode<V>.instanceOf(type: KClass<*>, message: String = messages.instanceOf)` **+λ** | `instanceOf = "must be an instance of {type}"` | P3 (types make it rare; useful with sealed hierarchies) |
 
 ### 3.2 String
@@ -219,7 +220,7 @@ Detekt and Konsist green. The order puts the P1 rules and the fewest design ques
 | 1 | Collections and maps | `CollectionConstraints.kt`, `MapConstraints.kt`, `Messages.kt` | #49 `notContains`, #50 `containsNone`, #51 `empty` (collection, array, map), #52 `containsValue`, #53 `notContainsKey`, #54 `onlyKeys` | Q2 (`empty` key shared with strings) |
 | 2 | Whole numbers and digits | `NumberConstraints.kt`, `Messages.kt` | #40 `integer` on `Double`/`Float`/`BigDecimal`, #42–#44 `minDigits`/`maxDigits`/`digitCount`/`decimalPlaces`/`minDecimalPlaces` | Q6 (names) |
 | 3 | Floating-point arithmetic | `NumberConstraints.kt` | #41 `multipleOf` and #45 `maxDecimalPlaces` on `Double`/`Float` | Q5 (tolerance policy); after phase 2 (same file) |
-| 4 | Boolean | new `BooleanConstraints.kt`, `Messages.kt` | #1 `accepted`, #2 `declined` | Q1 (names) |
+| 4 | Boolean | new `BooleanConstraints.kt`, `Messages.kt`, `harness/.../ProductionConventionsTest.kt` | #1 `isTrue`, #2 `isFalse`, and the harness change from Q1 | none (Q1 decided) |
 | 5 | Strings, no API change | `StringConstraints.kt`, `Messages.kt` | #4 `empty`, #5 `blank`, #7 `trimmed`, #8 `containsOnly`, #9 `minBytes`/`maxBytes`, #12 `boolean` | Q2; after phase 1 if `empty` shares its key |
 | 6 | Case-insensitive strings | `StringConstraints.kt`, `AnyConstraints.kt` (for overload resolution only) | #6 `ignoreCase` on `contains`…`notEndsWith`, `enum`, plus `String` `equalTo`/`oneOf` | Q3 (changes existing signatures); after phase 5 (same file) |
 | 7 | Internet and location formats | `InternetConstraints.kt`, `LocationConstraints.kt`, `Messages.kt` | #18 `domain`, #19 `port` (`String`; the `Int` overload goes in `NumberConstraints.kt`, see Q11), #20 `coordinates`, #21 `isoCountryCodeNumeric` | none |
@@ -233,10 +234,11 @@ earlier phase, so they follow it.
 
 ## 6. Design questions for the maintainer
 
-1. **Boolean names.** The harness forbids `isTrue`/`isFalse` for constraints. Options: `accepted`/`declined` (Laravel;
-   suits consent checkboxes, odd for other flags), `` `true`() ``/`` `false`() `` (needs backticks), or
-   `mustBeTrue`/`mustBeFalse` (breaks the noun/adjective style of the other names). The proposal uses
-   `accepted`/`declined`. The message could read "must be true" whichever name wins.
+1. **Boolean names: decided.** The rules are `isTrue`/`isFalse`, because they must fit any Boolean, not just consent
+   (`accepted`/`declined` was dropped). The harness rule *every function named is or has should return Boolean* then has
+   to leave constraints out. Proposed change: skip the functions in the test class's existing `constraints` set (public
+   functions in a `*Constraints.kt` file), so `is`/`has` still has to mean `Boolean` for every private helper
+   (`isCpf`, `hasCheckDigits`, ...).
 2. **One `empty` key for strings, collections and maps?** Messages today split by value type (`minLength` vs `minSize`
    vs `minEntries`), but `notEmpty` is a single key shared by all of them. The proposal follows `notEmpty` and uses one
    `empty`.
