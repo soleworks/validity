@@ -3,7 +3,11 @@ package io.github.soleworks.validity
 import kotlin.reflect.KProperty0
 
 @ValidityDsl
-public class Validation internal constructor() {
+public class Validation internal constructor(
+    private val block: Validation.() -> Unit
+) {
+    private val validity: Validity = Validity.current
+
     internal val nodes = mutableListOf<ValidationNode<*>>()
 
     internal var metadata: Map<String, Any?> = emptyMap()
@@ -55,9 +59,15 @@ public class Validation internal constructor() {
         }
     }
 
-    public fun validate(): ValidationResult = ValidationResult(
-        violations = nodes.flatMap { it.validate() }
-    )
+    public fun validate(
+        validity: Validity = Validity.default
+    ): ValidationResult = validity.use {
+        val rules = if (validity === this.validity) this else validation(block)
+
+        ValidationResult(
+            violations = rules.nodes.flatMap { it.validate() }
+        )
+    }
 
     private fun constraint(
         path: String,
@@ -80,4 +90,4 @@ public class Validation internal constructor() {
 
 public fun validation(
     block: Validation.() -> Unit
-): Validation = Validation().apply(block)
+): Validation = Validation(block).apply(block)
