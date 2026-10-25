@@ -3734,6 +3734,15 @@ class NumberConstraintsTest {
             violations shouldBe emptyList()
         }
 
+        @Test
+        fun `given a Byte code with at least three digits should accept it`() {
+            val node = ValidationNode(path = "code", value = 100.toByte()).apply { minDigits(3) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
         @ParameterizedTest
         @ValueSource(ints = [12, -999])
         fun `given an Int code without at least four digits should report it`(
@@ -3776,6 +3785,17 @@ class NumberConstraintsTest {
         @Test
         fun `given a BigInteger code without at least four digits should report it`() {
             val node = ValidationNode(path = "code", value = BigInteger("-999")).apply { minDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at least 4 digits", code = "minDigits")
+            )
+        }
+
+        @Test
+        fun `given a Short code without at least four digits should report it`() {
+            val node = ValidationNode(path = "code", value = 12.toShort()).apply { minDigits(4) }
 
             val violations = node.validate()
 
@@ -3852,6 +3872,15 @@ class NumberConstraintsTest {
             violations shouldBe emptyList()
         }
 
+        @Test
+        fun `given a Byte code with at most three digits should accept it`() {
+            val node = ValidationNode(path = "code", value = 100.toByte()).apply { maxDigits(3) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
         @ParameterizedTest
         @ValueSource(ints = [12_345, -10_000])
         fun `given an Int code without at most four digits should report it`(
@@ -3888,6 +3917,28 @@ class NumberConstraintsTest {
 
             violations shouldBe listOf(
                 Violation(path = "code", message = "must have at most 4 digits", code = "maxDigits")
+            )
+        }
+
+        @Test
+        fun `given a Short code without at most four digits should report it`() {
+            val node = ValidationNode(path = "code", value = 12_345.toShort()).apply { maxDigits(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at most 4 digits", code = "maxDigits")
+            )
+        }
+
+        @Test
+        fun `given a Byte code without at most two digits should report it`() {
+            val node = ValidationNode(path = "code", value = 100.toByte()).apply { maxDigits(2) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have at most 2 digits", code = "maxDigits")
             )
         }
 
@@ -3950,6 +4001,15 @@ class NumberConstraintsTest {
             violations shouldBe emptyList()
         }
 
+        @Test
+        fun `given a Byte code with exactly three digits should accept it`() {
+            val node = ValidationNode(path = "code", value = 100.toByte()).apply { digitCount(3) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
         @ParameterizedTest
         @ValueSource(ints = [123, 12_345])
         fun `given an Int code without exactly four digits should report it`(
@@ -3992,6 +4052,17 @@ class NumberConstraintsTest {
         @Test
         fun `given a BigInteger code without exactly four digits should report it`() {
             val node = ValidationNode(path = "code", value = BigInteger("12345")).apply { digitCount(4) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "code", message = "must have exactly 4 digits", code = "digitCount")
+            )
+        }
+
+        @Test
+        fun `given a Short code without exactly four digits should report it`() {
+            val node = ValidationNode(path = "code", value = 123.toShort()).apply { digitCount(4) }
 
             val violations = node.validate()
 

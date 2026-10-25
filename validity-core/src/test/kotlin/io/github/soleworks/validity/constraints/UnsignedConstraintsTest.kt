@@ -102,6 +102,36 @@ class UnsignedConstraintsTest {
         }
 
         @Test
+        fun `given no bound for a ULong should skip the check`() {
+            val bound: ULong? = null
+            val node = ValidationNode(path = "quantity", value = 9uL).apply { min(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a UShort should skip the check`() {
+            val bound: UShort? = null
+            val node = ValidationNode(path = "quantity", value = 9u.toUShort()).apply { min(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a UByte should skip the check`() {
+            val bound: UByte? = null
+            val node = ValidationNode(path = "quantity", value = 9u.toUByte()).apply { min(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
         fun `given a message function should build it from the value and the bound`() {
             val node = ValidationNode(path = "quantity", value = 9u).apply {
                 min(10u) { min -> "$this misses $min" }
@@ -202,6 +232,36 @@ class UnsignedConstraintsTest {
         fun `given no bound should skip the check`() {
             val bound: UInt? = null
             val node = ValidationNode(path = "quantity", value = 11u).apply { max(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a ULong should skip the check`() {
+            val bound: ULong? = null
+            val node = ValidationNode(path = "quantity", value = 9uL).apply { max(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a UShort should skip the check`() {
+            val bound: UShort? = null
+            val node = ValidationNode(path = "quantity", value = 9u.toUShort()).apply { max(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a UByte should skip the check`() {
+            val bound: UByte? = null
+            val node = ValidationNode(path = "quantity", value = 9u.toUByte()).apply { max(bound) }
 
             val violations = node.validate()
 
@@ -316,6 +376,36 @@ class UnsignedConstraintsTest {
         }
 
         @Test
+        fun `given no bound for a ULong should skip the check`() {
+            val bound: ULong? = null
+            val node = ValidationNode(path = "quantity", value = 9uL).apply { greaterThan(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a UShort should skip the check`() {
+            val bound: UShort? = null
+            val node = ValidationNode(path = "quantity", value = 9u.toUShort()).apply { greaterThan(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a UByte should skip the check`() {
+            val bound: UByte? = null
+            val node = ValidationNode(path = "quantity", value = 9u.toUByte()).apply { greaterThan(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
         fun `given a message function should build it from the value and the bound`() {
             val node = ValidationNode(path = "quantity", value = 10u).apply {
                 greaterThan(10u) { other -> "$this misses $other" }
@@ -416,6 +506,36 @@ class UnsignedConstraintsTest {
         fun `given no bound should skip the check`() {
             val bound: UInt? = null
             val node = ValidationNode(path = "quantity", value = 10u).apply { lessThan(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a ULong should skip the check`() {
+            val bound: ULong? = null
+            val node = ValidationNode(path = "quantity", value = 9uL).apply { lessThan(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a UShort should skip the check`() {
+            val bound: UShort? = null
+            val node = ValidationNode(path = "quantity", value = 9u.toUShort()).apply { lessThan(bound) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no bound for a UByte should skip the check`() {
+            val bound: UByte? = null
+            val node = ValidationNode(path = "quantity", value = 9u.toUByte()).apply { lessThan(bound) }
 
             val violations = node.validate()
 
@@ -539,6 +659,77 @@ class UnsignedConstraintsTest {
         fun `given no upper bound should skip the check`() {
             val max: UInt? = null
             val node = ValidationNode(path = "quantity", value = 11u).apply { between(min = 1u, max = max) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no lower bound for a UInt should skip the check`() {
+            val node = ValidationNode(path = "quantity", value = 11u).apply { between(min = null, max = 10u) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no lower bound for a ULong should skip the check`() {
+            val node = ValidationNode(path = "quantity", value = 11uL).apply { between(min = null, max = 10uL) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no upper bound for a ULong should skip the check`() {
+            val node = ValidationNode(path = "quantity", value = 11uL).apply { between(min = 1uL, max = null) }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no lower bound for a UShort should skip the check`() {
+            val node = ValidationNode(path = "quantity", value = 11u.toUShort()).apply {
+                between(min = null, max = 10u.toUShort())
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no upper bound for a UShort should skip the check`() {
+            val node = ValidationNode(path = "quantity", value = 11u.toUShort()).apply {
+                between(min = 1u.toUShort(), max = null)
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no lower bound for a UByte should skip the check`() {
+            val node = ValidationNode(path = "quantity", value = 11u.toUByte()).apply {
+                between(min = null, max = 10u.toUByte())
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given no upper bound for a UByte should skip the check`() {
+            val node = ValidationNode(path = "quantity", value = 11u.toUByte()).apply {
+                between(min = 1u.toUByte(), max = null)
+            }
 
             val violations = node.validate()
 

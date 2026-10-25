@@ -404,6 +404,17 @@ class CollectionConstraintsTest {
         }
 
         @Test
+        fun `given a file with fewer bytes than the range should report it`() {
+            val node = ValidationNode(path = "file", value = ByteArray(0)).apply { sizeBetween(min = 1, max = 3) }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "file", message = "must have between 1 and 3 items", code = "sizeBetween")
+            )
+        }
+
+        @Test
         fun `given a message function for a list should build it from the value and the parameters`() {
             val node = ValidationNode(path = "phones", value = emptyList<String>()).apply {
                 sizeBetween(min = 1, max = 3) { min, max -> "has $size phones, needs from $min to $max" }
