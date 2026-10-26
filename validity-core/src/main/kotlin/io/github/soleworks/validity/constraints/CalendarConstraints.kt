@@ -27,16 +27,12 @@ public fun ValidationNode<LocalDate>.minAge(
 public fun ValidationNode<LocalDate>.minAge(
     min: Int?,
     message: suspend LocalDate.(Int) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "minAge",
-        predicate = { it.age() >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "minAge",
+    predicate = { value, argument -> value.age() >= argument }
+)
 
 public fun ValidationNode<LocalDate>.maxAge(
     max: Int?,
@@ -49,16 +45,12 @@ public fun ValidationNode<LocalDate>.maxAge(
 public fun ValidationNode<LocalDate>.maxAge(
     max: Int?,
     message: suspend LocalDate.(Int) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "maxAge",
-        predicate = { it.age() <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "maxAge",
+    predicate = { value, argument -> value.age() <= argument }
+)
 
 public fun ValidationNode<LocalDate>.withinNext(
     duration: Duration?,
@@ -377,15 +369,11 @@ private fun <V> ValidationNode<V>.within(
     message: suspend V.(Duration) -> String,
     window: suspend (value: V, now: V, length: Duration) -> Boolean,
     now: suspend () -> V
-) {
-    if (duration == null)
-        return
-
-    constraint(
-        message = { it.message(duration) },
-        code = code,
-        predicate = { value -> window(value, now(), duration) }
-    )
-}
+) = constraint(
+    argument = duration,
+    message = message,
+    code = code,
+    predicate = { value, argument -> window(value, now(), argument) }
+)
 
 private fun LocalDate.age(): Int = Period.between(this, LocalDate.now(clock)).years

@@ -17,16 +17,12 @@ public fun ValidationNode<Int>.min(
 public fun ValidationNode<Int>.min(
     min: Int?,
     message: suspend Int.(Int) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 public fun ValidationNode<Long>.min(
     min: Long?,
@@ -39,16 +35,12 @@ public fun ValidationNode<Long>.min(
 public fun ValidationNode<Long>.min(
     min: Long?,
     message: suspend Long.(Long) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 public fun ValidationNode<Short>.min(
     min: Short?,
@@ -61,16 +53,12 @@ public fun ValidationNode<Short>.min(
 public fun ValidationNode<Short>.min(
     min: Short?,
     message: suspend Short.(Short) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 public fun ValidationNode<Byte>.min(
     min: Byte?,
@@ -83,16 +71,12 @@ public fun ValidationNode<Byte>.min(
 public fun ValidationNode<Byte>.min(
     min: Byte?,
     message: suspend Byte.(Byte) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 public fun ValidationNode<Double>.min(
     min: Double?,
@@ -105,16 +89,12 @@ public fun ValidationNode<Double>.min(
 public fun ValidationNode<Double>.min(
     min: Double?,
     message: suspend Double.(Double) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 public fun ValidationNode<Float>.min(
     min: Float?,
@@ -127,16 +107,12 @@ public fun ValidationNode<Float>.min(
 public fun ValidationNode<Float>.min(
     min: Float?,
     message: suspend Float.(Float) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 public fun ValidationNode<BigInteger>.min(
     min: BigInteger?,
@@ -149,16 +125,12 @@ public fun ValidationNode<BigInteger>.min(
 public fun ValidationNode<BigInteger>.min(
     min: BigInteger?,
     message: suspend BigInteger.(BigInteger) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 public fun ValidationNode<BigDecimal>.min(
     min: BigDecimal?,
@@ -171,16 +143,12 @@ public fun ValidationNode<BigDecimal>.min(
 public fun ValidationNode<BigDecimal>.min(
     min: BigDecimal?,
     message: suspend BigDecimal.(BigDecimal) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 public fun ValidationNode<Int>.max(
     max: Int?,
@@ -193,16 +161,12 @@ public fun ValidationNode<Int>.max(
 public fun ValidationNode<Int>.max(
     max: Int?,
     message: suspend Int.(Int) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 public fun ValidationNode<Long>.max(
     max: Long?,
@@ -215,16 +179,12 @@ public fun ValidationNode<Long>.max(
 public fun ValidationNode<Long>.max(
     max: Long?,
     message: suspend Long.(Long) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 public fun ValidationNode<Short>.max(
     max: Short?,
@@ -237,16 +197,12 @@ public fun ValidationNode<Short>.max(
 public fun ValidationNode<Short>.max(
     max: Short?,
     message: suspend Short.(Short) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 public fun ValidationNode<Byte>.max(
     max: Byte?,
@@ -259,16 +215,12 @@ public fun ValidationNode<Byte>.max(
 public fun ValidationNode<Byte>.max(
     max: Byte?,
     message: suspend Byte.(Byte) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 public fun ValidationNode<Double>.max(
     max: Double?,
@@ -281,16 +233,12 @@ public fun ValidationNode<Double>.max(
 public fun ValidationNode<Double>.max(
     max: Double?,
     message: suspend Double.(Double) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 public fun ValidationNode<Float>.max(
     max: Float?,
@@ -303,16 +251,12 @@ public fun ValidationNode<Float>.max(
 public fun ValidationNode<Float>.max(
     max: Float?,
     message: suspend Float.(Float) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 public fun ValidationNode<BigInteger>.max(
     max: BigInteger?,
@@ -325,16 +269,12 @@ public fun ValidationNode<BigInteger>.max(
 public fun ValidationNode<BigInteger>.max(
     max: BigInteger?,
     message: suspend BigInteger.(BigInteger) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 public fun ValidationNode<BigDecimal>.max(
     max: BigDecimal?,
@@ -347,16 +287,12 @@ public fun ValidationNode<BigDecimal>.max(
 public fun ValidationNode<BigDecimal>.max(
     max: BigDecimal?,
     message: suspend BigDecimal.(BigDecimal) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 public fun ValidationNode<Int>.greaterThan(
     other: Int?,
@@ -369,16 +305,12 @@ public fun ValidationNode<Int>.greaterThan(
 public fun ValidationNode<Int>.greaterThan(
     other: Int?,
     message: suspend Int.(Int) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 public fun ValidationNode<Long>.greaterThan(
     other: Long?,
@@ -391,16 +323,12 @@ public fun ValidationNode<Long>.greaterThan(
 public fun ValidationNode<Long>.greaterThan(
     other: Long?,
     message: suspend Long.(Long) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 public fun ValidationNode<Short>.greaterThan(
     other: Short?,
@@ -413,16 +341,12 @@ public fun ValidationNode<Short>.greaterThan(
 public fun ValidationNode<Short>.greaterThan(
     other: Short?,
     message: suspend Short.(Short) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 public fun ValidationNode<Byte>.greaterThan(
     other: Byte?,
@@ -435,16 +359,12 @@ public fun ValidationNode<Byte>.greaterThan(
 public fun ValidationNode<Byte>.greaterThan(
     other: Byte?,
     message: suspend Byte.(Byte) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 public fun ValidationNode<Double>.greaterThan(
     other: Double?,
@@ -457,16 +377,12 @@ public fun ValidationNode<Double>.greaterThan(
 public fun ValidationNode<Double>.greaterThan(
     other: Double?,
     message: suspend Double.(Double) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 public fun ValidationNode<Float>.greaterThan(
     other: Float?,
@@ -479,16 +395,12 @@ public fun ValidationNode<Float>.greaterThan(
 public fun ValidationNode<Float>.greaterThan(
     other: Float?,
     message: suspend Float.(Float) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 public fun ValidationNode<BigInteger>.greaterThan(
     other: BigInteger?,
@@ -501,16 +413,12 @@ public fun ValidationNode<BigInteger>.greaterThan(
 public fun ValidationNode<BigInteger>.greaterThan(
     other: BigInteger?,
     message: suspend BigInteger.(BigInteger) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 public fun ValidationNode<BigDecimal>.greaterThan(
     other: BigDecimal?,
@@ -523,16 +431,12 @@ public fun ValidationNode<BigDecimal>.greaterThan(
 public fun ValidationNode<BigDecimal>.greaterThan(
     other: BigDecimal?,
     message: suspend BigDecimal.(BigDecimal) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 public fun ValidationNode<Int>.lessThan(
     other: Int?,
@@ -545,16 +449,12 @@ public fun ValidationNode<Int>.lessThan(
 public fun ValidationNode<Int>.lessThan(
     other: Int?,
     message: suspend Int.(Int) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 public fun ValidationNode<Long>.lessThan(
     other: Long?,
@@ -567,16 +467,12 @@ public fun ValidationNode<Long>.lessThan(
 public fun ValidationNode<Long>.lessThan(
     other: Long?,
     message: suspend Long.(Long) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 public fun ValidationNode<Short>.lessThan(
     other: Short?,
@@ -589,16 +485,12 @@ public fun ValidationNode<Short>.lessThan(
 public fun ValidationNode<Short>.lessThan(
     other: Short?,
     message: suspend Short.(Short) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 public fun ValidationNode<Byte>.lessThan(
     other: Byte?,
@@ -611,16 +503,12 @@ public fun ValidationNode<Byte>.lessThan(
 public fun ValidationNode<Byte>.lessThan(
     other: Byte?,
     message: suspend Byte.(Byte) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 public fun ValidationNode<Double>.lessThan(
     other: Double?,
@@ -633,16 +521,12 @@ public fun ValidationNode<Double>.lessThan(
 public fun ValidationNode<Double>.lessThan(
     other: Double?,
     message: suspend Double.(Double) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 public fun ValidationNode<Float>.lessThan(
     other: Float?,
@@ -655,16 +539,12 @@ public fun ValidationNode<Float>.lessThan(
 public fun ValidationNode<Float>.lessThan(
     other: Float?,
     message: suspend Float.(Float) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 public fun ValidationNode<BigInteger>.lessThan(
     other: BigInteger?,
@@ -677,16 +557,12 @@ public fun ValidationNode<BigInteger>.lessThan(
 public fun ValidationNode<BigInteger>.lessThan(
     other: BigInteger?,
     message: suspend BigInteger.(BigInteger) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 public fun ValidationNode<BigDecimal>.lessThan(
     other: BigDecimal?,
@@ -699,16 +575,12 @@ public fun ValidationNode<BigDecimal>.lessThan(
 public fun ValidationNode<BigDecimal>.lessThan(
     other: BigDecimal?,
     message: suspend BigDecimal.(BigDecimal) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 public fun ValidationNode<Int>.between(
     min: Int?,
@@ -724,16 +596,13 @@ public fun ValidationNode<Int>.between(
     min: Int?,
     max: Int?,
     message: suspend Int.(Int, Int) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 public fun ValidationNode<Long>.between(
     min: Long?,
@@ -749,16 +618,13 @@ public fun ValidationNode<Long>.between(
     min: Long?,
     max: Long?,
     message: suspend Long.(Long, Long) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 public fun ValidationNode<Short>.between(
     min: Short?,
@@ -774,16 +640,13 @@ public fun ValidationNode<Short>.between(
     min: Short?,
     max: Short?,
     message: suspend Short.(Short, Short) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 public fun ValidationNode<Byte>.between(
     min: Byte?,
@@ -799,16 +662,13 @@ public fun ValidationNode<Byte>.between(
     min: Byte?,
     max: Byte?,
     message: suspend Byte.(Byte, Byte) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 public fun ValidationNode<Double>.between(
     min: Double?,
@@ -824,16 +684,13 @@ public fun ValidationNode<Double>.between(
     min: Double?,
     max: Double?,
     message: suspend Double.(Double, Double) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 public fun ValidationNode<Float>.between(
     min: Float?,
@@ -849,16 +706,13 @@ public fun ValidationNode<Float>.between(
     min: Float?,
     max: Float?,
     message: suspend Float.(Float, Float) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 public fun ValidationNode<BigInteger>.between(
     min: BigInteger?,
@@ -874,16 +728,13 @@ public fun ValidationNode<BigInteger>.between(
     min: BigInteger?,
     max: BigInteger?,
     message: suspend BigInteger.(BigInteger, BigInteger) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 public fun ValidationNode<BigDecimal>.between(
     min: BigDecimal?,
@@ -899,16 +750,13 @@ public fun ValidationNode<BigDecimal>.between(
     min: BigDecimal?,
     max: BigDecimal?,
     message: suspend BigDecimal.(BigDecimal, BigDecimal) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 public fun ValidationNode<Int>.positive(
     message: String = messages.positive
