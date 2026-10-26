@@ -5,6 +5,11 @@ import io.github.soleworks.validity.samples.Cart
 import io.github.soleworks.validity.samples.CartItem
 import io.github.soleworks.validity.samples.Directory
 import io.github.soleworks.validity.samples.Enrollment
+import io.github.soleworks.validity.samples.KnownUsers
+import io.github.soleworks.validity.samples.readme.Checkout
+import io.github.soleworks.validity.samples.readme.Customer
+import io.github.soleworks.validity.samples.readme.Invitation
+import io.github.soleworks.validity.samples.readme.Item
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
@@ -18,12 +23,46 @@ class ContextualValidatableTest {
     @DisplayName("When validate is called")
     inner class Validate {
         @Test
+        fun `given a checkout within the limit and the catalog should be valid`() {
+            val customer = Customer(creditLimit = 100, catalog = setOf("BOOK-1", "PEN-2"))
+            val checkout = Checkout(total = 80, items = listOf(Item(sku = "BOOK-1")))
+
+            val result = runBlocking { checkout.validate(customer) }
+
+            result.isValid shouldBe true
+        }
+
+        @Test
         fun `given a cart within the limit of the buyer should be valid`() {
             val cart = Cart(total = 80)
 
             val result = runBlocking { cart.validate(Buyer(creditLimit = 100)) }
 
             result.isValid shouldBe true
+        }
+
+        @Test
+        fun `given a checkout over the limit with an item outside the catalog should report both`() {
+            val customer = Customer(creditLimit = 100, catalog = setOf("BOOK-1", "PEN-2"))
+            val checkout = Checkout(total = 150, items = listOf(Item(sku = "BOOK-1"), Item(sku = "LAPTOP-9")))
+
+            val result = runBlocking { checkout.validate(customer) }
+
+            result.violations shouldBe listOf(
+                Violation(path = "total", message = "must be at most 100", code = "max"),
+                Violation(path = "items[1].sku", message = "is not in your catalog", code = "catalog")
+            )
+        }
+
+        @Test
+        fun `given an invitation for a registered email should report it`() {
+            val invitation = Invitation(email = "ana@mail.com")
+
+            val result = runBlocking { invitation.validate(KnownUsers("ana@mail.com")) }
+
+            result.violations shouldBe listOf(
+                Violation(path = "email", message = "is already registered", code = "registered")
+            )
         }
 
         @Test
@@ -53,6 +92,15 @@ class ContextualValidatableTest {
     @Nested
     @DisplayName("When validateBlocking is called")
     inner class ValidateBlocking {
+        @Test
+        fun `given an invitation for a new email should be valid`() {
+            val invitation = Invitation(email = "bia@mail.com")
+
+            val result = invitation.validateBlocking(KnownUsers("ana@mail.com"))
+
+            result.isValid shouldBe true
+        }
+
         @Test
         fun `given an email the accounts do not have should be valid`() {
             val enrollment = Enrollment(email = "bia@mail.com")
