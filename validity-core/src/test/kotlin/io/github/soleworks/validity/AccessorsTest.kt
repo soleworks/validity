@@ -10,6 +10,8 @@ import io.github.soleworks.validity.constraints.notEqualTo
 import io.github.soleworks.validity.constraints.positive
 import io.github.soleworks.validity.constraints.validate
 import io.github.soleworks.validity.samples.Address
+import io.github.soleworks.validity.samples.Buyer
+import io.github.soleworks.validity.samples.CartItem
 import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Invoice
@@ -126,6 +128,30 @@ class AccessorsTest {
     @Nested
     @DisplayName("When valid is called")
     inner class Valid {
+        @Test
+        fun `given a context the items accept should accept them`() {
+            val node = ValidationNode(path = "items", value = listOf(CartItem(), CartItem())).apply {
+                each { valid(Buyer(skus = setOf("SKU-1"))) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a context an item rejects should report it under its index`() {
+            val node = ValidationNode(path = "items", value = listOf(CartItem(), CartItem(sku = "SKU-2"))).apply {
+                each { valid(Buyer(skus = setOf("SKU-1"))) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "items[1].sku", message = "is not sold to this buyer", code = "sku")
+            )
+        }
+
         @Test
         fun `given an address without a street should report it under the address`() {
             val customer = Customer(address = Address(street = null))

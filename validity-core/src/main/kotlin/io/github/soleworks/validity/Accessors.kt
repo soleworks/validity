@@ -50,6 +50,12 @@ public fun <V : Validatable> ValidationNode<V>.valid(): Unit = valid(
     validation = { it.validation() }
 )
 
+public fun <C, V : ContextualValidatable<C>> ValidationNode<V>.valid(
+    context: C
+): Unit = valid(
+    validation = { it.validation(context) }
+)
+
 public fun <V> ValidationNode<V>.valid(
     validation: suspend (V) -> Validation
 ) {
