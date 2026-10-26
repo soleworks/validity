@@ -2,6 +2,7 @@ package io.github.soleworks.validity.constraints.bulgaria
 
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Violation
+import io.github.soleworks.validity.constraints.validate
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

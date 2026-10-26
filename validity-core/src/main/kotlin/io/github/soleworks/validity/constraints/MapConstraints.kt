@@ -14,7 +14,7 @@ public fun ValidationNode<out Map<*, *>>.minSize(
 
 public fun ValidationNode<out Map<*, *>>.minSize(
     min: Int,
-    message: Map<*, *>.(Int) -> String
+    message: suspend Map<*, *>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minSize",
@@ -31,7 +31,7 @@ public fun ValidationNode<out Map<*, *>>.maxSize(
 
 public fun ValidationNode<out Map<*, *>>.maxSize(
     max: Int,
-    message: Map<*, *>.(Int) -> String
+    message: suspend Map<*, *>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxSize",
@@ -48,7 +48,7 @@ public fun ValidationNode<out Map<*, *>>.size(
 
 public fun ValidationNode<out Map<*, *>>.size(
     size: Int,
-    message: Map<*, *>.(Int) -> String
+    message: suspend Map<*, *>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(size) },
     code = "size",
@@ -68,7 +68,7 @@ public fun ValidationNode<out Map<*, *>>.sizeBetween(
 public fun ValidationNode<out Map<*, *>>.sizeBetween(
     min: Int,
     max: Int,
-    message: Map<*, *>.(Int, Int) -> String
+    message: suspend Map<*, *>.(Int, Int) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "sizeBetween",
@@ -101,7 +101,7 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKey(
 
 public fun <K> ValidationNode<out Map<K, *>>.containsKey(
     key: K?,
-    message: Map<K, *>.(K) -> String
+    message: suspend Map<K, *>.(K) -> String
 ) {
     if (key == null)
         return
@@ -123,7 +123,7 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
 
 public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
     keys: Iterable<K>?,
-    message: Map<K, *>.(Iterable<K>) -> String
+    message: suspend Map<K, *>.(Iterable<K>) -> String
 ) {
     if (keys == null)
         return
@@ -145,7 +145,7 @@ public fun <K> ValidationNode<out Map<K, *>>.notContainsKey(
 
 public fun <K> ValidationNode<out Map<K, *>>.notContainsKey(
     key: K?,
-    message: Map<K, *>.(K) -> String
+    message: suspend Map<K, *>.(K) -> String
 ) {
     if (key == null)
         return
@@ -167,7 +167,7 @@ public fun <K> ValidationNode<out Map<K, *>>.onlyKeys(
 
 public fun <K> ValidationNode<out Map<K, *>>.onlyKeys(
     keys: Iterable<K>?,
-    message: Map<K, *>.(Iterable<K>) -> String
+    message: suspend Map<K, *>.(Iterable<K>) -> String
 ) {
     if (keys == null)
         return
@@ -189,7 +189,7 @@ public fun <V> ValidationNode<out Map<*, V>>.containsValue(
 
 public fun <V> ValidationNode<out Map<*, V>>.containsValue(
     value: V?,
-    message: Map<*, V>.(V) -> String
+    message: suspend Map<*, V>.(V) -> String
 ) {
     if (value == null)
         return

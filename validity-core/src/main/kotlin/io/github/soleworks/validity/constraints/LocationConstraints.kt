@@ -232,7 +232,7 @@ public fun ValidationNode<String>.postalCode(
 
 public fun ValidationNode<String>.postalCode(
     country: String?,
-    message: String.(String) -> String
+    message: suspend String.(String) -> String
 ) {
     val format = country?.let { POSTAL_CODES[it.uppercase()] }
 

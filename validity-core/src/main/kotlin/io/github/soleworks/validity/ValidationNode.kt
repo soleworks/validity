@@ -2,19 +2,23 @@ package io.github.soleworks.validity
 
 @ValidityDsl
 public class ValidationNode<V>(
+    @PublishedApi
     internal val path: String,
+    @PublishedApi
     internal val value: V
 ) {
     private val rules = mutableListOf<ValidationNodeRule<V>>()
 
+    @PublishedApi
     internal var operator: String? = null
 
+    @PublishedApi
     internal var metadata: Map<String, Any?> = emptyMap()
 
     public fun constraint(
         message: String,
         code: String = "",
-        predicate: (V) -> Boolean
+        predicate: suspend (V) -> Boolean
     ): Unit = constraint(
         message = { message },
         code = code,
@@ -22,9 +26,9 @@ public class ValidationNode<V>(
     )
 
     public fun constraint(
-        message: (V) -> String,
+        message: suspend (V) -> String,
         code: String = "",
-        predicate: (V) -> Boolean
+        predicate: suspend (V) -> Boolean
     ) {
         val metadata = metadata
 
@@ -43,7 +47,7 @@ public class ValidationNode<V>(
         )
     }
 
-    public fun metadata(
+    public inline fun metadata(
         vararg entries: Pair<String, Any?>,
         block: ValidationNode<V>.() -> Unit
     ) {
@@ -58,16 +62,9 @@ public class ValidationNode<V>(
         }
     }
 
-    public fun failFast(
+    public inline fun failFast(
         block: ValidationNode<V>.() -> Unit
-    ) {
-        val rules = ValidationNode(path, value).also { rules ->
-            rules.operator = operator
-            rules.metadata = metadata
-        }
-
-        this.rules += ValidationNodeRule.Chain(rules.apply(block))
-    }
+    ): Unit = chain(child(path, value).apply(block))
 
     internal fun add(
         constraint: Constraint<V>
@@ -75,21 +72,40 @@ public class ValidationNode<V>(
         rules += ValidationNodeRule.Check(constraint)
     }
 
+    @PublishedApi
     internal fun add(
         nodes: List<ValidationNode<*>>
     ) {
-        rules += ValidationNodeRule.Group(nodes)
+        rules += ValidationNodeRule.Group { nodes }
     }
 
-    internal fun validate(): List<Violation> = branches().flatten()
+    internal fun add(
+        group: suspend () -> List<ValidationNode<*>>
+    ) {
+        rules += ValidationNodeRule.Group(group)
+    }
 
-    internal fun firstFailure(): List<Violation> = rules
-        .asSequence()
-        .map { rule -> rule.validate(path, value) }
-        .firstOrNull { violations -> violations.isNotEmpty() }
-        .orEmpty()
+    @PublishedApi
+    internal fun chain(
+        node: ValidationNode<V>
+    ) {
+        rules += ValidationNodeRule.Chain(node)
+    }
 
-    internal fun branches(): List<List<Violation>> =
+    internal suspend fun violations(): List<Violation> = branches().flatten()
+
+    internal suspend fun firstFailure(): List<Violation> {
+        for (rule in rules) {
+            val violations = rule.validate(path, value)
+
+            if (violations.isNotEmpty())
+                return violations
+        }
+
+        return emptyList()
+    }
+
+    internal suspend fun branches(): List<List<Violation>> =
         rules.filterNot { rule -> rule is ValidationNodeRule.Group }.map { rule -> rule.validate(path, value) } +
             rules.filterIsInstance<ValidationNodeRule.Group<V>>().map { rule -> rule.validate(path, value) }
 

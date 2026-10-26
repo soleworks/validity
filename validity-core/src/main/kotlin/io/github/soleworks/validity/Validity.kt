@@ -1,6 +1,8 @@
 package io.github.soleworks.validity
 
 import java.time.Clock
+import kotlinx.coroutines.asContextElement
+import kotlinx.coroutines.withContext
 
 public class Validity private constructor(
     private val blocks: List<ValidityConfiguration.() -> Unit>
@@ -9,19 +11,9 @@ public class Validity private constructor(
         blocks.forEach { block -> block() }
     }
 
-    internal fun <T> use(
-        block: () -> T
-    ): T {
-        val outer = active.get()
-
-        active.set(this)
-
-        try {
-            return block()
-        } finally {
-            active.set(outer)
-        }
-    }
+    internal suspend fun <T> use(
+        block: suspend () -> T
+    ): T = withContext(active.asContextElement(this)) { block() }
 
     public companion object {
         private val active = ThreadLocal<Validity>()
@@ -49,9 +41,10 @@ public class Validity private constructor(
 internal val messages: Messages
     get() = Validity.current.configuration.messages
 
+@PublishedApi
 internal val clock: Clock
     get() = Validity.current.configuration.clock
 
-public fun <T> now(
+public inline fun <T> now(
     of: (Clock) -> T
 ): T = of(clock)

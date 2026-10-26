@@ -14,7 +14,7 @@ public fun ValidationNode<UInt>.min(
 
 public fun ValidationNode<UInt>.min(
     min: UInt?,
-    message: UInt.(UInt) -> String
+    message: suspend UInt.(UInt) -> String
 ) {
     if (min == null)
         return
@@ -38,7 +38,7 @@ public fun ValidationNode<ULong>.min(
 @JvmName("minULong")
 public fun ValidationNode<ULong>.min(
     min: ULong?,
-    message: ULong.(ULong) -> String
+    message: suspend ULong.(ULong) -> String
 ) {
     if (min == null)
         return
@@ -62,7 +62,7 @@ public fun ValidationNode<UShort>.min(
 @JvmName("minUShort")
 public fun ValidationNode<UShort>.min(
     min: UShort?,
-    message: UShort.(UShort) -> String
+    message: suspend UShort.(UShort) -> String
 ) {
     if (min == null)
         return
@@ -86,7 +86,7 @@ public fun ValidationNode<UByte>.min(
 @JvmName("minUByte")
 public fun ValidationNode<UByte>.min(
     min: UByte?,
-    message: UByte.(UByte) -> String
+    message: suspend UByte.(UByte) -> String
 ) {
     if (min == null)
         return
@@ -108,7 +108,7 @@ public fun ValidationNode<UInt>.max(
 
 public fun ValidationNode<UInt>.max(
     max: UInt?,
-    message: UInt.(UInt) -> String
+    message: suspend UInt.(UInt) -> String
 ) {
     if (max == null)
         return
@@ -132,7 +132,7 @@ public fun ValidationNode<ULong>.max(
 @JvmName("maxULong")
 public fun ValidationNode<ULong>.max(
     max: ULong?,
-    message: ULong.(ULong) -> String
+    message: suspend ULong.(ULong) -> String
 ) {
     if (max == null)
         return
@@ -156,7 +156,7 @@ public fun ValidationNode<UShort>.max(
 @JvmName("maxUShort")
 public fun ValidationNode<UShort>.max(
     max: UShort?,
-    message: UShort.(UShort) -> String
+    message: suspend UShort.(UShort) -> String
 ) {
     if (max == null)
         return
@@ -180,7 +180,7 @@ public fun ValidationNode<UByte>.max(
 @JvmName("maxUByte")
 public fun ValidationNode<UByte>.max(
     max: UByte?,
-    message: UByte.(UByte) -> String
+    message: suspend UByte.(UByte) -> String
 ) {
     if (max == null)
         return
@@ -202,7 +202,7 @@ public fun ValidationNode<UInt>.greaterThan(
 
 public fun ValidationNode<UInt>.greaterThan(
     other: UInt?,
-    message: UInt.(UInt) -> String
+    message: suspend UInt.(UInt) -> String
 ) {
     if (other == null)
         return
@@ -226,7 +226,7 @@ public fun ValidationNode<ULong>.greaterThan(
 @JvmName("greaterThanULong")
 public fun ValidationNode<ULong>.greaterThan(
     other: ULong?,
-    message: ULong.(ULong) -> String
+    message: suspend ULong.(ULong) -> String
 ) {
     if (other == null)
         return
@@ -250,7 +250,7 @@ public fun ValidationNode<UShort>.greaterThan(
 @JvmName("greaterThanUShort")
 public fun ValidationNode<UShort>.greaterThan(
     other: UShort?,
-    message: UShort.(UShort) -> String
+    message: suspend UShort.(UShort) -> String
 ) {
     if (other == null)
         return
@@ -274,7 +274,7 @@ public fun ValidationNode<UByte>.greaterThan(
 @JvmName("greaterThanUByte")
 public fun ValidationNode<UByte>.greaterThan(
     other: UByte?,
-    message: UByte.(UByte) -> String
+    message: suspend UByte.(UByte) -> String
 ) {
     if (other == null)
         return
@@ -296,7 +296,7 @@ public fun ValidationNode<UInt>.lessThan(
 
 public fun ValidationNode<UInt>.lessThan(
     other: UInt?,
-    message: UInt.(UInt) -> String
+    message: suspend UInt.(UInt) -> String
 ) {
     if (other == null)
         return
@@ -320,7 +320,7 @@ public fun ValidationNode<ULong>.lessThan(
 @JvmName("lessThanULong")
 public fun ValidationNode<ULong>.lessThan(
     other: ULong?,
-    message: ULong.(ULong) -> String
+    message: suspend ULong.(ULong) -> String
 ) {
     if (other == null)
         return
@@ -344,7 +344,7 @@ public fun ValidationNode<UShort>.lessThan(
 @JvmName("lessThanUShort")
 public fun ValidationNode<UShort>.lessThan(
     other: UShort?,
-    message: UShort.(UShort) -> String
+    message: suspend UShort.(UShort) -> String
 ) {
     if (other == null)
         return
@@ -368,7 +368,7 @@ public fun ValidationNode<UByte>.lessThan(
 @JvmName("lessThanUByte")
 public fun ValidationNode<UByte>.lessThan(
     other: UByte?,
-    message: UByte.(UByte) -> String
+    message: suspend UByte.(UByte) -> String
 ) {
     if (other == null)
         return
@@ -393,7 +393,7 @@ public fun ValidationNode<UInt>.between(
 public fun ValidationNode<UInt>.between(
     min: UInt?,
     max: UInt?,
-    message: UInt.(UInt, UInt) -> String
+    message: suspend UInt.(UInt, UInt) -> String
 ) {
     if (min == null || max == null)
         return
@@ -420,7 +420,7 @@ public fun ValidationNode<ULong>.between(
 public fun ValidationNode<ULong>.between(
     min: ULong?,
     max: ULong?,
-    message: ULong.(ULong, ULong) -> String
+    message: suspend ULong.(ULong, ULong) -> String
 ) {
     if (min == null || max == null)
         return
@@ -447,7 +447,7 @@ public fun ValidationNode<UShort>.between(
 public fun ValidationNode<UShort>.between(
     min: UShort?,
     max: UShort?,
-    message: UShort.(UShort, UShort) -> String
+    message: suspend UShort.(UShort, UShort) -> String
 ) {
     if (min == null || max == null)
         return
@@ -474,7 +474,7 @@ public fun ValidationNode<UByte>.between(
 public fun ValidationNode<UByte>.between(
     min: UByte?,
     max: UByte?,
-    message: UByte.(UByte, UByte) -> String
+    message: suspend UByte.(UByte, UByte) -> String
 ) {
     if (min == null || max == null)
         return

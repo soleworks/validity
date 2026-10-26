@@ -310,7 +310,7 @@ public fun ValidationNode<LocalDate>.after(
 
 public fun ValidationNode<LocalDate>.after(
     other: LocalDate?,
-    message: LocalDate.(LocalDate) -> String
+    message: suspend LocalDate.(LocalDate) -> String
 ) {
     if (other == null)
         return
@@ -332,7 +332,7 @@ public fun ValidationNode<LocalDateTime>.after(
 
 public fun ValidationNode<LocalDateTime>.after(
     other: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime) -> String
+    message: suspend LocalDateTime.(LocalDateTime) -> String
 ) {
     if (other == null)
         return
@@ -354,7 +354,7 @@ public fun ValidationNode<LocalTime>.after(
 
 public fun ValidationNode<LocalTime>.after(
     other: LocalTime?,
-    message: LocalTime.(LocalTime) -> String
+    message: suspend LocalTime.(LocalTime) -> String
 ) {
     if (other == null)
         return
@@ -376,7 +376,7 @@ public fun ValidationNode<OffsetTime>.after(
 
 public fun ValidationNode<OffsetTime>.after(
     other: OffsetTime?,
-    message: OffsetTime.(OffsetTime) -> String
+    message: suspend OffsetTime.(OffsetTime) -> String
 ) {
     if (other == null)
         return
@@ -398,7 +398,7 @@ public fun ValidationNode<ZonedDateTime>.after(
 
 public fun ValidationNode<ZonedDateTime>.after(
     other: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime) -> String
+    message: suspend ZonedDateTime.(ZonedDateTime) -> String
 ) {
     if (other == null)
         return
@@ -420,7 +420,7 @@ public fun ValidationNode<OffsetDateTime>.after(
 
 public fun ValidationNode<OffsetDateTime>.after(
     other: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime) -> String
+    message: suspend OffsetDateTime.(OffsetDateTime) -> String
 ) {
     if (other == null)
         return
@@ -442,7 +442,7 @@ public fun ValidationNode<Instant>.after(
 
 public fun ValidationNode<Instant>.after(
     other: Instant?,
-    message: Instant.(Instant) -> String
+    message: suspend Instant.(Instant) -> String
 ) {
     if (other == null)
         return
@@ -464,7 +464,7 @@ public fun ValidationNode<YearMonth>.after(
 
 public fun ValidationNode<YearMonth>.after(
     other: YearMonth?,
-    message: YearMonth.(YearMonth) -> String
+    message: suspend YearMonth.(YearMonth) -> String
 ) {
     if (other == null)
         return
@@ -486,7 +486,7 @@ public fun ValidationNode<Year>.after(
 
 public fun ValidationNode<Year>.after(
     other: Year?,
-    message: Year.(Year) -> String
+    message: suspend Year.(Year) -> String
 ) {
     if (other == null)
         return
@@ -508,7 +508,7 @@ public fun ValidationNode<Date>.after(
 
 public fun ValidationNode<Date>.after(
     other: Date?,
-    message: Date.(Date) -> String
+    message: suspend Date.(Date) -> String
 ) {
     if (other == null)
         return
@@ -530,7 +530,7 @@ public fun ValidationNode<LocalDate>.before(
 
 public fun ValidationNode<LocalDate>.before(
     other: LocalDate?,
-    message: LocalDate.(LocalDate) -> String
+    message: suspend LocalDate.(LocalDate) -> String
 ) {
     if (other == null)
         return
@@ -552,7 +552,7 @@ public fun ValidationNode<LocalDateTime>.before(
 
 public fun ValidationNode<LocalDateTime>.before(
     other: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime) -> String
+    message: suspend LocalDateTime.(LocalDateTime) -> String
 ) {
     if (other == null)
         return
@@ -574,7 +574,7 @@ public fun ValidationNode<LocalTime>.before(
 
 public fun ValidationNode<LocalTime>.before(
     other: LocalTime?,
-    message: LocalTime.(LocalTime) -> String
+    message: suspend LocalTime.(LocalTime) -> String
 ) {
     if (other == null)
         return
@@ -596,7 +596,7 @@ public fun ValidationNode<OffsetTime>.before(
 
 public fun ValidationNode<OffsetTime>.before(
     other: OffsetTime?,
-    message: OffsetTime.(OffsetTime) -> String
+    message: suspend OffsetTime.(OffsetTime) -> String
 ) {
     if (other == null)
         return
@@ -618,7 +618,7 @@ public fun ValidationNode<ZonedDateTime>.before(
 
 public fun ValidationNode<ZonedDateTime>.before(
     other: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime) -> String
+    message: suspend ZonedDateTime.(ZonedDateTime) -> String
 ) {
     if (other == null)
         return
@@ -640,7 +640,7 @@ public fun ValidationNode<OffsetDateTime>.before(
 
 public fun ValidationNode<OffsetDateTime>.before(
     other: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime) -> String
+    message: suspend OffsetDateTime.(OffsetDateTime) -> String
 ) {
     if (other == null)
         return
@@ -662,7 +662,7 @@ public fun ValidationNode<Instant>.before(
 
 public fun ValidationNode<Instant>.before(
     other: Instant?,
-    message: Instant.(Instant) -> String
+    message: suspend Instant.(Instant) -> String
 ) {
     if (other == null)
         return
@@ -684,7 +684,7 @@ public fun ValidationNode<YearMonth>.before(
 
 public fun ValidationNode<YearMonth>.before(
     other: YearMonth?,
-    message: YearMonth.(YearMonth) -> String
+    message: suspend YearMonth.(YearMonth) -> String
 ) {
     if (other == null)
         return
@@ -706,7 +706,7 @@ public fun ValidationNode<Year>.before(
 
 public fun ValidationNode<Year>.before(
     other: Year?,
-    message: Year.(Year) -> String
+    message: suspend Year.(Year) -> String
 ) {
     if (other == null)
         return
@@ -728,7 +728,7 @@ public fun ValidationNode<Date>.before(
 
 public fun ValidationNode<Date>.before(
     other: Date?,
-    message: Date.(Date) -> String
+    message: suspend Date.(Date) -> String
 ) {
     if (other == null)
         return
@@ -750,7 +750,7 @@ public fun ValidationNode<LocalDate>.afterOrEqual(
 
 public fun ValidationNode<LocalDate>.afterOrEqual(
     other: LocalDate?,
-    message: LocalDate.(LocalDate) -> String
+    message: suspend LocalDate.(LocalDate) -> String
 ) {
     if (other == null)
         return
@@ -772,7 +772,7 @@ public fun ValidationNode<LocalDateTime>.afterOrEqual(
 
 public fun ValidationNode<LocalDateTime>.afterOrEqual(
     other: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime) -> String
+    message: suspend LocalDateTime.(LocalDateTime) -> String
 ) {
     if (other == null)
         return
@@ -794,7 +794,7 @@ public fun ValidationNode<LocalTime>.afterOrEqual(
 
 public fun ValidationNode<LocalTime>.afterOrEqual(
     other: LocalTime?,
-    message: LocalTime.(LocalTime) -> String
+    message: suspend LocalTime.(LocalTime) -> String
 ) {
     if (other == null)
         return
@@ -816,7 +816,7 @@ public fun ValidationNode<OffsetTime>.afterOrEqual(
 
 public fun ValidationNode<OffsetTime>.afterOrEqual(
     other: OffsetTime?,
-    message: OffsetTime.(OffsetTime) -> String
+    message: suspend OffsetTime.(OffsetTime) -> String
 ) {
     if (other == null)
         return
@@ -838,7 +838,7 @@ public fun ValidationNode<ZonedDateTime>.afterOrEqual(
 
 public fun ValidationNode<ZonedDateTime>.afterOrEqual(
     other: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime) -> String
+    message: suspend ZonedDateTime.(ZonedDateTime) -> String
 ) {
     if (other == null)
         return
@@ -860,7 +860,7 @@ public fun ValidationNode<OffsetDateTime>.afterOrEqual(
 
 public fun ValidationNode<OffsetDateTime>.afterOrEqual(
     other: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime) -> String
+    message: suspend OffsetDateTime.(OffsetDateTime) -> String
 ) {
     if (other == null)
         return
@@ -882,7 +882,7 @@ public fun ValidationNode<Instant>.afterOrEqual(
 
 public fun ValidationNode<Instant>.afterOrEqual(
     other: Instant?,
-    message: Instant.(Instant) -> String
+    message: suspend Instant.(Instant) -> String
 ) {
     if (other == null)
         return
@@ -904,7 +904,7 @@ public fun ValidationNode<YearMonth>.afterOrEqual(
 
 public fun ValidationNode<YearMonth>.afterOrEqual(
     other: YearMonth?,
-    message: YearMonth.(YearMonth) -> String
+    message: suspend YearMonth.(YearMonth) -> String
 ) {
     if (other == null)
         return
@@ -926,7 +926,7 @@ public fun ValidationNode<Year>.afterOrEqual(
 
 public fun ValidationNode<Year>.afterOrEqual(
     other: Year?,
-    message: Year.(Year) -> String
+    message: suspend Year.(Year) -> String
 ) {
     if (other == null)
         return
@@ -948,7 +948,7 @@ public fun ValidationNode<Date>.afterOrEqual(
 
 public fun ValidationNode<Date>.afterOrEqual(
     other: Date?,
-    message: Date.(Date) -> String
+    message: suspend Date.(Date) -> String
 ) {
     if (other == null)
         return
@@ -970,7 +970,7 @@ public fun ValidationNode<LocalDate>.beforeOrEqual(
 
 public fun ValidationNode<LocalDate>.beforeOrEqual(
     other: LocalDate?,
-    message: LocalDate.(LocalDate) -> String
+    message: suspend LocalDate.(LocalDate) -> String
 ) {
     if (other == null)
         return
@@ -992,7 +992,7 @@ public fun ValidationNode<LocalDateTime>.beforeOrEqual(
 
 public fun ValidationNode<LocalDateTime>.beforeOrEqual(
     other: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime) -> String
+    message: suspend LocalDateTime.(LocalDateTime) -> String
 ) {
     if (other == null)
         return
@@ -1014,7 +1014,7 @@ public fun ValidationNode<LocalTime>.beforeOrEqual(
 
 public fun ValidationNode<LocalTime>.beforeOrEqual(
     other: LocalTime?,
-    message: LocalTime.(LocalTime) -> String
+    message: suspend LocalTime.(LocalTime) -> String
 ) {
     if (other == null)
         return
@@ -1036,7 +1036,7 @@ public fun ValidationNode<OffsetTime>.beforeOrEqual(
 
 public fun ValidationNode<OffsetTime>.beforeOrEqual(
     other: OffsetTime?,
-    message: OffsetTime.(OffsetTime) -> String
+    message: suspend OffsetTime.(OffsetTime) -> String
 ) {
     if (other == null)
         return
@@ -1058,7 +1058,7 @@ public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
 
 public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
     other: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime) -> String
+    message: suspend ZonedDateTime.(ZonedDateTime) -> String
 ) {
     if (other == null)
         return
@@ -1080,7 +1080,7 @@ public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
 
 public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
     other: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime) -> String
+    message: suspend OffsetDateTime.(OffsetDateTime) -> String
 ) {
     if (other == null)
         return
@@ -1102,7 +1102,7 @@ public fun ValidationNode<Instant>.beforeOrEqual(
 
 public fun ValidationNode<Instant>.beforeOrEqual(
     other: Instant?,
-    message: Instant.(Instant) -> String
+    message: suspend Instant.(Instant) -> String
 ) {
     if (other == null)
         return
@@ -1124,7 +1124,7 @@ public fun ValidationNode<YearMonth>.beforeOrEqual(
 
 public fun ValidationNode<YearMonth>.beforeOrEqual(
     other: YearMonth?,
-    message: YearMonth.(YearMonth) -> String
+    message: suspend YearMonth.(YearMonth) -> String
 ) {
     if (other == null)
         return
@@ -1146,7 +1146,7 @@ public fun ValidationNode<Year>.beforeOrEqual(
 
 public fun ValidationNode<Year>.beforeOrEqual(
     other: Year?,
-    message: Year.(Year) -> String
+    message: suspend Year.(Year) -> String
 ) {
     if (other == null)
         return
@@ -1168,7 +1168,7 @@ public fun ValidationNode<Date>.beforeOrEqual(
 
 public fun ValidationNode<Date>.beforeOrEqual(
     other: Date?,
-    message: Date.(Date) -> String
+    message: suspend Date.(Date) -> String
 ) {
     if (other == null)
         return
@@ -1193,7 +1193,7 @@ public fun ValidationNode<LocalDate>.between(
 public fun ValidationNode<LocalDate>.between(
     start: LocalDate?,
     end: LocalDate?,
-    message: LocalDate.(LocalDate, LocalDate) -> String
+    message: suspend LocalDate.(LocalDate, LocalDate) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1218,7 +1218,7 @@ public fun ValidationNode<LocalDateTime>.between(
 public fun ValidationNode<LocalDateTime>.between(
     start: LocalDateTime?,
     end: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime, LocalDateTime) -> String
+    message: suspend LocalDateTime.(LocalDateTime, LocalDateTime) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1243,7 +1243,7 @@ public fun ValidationNode<LocalTime>.between(
 public fun ValidationNode<LocalTime>.between(
     start: LocalTime?,
     end: LocalTime?,
-    message: LocalTime.(LocalTime, LocalTime) -> String
+    message: suspend LocalTime.(LocalTime, LocalTime) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1268,7 +1268,7 @@ public fun ValidationNode<OffsetTime>.between(
 public fun ValidationNode<OffsetTime>.between(
     start: OffsetTime?,
     end: OffsetTime?,
-    message: OffsetTime.(OffsetTime, OffsetTime) -> String
+    message: suspend OffsetTime.(OffsetTime, OffsetTime) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1293,7 +1293,7 @@ public fun ValidationNode<ZonedDateTime>.between(
 public fun ValidationNode<ZonedDateTime>.between(
     start: ZonedDateTime?,
     end: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime, ZonedDateTime) -> String
+    message: suspend ZonedDateTime.(ZonedDateTime, ZonedDateTime) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1318,7 +1318,7 @@ public fun ValidationNode<OffsetDateTime>.between(
 public fun ValidationNode<OffsetDateTime>.between(
     start: OffsetDateTime?,
     end: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime, OffsetDateTime) -> String
+    message: suspend OffsetDateTime.(OffsetDateTime, OffsetDateTime) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1343,7 +1343,7 @@ public fun ValidationNode<Instant>.between(
 public fun ValidationNode<Instant>.between(
     start: Instant?,
     end: Instant?,
-    message: Instant.(Instant, Instant) -> String
+    message: suspend Instant.(Instant, Instant) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1368,7 +1368,7 @@ public fun ValidationNode<YearMonth>.between(
 public fun ValidationNode<YearMonth>.between(
     start: YearMonth?,
     end: YearMonth?,
-    message: YearMonth.(YearMonth, YearMonth) -> String
+    message: suspend YearMonth.(YearMonth, YearMonth) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1393,7 +1393,7 @@ public fun ValidationNode<Year>.between(
 public fun ValidationNode<Year>.between(
     start: Year?,
     end: Year?,
-    message: Year.(Year, Year) -> String
+    message: suspend Year.(Year, Year) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1418,7 +1418,7 @@ public fun ValidationNode<Date>.between(
 public fun ValidationNode<Date>.between(
     start: Date?,
     end: Date?,
-    message: Date.(Date, Date) -> String
+    message: suspend Date.(Date, Date) -> String
 ) {
     if (start == null || end == null)
         return
@@ -1440,7 +1440,7 @@ public fun ValidationNode<Duration>.min(
 
 public fun ValidationNode<Duration>.min(
     min: Duration?,
-    message: Duration.(Duration) -> String
+    message: suspend Duration.(Duration) -> String
 ) {
     if (min == null)
         return
@@ -1462,7 +1462,7 @@ public fun ValidationNode<Duration>.max(
 
 public fun ValidationNode<Duration>.max(
     max: Duration?,
-    message: Duration.(Duration) -> String
+    message: suspend Duration.(Duration) -> String
 ) {
     if (max == null)
         return
@@ -1484,7 +1484,7 @@ public fun ValidationNode<Duration>.greaterThan(
 
 public fun ValidationNode<Duration>.greaterThan(
     other: Duration?,
-    message: Duration.(Duration) -> String
+    message: suspend Duration.(Duration) -> String
 ) {
     if (other == null)
         return
@@ -1506,7 +1506,7 @@ public fun ValidationNode<Duration>.lessThan(
 
 public fun ValidationNode<Duration>.lessThan(
     other: Duration?,
-    message: Duration.(Duration) -> String
+    message: suspend Duration.(Duration) -> String
 ) {
     if (other == null)
         return
@@ -1531,7 +1531,7 @@ public fun ValidationNode<Duration>.between(
 public fun ValidationNode<Duration>.between(
     min: Duration?,
     max: Duration?,
-    message: Duration.(Duration, Duration) -> String
+    message: suspend Duration.(Duration, Duration) -> String
 ) {
     if (min == null || max == null)
         return

@@ -16,7 +16,7 @@ public fun ValidationNode<Int>.min(
 
 public fun ValidationNode<Int>.min(
     min: Int?,
-    message: Int.(Int) -> String
+    message: suspend Int.(Int) -> String
 ) {
     if (min == null)
         return
@@ -38,7 +38,7 @@ public fun ValidationNode<Long>.min(
 
 public fun ValidationNode<Long>.min(
     min: Long?,
-    message: Long.(Long) -> String
+    message: suspend Long.(Long) -> String
 ) {
     if (min == null)
         return
@@ -60,7 +60,7 @@ public fun ValidationNode<Short>.min(
 
 public fun ValidationNode<Short>.min(
     min: Short?,
-    message: Short.(Short) -> String
+    message: suspend Short.(Short) -> String
 ) {
     if (min == null)
         return
@@ -82,7 +82,7 @@ public fun ValidationNode<Byte>.min(
 
 public fun ValidationNode<Byte>.min(
     min: Byte?,
-    message: Byte.(Byte) -> String
+    message: suspend Byte.(Byte) -> String
 ) {
     if (min == null)
         return
@@ -104,7 +104,7 @@ public fun ValidationNode<Double>.min(
 
 public fun ValidationNode<Double>.min(
     min: Double?,
-    message: Double.(Double) -> String
+    message: suspend Double.(Double) -> String
 ) {
     if (min == null)
         return
@@ -126,7 +126,7 @@ public fun ValidationNode<Float>.min(
 
 public fun ValidationNode<Float>.min(
     min: Float?,
-    message: Float.(Float) -> String
+    message: suspend Float.(Float) -> String
 ) {
     if (min == null)
         return
@@ -148,7 +148,7 @@ public fun ValidationNode<BigInteger>.min(
 
 public fun ValidationNode<BigInteger>.min(
     min: BigInteger?,
-    message: BigInteger.(BigInteger) -> String
+    message: suspend BigInteger.(BigInteger) -> String
 ) {
     if (min == null)
         return
@@ -170,7 +170,7 @@ public fun ValidationNode<BigDecimal>.min(
 
 public fun ValidationNode<BigDecimal>.min(
     min: BigDecimal?,
-    message: BigDecimal.(BigDecimal) -> String
+    message: suspend BigDecimal.(BigDecimal) -> String
 ) {
     if (min == null)
         return
@@ -192,7 +192,7 @@ public fun ValidationNode<Int>.max(
 
 public fun ValidationNode<Int>.max(
     max: Int?,
-    message: Int.(Int) -> String
+    message: suspend Int.(Int) -> String
 ) {
     if (max == null)
         return
@@ -214,7 +214,7 @@ public fun ValidationNode<Long>.max(
 
 public fun ValidationNode<Long>.max(
     max: Long?,
-    message: Long.(Long) -> String
+    message: suspend Long.(Long) -> String
 ) {
     if (max == null)
         return
@@ -236,7 +236,7 @@ public fun ValidationNode<Short>.max(
 
 public fun ValidationNode<Short>.max(
     max: Short?,
-    message: Short.(Short) -> String
+    message: suspend Short.(Short) -> String
 ) {
     if (max == null)
         return
@@ -258,7 +258,7 @@ public fun ValidationNode<Byte>.max(
 
 public fun ValidationNode<Byte>.max(
     max: Byte?,
-    message: Byte.(Byte) -> String
+    message: suspend Byte.(Byte) -> String
 ) {
     if (max == null)
         return
@@ -280,7 +280,7 @@ public fun ValidationNode<Double>.max(
 
 public fun ValidationNode<Double>.max(
     max: Double?,
-    message: Double.(Double) -> String
+    message: suspend Double.(Double) -> String
 ) {
     if (max == null)
         return
@@ -302,7 +302,7 @@ public fun ValidationNode<Float>.max(
 
 public fun ValidationNode<Float>.max(
     max: Float?,
-    message: Float.(Float) -> String
+    message: suspend Float.(Float) -> String
 ) {
     if (max == null)
         return
@@ -324,7 +324,7 @@ public fun ValidationNode<BigInteger>.max(
 
 public fun ValidationNode<BigInteger>.max(
     max: BigInteger?,
-    message: BigInteger.(BigInteger) -> String
+    message: suspend BigInteger.(BigInteger) -> String
 ) {
     if (max == null)
         return
@@ -346,7 +346,7 @@ public fun ValidationNode<BigDecimal>.max(
 
 public fun ValidationNode<BigDecimal>.max(
     max: BigDecimal?,
-    message: BigDecimal.(BigDecimal) -> String
+    message: suspend BigDecimal.(BigDecimal) -> String
 ) {
     if (max == null)
         return
@@ -368,7 +368,7 @@ public fun ValidationNode<Int>.greaterThan(
 
 public fun ValidationNode<Int>.greaterThan(
     other: Int?,
-    message: Int.(Int) -> String
+    message: suspend Int.(Int) -> String
 ) {
     if (other == null)
         return
@@ -390,7 +390,7 @@ public fun ValidationNode<Long>.greaterThan(
 
 public fun ValidationNode<Long>.greaterThan(
     other: Long?,
-    message: Long.(Long) -> String
+    message: suspend Long.(Long) -> String
 ) {
     if (other == null)
         return
@@ -412,7 +412,7 @@ public fun ValidationNode<Short>.greaterThan(
 
 public fun ValidationNode<Short>.greaterThan(
     other: Short?,
-    message: Short.(Short) -> String
+    message: suspend Short.(Short) -> String
 ) {
     if (other == null)
         return
@@ -434,7 +434,7 @@ public fun ValidationNode<Byte>.greaterThan(
 
 public fun ValidationNode<Byte>.greaterThan(
     other: Byte?,
-    message: Byte.(Byte) -> String
+    message: suspend Byte.(Byte) -> String
 ) {
     if (other == null)
         return
@@ -456,7 +456,7 @@ public fun ValidationNode<Double>.greaterThan(
 
 public fun ValidationNode<Double>.greaterThan(
     other: Double?,
-    message: Double.(Double) -> String
+    message: suspend Double.(Double) -> String
 ) {
     if (other == null)
         return
@@ -478,7 +478,7 @@ public fun ValidationNode<Float>.greaterThan(
 
 public fun ValidationNode<Float>.greaterThan(
     other: Float?,
-    message: Float.(Float) -> String
+    message: suspend Float.(Float) -> String
 ) {
     if (other == null)
         return
@@ -500,7 +500,7 @@ public fun ValidationNode<BigInteger>.greaterThan(
 
 public fun ValidationNode<BigInteger>.greaterThan(
     other: BigInteger?,
-    message: BigInteger.(BigInteger) -> String
+    message: suspend BigInteger.(BigInteger) -> String
 ) {
     if (other == null)
         return
@@ -522,7 +522,7 @@ public fun ValidationNode<BigDecimal>.greaterThan(
 
 public fun ValidationNode<BigDecimal>.greaterThan(
     other: BigDecimal?,
-    message: BigDecimal.(BigDecimal) -> String
+    message: suspend BigDecimal.(BigDecimal) -> String
 ) {
     if (other == null)
         return
@@ -544,7 +544,7 @@ public fun ValidationNode<Int>.lessThan(
 
 public fun ValidationNode<Int>.lessThan(
     other: Int?,
-    message: Int.(Int) -> String
+    message: suspend Int.(Int) -> String
 ) {
     if (other == null)
         return
@@ -566,7 +566,7 @@ public fun ValidationNode<Long>.lessThan(
 
 public fun ValidationNode<Long>.lessThan(
     other: Long?,
-    message: Long.(Long) -> String
+    message: suspend Long.(Long) -> String
 ) {
     if (other == null)
         return
@@ -588,7 +588,7 @@ public fun ValidationNode<Short>.lessThan(
 
 public fun ValidationNode<Short>.lessThan(
     other: Short?,
-    message: Short.(Short) -> String
+    message: suspend Short.(Short) -> String
 ) {
     if (other == null)
         return
@@ -610,7 +610,7 @@ public fun ValidationNode<Byte>.lessThan(
 
 public fun ValidationNode<Byte>.lessThan(
     other: Byte?,
-    message: Byte.(Byte) -> String
+    message: suspend Byte.(Byte) -> String
 ) {
     if (other == null)
         return
@@ -632,7 +632,7 @@ public fun ValidationNode<Double>.lessThan(
 
 public fun ValidationNode<Double>.lessThan(
     other: Double?,
-    message: Double.(Double) -> String
+    message: suspend Double.(Double) -> String
 ) {
     if (other == null)
         return
@@ -654,7 +654,7 @@ public fun ValidationNode<Float>.lessThan(
 
 public fun ValidationNode<Float>.lessThan(
     other: Float?,
-    message: Float.(Float) -> String
+    message: suspend Float.(Float) -> String
 ) {
     if (other == null)
         return
@@ -676,7 +676,7 @@ public fun ValidationNode<BigInteger>.lessThan(
 
 public fun ValidationNode<BigInteger>.lessThan(
     other: BigInteger?,
-    message: BigInteger.(BigInteger) -> String
+    message: suspend BigInteger.(BigInteger) -> String
 ) {
     if (other == null)
         return
@@ -698,7 +698,7 @@ public fun ValidationNode<BigDecimal>.lessThan(
 
 public fun ValidationNode<BigDecimal>.lessThan(
     other: BigDecimal?,
-    message: BigDecimal.(BigDecimal) -> String
+    message: suspend BigDecimal.(BigDecimal) -> String
 ) {
     if (other == null)
         return
@@ -723,7 +723,7 @@ public fun ValidationNode<Int>.between(
 public fun ValidationNode<Int>.between(
     min: Int?,
     max: Int?,
-    message: Int.(Int, Int) -> String
+    message: suspend Int.(Int, Int) -> String
 ) {
     if (min == null || max == null)
         return
@@ -748,7 +748,7 @@ public fun ValidationNode<Long>.between(
 public fun ValidationNode<Long>.between(
     min: Long?,
     max: Long?,
-    message: Long.(Long, Long) -> String
+    message: suspend Long.(Long, Long) -> String
 ) {
     if (min == null || max == null)
         return
@@ -773,7 +773,7 @@ public fun ValidationNode<Short>.between(
 public fun ValidationNode<Short>.between(
     min: Short?,
     max: Short?,
-    message: Short.(Short, Short) -> String
+    message: suspend Short.(Short, Short) -> String
 ) {
     if (min == null || max == null)
         return
@@ -798,7 +798,7 @@ public fun ValidationNode<Byte>.between(
 public fun ValidationNode<Byte>.between(
     min: Byte?,
     max: Byte?,
-    message: Byte.(Byte, Byte) -> String
+    message: suspend Byte.(Byte, Byte) -> String
 ) {
     if (min == null || max == null)
         return
@@ -823,7 +823,7 @@ public fun ValidationNode<Double>.between(
 public fun ValidationNode<Double>.between(
     min: Double?,
     max: Double?,
-    message: Double.(Double, Double) -> String
+    message: suspend Double.(Double, Double) -> String
 ) {
     if (min == null || max == null)
         return
@@ -848,7 +848,7 @@ public fun ValidationNode<Float>.between(
 public fun ValidationNode<Float>.between(
     min: Float?,
     max: Float?,
-    message: Float.(Float, Float) -> String
+    message: suspend Float.(Float, Float) -> String
 ) {
     if (min == null || max == null)
         return
@@ -873,7 +873,7 @@ public fun ValidationNode<BigInteger>.between(
 public fun ValidationNode<BigInteger>.between(
     min: BigInteger?,
     max: BigInteger?,
-    message: BigInteger.(BigInteger, BigInteger) -> String
+    message: suspend BigInteger.(BigInteger, BigInteger) -> String
 ) {
     if (min == null || max == null)
         return
@@ -898,7 +898,7 @@ public fun ValidationNode<BigDecimal>.between(
 public fun ValidationNode<BigDecimal>.between(
     min: BigDecimal?,
     max: BigDecimal?,
-    message: BigDecimal.(BigDecimal, BigDecimal) -> String
+    message: suspend BigDecimal.(BigDecimal, BigDecimal) -> String
 ) {
     if (min == null || max == null)
         return
@@ -1204,7 +1204,7 @@ public fun ValidationNode<Int>.multipleOf(
 
 public fun ValidationNode<Int>.multipleOf(
     factor: Int,
-    message: Int.(Int) -> String
+    message: suspend Int.(Int) -> String
 ) {
     require(factor != 0) { "multipleOf needs a factor other than 0" }
 
@@ -1225,7 +1225,7 @@ public fun ValidationNode<Long>.multipleOf(
 
 public fun ValidationNode<Long>.multipleOf(
     factor: Long,
-    message: Long.(Long) -> String
+    message: suspend Long.(Long) -> String
 ) {
     require(factor != 0L) { "multipleOf needs a factor other than 0" }
 
@@ -1246,7 +1246,7 @@ public fun ValidationNode<Short>.multipleOf(
 
 public fun ValidationNode<Short>.multipleOf(
     factor: Short,
-    message: Short.(Short) -> String
+    message: suspend Short.(Short) -> String
 ) {
     require(factor.toInt() != 0) { "multipleOf needs a factor other than 0" }
 
@@ -1267,7 +1267,7 @@ public fun ValidationNode<Byte>.multipleOf(
 
 public fun ValidationNode<Byte>.multipleOf(
     factor: Byte,
-    message: Byte.(Byte) -> String
+    message: suspend Byte.(Byte) -> String
 ) {
     require(factor.toInt() != 0) { "multipleOf needs a factor other than 0" }
 
@@ -1288,7 +1288,7 @@ public fun ValidationNode<BigInteger>.multipleOf(
 
 public fun ValidationNode<BigInteger>.multipleOf(
     factor: BigInteger,
-    message: BigInteger.(BigInteger) -> String
+    message: suspend BigInteger.(BigInteger) -> String
 ) {
     require(factor.signum() != 0) { "multipleOf needs a factor other than 0" }
 
@@ -1309,7 +1309,7 @@ public fun ValidationNode<BigDecimal>.multipleOf(
 
 public fun ValidationNode<BigDecimal>.multipleOf(
     factor: BigDecimal,
-    message: BigDecimal.(BigDecimal) -> String
+    message: suspend BigDecimal.(BigDecimal) -> String
 ) {
     require(factor.signum() != 0) { "multipleOf needs a factor other than 0" }
 
@@ -1330,7 +1330,7 @@ public fun ValidationNode<Double>.multipleOf(
 
 public fun ValidationNode<Double>.multipleOf(
     factor: Double,
-    message: Double.(Double) -> String
+    message: suspend Double.(Double) -> String
 ) {
     require(factor.isFinite() && factor != 0.0) { "multipleOf needs a finite factor other than 0" }
 
@@ -1351,7 +1351,7 @@ public fun ValidationNode<Float>.multipleOf(
 
 public fun ValidationNode<Float>.multipleOf(
     factor: Float,
-    message: Float.(Float) -> String
+    message: suspend Float.(Float) -> String
 ) {
     require(factor.isFinite() && factor != 0f) { "multipleOf needs a finite factor other than 0" }
 
@@ -1415,7 +1415,7 @@ public fun ValidationNode<BigDecimal>.maxDecimalPlaces(
 
 public fun ValidationNode<BigDecimal>.maxDecimalPlaces(
     max: Int,
-    message: BigDecimal.(Int) -> String
+    message: suspend BigDecimal.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxDecimalPlaces",
@@ -1432,7 +1432,7 @@ public fun ValidationNode<BigDecimal>.maxIntegerDigits(
 
 public fun ValidationNode<BigDecimal>.maxIntegerDigits(
     max: Int,
-    message: BigDecimal.(Int) -> String
+    message: suspend BigDecimal.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxIntegerDigits",
@@ -1449,7 +1449,7 @@ public fun ValidationNode<Int>.minDigits(
 
 public fun ValidationNode<Int>.minDigits(
     min: Int,
-    message: Int.(Int) -> String
+    message: suspend Int.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minDigits",
@@ -1468,7 +1468,7 @@ public fun ValidationNode<Long>.minDigits(
 @JvmName("minDigitsLong")
 public fun ValidationNode<Long>.minDigits(
     min: Int,
-    message: Long.(Int) -> String
+    message: suspend Long.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minDigits",
@@ -1487,7 +1487,7 @@ public fun ValidationNode<Short>.minDigits(
 @JvmName("minDigitsShort")
 public fun ValidationNode<Short>.minDigits(
     min: Int,
-    message: Short.(Int) -> String
+    message: suspend Short.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minDigits",
@@ -1506,7 +1506,7 @@ public fun ValidationNode<Byte>.minDigits(
 @JvmName("minDigitsByte")
 public fun ValidationNode<Byte>.minDigits(
     min: Int,
-    message: Byte.(Int) -> String
+    message: suspend Byte.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minDigits",
@@ -1525,7 +1525,7 @@ public fun ValidationNode<BigInteger>.minDigits(
 @JvmName("minDigitsBigInteger")
 public fun ValidationNode<BigInteger>.minDigits(
     min: Int,
-    message: BigInteger.(Int) -> String
+    message: suspend BigInteger.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minDigits",
@@ -1542,7 +1542,7 @@ public fun ValidationNode<Int>.maxDigits(
 
 public fun ValidationNode<Int>.maxDigits(
     max: Int,
-    message: Int.(Int) -> String
+    message: suspend Int.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxDigits",
@@ -1561,7 +1561,7 @@ public fun ValidationNode<Long>.maxDigits(
 @JvmName("maxDigitsLong")
 public fun ValidationNode<Long>.maxDigits(
     max: Int,
-    message: Long.(Int) -> String
+    message: suspend Long.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxDigits",
@@ -1580,7 +1580,7 @@ public fun ValidationNode<Short>.maxDigits(
 @JvmName("maxDigitsShort")
 public fun ValidationNode<Short>.maxDigits(
     max: Int,
-    message: Short.(Int) -> String
+    message: suspend Short.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxDigits",
@@ -1599,7 +1599,7 @@ public fun ValidationNode<Byte>.maxDigits(
 @JvmName("maxDigitsByte")
 public fun ValidationNode<Byte>.maxDigits(
     max: Int,
-    message: Byte.(Int) -> String
+    message: suspend Byte.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxDigits",
@@ -1618,7 +1618,7 @@ public fun ValidationNode<BigInteger>.maxDigits(
 @JvmName("maxDigitsBigInteger")
 public fun ValidationNode<BigInteger>.maxDigits(
     max: Int,
-    message: BigInteger.(Int) -> String
+    message: suspend BigInteger.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxDigits",
@@ -1635,7 +1635,7 @@ public fun ValidationNode<Int>.digitCount(
 
 public fun ValidationNode<Int>.digitCount(
     count: Int,
-    message: Int.(Int) -> String
+    message: suspend Int.(Int) -> String
 ): Unit = constraint(
     message = { it.message(count) },
     code = "digitCount",
@@ -1654,7 +1654,7 @@ public fun ValidationNode<Long>.digitCount(
 @JvmName("digitCountLong")
 public fun ValidationNode<Long>.digitCount(
     count: Int,
-    message: Long.(Int) -> String
+    message: suspend Long.(Int) -> String
 ): Unit = constraint(
     message = { it.message(count) },
     code = "digitCount",
@@ -1673,7 +1673,7 @@ public fun ValidationNode<Short>.digitCount(
 @JvmName("digitCountShort")
 public fun ValidationNode<Short>.digitCount(
     count: Int,
-    message: Short.(Int) -> String
+    message: suspend Short.(Int) -> String
 ): Unit = constraint(
     message = { it.message(count) },
     code = "digitCount",
@@ -1692,7 +1692,7 @@ public fun ValidationNode<Byte>.digitCount(
 @JvmName("digitCountByte")
 public fun ValidationNode<Byte>.digitCount(
     count: Int,
-    message: Byte.(Int) -> String
+    message: suspend Byte.(Int) -> String
 ): Unit = constraint(
     message = { it.message(count) },
     code = "digitCount",
@@ -1711,7 +1711,7 @@ public fun ValidationNode<BigInteger>.digitCount(
 @JvmName("digitCountBigInteger")
 public fun ValidationNode<BigInteger>.digitCount(
     count: Int,
-    message: BigInteger.(Int) -> String
+    message: suspend BigInteger.(Int) -> String
 ): Unit = constraint(
     message = { it.message(count) },
     code = "digitCount",
@@ -1728,7 +1728,7 @@ public fun ValidationNode<BigDecimal>.decimalPlaces(
 
 public fun ValidationNode<BigDecimal>.decimalPlaces(
     count: Int,
-    message: BigDecimal.(Int) -> String
+    message: suspend BigDecimal.(Int) -> String
 ): Unit = constraint(
     message = { it.message(count) },
     code = "decimalPlaces",
@@ -1745,7 +1745,7 @@ public fun ValidationNode<BigDecimal>.minDecimalPlaces(
 
 public fun ValidationNode<BigDecimal>.minDecimalPlaces(
     min: Int,
-    message: BigDecimal.(Int) -> String
+    message: suspend BigDecimal.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minDecimalPlaces",
@@ -1764,7 +1764,7 @@ public fun ValidationNode<Double>.maxDecimalPlaces(
 @JvmName("maxDecimalPlacesDouble")
 public fun ValidationNode<Double>.maxDecimalPlaces(
     max: Int,
-    message: Double.(Int) -> String
+    message: suspend Double.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxDecimalPlaces",
@@ -1783,7 +1783,7 @@ public fun ValidationNode<Float>.maxDecimalPlaces(
 @JvmName("maxDecimalPlacesFloat")
 public fun ValidationNode<Float>.maxDecimalPlaces(
     max: Int,
-    message: Float.(Int) -> String
+    message: suspend Float.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxDecimalPlaces",

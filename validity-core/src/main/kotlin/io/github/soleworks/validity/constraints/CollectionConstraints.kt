@@ -14,7 +14,7 @@ public fun ValidationNode<out Collection<*>>.minSize(
 
 public fun ValidationNode<out Collection<*>>.minSize(
     min: Int,
-    message: Collection<*>.(Int) -> String
+    message: suspend Collection<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minSize",
@@ -33,7 +33,7 @@ public fun ValidationNode<out Array<*>>.minSize(
 @JvmName("minSizeArray")
 public fun ValidationNode<out Array<*>>.minSize(
     min: Int,
-    message: Array<*>.(Int) -> String
+    message: suspend Array<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minSize",
@@ -52,7 +52,7 @@ public fun ValidationNode<ByteArray>.minSize(
 @JvmName("minSizeByteArray")
 public fun ValidationNode<ByteArray>.minSize(
     min: Int,
-    message: ByteArray.(Int) -> String
+    message: suspend ByteArray.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minSize",
@@ -69,7 +69,7 @@ public fun ValidationNode<out Collection<*>>.maxSize(
 
 public fun ValidationNode<out Collection<*>>.maxSize(
     max: Int,
-    message: Collection<*>.(Int) -> String
+    message: suspend Collection<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxSize",
@@ -88,7 +88,7 @@ public fun ValidationNode<out Array<*>>.maxSize(
 @JvmName("maxSizeArray")
 public fun ValidationNode<out Array<*>>.maxSize(
     max: Int,
-    message: Array<*>.(Int) -> String
+    message: suspend Array<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxSize",
@@ -107,7 +107,7 @@ public fun ValidationNode<ByteArray>.maxSize(
 @JvmName("maxSizeByteArray")
 public fun ValidationNode<ByteArray>.maxSize(
     max: Int,
-    message: ByteArray.(Int) -> String
+    message: suspend ByteArray.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxSize",
@@ -124,7 +124,7 @@ public fun ValidationNode<out Collection<*>>.size(
 
 public fun ValidationNode<out Collection<*>>.size(
     size: Int,
-    message: Collection<*>.(Int) -> String
+    message: suspend Collection<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(size) },
     code = "size",
@@ -143,7 +143,7 @@ public fun ValidationNode<out Array<*>>.size(
 @JvmName("sizeArray")
 public fun ValidationNode<out Array<*>>.size(
     size: Int,
-    message: Array<*>.(Int) -> String
+    message: suspend Array<*>.(Int) -> String
 ): Unit = constraint(
     message = { it.message(size) },
     code = "size",
@@ -162,7 +162,7 @@ public fun ValidationNode<ByteArray>.size(
 @JvmName("sizeByteArray")
 public fun ValidationNode<ByteArray>.size(
     size: Int,
-    message: ByteArray.(Int) -> String
+    message: suspend ByteArray.(Int) -> String
 ): Unit = constraint(
     message = { it.message(size) },
     code = "size",
@@ -182,7 +182,7 @@ public fun ValidationNode<out Collection<*>>.sizeBetween(
 public fun ValidationNode<out Collection<*>>.sizeBetween(
     min: Int,
     max: Int,
-    message: Collection<*>.(Int, Int) -> String
+    message: suspend Collection<*>.(Int, Int) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "sizeBetween",
@@ -204,7 +204,7 @@ public fun ValidationNode<out Array<*>>.sizeBetween(
 public fun ValidationNode<out Array<*>>.sizeBetween(
     min: Int,
     max: Int,
-    message: Array<*>.(Int, Int) -> String
+    message: suspend Array<*>.(Int, Int) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "sizeBetween",
@@ -226,7 +226,7 @@ public fun ValidationNode<ByteArray>.sizeBetween(
 public fun ValidationNode<ByteArray>.sizeBetween(
     min: Int,
     max: Int,
-    message: ByteArray.(Int, Int) -> String
+    message: suspend ByteArray.(Int, Int) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "sizeBetween",
@@ -303,7 +303,7 @@ public fun ValidationNode<out Array<*>>.distinct(
 )
 
 public fun <E, K> ValidationNode<List<E>>.distinctBy(
-    selector: (E) -> K
+    selector: suspend (E) -> K
 ): Unit = distinctBy(
     message = messages.distinct,
     selector = selector
@@ -311,16 +311,16 @@ public fun <E, K> ValidationNode<List<E>>.distinctBy(
 
 public fun <E, K> ValidationNode<List<E>>.distinctBy(
     message: String,
-    selector: (E) -> K
+    selector: suspend (E) -> K
 ): Unit = constraint(
     message = message,
     code = "distinctBy",
-    predicate = { it.distinctBy(selector).size == it.size }
+    predicate = { it.distinctBy { element -> selector(element) }.size == it.size }
 )
 
 @JvmName("distinctBySet")
 public fun <E, K> ValidationNode<Set<E>>.distinctBy(
-    selector: (E) -> K
+    selector: suspend (E) -> K
 ): Unit = distinctBy(
     message = messages.distinct,
     selector = selector
@@ -329,16 +329,16 @@ public fun <E, K> ValidationNode<Set<E>>.distinctBy(
 @JvmName("distinctBySet")
 public fun <E, K> ValidationNode<Set<E>>.distinctBy(
     message: String,
-    selector: (E) -> K
+    selector: suspend (E) -> K
 ): Unit = constraint(
     message = message,
     code = "distinctBy",
-    predicate = { it.distinctBy(selector).size == it.size }
+    predicate = { it.distinctBy { element -> selector(element) }.size == it.size }
 )
 
 @JvmName("distinctByArray")
 public fun <E, K> ValidationNode<Array<E>>.distinctBy(
-    selector: (E) -> K
+    selector: suspend (E) -> K
 ): Unit = distinctBy(
     message = messages.distinct,
     selector = selector
@@ -347,11 +347,11 @@ public fun <E, K> ValidationNode<Array<E>>.distinctBy(
 @JvmName("distinctByArray")
 public fun <E, K> ValidationNode<Array<E>>.distinctBy(
     message: String,
-    selector: (E) -> K
+    selector: suspend (E) -> K
 ): Unit = constraint(
     message = message,
     code = "distinctBy",
-    predicate = { it.distinctBy(selector).size == it.size }
+    predicate = { it.distinctBy { element -> selector(element) }.size == it.size }
 )
 
 public fun <E> ValidationNode<List<E>>.contains(
@@ -364,7 +364,7 @@ public fun <E> ValidationNode<List<E>>.contains(
 
 public fun <E> ValidationNode<List<E>>.contains(
     element: E?,
-    message: List<E>.(E) -> String
+    message: suspend List<E>.(E) -> String
 ) {
     if (element == null)
         return
@@ -388,7 +388,7 @@ public fun <E> ValidationNode<Set<E>>.contains(
 @JvmName("containsSet")
 public fun <E> ValidationNode<Set<E>>.contains(
     element: E?,
-    message: Set<E>.(E) -> String
+    message: suspend Set<E>.(E) -> String
 ) {
     if (element == null)
         return
@@ -412,7 +412,7 @@ public fun <E> ValidationNode<Array<E>>.contains(
 @JvmName("containsArray")
 public fun <E> ValidationNode<Array<E>>.contains(
     element: E?,
-    message: Array<E>.(E) -> String
+    message: suspend Array<E>.(E) -> String
 ) {
     if (element == null)
         return
@@ -434,7 +434,7 @@ public fun <E> ValidationNode<List<E>>.notContains(
 
 public fun <E> ValidationNode<List<E>>.notContains(
     element: E?,
-    message: List<E>.(E) -> String
+    message: suspend List<E>.(E) -> String
 ) {
     if (element == null)
         return
@@ -458,7 +458,7 @@ public fun <E> ValidationNode<Set<E>>.notContains(
 @JvmName("notContainsSet")
 public fun <E> ValidationNode<Set<E>>.notContains(
     element: E?,
-    message: Set<E>.(E) -> String
+    message: suspend Set<E>.(E) -> String
 ) {
     if (element == null)
         return
@@ -482,7 +482,7 @@ public fun <E> ValidationNode<Array<E>>.notContains(
 @JvmName("notContainsArray")
 public fun <E> ValidationNode<Array<E>>.notContains(
     element: E?,
-    message: Array<E>.(E) -> String
+    message: suspend Array<E>.(E) -> String
 ) {
     if (element == null)
         return
@@ -504,7 +504,7 @@ public fun <E> ValidationNode<List<E>>.containsAll(
 
 public fun <E> ValidationNode<List<E>>.containsAll(
     elements: Iterable<E>?,
-    message: List<E>.(Iterable<E>) -> String
+    message: suspend List<E>.(Iterable<E>) -> String
 ) {
     if (elements == null)
         return
@@ -528,7 +528,7 @@ public fun <E> ValidationNode<Set<E>>.containsAll(
 @JvmName("containsAllSet")
 public fun <E> ValidationNode<Set<E>>.containsAll(
     elements: Iterable<E>?,
-    message: Set<E>.(Iterable<E>) -> String
+    message: suspend Set<E>.(Iterable<E>) -> String
 ) {
     if (elements == null)
         return
@@ -552,7 +552,7 @@ public fun <E> ValidationNode<Array<E>>.containsAll(
 @JvmName("containsAllArray")
 public fun <E> ValidationNode<Array<E>>.containsAll(
     elements: Iterable<E>?,
-    message: Array<E>.(Iterable<E>) -> String
+    message: suspend Array<E>.(Iterable<E>) -> String
 ) {
     if (elements == null)
         return
@@ -574,7 +574,7 @@ public fun <E> ValidationNode<List<E>>.containsAny(
 
 public fun <E> ValidationNode<List<E>>.containsAny(
     elements: Iterable<E>?,
-    message: List<E>.(Iterable<E>) -> String
+    message: suspend List<E>.(Iterable<E>) -> String
 ) {
     if (elements == null)
         return
@@ -598,7 +598,7 @@ public fun <E> ValidationNode<Set<E>>.containsAny(
 @JvmName("containsAnySet")
 public fun <E> ValidationNode<Set<E>>.containsAny(
     elements: Iterable<E>?,
-    message: Set<E>.(Iterable<E>) -> String
+    message: suspend Set<E>.(Iterable<E>) -> String
 ) {
     if (elements == null)
         return
@@ -622,7 +622,7 @@ public fun <E> ValidationNode<Array<E>>.containsAny(
 @JvmName("containsAnyArray")
 public fun <E> ValidationNode<Array<E>>.containsAny(
     elements: Iterable<E>?,
-    message: Array<E>.(Iterable<E>) -> String
+    message: suspend Array<E>.(Iterable<E>) -> String
 ) {
     if (elements == null)
         return
@@ -644,7 +644,7 @@ public fun <E> ValidationNode<List<E>>.containsNone(
 
 public fun <E> ValidationNode<List<E>>.containsNone(
     elements: Iterable<E>?,
-    message: List<E>.(Iterable<E>) -> String
+    message: suspend List<E>.(Iterable<E>) -> String
 ) {
     if (elements == null)
         return
@@ -668,7 +668,7 @@ public fun <E> ValidationNode<Set<E>>.containsNone(
 @JvmName("containsNoneSet")
 public fun <E> ValidationNode<Set<E>>.containsNone(
     elements: Iterable<E>?,
-    message: Set<E>.(Iterable<E>) -> String
+    message: suspend Set<E>.(Iterable<E>) -> String
 ) {
     if (elements == null)
         return
@@ -692,7 +692,7 @@ public fun <E> ValidationNode<Array<E>>.containsNone(
 @JvmName("containsNoneArray")
 public fun <E> ValidationNode<Array<E>>.containsNone(
     elements: Iterable<E>?,
-    message: Array<E>.(Iterable<E>) -> String
+    message: suspend Array<E>.(Iterable<E>) -> String
 ) {
     if (elements == null)
         return
