@@ -23,12 +23,10 @@ public class Validation internal constructor(
         message: String,
         code: String = "",
         predicate: suspend () -> Boolean
-    ): Unit = constraint(
-        path = property.name,
-        value = property.get(),
+    ): Unit = node(path = property.name, value = property.get()).constraint(
         message = message,
         code = code,
-        predicate = predicate
+        predicate = { predicate() }
     )
 
     public fun constraint(
@@ -36,12 +34,10 @@ public class Validation internal constructor(
         message: String,
         code: String = "",
         predicate: suspend () -> Boolean
-    ): Unit = constraint(
-        path = path,
-        value = null,
+    ): Unit = node(path = path, value = null).constraint(
         message = message,
         code = code,
-        predicate = predicate
+        predicate = { predicate() }
     )
 
     public inline fun metadata(
@@ -72,24 +68,6 @@ public class Validation internal constructor(
     ): ValidationResult = runBlocking { validate(validity) }
 
     internal suspend fun built(): Validation = Validation(block).apply { block() }
-
-    private fun constraint(
-        path: String,
-        value: Any?,
-        message: String,
-        code: String,
-        predicate: suspend () -> Boolean
-    ) {
-        val node = ValidationNode(path = path, value = value).also { node -> node.metadata = metadata }
-
-        add(node)
-
-        node.constraint(
-            message = message,
-            code = code,
-            predicate = { predicate() }
-        )
-    }
 }
 
 public fun validation(

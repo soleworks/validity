@@ -37,11 +37,7 @@ public inline fun <V : Any> required(
             predicate = { it != null }
         )
 
-    validation.add(
-        path = path,
-        value = value,
-        block = block
-    )
+    validation.node(path = path, value = value).block()
 }
 
 context(validation: Validation)
@@ -60,11 +56,7 @@ public inline fun <V : Any> ifPresent(
     block: ValidationNode<V>.() -> Unit
 ) {
     if (value != null)
-        validation.add(
-            path = path,
-            value = value,
-            block = block
-        )
+        validation.node(path = path, value = value).block()
 }
 
 context(validation: Validation)
@@ -206,26 +198,17 @@ private fun presence(
 }
 
 @PublishedApi
-internal inline fun <V> Validation.add(
-    path: String,
-    value: V,
-    block: ValidationNode<V>.() -> Unit
-) {
-    node(path = path, value = value).block()
-}
-
-@PublishedApi
 internal fun <V> Validation.add(
     path: String,
     value: V,
     message: String,
     code: String,
-    predicate: (V) -> Boolean
+    predicate: suspend (V) -> Boolean
 ) {
     node(path = path, value = value).constraint(
         message = message,
         code = code,
-        predicate = { predicate(it) }
+        predicate = predicate
     )
 }
 
