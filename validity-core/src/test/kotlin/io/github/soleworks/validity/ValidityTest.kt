@@ -5,6 +5,7 @@ import io.github.soleworks.validity.constraints.future
 import io.github.soleworks.validity.constraints.futureOrPresent
 import io.github.soleworks.validity.constraints.past
 import io.github.soleworks.validity.constraints.pastOrPresent
+import io.github.soleworks.validity.constraints.validate
 import io.github.soleworks.validity.samples.Address
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Recipient
@@ -45,7 +46,7 @@ class ValidityTest {
             }
             val customer = Customer(email = null)
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "email", message = "email is mandatory", code = "required")
@@ -113,7 +114,7 @@ class ValidityTest {
         fun `given no configuration should report the default message in English`() {
             val customer = Customer(name = "A")
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "name", message = "must have at least 2 characters", code = "minLength")
@@ -129,7 +130,7 @@ class ValidityTest {
             }
             val customer = Customer(name = null)
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "name", message = "é obrigatório", code = "required")
@@ -164,7 +165,7 @@ class ValidityTest {
             }
             val recipient = Recipient(email = null, phone = null, companyName = "Ana LTDA")
 
-            val result = recipient.validate()
+            val result = recipient.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -288,7 +289,7 @@ class ValidityTest {
             }
             val recipient = Recipient(pixKey = null, cnpj = "11222333000181")
 
-            val result = recipient.validate()
+            val result = recipient.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -315,7 +316,7 @@ class ValidityTest {
             }
             val customer = Customer(name = "A")
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength")
@@ -336,7 +337,7 @@ class ValidityTest {
             }
             val customer = Customer(name = "A")
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "name", message = "must have at least 2 characters", code = "minLength")
@@ -353,7 +354,7 @@ class ValidityTest {
             }
             val customer = Customer(name = "A", address = Address(street = null))
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -375,7 +376,7 @@ class ValidityTest {
             val validity = Validity { }
             val customer = Customer(name = "A")
 
-            val result = customer.validate(validity)
+            val result = customer.validateBlocking(validity)
 
             result.violations shouldBe listOf(
                 Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength")
@@ -388,7 +389,7 @@ class ValidityTest {
             val validity = Validity { clock = Clock.fixed(Instant.parse("2020-06-15T12:00:00Z"), UTC) }
             val subscription = Subscription(startsOn = LocalDate.of(2010, 1, 1))
 
-            val result = subscription.validate(validity)
+            val result = subscription.validateBlocking(validity)
 
             result.violations shouldBe listOf(
                 Violation(path = "startsOn", message = "deve estar no futuro", code = "future")
@@ -400,7 +401,7 @@ class ValidityTest {
             Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
             val customer = Customer(name = "A")
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "name", message = "must have at least 2 characters", code = "minLength")
@@ -414,7 +415,7 @@ class ValidityTest {
             Validity.configure { }
             val customer = Customer(name = "A")
 
-            val result = customer.validate(validity)
+            val result = customer.validateBlocking(validity)
 
             result.violations shouldBe listOf(
                 Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength")
@@ -429,7 +430,7 @@ class ValidityTest {
         fun `given no Validity should accept a date of this year on the system clock`() {
             val report = Report(issuedOn = LocalDate.now())
 
-            val result = report.validate()
+            val result = report.validateBlocking()
 
             result.isValid shouldBe true
         }
@@ -439,7 +440,7 @@ class ValidityTest {
             val validity = Validity { clock = Clock.fixed(Instant.parse("2026-10-24T12:00:00Z"), UTC) }
             val report = Report(issuedOn = LocalDate.of(2026, 3, 1))
 
-            val result = report.validate(validity)
+            val result = report.validateBlocking(validity)
 
             result.isValid shouldBe true
         }
@@ -449,7 +450,7 @@ class ValidityTest {
             val validity = Validity { clock = Clock.fixed(Instant.parse("2030-01-01T12:00:00Z"), UTC) }
             val report = Report(issuedOn = LocalDate.of(2026, 3, 1))
 
-            val result = report.validate(validity)
+            val result = report.validateBlocking(validity)
 
             result.violations shouldBe listOf(
                 Violation(path = "issuedOn", message = "must be issued this year", code = "")
@@ -462,7 +463,7 @@ class ValidityTest {
             val validity = Validity { clock = Clock.fixed(Instant.parse("2026-10-24T12:00:00Z"), zone) }
             val report = Report(sentAt = ZonedDateTime.of(2026, 10, 24, 12, 0, 0, 0, UTC))
 
-            val result = report.validate(validity)
+            val result = report.validateBlocking(validity)
 
             result.violations shouldBe listOf(
                 Violation(path = "sentAt", message = "must be sent in the zone of the clock", code = "")

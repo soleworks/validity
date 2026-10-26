@@ -1,15 +1,15 @@
 package io.github.soleworks.validity
 
 import kotlin.reflect.KProperty0
+import kotlinx.coroutines.runBlocking
 
 @ValidityDsl
 public class Validation internal constructor(
-    private val block: Validation.() -> Unit
+    private val block: suspend Validation.() -> Unit
 ) {
-    private val validity: Validity = Validity.current
-
     internal val nodes = mutableListOf<ValidationNode<*>>()
 
+    @PublishedApi
     internal var metadata: Map<String, Any?> = emptyMap()
 
     public fun add(
@@ -22,7 +22,7 @@ public class Validation internal constructor(
         property: KProperty0<*>,
         message: String,
         code: String = "",
-        predicate: () -> Boolean
+        predicate: suspend () -> Boolean
     ): Unit = constraint(
         path = property.name,
         value = property.get(),
@@ -35,7 +35,7 @@ public class Validation internal constructor(
         path: String = "",
         message: String,
         code: String = "",
-        predicate: () -> Boolean
+        predicate: suspend () -> Boolean
     ): Unit = constraint(
         path = path,
         value = null,
@@ -44,7 +44,7 @@ public class Validation internal constructor(
         predicate = predicate
     )
 
-    public fun metadata(
+    public inline fun metadata(
         vararg entries: Pair<String, Any?>,
         block: Validation.() -> Unit
     ) {
@@ -59,22 +59,26 @@ public class Validation internal constructor(
         }
     }
 
-    public fun validate(
+    public suspend fun validate(
         validity: Validity = Validity.default
     ): ValidationResult = validity.use {
-        val rules = if (validity === this.validity) this else validation(block)
-
         ValidationResult(
-            violations = rules.nodes.flatMap { it.validate() }
+            violations = built().nodes.flatMap { it.violations() }
         )
     }
+
+    public fun validateBlocking(
+        validity: Validity = Validity.default
+    ): ValidationResult = runBlocking { validate(validity) }
+
+    internal suspend fun built(): Validation = Validation(block).apply { block() }
 
     private fun constraint(
         path: String,
         value: Any?,
         message: String,
         code: String,
-        predicate: () -> Boolean
+        predicate: suspend () -> Boolean
     ) {
         val node = ValidationNode(path = path, value = value).also { node -> node.metadata = metadata }
 
@@ -89,5 +93,5 @@ public class Validation internal constructor(
 }
 
 public fun validation(
-    block: Validation.() -> Unit
-): Validation = Validation(block).apply(block)
+    block: suspend Validation.() -> Unit
+): Validation = Validation(block)

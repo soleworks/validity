@@ -86,7 +86,7 @@ Violation(path=iban, message=is required, code=required)
 - **Batteries included.** More than 140 constraints, postal codes of 72 countries, national documents of 14, and phone
   numbers in their own module.
 - **Nothing hidden.** No annotations, no code generation, no `kotlin-reflect`. `validity-core` depends on nothing but
-  the Kotlin standard library.
+  the Kotlin standard library and kotlinx.coroutines.
 
 How it compares, in each library's own terms:
 
@@ -151,14 +151,17 @@ Violation(path=email, message=must be a valid email, code=email)
 Violation(path=age, message=must be at least 18, code=min)
 ```
 
-At the edge of your system, `user.validateOrThrow()` throws a `ValidationException` that carries the same list, so one
-error handler can turn every invalid request into a response.
+`validate()` is a `suspend` function, so a rule can query a database or an API. Outside a coroutine, call
+`validateBlocking()` instead.
+
+At the edge of your system, `user.validateOrThrow()` (or `validateOrThrowBlocking()`) throws a `ValidationException`
+that carries the same list, so one error handler can turn every invalid request into a response.
 
 ## Modules
 
 | Module | What it adds | Dependencies |
 |---|---|---|
-| `validity-core` | the DSL and every constraint but the phone ones | none |
+| `validity-core` | the DSL and every constraint but the phone ones | [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines) |
 | `validity-phone` | `phone`, `mobilePhone`, `countryCode` and `areaCode` | Google's [libphonenumber](https://github.com/google/libphonenumber) |
 
 ## Documentation

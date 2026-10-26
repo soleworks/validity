@@ -26,7 +26,7 @@ public fun <V> ValidationNode<V>.equalTo(
 
 public fun <V> ValidationNode<V>.equalTo(
     other: V?,
-    message: V.(V) -> String
+    message: suspend V.(V) -> String
 ) {
     if (other == null)
         return
@@ -48,7 +48,7 @@ public fun <V> ValidationNode<V>.notEqualTo(
 
 public fun <V> ValidationNode<V>.notEqualTo(
     other: V?,
-    message: V.(V) -> String
+    message: suspend V.(V) -> String
 ) {
     if (other == null)
         return
@@ -70,7 +70,7 @@ public fun <V> ValidationNode<V>.oneOf(
 
 public fun <V> ValidationNode<V>.oneOf(
     values: Iterable<V>?,
-    message: V.(Iterable<V>) -> String
+    message: suspend V.(Iterable<V>) -> String
 ) {
     if (values == null)
         return
@@ -92,7 +92,7 @@ public fun <V> ValidationNode<V>.noneOf(
 
 public fun <V> ValidationNode<V>.noneOf(
     values: Iterable<V>?,
-    message: V.(Iterable<V>) -> String
+    message: suspend V.(Iterable<V>) -> String
 ) {
     if (values == null)
         return

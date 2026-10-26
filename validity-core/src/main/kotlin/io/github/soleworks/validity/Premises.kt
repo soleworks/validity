@@ -3,7 +3,7 @@ package io.github.soleworks.validity
 import kotlin.reflect.KProperty0
 
 context(validation: Validation)
-public infix fun <V : Any> KProperty0<V?>.required(
+public inline infix fun <V : Any> KProperty0<V?>.required(
     block: ValidationNode<V>.() -> Unit
 ): Unit = required(
     message = messages.required,
@@ -11,7 +11,7 @@ public infix fun <V : Any> KProperty0<V?>.required(
 )
 
 context(validation: Validation)
-public fun <V : Any> KProperty0<V?>.required(
+public inline fun <V : Any> KProperty0<V?>.required(
     message: String,
     block: ValidationNode<V>.() -> Unit
 ): Unit = required(
@@ -22,7 +22,7 @@ public fun <V : Any> KProperty0<V?>.required(
 )
 
 context(validation: Validation)
-public fun <V : Any> required(
+public inline fun <V : Any> required(
     path: String,
     value: V?,
     message: String = messages.required,
@@ -45,7 +45,7 @@ public fun <V : Any> required(
 }
 
 context(validation: Validation)
-public infix fun <V : Any> KProperty0<V?>.ifPresent(
+public inline infix fun <V : Any> KProperty0<V?>.ifPresent(
     block: ValidationNode<V>.() -> Unit
 ): Unit = ifPresent(
     path = name,
@@ -54,7 +54,7 @@ public infix fun <V : Any> KProperty0<V?>.ifPresent(
 )
 
 context(validation: Validation)
-public fun <V : Any> ifPresent(
+public inline fun <V : Any> ifPresent(
     path: String,
     value: V?,
     block: ValidationNode<V>.() -> Unit
@@ -205,34 +205,35 @@ private fun presence(
     }
 }
 
-private fun <V> Validation.add(
+@PublishedApi
+internal inline fun <V> Validation.add(
     path: String,
     value: V,
     block: ValidationNode<V>.() -> Unit
 ) {
-    val node = ValidationNode(path = path, value = value).also { node -> node.metadata = metadata }
-
-    add(node)
-
-    node.apply(block)
+    node(path = path, value = value).block()
 }
 
-private fun <V> Validation.add(
+@PublishedApi
+internal fun <V> Validation.add(
     path: String,
     value: V,
     message: String,
     code: String,
     predicate: (V) -> Boolean
 ) {
-    add(
-        path = path,
-        value = value,
-        block = {
-            constraint(
-                message = message,
-                code = code,
-                predicate = predicate
-            )
-        }
+    node(path = path, value = value).constraint(
+        message = message,
+        code = code,
+        predicate = { predicate(it) }
     )
+}
+
+@PublishedApi
+internal fun <V> Validation.node(
+    path: String,
+    value: V
+): ValidationNode<V> = ValidationNode(path = path, value = value).also { node ->
+    node.metadata = metadata
+    add(node)
 }

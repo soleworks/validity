@@ -55,7 +55,7 @@ public fun ValidationNode<String>.dateFormat(
 
 public fun ValidationNode<String>.dateFormat(
     pattern: String,
-    message: String.(String) -> String
+    message: suspend String.(String) -> String
 ): Unit = constraint(
     message = { it.message(pattern) },
     code = "dateFormat",

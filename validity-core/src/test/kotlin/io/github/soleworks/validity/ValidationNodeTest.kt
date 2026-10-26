@@ -6,9 +6,13 @@ import io.github.soleworks.validity.constraints.min
 import io.github.soleworks.validity.constraints.minLength
 import io.github.soleworks.validity.constraints.or
 import io.github.soleworks.validity.constraints.positive
+import io.github.soleworks.validity.constraints.validate
+import io.github.soleworks.validity.samples.Accounts
 import io.github.soleworks.validity.samples.Company
 import io.github.soleworks.validity.samples.Operation
+import io.github.soleworks.validity.samples.Threads
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,6 +21,31 @@ class ValidationNodeTest {
     @Nested
     @DisplayName("When constraint is called")
     inner class Constraint {
+        @Test
+        fun `given a predicate that suspends should accept a value it accepts`() {
+            val accounts = Accounts("ana@mail.com")
+            val node = ValidationNode(path = "email", value = "bia@mail.com").apply {
+                constraint(message = "is already taken") { !accounts.exists(it) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function that suspends should report its message`() {
+            val node = ValidationNode(path = "amount", value = -1).apply {
+                constraint(message = { withContext(Threads.other) { "$it is not positive" } }) { it > 0 }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "amount", message = "-1 is not positive", code = "")
+            )
+        }
+
         @Test
         fun `given a code should report it with the violation`() {
             val node = ValidationNode(path = "amount", value = -1).apply {

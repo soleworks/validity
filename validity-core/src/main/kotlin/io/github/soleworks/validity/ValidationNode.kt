@@ -2,20 +2,24 @@ package io.github.soleworks.validity
 
 @ValidityDsl
 public class ValidationNode<V>(
+    @PublishedApi
     internal val path: String,
+    @PublishedApi
     internal val value: V
 ) {
     private val constraints = mutableListOf<Constraint<V>>()
-    private val groups = mutableListOf<List<ValidationNode<*>>>()
+    private val groups = mutableListOf<suspend () -> List<ValidationNode<*>>>()
 
+    @PublishedApi
     internal var operator: String? = null
 
+    @PublishedApi
     internal var metadata: Map<String, Any?> = emptyMap()
 
     public fun constraint(
         message: String,
         code: String = "",
-        predicate: (V) -> Boolean
+        predicate: suspend (V) -> Boolean
     ): Unit = constraint(
         message = { message },
         code = code,
@@ -23,9 +27,9 @@ public class ValidationNode<V>(
     )
 
     public fun constraint(
-        message: (V) -> String,
+        message: suspend (V) -> String,
         code: String = "",
-        predicate: (V) -> Boolean
+        predicate: suspend (V) -> Boolean
     ) {
         val metadata = metadata
 
@@ -44,7 +48,7 @@ public class ValidationNode<V>(
         )
     }
 
-    public fun metadata(
+    public inline fun metadata(
         vararg entries: Pair<String, Any?>,
         block: ValidationNode<V>.() -> Unit
     ) {
@@ -65,16 +69,23 @@ public class ValidationNode<V>(
         constraints += constraint
     }
 
+    @PublishedApi
     internal fun add(
         nodes: List<ValidationNode<*>>
     ) {
-        groups += nodes
+        groups += { nodes }
     }
 
-    internal fun validate(): List<Violation> = branches().flatten()
+    internal fun add(
+        group: suspend () -> List<ValidationNode<*>>
+    ) {
+        groups += group
+    }
 
-    internal fun branches(): List<List<Violation>> =
-        constraints.map { it.validate(path, value) } + groups.map { nodes -> nodes.flatMap { it.validate() } }
+    internal suspend fun violations(): List<Violation> = branches().flatten()
+
+    internal suspend fun branches(): List<List<Violation>> =
+        constraints.map { it.validate(path, value) } + groups.map { group -> group().flatMap { it.violations() } }
 
     internal fun relocated(
         path: String,
@@ -84,8 +95,8 @@ public class ValidationNode<V>(
     else
         ValidationNode(path, value).also { relocated ->
             relocated.constraints += constraints.map { constraint -> constraint.inheriting(metadata) }
-            relocated.groups += groups.map { nodes ->
-                nodes.map { node -> node.relocated(path + node.path.removePrefix(this.path), metadata) }
+            relocated.groups += groups.map { group ->
+                suspend { group().map { node -> node.relocated(path + node.path.removePrefix(this.path), metadata) } }
             }
         }
 }

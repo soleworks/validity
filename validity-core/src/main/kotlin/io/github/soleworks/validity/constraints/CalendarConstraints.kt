@@ -26,7 +26,7 @@ public fun ValidationNode<LocalDate>.minAge(
 
 public fun ValidationNode<LocalDate>.minAge(
     min: Int?,
-    message: LocalDate.(Int) -> String
+    message: suspend LocalDate.(Int) -> String
 ) {
     if (min == null)
         return
@@ -48,7 +48,7 @@ public fun ValidationNode<LocalDate>.maxAge(
 
 public fun ValidationNode<LocalDate>.maxAge(
     max: Int?,
-    message: LocalDate.(Int) -> String
+    message: suspend LocalDate.(Int) -> String
 ) {
     if (max == null)
         return
@@ -70,7 +70,7 @@ public fun ValidationNode<LocalDate>.withinNext(
 
 public fun ValidationNode<LocalDate>.withinNext(
     duration: Duration?,
-    message: LocalDate.(Duration) -> String
+    message: suspend LocalDate.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinNext",
@@ -91,7 +91,7 @@ public fun ValidationNode<LocalDateTime>.withinNext(
 @JvmName("withinNextLocalDateTime")
 public fun ValidationNode<LocalDateTime>.withinNext(
     duration: Duration?,
-    message: LocalDateTime.(Duration) -> String
+    message: suspend LocalDateTime.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinNext",
@@ -112,7 +112,7 @@ public fun ValidationNode<ZonedDateTime>.withinNext(
 @JvmName("withinNextZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.withinNext(
     duration: Duration?,
-    message: ZonedDateTime.(Duration) -> String
+    message: suspend ZonedDateTime.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinNext",
@@ -133,7 +133,7 @@ public fun ValidationNode<OffsetDateTime>.withinNext(
 @JvmName("withinNextOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.withinNext(
     duration: Duration?,
-    message: OffsetDateTime.(Duration) -> String
+    message: suspend OffsetDateTime.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinNext",
@@ -154,7 +154,7 @@ public fun ValidationNode<Instant>.withinNext(
 @JvmName("withinNextInstant")
 public fun ValidationNode<Instant>.withinNext(
     duration: Duration?,
-    message: Instant.(Duration) -> String
+    message: suspend Instant.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinNext",
@@ -173,7 +173,7 @@ public fun ValidationNode<LocalDate>.withinLast(
 
 public fun ValidationNode<LocalDate>.withinLast(
     duration: Duration?,
-    message: LocalDate.(Duration) -> String
+    message: suspend LocalDate.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinLast",
@@ -194,7 +194,7 @@ public fun ValidationNode<LocalDateTime>.withinLast(
 @JvmName("withinLastLocalDateTime")
 public fun ValidationNode<LocalDateTime>.withinLast(
     duration: Duration?,
-    message: LocalDateTime.(Duration) -> String
+    message: suspend LocalDateTime.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinLast",
@@ -215,7 +215,7 @@ public fun ValidationNode<ZonedDateTime>.withinLast(
 @JvmName("withinLastZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.withinLast(
     duration: Duration?,
-    message: ZonedDateTime.(Duration) -> String
+    message: suspend ZonedDateTime.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinLast",
@@ -236,7 +236,7 @@ public fun ValidationNode<OffsetDateTime>.withinLast(
 @JvmName("withinLastOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.withinLast(
     duration: Duration?,
-    message: OffsetDateTime.(Duration) -> String
+    message: suspend OffsetDateTime.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinLast",
@@ -257,7 +257,7 @@ public fun ValidationNode<Instant>.withinLast(
 @JvmName("withinLastInstant")
 public fun ValidationNode<Instant>.withinLast(
     duration: Duration?,
-    message: Instant.(Duration) -> String
+    message: suspend Instant.(Duration) -> String
 ): Unit = within(
     duration = duration,
     code = "withinLast",
@@ -374,9 +374,9 @@ public fun ValidationNode<OffsetDateTime>.weekend(
 private fun <V> ValidationNode<V>.within(
     duration: Duration?,
     code: String,
-    message: V.(Duration) -> String,
-    window: (value: V, now: V, length: Duration) -> Boolean,
-    now: () -> V
+    message: suspend V.(Duration) -> String,
+    window: suspend (value: V, now: V, length: Duration) -> Boolean,
+    now: suspend () -> V
 ) {
     if (duration == null)
         return

@@ -15,7 +15,7 @@ public fun ValidationNode<Duration>.min(
 
 public fun ValidationNode<Duration>.min(
     min: Duration?,
-    message: Duration.(Duration) -> String
+    message: suspend Duration.(Duration) -> String
 ) {
     if (min == null)
         return
@@ -37,7 +37,7 @@ public fun ValidationNode<Duration>.max(
 
 public fun ValidationNode<Duration>.max(
     max: Duration?,
-    message: Duration.(Duration) -> String
+    message: suspend Duration.(Duration) -> String
 ) {
     if (max == null)
         return
@@ -59,7 +59,7 @@ public fun ValidationNode<Duration>.greaterThan(
 
 public fun ValidationNode<Duration>.greaterThan(
     other: Duration?,
-    message: Duration.(Duration) -> String
+    message: suspend Duration.(Duration) -> String
 ) {
     if (other == null)
         return
@@ -81,7 +81,7 @@ public fun ValidationNode<Duration>.lessThan(
 
 public fun ValidationNode<Duration>.lessThan(
     other: Duration?,
-    message: Duration.(Duration) -> String
+    message: suspend Duration.(Duration) -> String
 ) {
     if (other == null)
         return
@@ -106,7 +106,7 @@ public fun ValidationNode<Duration>.between(
 public fun ValidationNode<Duration>.between(
     min: Duration?,
     max: Duration?,
-    message: Duration.(Duration, Duration) -> String
+    message: suspend Duration.(Duration, Duration) -> String
 ) {
     if (min == null || max == null)
         return

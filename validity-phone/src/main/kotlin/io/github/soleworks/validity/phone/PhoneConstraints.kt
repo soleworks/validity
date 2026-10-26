@@ -20,7 +20,7 @@ public fun ValidationNode<String>.phone(
     countryCode: String? = null,
     areaCode: String? = null,
     format: PhoneFormat? = null,
-    message: String.(String?, String?, PhoneFormat?) -> String
+    message: suspend String.(String?, String?, PhoneFormat?) -> String
 ): Unit = constraint(
     message = { it.message(countryCode, areaCode, format) },
     code = "phone",
@@ -43,7 +43,7 @@ public fun ValidationNode<String>.mobilePhone(
     countryCode: String? = null,
     areaCode: String? = null,
     format: PhoneFormat? = null,
-    message: String.(String?, String?, PhoneFormat?) -> String
+    message: suspend String.(String?, String?, PhoneFormat?) -> String
 ): Unit = constraint(
     message = { it.message(countryCode, areaCode, format) },
     code = "mobilePhone",
@@ -68,7 +68,7 @@ public fun ValidationNode<String>.areaCode(
 
 public fun ValidationNode<String>.areaCode(
     countryCode: String? = null,
-    message: String.(String?) -> String
+    message: suspend String.(String?) -> String
 ): Unit = constraint(
     message = { it.message(countryCode) },
     code = "areaCode",

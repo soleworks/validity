@@ -6,56 +6,56 @@ import io.github.soleworks.validity.Violation
 import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
 
-private const val OR = "or"
-private const val AND = "and"
-private const val NOT = "not"
+@PublishedApi
+internal const val OR: String = "or"
 
-public fun <V> ValidationNode<V>.or(
+@PublishedApi
+internal const val AND: String = "and"
+
+@PublishedApi
+internal const val NOT: String = "not"
+
+public inline fun <V> ValidationNode<V>.or(
     block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
     operator = OR,
     message = null,
-    passes = ::anyPasses,
-    block = block
+    rules = branch(OR).apply(block)
 )
 
-public fun <V> ValidationNode<V>.or(
+public inline fun <V> ValidationNode<V>.or(
     message: String,
     block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
     operator = OR,
     message = message,
-    passes = ::anyPasses,
-    block = block
+    rules = branch(OR).apply(block)
 )
 
-public fun <V> ValidationNode<V>.and(
+public inline fun <V> ValidationNode<V>.and(
     block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
     operator = AND,
     message = null,
-    passes = ::allPass,
-    block = block
+    rules = branch(AND).apply(block)
 )
 
-public fun <V> ValidationNode<V>.and(
+public inline fun <V> ValidationNode<V>.and(
     message: String,
     block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
     operator = AND,
     message = message,
-    passes = ::allPass,
-    block = block
+    rules = branch(AND).apply(block)
 )
 
-public fun <V> ValidationNode<V>.not(
+public inline fun <V> ValidationNode<V>.not(
     message: String = messages.not,
     block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
     operator = NOT,
     message = message,
-    passes = ::nonePasses,
-    block = block
+    rules = branch(NOT).apply(block)
 )
 
 private fun anyPasses(
@@ -70,13 +70,22 @@ private fun nonePasses(
     branches: List<List<Violation>>
 ): Boolean = branches.all { it.isNotEmpty() }
 
-private fun <V> ValidationNode<V>.combine(
+@PublishedApi
+internal fun <V> ValidationNode<V>.branch(
+    operator: String
+): ValidationNode<V> = ValidationNode(path, value).also { it.operator = operator }
+
+@PublishedApi
+internal fun <V> ValidationNode<V>.combine(
     operator: String,
     message: String?,
-    passes: (List<List<Violation>>) -> Boolean,
-    block: ValidationNode<V>.() -> Unit
+    rules: ValidationNode<V>
 ) {
-    val rules = ValidationNode(path, value).also { it.operator = operator }.apply(block)
+    val passes = when (operator) {
+        OR -> ::anyPasses
+        AND -> ::allPass
+        else -> ::nonePasses
+    }
     val outer = this.operator
     val metadata = metadata
     val template = if (operator == OR) messages.or else messages.and

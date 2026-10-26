@@ -1,12 +1,17 @@
 package io.github.soleworks.validity
 
+import io.github.soleworks.validity.constraints.minLength
+import io.github.soleworks.validity.samples.Accounts
 import io.github.soleworks.validity.samples.Batch
 import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Invoice
 import io.github.soleworks.validity.samples.Operation
 import io.github.soleworks.validity.samples.Payout
+import io.github.soleworks.validity.samples.Threads
 import io.github.soleworks.validity.samples.validation
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,10 +22,39 @@ class ValidationTest {
     inner class Validate {
         @Test
         fun `given a valid contact should be valid`() {
+            val rules = Contact().validation()
+
+            val result = runBlocking { rules.validate() }
+
+            result.isValid shouldBe true
+        }
+
+        @Test
+        fun `given a block that resumes on another thread should report the rules after it with the messages`() {
+            val validity = Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
+            val contact = Contact(phone = "123")
+            val rules = validation {
+                withContext(Threads.other) { }
+                add(ValidationNode(path = "phone", value = contact.phone.orEmpty()).apply { minLength(8) })
+            }
+
+            val result = runBlocking(Threads.caller) { rules.validate(validity) }
+
+            result.violations shouldBe listOf(
+                Violation(path = "phone", message = "deve ter pelo menos 8 caracteres", code = "minLength")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When validateBlocking is called")
+    inner class ValidateBlocking {
+        @Test
+        fun `given a valid contact should be valid`() {
             val contact = Contact()
             val rules = contact.validation()
 
-            val result = rules.validate()
+            val result = rules.validateBlocking()
 
             result.isValid shouldBe true
         }
@@ -30,7 +64,7 @@ class ValidationTest {
             val contact = Contact(phone = "123")
             val rules = contact.validation()
 
-            val result = rules.validate()
+            val result = rules.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "phone", message = "must have at least 8 characters", code = "minLength")
@@ -42,10 +76,25 @@ class ValidationTest {
             val validity = Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
             val rules = Contact(phone = "123").validation()
 
-            val result = rules.validate(validity)
+            val result = rules.validateBlocking(validity)
 
             result.violations shouldBe listOf(
                 Violation(path = "phone", message = "deve ter pelo menos 8 caracteres", code = "minLength")
+            )
+        }
+
+        @Test
+        fun `given a block that calls a suspend function should report the rule that depends on it`() {
+            val accounts = Accounts("ana@mail.com")
+            val rules = validation {
+                val isTaken = accounts.exists("ana@mail.com")
+                constraint(path = "email", message = "is already taken") { !isTaken }
+            }
+
+            val result = rules.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(path = "email", message = "is already taken", code = "")
             )
         }
     }
@@ -57,7 +106,7 @@ class ValidationTest {
         fun `given a rule that holds should accept it`() {
             val invoice = Invoice()
 
-            val result = invoice.validate()
+            val result = invoice.validateBlocking()
 
             result.violations shouldBe emptyList()
         }
@@ -66,7 +115,7 @@ class ValidationTest {
         fun `given a missing pix key should report the broken rule at the property`() {
             val payout = Payout(pixKey = null)
 
-            val result = payout.validate()
+            val result = payout.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "pixKey", message = "fill the pix key", code = "pixKey")
@@ -77,7 +126,7 @@ class ValidationTest {
         fun `given a broken rule without a path should report it at the root`() {
             val invoice = Invoice(total = 5)
 
-            val result = invoice.validate()
+            val result = invoice.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "", message = "items must add up to the total", code = "total")
@@ -88,7 +137,7 @@ class ValidationTest {
         fun `given a broken rule with a path should report it at that path`() {
             val rules = validation { constraint(path = "bankAccount", message = "fill the bank account") { false } }
 
-            val result = rules.validate()
+            val result = rules.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "bankAccount", message = "fill the bank account", code = "")
@@ -101,7 +150,7 @@ class ValidationTest {
                 metadata("operationId" to "op-1") { constraint(message = "send at least one field") { false } }
             }
 
-            val result = rules.validate()
+            val result = rules.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -117,7 +166,7 @@ class ValidationTest {
         fun `given a message with placeholders should fill the path and the value`() {
             val payout = Payout(amount = 0)
 
-            val result = payout.validate()
+            val result = payout.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "amount", message = "amount cannot be 0", code = "")
@@ -132,7 +181,7 @@ class ValidationTest {
         fun `given premises inside the block should attach the entries to their violations`() {
             val operation = Operation(email = null, phone = null)
 
-            val result = operation.validate()
+            val result = operation.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -150,7 +199,7 @@ class ValidationTest {
                 metadata("operationId" to "op-1") { required<String>(path = "email", value = null) {} }
             }
 
-            val result = rules.validate()
+            val result = rules.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -166,7 +215,7 @@ class ValidationTest {
         fun `given nested objects inside the block should merge the entries of each level`() {
             val batch = Batch(operations = listOf(Operation(id = "op-7", amount = 0)))
 
-            val result = batch.validate()
+            val result = batch.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -182,7 +231,7 @@ class ValidationTest {
         fun `given a collection of a nested object inside the block should attach the entries to its elements`() {
             val batch = Batch(operations = listOf(Operation(tags = listOf("x"))))
 
-            val result = batch.validate()
+            val result = batch.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -201,7 +250,7 @@ class ValidationTest {
                 required<String>(path = "phone", value = null) {}
             }
 
-            val result = rules.validate()
+            val result = rules.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
