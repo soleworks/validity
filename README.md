@@ -79,6 +79,8 @@ Violation(path=iban, message=is required, code=required)
 - **Rules across fields are built in.** `atLeastOneOf`, `exactlyOneOf` and `allOrNoneOf` cover the rules that forms
   and payment APIs are full of, `exactlyOf(2, ::a, ::b, ::c)` counts any number of them, `constraint(::total, message = "...") { }` checks any rule about the whole object,
   and `or`, `and` and `not` combine any constraints.
+- **Context and coroutines.** A rule can read data the caller passes, such as the logged-in user, and call `suspend`
+  functions, such as a database lookup, without a separate API for either.
 - **Nested objects and collections.** `valid()` and `each` follow the data, and every violation says where it is:
   `shipping.zipCode`, `items[1].quantity`, `prices[USD]`.
 - **Every error at once, for two audiences.** A `message` for people, configurable and translatable, and a stable
@@ -202,6 +204,83 @@ The rules after the block, and the other fields, run as usual. Each call in the 
 > ```
 >
 > Put the work inside `constraint { }`, after the rule it depends on.
+
+### Rules that need the caller's data
+
+Some rules depend on who is asking: the credit limit of the logged-in customer, the catalog of a tenant, a repository.
+Implement `ContextualValidatable` and the rules receive that context, with its type checked by the compiler:
+
+```kotlin
+data class Checkout(
+    val total: Int?,
+    val items: List<Item>?
+) : ContextualValidatable<Customer> {
+    override fun validation(
+        context: Customer
+    ) = validation {
+        ::total required { max(context.creditLimit) }
+        ::items required { each { valid(context) } }
+    }
+}
+
+data class Item(
+    val sku: String?
+) : ContextualValidatable<Customer> {
+    override fun validation(
+        context: Customer
+    ) = validation {
+        ::sku required { constraint("is not in your catalog", code = "catalog") { it in context.catalog } }
+    }
+}
+
+val customer = Customer(creditLimit = 100, catalog = setOf("BOOK-1", "PEN-2"))
+
+Checkout(total = 150, items = listOf(Item(sku = "BOOK-1"), Item(sku = "LAPTOP-9"))).validate(customer).violations
+```
+
+```text
+Violation(path=total, message=must be at most 100, code=max)
+Violation(path=items[1].sku, message=is not in your catalog, code=catalog)
+```
+
+Nested objects receive the context explicitly, with `valid(context)`, so a child can also take a part of it, such as
+`valid(context.tenant)`. `validateBlocking(context)`, `validateOrThrow(context)` and `validateOrThrowBlocking(context)`
+work as their `Validatable` counterparts.
+
+### Rules that suspend
+
+Every piece of code you hand to Validity can call a `suspend` function, under the same names: the condition of a
+`constraint`, a message built from the value, a converter, and the blocks of `validation`, `required`, `each`, `or` and
+the others. A lookup is one more rule:
+
+```kotlin
+interface Users {
+    suspend fun exists(
+        email: String
+    ): Boolean
+}
+
+data class Invitation(
+    val email: String?
+) : ContextualValidatable<Users> {
+    override fun validation(
+        context: Users
+    ) = validation {
+        ::email required {
+            failFast {
+                email()
+                constraint("is already registered", code = "registered") { !context.exists(it) }
+            }
+        }
+    }
+}
+
+invitation.validate(users)           // inside a coroutine: Ktor, Spring WebFlux
+invitation.validateBlocking(users)   // anywhere else: waits for the lookup
+```
+
+The `Validity` in use goes with the coroutine, so a rule that resumes on another thread still reads the configured
+clock and messages.
 
 ## Modules
 
