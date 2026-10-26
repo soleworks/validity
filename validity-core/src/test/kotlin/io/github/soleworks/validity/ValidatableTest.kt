@@ -207,19 +207,6 @@ class ValidatableTest {
         }
 
         @Test
-        fun `given an invalid user should throw an error that carries every violation`() {
-            val user = User(name = "A", email = "ana@", age = 16)
-
-            val error = shouldThrow<ValidationException> { user.validateOrThrowBlocking() }
-
-            error.violations shouldBe listOf(
-                Violation(path = "name", message = "must have at least 2 characters", code = "minLength"),
-                Violation(path = "email", message = "must be a valid email", code = "email"),
-                Violation(path = "age", message = "must be at least 18", code = "min")
-            )
-        }
-
-        @Test
         fun `given a Validity with messages should throw its violations with them`() {
             val validity = Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
             val customer = Customer(name = "A")

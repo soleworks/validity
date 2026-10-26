@@ -388,8 +388,8 @@ class PremisesTest {
     @DisplayName("When atLeastOf is called")
     inner class AtLeastOf {
         @Test
-        fun `given two channels should accept them`() {
-            val signup = Signup()
+        fun `given three channels should accept them`() {
+            val signup = Signup(whatsapp = "11988888888")
 
             val result = signup.validateBlocking()
 
@@ -464,8 +464,8 @@ class PremisesTest {
     @DisplayName("When exactlyOf is called")
     inner class ExactlyOf {
         @Test
-        fun `given two references should accept them`() {
-            val signup = Signup()
+        fun `given two other references should accept them`() {
+            val signup = Signup(secondReference = null, thirdReference = "Duda")
 
             val result = signup.validateBlocking()
 

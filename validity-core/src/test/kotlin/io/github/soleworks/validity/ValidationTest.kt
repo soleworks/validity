@@ -72,7 +72,7 @@ class ValidationTest {
         }
 
         @Test
-        fun `given a Validity with messages should report the rules declared before with them`() {
+        fun `given a Validity with messages should report the rules with them`() {
             val validity = Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
             val rules = Contact(phone = "123").validation()
 
