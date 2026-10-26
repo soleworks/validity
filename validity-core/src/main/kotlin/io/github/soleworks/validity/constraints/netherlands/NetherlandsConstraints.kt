@@ -10,6 +10,14 @@ private const val MODULUS = 11
 private val BSN_FORMAT = Regex("""\d{9}""")
 private val BSN_WEIGHTS = (9 downTo 2).toList()
 
+/**
+ * Checks that the string is a Dutch BSN: 9 digits that pass the eleven test.
+ *
+ * Fails with code `bsn` and, by default, the message `must be a valid BSN`
+ * ([NetherlandsMessages.bsn][io.github.soleworks.validity.NetherlandsMessages.bsn]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.bsn(
     message: String = messages.netherlands.bsn
 ): Unit = constraint(

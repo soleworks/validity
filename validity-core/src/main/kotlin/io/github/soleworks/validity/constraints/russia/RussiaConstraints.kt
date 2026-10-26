@@ -14,6 +14,14 @@ private val INN_INDIVIDUAL_FIRST_WEIGHTS = listOf(7, 2, 4, 10, 3, 5, 9, 4, 6, 8)
 private val INN_INDIVIDUAL_SECOND_WEIGHTS = listOf(3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8)
 private val INN_LEGAL_ENTITY_WEIGHTS = listOf(2, 4, 10, 3, 5, 9, 4, 6, 8)
 
+/**
+ * Checks that the string is the INN of a Russian individual: 12 digits with two valid check digits.
+ *
+ * Fails with code `innIndividual` and, by default, the message `must be a valid individual INN`
+ * ([RussiaMessages.innIndividual][io.github.soleworks.validity.RussiaMessages.innIndividual]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.innIndividual(
     message: String = messages.russia.innIndividual
 ): Unit = constraint(
@@ -22,6 +30,14 @@ public fun ValidationNode<String>.innIndividual(
     predicate = { INN_INDIVIDUAL_FORMAT.matches(it) && it.digits().isInnIndividual() }
 )
 
+/**
+ * Checks that the string is the INN of a Russian legal entity: 10 digits with a valid check digit.
+ *
+ * Fails with code `innLegalEntity` and, by default, the message `must be a valid legal entity INN`
+ * ([RussiaMessages.innLegalEntity][io.github.soleworks.validity.RussiaMessages.innLegalEntity]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.innLegalEntity(
     message: String = messages.russia.innLegalEntity
 ): Unit = constraint(

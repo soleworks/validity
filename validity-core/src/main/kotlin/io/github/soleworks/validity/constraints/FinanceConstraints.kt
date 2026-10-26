@@ -128,6 +128,16 @@ private val IBAN_FORMATS: Map<String, Regex> = mapOf(
     "YT" to Regex("""YT\d{12}[A-Z0-9]{11}\d{2}""")
 )
 
+/**
+ * Checks that the string is a card number: 12 to 19 digits with a valid Luhn check digit.
+ *
+ * Spaces and dashes are not accepted.
+ *
+ * Fails with code `creditCard` and, by default, the message `must be a valid credit card number`
+ * ([Messages.creditCard][io.github.soleworks.validity.Messages.creditCard]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.creditCard(
     message: String = messages.creditCard
 ): Unit = constraint(
@@ -136,6 +146,16 @@ public fun ValidationNode<String>.creditCard(
     predicate = { CREDIT_CARD_FORMAT.matches(it) && it.hasLuhnCheckDigit() }
 )
 
+/**
+ * Checks that the string is an IBAN: the length and layout of its country, and valid check digits.
+ *
+ * It is written in uppercase with no spaces, such as `DE89370400440532013000`.
+ *
+ * Fails with code `iban` and, by default, the message `must be a valid IBAN`
+ * ([Messages.iban][io.github.soleworks.validity.Messages.iban]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.iban(
     message: String = messages.iban
 ): Unit = constraint(
@@ -144,6 +164,16 @@ public fun ValidationNode<String>.iban(
     predicate = { IBAN_FORMATS[it.take(COUNTRY_CODE_LENGTH)]?.matches(it) == true && it.hasIbanCheckDigits() }
 )
 
+/**
+ * Checks that the string is a BIC (SWIFT code) of 8 or 11 characters, with a known country code.
+ *
+ * It is written in uppercase, such as `DEUTDEFF` or `DEUTDEFF500`.
+ *
+ * Fails with code `bic` and, by default, the message `must be a valid BIC`
+ * ([Messages.bic][io.github.soleworks.validity.Messages.bic]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.bic(
     message: String = messages.bic
 ): Unit = constraint(
@@ -152,6 +182,15 @@ public fun ValidationNode<String>.bic(
     predicate = { BIC_FORMAT.groups(it)?.first() in BIC_COUNTRY_CODES }
 )
 
+/**
+ * Checks that the string is an ISIN: a country code, 9 letters or digits and a valid check digit, such as
+ * `US0378331005`.
+ *
+ * Fails with code `isin` and, by default, the message `must be a valid ISIN`
+ * ([Messages.isin][io.github.soleworks.validity.Messages.isin]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.isin(
     message: String = messages.isin
 ): Unit = constraint(
@@ -160,6 +199,16 @@ public fun ValidationNode<String>.isin(
     predicate = { ISIN_FORMAT.matches(it) && it.toDigitString().hasLuhnCheckDigit() }
 )
 
+/**
+ * Checks that the string is an ISO 4217 currency code the JVM knows, such as `EUR` or `USD`.
+ *
+ * The code is in uppercase.
+ *
+ * Fails with code `currencyCode` and, by default, the message `must be a valid ISO 4217 currency code`
+ * ([Messages.currencyCode][io.github.soleworks.validity.Messages.currencyCode]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.currencyCode(
     message: String = messages.currencyCode
 ): Unit = constraint(
@@ -168,6 +217,16 @@ public fun ValidationNode<String>.currencyCode(
     predicate = { it in CURRENCY_CODES }
 )
 
+/**
+ * Checks that the string has the format of a Bitcoin address: legacy (`1...`), script (`3...`) or Bech32 (`bc1...`).
+ *
+ * Only the format is checked, not the checksum.
+ *
+ * Fails with code `bitcoinAddress` and, by default, the message `must be a valid Bitcoin address`
+ * ([Messages.bitcoinAddress][io.github.soleworks.validity.Messages.bitcoinAddress]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.bitcoinAddress(
     message: String = messages.bitcoinAddress
 ): Unit = constraint(
@@ -176,6 +235,16 @@ public fun ValidationNode<String>.bitcoinAddress(
     predicate = { BITCOIN_ADDRESS_FORMAT.matches(it) }
 )
 
+/**
+ * Checks that the string is an Ethereum address: `0x` and 40 hexadecimal digits.
+ *
+ * The EIP-55 mixed-case checksum is not checked.
+ *
+ * Fails with code `ethereumAddress` and, by default, the message `must be a valid Ethereum address`
+ * ([Messages.ethereumAddress][io.github.soleworks.validity.Messages.ethereumAddress]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.ethereumAddress(
     message: String = messages.ethereumAddress
 ): Unit = constraint(

@@ -16,6 +16,24 @@ import kotlin.time.toJavaDuration
 
 private val WEEKEND = setOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)
 
+/**
+ * Checks that someone born on the date is at least [min] years old today.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `minAge` and, by default, the message `must be at least {min} years old`
+ * ([Messages.minAge][io.github.soleworks.validity.Messages.minAge]).
+ *
+ * ```kotlin
+ * ::birthDate required { minAge(18) }
+ * ```
+ *
+ * @param min the youngest age accepted, in whole years.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.minAge(
     min: Int?,
     message: String = messages.minAge
@@ -24,6 +42,19 @@ public fun ValidationNode<LocalDate>.minAge(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that someone born on the date is at least [min] years old today.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `minAge` and the message that [message] builds.
+ *
+ * @param min the youngest age accepted, in whole years.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<LocalDate>.minAge(
     min: Int?,
     message: LocalDate.(Int) -> String
@@ -38,6 +69,20 @@ public fun ValidationNode<LocalDate>.minAge(
     )
 }
 
+/**
+ * Checks that someone born on the date is at most [max] years old today.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `maxAge` and, by default, the message `must be at most {max} years old`
+ * ([Messages.maxAge][io.github.soleworks.validity.Messages.maxAge]).
+ *
+ * @param max the oldest age accepted, in whole years.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.maxAge(
     max: Int?,
     message: String = messages.maxAge
@@ -46,6 +91,19 @@ public fun ValidationNode<LocalDate>.maxAge(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that someone born on the date is at most [max] years old today.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `maxAge` and the message that [message] builds.
+ *
+ * @param max the oldest age accepted, in whole years.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<LocalDate>.maxAge(
     max: Int?,
     message: LocalDate.(Int) -> String
@@ -60,6 +118,22 @@ public fun ValidationNode<LocalDate>.maxAge(
     )
 }
 
+/**
+ * Checks that the date is between today and [duration] from today, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and, by default, the message `must be within the next {duration}`
+ * ([Messages.withinNext][io.github.soleworks.validity.Messages.withinNext]).
+ *
+ * ```kotlin
+ * ::deliveryDate required { withinNext(30.days) }
+ * ```
+ *
+ * @param duration how far ahead of today it can be. Only whole days count.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.withinNext(
     duration: Duration?,
     message: String = messages.withinNext
@@ -68,6 +142,17 @@ public fun ValidationNode<LocalDate>.withinNext(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the date is between today and [duration] from today, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and the message that [message] builds.
+ *
+ * @param duration how far ahead of today it can be. Only whole days count.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 public fun ValidationNode<LocalDate>.withinNext(
     duration: Duration?,
     message: LocalDate.(Duration) -> String
@@ -79,6 +164,18 @@ public fun ValidationNode<LocalDate>.withinNext(
     now = { LocalDate.now(clock) }
 )
 
+/**
+ * Checks that the date and time is between now and [duration] from now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and, by default, the message `must be within the next {duration}`
+ * ([Messages.withinNext][io.github.soleworks.validity.Messages.withinNext]).
+ *
+ * @param duration how far ahead of now it can be.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("withinNextLocalDateTime")
 public fun ValidationNode<LocalDateTime>.withinNext(
     duration: Duration?,
@@ -88,6 +185,17 @@ public fun ValidationNode<LocalDateTime>.withinNext(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the date and time is between now and [duration] from now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and the message that [message] builds.
+ *
+ * @param duration how far ahead of now it can be.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 @JvmName("withinNextLocalDateTime")
 public fun ValidationNode<LocalDateTime>.withinNext(
     duration: Duration?,
@@ -100,6 +208,18 @@ public fun ValidationNode<LocalDateTime>.withinNext(
     now = { LocalDateTime.now(clock) }
 )
 
+/**
+ * Checks that the date and time is between now and [duration] from now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and, by default, the message `must be within the next {duration}`
+ * ([Messages.withinNext][io.github.soleworks.validity.Messages.withinNext]).
+ *
+ * @param duration how far ahead of now it can be.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("withinNextZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.withinNext(
     duration: Duration?,
@@ -109,6 +229,17 @@ public fun ValidationNode<ZonedDateTime>.withinNext(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the date and time is between now and [duration] from now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and the message that [message] builds.
+ *
+ * @param duration how far ahead of now it can be.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 @JvmName("withinNextZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.withinNext(
     duration: Duration?,
@@ -121,6 +252,18 @@ public fun ValidationNode<ZonedDateTime>.withinNext(
     now = { ZonedDateTime.now(clock) }
 )
 
+/**
+ * Checks that the date and time is between now and [duration] from now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and, by default, the message `must be within the next {duration}`
+ * ([Messages.withinNext][io.github.soleworks.validity.Messages.withinNext]).
+ *
+ * @param duration how far ahead of now it can be.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("withinNextOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.withinNext(
     duration: Duration?,
@@ -130,6 +273,17 @@ public fun ValidationNode<OffsetDateTime>.withinNext(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the date and time is between now and [duration] from now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and the message that [message] builds.
+ *
+ * @param duration how far ahead of now it can be.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 @JvmName("withinNextOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.withinNext(
     duration: Duration?,
@@ -142,6 +296,18 @@ public fun ValidationNode<OffsetDateTime>.withinNext(
     now = { OffsetDateTime.now(clock) }
 )
 
+/**
+ * Checks that the instant is between now and [duration] from now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and, by default, the message `must be within the next {duration}`
+ * ([Messages.withinNext][io.github.soleworks.validity.Messages.withinNext]).
+ *
+ * @param duration how far ahead of now it can be.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("withinNextInstant")
 public fun ValidationNode<Instant>.withinNext(
     duration: Duration?,
@@ -151,6 +317,17 @@ public fun ValidationNode<Instant>.withinNext(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the instant is between now and [duration] from now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinNext` and the message that [message] builds.
+ *
+ * @param duration how far ahead of now it can be.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 @JvmName("withinNextInstant")
 public fun ValidationNode<Instant>.withinNext(
     duration: Duration?,
@@ -163,6 +340,18 @@ public fun ValidationNode<Instant>.withinNext(
     now = { Instant.now(clock) }
 )
 
+/**
+ * Checks that the date is between [duration] before today and today, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and, by default, the message `must be within the last {duration}`
+ * ([Messages.withinLast][io.github.soleworks.validity.Messages.withinLast]).
+ *
+ * @param duration how far before today it can be. Only whole days count.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.withinLast(
     duration: Duration?,
     message: String = messages.withinLast
@@ -171,6 +360,17 @@ public fun ValidationNode<LocalDate>.withinLast(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the date is between [duration] before today and today, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and the message that [message] builds.
+ *
+ * @param duration how far before today it can be. Only whole days count.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 public fun ValidationNode<LocalDate>.withinLast(
     duration: Duration?,
     message: LocalDate.(Duration) -> String
@@ -182,6 +382,18 @@ public fun ValidationNode<LocalDate>.withinLast(
     now = { LocalDate.now(clock) }
 )
 
+/**
+ * Checks that the date and time is between [duration] ago and now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and, by default, the message `must be within the last {duration}`
+ * ([Messages.withinLast][io.github.soleworks.validity.Messages.withinLast]).
+ *
+ * @param duration how far before now it can be.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("withinLastLocalDateTime")
 public fun ValidationNode<LocalDateTime>.withinLast(
     duration: Duration?,
@@ -191,6 +403,17 @@ public fun ValidationNode<LocalDateTime>.withinLast(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the date and time is between [duration] ago and now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and the message that [message] builds.
+ *
+ * @param duration how far before now it can be.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 @JvmName("withinLastLocalDateTime")
 public fun ValidationNode<LocalDateTime>.withinLast(
     duration: Duration?,
@@ -203,6 +426,18 @@ public fun ValidationNode<LocalDateTime>.withinLast(
     now = { LocalDateTime.now(clock) }
 )
 
+/**
+ * Checks that the date and time is between [duration] ago and now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and, by default, the message `must be within the last {duration}`
+ * ([Messages.withinLast][io.github.soleworks.validity.Messages.withinLast]).
+ *
+ * @param duration how far before now it can be.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("withinLastZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.withinLast(
     duration: Duration?,
@@ -212,6 +447,17 @@ public fun ValidationNode<ZonedDateTime>.withinLast(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the date and time is between [duration] ago and now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and the message that [message] builds.
+ *
+ * @param duration how far before now it can be.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 @JvmName("withinLastZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.withinLast(
     duration: Duration?,
@@ -224,6 +470,18 @@ public fun ValidationNode<ZonedDateTime>.withinLast(
     now = { ZonedDateTime.now(clock) }
 )
 
+/**
+ * Checks that the date and time is between [duration] ago and now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and, by default, the message `must be within the last {duration}`
+ * ([Messages.withinLast][io.github.soleworks.validity.Messages.withinLast]).
+ *
+ * @param duration how far before now it can be.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("withinLastOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.withinLast(
     duration: Duration?,
@@ -233,6 +491,17 @@ public fun ValidationNode<OffsetDateTime>.withinLast(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the date and time is between [duration] ago and now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and the message that [message] builds.
+ *
+ * @param duration how far before now it can be.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 @JvmName("withinLastOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.withinLast(
     duration: Duration?,
@@ -245,6 +514,18 @@ public fun ValidationNode<OffsetDateTime>.withinLast(
     now = { OffsetDateTime.now(clock) }
 )
 
+/**
+ * Checks that the instant is between [duration] ago and now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and, by default, the message `must be within the last {duration}`
+ * ([Messages.withinLast][io.github.soleworks.validity.Messages.withinLast]).
+ *
+ * @param duration how far before now it can be.
+ * @param message the message of the violation. `{duration}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("withinLastInstant")
 public fun ValidationNode<Instant>.withinLast(
     duration: Duration?,
@@ -254,6 +535,17 @@ public fun ValidationNode<Instant>.withinLast(
     message = { message.filled("duration" to duration) }
 )
 
+/**
+ * Checks that the instant is between [duration] ago and now, both included.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `withinLast` and the message that [message] builds.
+ *
+ * @param duration how far before now it can be.
+ * @param message builds the message from the value (the receiver) and [duration].
+ */
 @JvmName("withinLastInstant")
 public fun ValidationNode<Instant>.withinLast(
     duration: Duration?,
@@ -266,6 +558,17 @@ public fun ValidationNode<Instant>.withinLast(
     now = { Instant.now(clock) }
 )
 
+/**
+ * Checks that the date falls on today.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `today` and, by default, the message `must be today`
+ * ([Messages.today][io.github.soleworks.validity.Messages.today]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.today(
     message: String = messages.today
 ): Unit = constraint(
@@ -274,6 +577,17 @@ public fun ValidationNode<LocalDate>.today(
     predicate = { it == LocalDate.now(clock) }
 )
 
+/**
+ * Checks that the date and time falls on today.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `today` and, by default, the message `must be today`
+ * ([Messages.today][io.github.soleworks.validity.Messages.today]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("todayLocalDateTime")
 public fun ValidationNode<LocalDateTime>.today(
     message: String = messages.today
@@ -283,6 +597,19 @@ public fun ValidationNode<LocalDateTime>.today(
     predicate = { it.toLocalDate() == LocalDate.now(clock) }
 )
 
+/**
+ * Checks that the date and time falls on today.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * It is moved to the zone of the clock before its date is compared.
+ *
+ * Fails with code `today` and, by default, the message `must be today`
+ * ([Messages.today][io.github.soleworks.validity.Messages.today]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("todayZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.today(
     message: String = messages.today
@@ -292,6 +619,19 @@ public fun ValidationNode<ZonedDateTime>.today(
     predicate = { it.withZoneSameInstant(clock.zone).toLocalDate() == LocalDate.now(clock) }
 )
 
+/**
+ * Checks that the date and time falls on today.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * It is moved to the zone of the clock before its date is compared.
+ *
+ * Fails with code `today` and, by default, the message `must be today`
+ * ([Messages.today][io.github.soleworks.validity.Messages.today]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("todayOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.today(
     message: String = messages.today
@@ -301,6 +641,14 @@ public fun ValidationNode<OffsetDateTime>.today(
     predicate = { it.atZoneSameInstant(clock.zone).toLocalDate() == LocalDate.now(clock) }
 )
 
+/**
+ * Checks that the date falls from Monday to Friday.
+ *
+ * Fails with code `weekday` and, by default, the message `must be a weekday`
+ * ([Messages.weekday][io.github.soleworks.validity.Messages.weekday]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.weekday(
     message: String = messages.weekday
 ): Unit = constraint(
@@ -309,6 +657,14 @@ public fun ValidationNode<LocalDate>.weekday(
     predicate = { it.dayOfWeek !in WEEKEND }
 )
 
+/**
+ * Checks that the date and time falls from Monday to Friday.
+ *
+ * Fails with code `weekday` and, by default, the message `must be a weekday`
+ * ([Messages.weekday][io.github.soleworks.validity.Messages.weekday]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("weekdayLocalDateTime")
 public fun ValidationNode<LocalDateTime>.weekday(
     message: String = messages.weekday
@@ -318,6 +674,14 @@ public fun ValidationNode<LocalDateTime>.weekday(
     predicate = { it.dayOfWeek !in WEEKEND }
 )
 
+/**
+ * Checks that the date and time falls from Monday to Friday.
+ *
+ * Fails with code `weekday` and, by default, the message `must be a weekday`
+ * ([Messages.weekday][io.github.soleworks.validity.Messages.weekday]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("weekdayZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.weekday(
     message: String = messages.weekday
@@ -327,6 +691,14 @@ public fun ValidationNode<ZonedDateTime>.weekday(
     predicate = { it.dayOfWeek !in WEEKEND }
 )
 
+/**
+ * Checks that the date and time falls from Monday to Friday.
+ *
+ * Fails with code `weekday` and, by default, the message `must be a weekday`
+ * ([Messages.weekday][io.github.soleworks.validity.Messages.weekday]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("weekdayOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.weekday(
     message: String = messages.weekday
@@ -336,6 +708,14 @@ public fun ValidationNode<OffsetDateTime>.weekday(
     predicate = { it.dayOfWeek !in WEEKEND }
 )
 
+/**
+ * Checks that the date falls on a Saturday or a Sunday.
+ *
+ * Fails with code `weekend` and, by default, the message `must be on a weekend`
+ * ([Messages.weekend][io.github.soleworks.validity.Messages.weekend]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.weekend(
     message: String = messages.weekend
 ): Unit = constraint(
@@ -344,6 +724,14 @@ public fun ValidationNode<LocalDate>.weekend(
     predicate = { it.dayOfWeek in WEEKEND }
 )
 
+/**
+ * Checks that the date and time falls on a Saturday or a Sunday.
+ *
+ * Fails with code `weekend` and, by default, the message `must be on a weekend`
+ * ([Messages.weekend][io.github.soleworks.validity.Messages.weekend]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("weekendLocalDateTime")
 public fun ValidationNode<LocalDateTime>.weekend(
     message: String = messages.weekend
@@ -353,6 +741,14 @@ public fun ValidationNode<LocalDateTime>.weekend(
     predicate = { it.dayOfWeek in WEEKEND }
 )
 
+/**
+ * Checks that the date and time falls on a Saturday or a Sunday.
+ *
+ * Fails with code `weekend` and, by default, the message `must be on a weekend`
+ * ([Messages.weekend][io.github.soleworks.validity.Messages.weekend]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("weekendZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.weekend(
     message: String = messages.weekend
@@ -362,6 +758,14 @@ public fun ValidationNode<ZonedDateTime>.weekend(
     predicate = { it.dayOfWeek in WEEKEND }
 )
 
+/**
+ * Checks that the date and time falls on a Saturday or a Sunday.
+ *
+ * Fails with code `weekend` and, by default, the message `must be on a weekend`
+ * ([Messages.weekend][io.github.soleworks.validity.Messages.weekend]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("weekendOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.weekend(
     message: String = messages.weekend

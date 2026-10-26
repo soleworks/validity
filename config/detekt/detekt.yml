@@ -1,15 +1,6 @@
 # Detekt runs every rule it has (allRules = true), including the ktlint and libraries rule sets.
 # This file only lists the rules this project tunes or turns off, each with the reason.
 
-comments:
-  # KDoc on the public API is its own piece of work (SOL-5). These turn on with it.
-  UndocumentedPublicClass:
-    active: false
-  UndocumentedPublicFunction:
-    active: false
-  UndocumentedPublicProperty:
-    active: false
-
 complexity:
   # A test class mirrors a whole source file, one nested class per public function.
   LargeClass:

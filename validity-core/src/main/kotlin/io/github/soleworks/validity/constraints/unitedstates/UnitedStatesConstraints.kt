@@ -15,6 +15,16 @@ private val EIN_PREFIXES = setOf(
     "95", "98", "99"
 )
 
+/**
+ * Checks that the string is a US EIN with a prefix the IRS assigns, such as `12-3456789`.
+ *
+ * The separator can be a dash, a space or nothing.
+ *
+ * Fails with code `ein` and, by default, the message `must be a valid EIN`
+ * ([UnitedStatesMessages.ein][io.github.soleworks.validity.UnitedStatesMessages.ein]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.ein(
     message: String = messages.unitedStates.ein
 ): Unit = constraint(

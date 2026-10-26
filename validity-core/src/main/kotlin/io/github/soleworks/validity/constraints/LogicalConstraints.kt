@@ -10,6 +10,21 @@ private const val OR = "or"
 private const val AND = "and"
 private const val NOT = "not"
 
+/**
+ * Checks that at least one of the constraints of [block] holds.
+ *
+ * Each call in the block is a branch, and an [and] groups several constraints into one branch. An empty block holds.
+ *
+ * ```kotlin
+ * ::document required { or { cpf(); cnpj() } }
+ * ```
+ *
+ * Fails with code `or` and a message that joins the failures of the branches with
+ * [Messages.or][io.github.soleworks.validity.Messages.or]: `must be a valid CPF or must be a valid CNPJ`.
+ *
+ * @param V the type of the value.
+ * @param block the branches.
+ */
 public fun <V> ValidationNode<V>.or(
     block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
@@ -19,6 +34,15 @@ public fun <V> ValidationNode<V>.or(
     block = block
 )
 
+/**
+ * Checks that at least one of the constraints of [block] holds, and reports [message] when none does.
+ *
+ * Fails with code `or` and [message].
+ *
+ * @param V the type of the value.
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ * @param block the branches.
+ */
 public fun <V> ValidationNode<V>.or(
     message: String,
     block: ValidationNode<V>.() -> Unit
@@ -29,6 +53,22 @@ public fun <V> ValidationNode<V>.or(
     block = block
 )
 
+/**
+ * Checks that every constraint of [block] holds, as one rule.
+ *
+ * Inside an [or], it makes one branch of several constraints. On its own, it reports one violation instead of one per
+ * constraint.
+ *
+ * ```kotlin
+ * ::code required { or { length(8); and { startsWith("X"); length(10) } } }
+ * ```
+ *
+ * Fails with code `and` and a message that joins the failures with
+ * [Messages.and][io.github.soleworks.validity.Messages.and].
+ *
+ * @param V the type of the value.
+ * @param block the constraints.
+ */
 public fun <V> ValidationNode<V>.and(
     block: ValidationNode<V>.() -> Unit
 ): Unit = combine(
@@ -38,6 +78,15 @@ public fun <V> ValidationNode<V>.and(
     block = block
 )
 
+/**
+ * Checks that every constraint of [block] holds, as one rule, and reports [message] when any does not.
+ *
+ * Fails with code `and` and [message].
+ *
+ * @param V the type of the value.
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ * @param block the constraints.
+ */
 public fun <V> ValidationNode<V>.and(
     message: String,
     block: ValidationNode<V>.() -> Unit
@@ -48,6 +97,20 @@ public fun <V> ValidationNode<V>.and(
     block = block
 )
 
+/**
+ * Checks that none of the constraints of [block] holds.
+ *
+ * ```kotlin
+ * ::password required { not { contains(username) } }
+ * ```
+ *
+ * Fails with code `not` and, by default, the message `is not allowed`
+ * ([Messages.not][io.github.soleworks.validity.Messages.not]).
+ *
+ * @param V the type of the value.
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ * @param block the constraints that must all fail.
+ */
 public fun <V> ValidationNode<V>.not(
     message: String = messages.not,
     block: ValidationNode<V>.() -> Unit

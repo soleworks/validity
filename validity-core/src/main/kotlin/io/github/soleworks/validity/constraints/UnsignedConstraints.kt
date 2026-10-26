@@ -4,6 +4,17 @@ import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.filled
 import io.github.soleworks.validity.messages
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<UInt>.min(
     min: UInt?,
     message: String = messages.min
@@ -12,6 +23,16 @@ public fun ValidationNode<UInt>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<UInt>.min(
     min: UInt?,
     message: UInt.(UInt) -> String
@@ -26,6 +47,17 @@ public fun ValidationNode<UInt>.min(
     )
 }
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("minULong")
 public fun ValidationNode<ULong>.min(
     min: ULong?,
@@ -35,6 +67,16 @@ public fun ValidationNode<ULong>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 @JvmName("minULong")
 public fun ValidationNode<ULong>.min(
     min: ULong?,
@@ -50,6 +92,17 @@ public fun ValidationNode<ULong>.min(
     )
 }
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("minUShort")
 public fun ValidationNode<UShort>.min(
     min: UShort?,
@@ -59,6 +112,16 @@ public fun ValidationNode<UShort>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 @JvmName("minUShort")
 public fun ValidationNode<UShort>.min(
     min: UShort?,
@@ -74,6 +137,17 @@ public fun ValidationNode<UShort>.min(
     )
 }
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("minUByte")
 public fun ValidationNode<UByte>.min(
     min: UByte?,
@@ -83,6 +157,16 @@ public fun ValidationNode<UByte>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 @JvmName("minUByte")
 public fun ValidationNode<UByte>.min(
     min: UByte?,
@@ -98,6 +182,17 @@ public fun ValidationNode<UByte>.min(
     )
 }
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<UInt>.max(
     max: UInt?,
     message: String = messages.max
@@ -106,6 +201,16 @@ public fun ValidationNode<UInt>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<UInt>.max(
     max: UInt?,
     message: UInt.(UInt) -> String
@@ -120,6 +225,17 @@ public fun ValidationNode<UInt>.max(
     )
 }
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("maxULong")
 public fun ValidationNode<ULong>.max(
     max: ULong?,
@@ -129,6 +245,16 @@ public fun ValidationNode<ULong>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 @JvmName("maxULong")
 public fun ValidationNode<ULong>.max(
     max: ULong?,
@@ -144,6 +270,17 @@ public fun ValidationNode<ULong>.max(
     )
 }
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("maxUShort")
 public fun ValidationNode<UShort>.max(
     max: UShort?,
@@ -153,6 +290,16 @@ public fun ValidationNode<UShort>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 @JvmName("maxUShort")
 public fun ValidationNode<UShort>.max(
     max: UShort?,
@@ -168,6 +315,17 @@ public fun ValidationNode<UShort>.max(
     )
 }
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("maxUByte")
 public fun ValidationNode<UByte>.max(
     max: UByte?,
@@ -177,6 +335,16 @@ public fun ValidationNode<UByte>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 @JvmName("maxUByte")
 public fun ValidationNode<UByte>.max(
     max: UByte?,
@@ -192,6 +360,17 @@ public fun ValidationNode<UByte>.max(
     )
 }
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<UInt>.greaterThan(
     other: UInt?,
     message: String = messages.greaterThan
@@ -200,6 +379,16 @@ public fun ValidationNode<UInt>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<UInt>.greaterThan(
     other: UInt?,
     message: UInt.(UInt) -> String
@@ -214,6 +403,17 @@ public fun ValidationNode<UInt>.greaterThan(
     )
 }
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("greaterThanULong")
 public fun ValidationNode<ULong>.greaterThan(
     other: ULong?,
@@ -223,6 +423,16 @@ public fun ValidationNode<ULong>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 @JvmName("greaterThanULong")
 public fun ValidationNode<ULong>.greaterThan(
     other: ULong?,
@@ -238,6 +448,17 @@ public fun ValidationNode<ULong>.greaterThan(
     )
 }
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("greaterThanUShort")
 public fun ValidationNode<UShort>.greaterThan(
     other: UShort?,
@@ -247,6 +468,16 @@ public fun ValidationNode<UShort>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 @JvmName("greaterThanUShort")
 public fun ValidationNode<UShort>.greaterThan(
     other: UShort?,
@@ -262,6 +493,17 @@ public fun ValidationNode<UShort>.greaterThan(
     )
 }
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("greaterThanUByte")
 public fun ValidationNode<UByte>.greaterThan(
     other: UByte?,
@@ -271,6 +513,16 @@ public fun ValidationNode<UByte>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 @JvmName("greaterThanUByte")
 public fun ValidationNode<UByte>.greaterThan(
     other: UByte?,
@@ -286,6 +538,17 @@ public fun ValidationNode<UByte>.greaterThan(
     )
 }
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<UInt>.lessThan(
     other: UInt?,
     message: String = messages.lessThan
@@ -294,6 +557,16 @@ public fun ValidationNode<UInt>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<UInt>.lessThan(
     other: UInt?,
     message: UInt.(UInt) -> String
@@ -308,6 +581,17 @@ public fun ValidationNode<UInt>.lessThan(
     )
 }
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("lessThanULong")
 public fun ValidationNode<ULong>.lessThan(
     other: ULong?,
@@ -317,6 +601,16 @@ public fun ValidationNode<ULong>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 @JvmName("lessThanULong")
 public fun ValidationNode<ULong>.lessThan(
     other: ULong?,
@@ -332,6 +626,17 @@ public fun ValidationNode<ULong>.lessThan(
     )
 }
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("lessThanUShort")
 public fun ValidationNode<UShort>.lessThan(
     other: UShort?,
@@ -341,6 +646,16 @@ public fun ValidationNode<UShort>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 @JvmName("lessThanUShort")
 public fun ValidationNode<UShort>.lessThan(
     other: UShort?,
@@ -356,6 +671,17 @@ public fun ValidationNode<UShort>.lessThan(
     )
 }
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("lessThanUByte")
 public fun ValidationNode<UByte>.lessThan(
     other: UByte?,
@@ -365,6 +691,16 @@ public fun ValidationNode<UByte>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 @JvmName("lessThanUByte")
 public fun ValidationNode<UByte>.lessThan(
     other: UByte?,
@@ -380,6 +716,18 @@ public fun ValidationNode<UByte>.lessThan(
     )
 }
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<UInt>.between(
     min: UInt?,
     max: UInt?,
@@ -390,6 +738,17 @@ public fun ValidationNode<UInt>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<UInt>.between(
     min: UInt?,
     max: UInt?,
@@ -405,6 +764,18 @@ public fun ValidationNode<UInt>.between(
     )
 }
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("betweenULong")
 public fun ValidationNode<ULong>.between(
     min: ULong?,
@@ -416,6 +787,17 @@ public fun ValidationNode<ULong>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 @JvmName("betweenULong")
 public fun ValidationNode<ULong>.between(
     min: ULong?,
@@ -432,6 +814,18 @@ public fun ValidationNode<ULong>.between(
     )
 }
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("betweenUShort")
 public fun ValidationNode<UShort>.between(
     min: UShort?,
@@ -443,6 +837,17 @@ public fun ValidationNode<UShort>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 @JvmName("betweenUShort")
 public fun ValidationNode<UShort>.between(
     min: UShort?,
@@ -459,6 +864,18 @@ public fun ValidationNode<UShort>.between(
     )
 }
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("betweenUByte")
 public fun ValidationNode<UByte>.between(
     min: UByte?,
@@ -470,6 +887,17 @@ public fun ValidationNode<UByte>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 @JvmName("betweenUByte")
 public fun ValidationNode<UByte>.between(
     min: UByte?,

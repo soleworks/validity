@@ -17,6 +17,14 @@ private val PESEL_CENTURIES = listOf(1900, 2000, 2100, 2200, 1800)
 private val PESEL_WEIGHTS = listOf(1, 3, 7, 9, 1, 3, 7, 9, 1, 3)
 private val NIP_WEIGHTS = listOf(6, 5, 7, 2, 3, 4, 5, 6, 7)
 
+/**
+ * Checks that the string is a Polish PESEL: 11 digits that start with a real birth date, and a valid check digit.
+ *
+ * Fails with code `pesel` and, by default, the message `must be a valid PESEL`
+ * ([PolandMessages.pesel][io.github.soleworks.validity.PolandMessages.pesel]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.pesel(
     message: String = messages.poland.pesel
 ): Unit = constraint(
@@ -25,6 +33,14 @@ public fun ValidationNode<String>.pesel(
     predicate = { it.isPesel() }
 )
 
+/**
+ * Checks that the string is a Polish NIP (tax number): 10 digits with a valid check digit, with no dashes.
+ *
+ * Fails with code `nip` and, by default, the message `must be a valid NIP`
+ * ([PolandMessages.nip][io.github.soleworks.validity.PolandMessages.nip]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.nip(
     message: String = messages.poland.nip
 ): Unit = constraint(
