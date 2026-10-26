@@ -42,6 +42,11 @@ class TestConventionsTest {
         }
 
         @Test
+        fun `every test file should declare at most one top-level type`() {
+            tests.files.assertTrue { file -> file.topLevelTypes <= 1 }
+        }
+
+        @Test
         fun `every test class should hold its tests in nested classes`() {
             testClasses.assertFalse { testClass ->
                 testClass

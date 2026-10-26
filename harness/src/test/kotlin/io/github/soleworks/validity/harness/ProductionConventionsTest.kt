@@ -134,6 +134,11 @@ class ProductionConventionsTest {
         }
 
         @Test
+        fun `every file should declare at most one top-level type`() {
+            production.files.assertTrue { file -> file.topLevelTypes <= 1 }
+        }
+
+        @Test
         fun `every message class should be a DSL receiver that only the library creates`() {
             production.classes().withNameEndingWith("Messages").assertTrue { messages ->
                 messages.hasAnnotationWithName(

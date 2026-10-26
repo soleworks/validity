@@ -5,8 +5,7 @@ public class ValidationNode<V>(
     internal val path: String,
     internal val value: V
 ) {
-    private val constraints = mutableListOf<Constraint<V>>()
-    private val groups = mutableListOf<List<ValidationNode<*>>>()
+    private val rules = mutableListOf<ValidationNodeRule<V>>()
 
     internal var operator: String? = null
 
@@ -59,22 +58,40 @@ public class ValidationNode<V>(
         }
     }
 
+    public fun failFast(
+        block: ValidationNode<V>.() -> Unit
+    ) {
+        val rules = ValidationNode(path, value).also { rules ->
+            rules.operator = operator
+            rules.metadata = metadata
+        }
+
+        this.rules += ValidationNodeRule.Chain(rules.apply(block))
+    }
+
     internal fun add(
         constraint: Constraint<V>
     ) {
-        constraints += constraint
+        rules += ValidationNodeRule.Check(constraint)
     }
 
     internal fun add(
         nodes: List<ValidationNode<*>>
     ) {
-        groups += nodes
+        rules += ValidationNodeRule.Group(nodes)
     }
 
     internal fun validate(): List<Violation> = branches().flatten()
 
+    internal fun firstFailure(): List<Violation> = rules
+        .asSequence()
+        .map { rule -> rule.validate(path, value) }
+        .firstOrNull { violations -> violations.isNotEmpty() }
+        .orEmpty()
+
     internal fun branches(): List<List<Violation>> =
-        constraints.map { it.validate(path, value) } + groups.map { nodes -> nodes.flatMap { it.validate() } }
+        rules.filterNot { rule -> rule is ValidationNodeRule.Group }.map { rule -> rule.validate(path, value) } +
+            rules.filterIsInstance<ValidationNodeRule.Group<V>>().map { rule -> rule.validate(path, value) }
 
     internal fun relocated(
         path: String,
@@ -83,9 +100,6 @@ public class ValidationNode<V>(
         this
     else
         ValidationNode(path, value).also { relocated ->
-            relocated.constraints += constraints.map { constraint -> constraint.inheriting(metadata) }
-            relocated.groups += groups.map { nodes ->
-                nodes.map { node -> node.relocated(path + node.path.removePrefix(this.path), metadata) }
-            }
+            relocated.rules += rules.map { rule -> rule.relocated(from = this.path, to = path, metadata = metadata) }
         }
 }

@@ -82,7 +82,7 @@ Violation(path=iban, message=is required, code=required)
 - **Nested objects and collections.** `valid()` and `each` follow the data, and every violation says where it is:
   `shipping.zipCode`, `items[1].quantity`, `prices[USD]`.
 - **Every error at once, for two audiences.** A `message` for people, configurable and translatable, and a stable
-  `code` for programs, plus the `metadata` you attach.
+  `code` for programs, plus the `metadata` you attach, and `failFast { }` where a rule only makes sense after another.
 - **Batteries included.** More than 140 constraints, postal codes of 72 countries, national documents of 14, and phone
   numbers in their own module.
 - **Nothing hidden.** No annotations, no code generation, no `kotlin-reflect`. `validity-core` depends on nothing but
@@ -153,6 +153,52 @@ Violation(path=age, message=must be at least 18, code=min)
 
 At the edge of your system, `user.validateOrThrow()` throws a `ValidationException` that carries the same list, so one
 error handler can turn every invalid request into a response.
+
+### Stopping at the first failure
+
+Every rule runs by default, so one request reports every error. When a rule only makes sense after another, such as a
+lookup after a format check, put both in `failFast { }`: its rules run in order, and the ones after the first failure
+are not evaluated.
+
+```kotlin
+data class Registration(
+    val email: String?
+) : Validatable {
+    override fun validation() = validation {
+        ::email required {
+            failFast {
+                email()
+                constraint("is already registered", code = "registered") { !Accounts.exists(it) }
+            }
+        }
+    }
+}
+
+Registration(email = "ana@").validate().violations           // Accounts.exists is never called
+Registration(email = "ana@mail.com").validate().violations   // when it is taken
+```
+
+```text
+Violation(path=email, message=must be a valid email, code=email)
+Violation(path=email, message=is already registered, code=registered)
+```
+
+The rules after the block, and the other fields, run as usual. Each call in the block is one rule: an `each { }` or a
+`valid()` counts once, with all its elements.
+
+> [!IMPORTANT]
+> `failFast` skips rules, not code. The rules are declared first and checked later, so work written in the block but
+> outside a rule runs every time:
+>
+> ```kotlin
+> failFast {
+>     email()
+>     val taken = Accounts.exists(email)              // runs even for "ana@"
+>     constraint("is already registered") { !taken }
+> }
+> ```
+>
+> Put the work inside `constraint { }`, after the rule it depends on.
 
 ## Modules
 

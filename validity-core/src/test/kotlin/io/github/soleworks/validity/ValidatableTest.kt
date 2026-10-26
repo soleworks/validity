@@ -4,6 +4,7 @@ import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Subscription
 import io.github.soleworks.validity.samples.readme.Payment
+import io.github.soleworks.validity.samples.readme.Registration
 import io.github.soleworks.validity.samples.readme.User
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
@@ -53,6 +54,28 @@ class ValidatableTest {
                 Violation(path = "name", message = "must have at least 2 characters", code = "minLength"),
                 Violation(path = "email", message = "must be a valid email", code = "email"),
                 Violation(path = "age", message = "must be at least 18", code = "min")
+            )
+        }
+
+        @Test
+        fun `given a registration with an invalid email should report only the format`() {
+            val registration = Registration(email = "ana@")
+
+            val violations = registration.validate().violations
+
+            violations shouldBe listOf(
+                Violation(path = "email", message = "must be a valid email", code = "email")
+            )
+        }
+
+        @Test
+        fun `given a registration with a taken email should report the lookup`() {
+            val registration = Registration(email = "ana@mail.com")
+
+            val violations = registration.validate().violations
+
+            violations shouldBe listOf(
+                Violation(path = "email", message = "is already registered", code = "registered")
             )
         }
 
