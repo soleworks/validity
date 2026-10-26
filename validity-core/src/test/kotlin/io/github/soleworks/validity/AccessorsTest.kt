@@ -8,7 +8,10 @@ import io.github.soleworks.validity.constraints.maxDecimalPlaces
 import io.github.soleworks.validity.constraints.min
 import io.github.soleworks.validity.constraints.notEqualTo
 import io.github.soleworks.validity.constraints.positive
+import io.github.soleworks.validity.constraints.validate
 import io.github.soleworks.validity.samples.Address
+import io.github.soleworks.validity.samples.Buyer
+import io.github.soleworks.validity.samples.CartItem
 import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Invoice
@@ -38,7 +41,7 @@ class AccessorsTest {
         fun `given a short tag should report it with its index`() {
             val order = Order(tags = listOf("gift", "x"))
 
-            val result = order.validate()
+            val result = order.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "tags[1]", message = "must have at least 3 characters", code = "minLength")
@@ -49,7 +52,7 @@ class AccessorsTest {
         fun `given a list rule and item rules should report the list before its items`() {
             val order = Order(tags = listOf("a", "b", "gift", "sale"))
 
-            val result = order.validate()
+            val result = order.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "tags", message = "must have at most 3 tags", code = ""),
@@ -62,7 +65,7 @@ class AccessorsTest {
         fun `given boxes of products should report the product with both indexes`() {
             val order = Order(boxes = listOf(listOf("SKU-1", "S2")))
 
-            val result = order.validate()
+            val result = order.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "boxes[0][1]", message = "must have at least 5 characters", code = "minLength")
@@ -73,7 +76,7 @@ class AccessorsTest {
         fun `given a short coupon code in an array should report it with its index`() {
             val order = Order(couponCodes = arrayOf("PROMO10", "OFF"))
 
-            val result = order.validate()
+            val result = order.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "couponCodes[1]", message = "must have at least 5 characters", code = "minLength")
@@ -84,7 +87,7 @@ class AccessorsTest {
         fun `given a rule on a price entry should report it with its currency`() {
             val order = Order(prices = mapOf("BRL" to 50))
 
-            val result = order.validate()
+            val result = order.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "prices[BRL]", message = "must be at least 100 in BRL", code = "")
@@ -99,7 +102,7 @@ class AccessorsTest {
         fun `given a currency code that is too short should report it with the key`() {
             val order = Order(prices = mapOf("US" to 1000))
 
-            val result = order.validate()
+            val result = order.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "prices[US]", message = "must have at least 3 characters", code = "minLength")
@@ -114,7 +117,7 @@ class AccessorsTest {
         fun `given a missing price should report it with its currency`() {
             val order = Order(prices = mapOf("USD" to null))
 
-            val result = order.validate()
+            val result = order.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "prices[USD]", message = "is required", code = "notNull")
@@ -126,10 +129,34 @@ class AccessorsTest {
     @DisplayName("When valid is called")
     inner class Valid {
         @Test
+        fun `given a context the items accept should accept them`() {
+            val node = ValidationNode(path = "items", value = listOf(CartItem(), CartItem())).apply {
+                each { valid(Buyer(skus = setOf("SKU-1"))) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a context an item rejects should report it under its index`() {
+            val node = ValidationNode(path = "items", value = listOf(CartItem(), CartItem(sku = "SKU-2"))).apply {
+                each { valid(Buyer(skus = setOf("SKU-1"))) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "items[1].sku", message = "is not sold to this buyer", code = "sku")
+            )
+        }
+
+        @Test
         fun `given an address without a street should report it under the address`() {
             val customer = Customer(address = Address(street = null))
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "address.street", message = "is required", code = "required")
@@ -140,7 +167,7 @@ class AccessorsTest {
         fun `given a list of addresses should report each one under its index`() {
             val customer = Customer(addresses = listOf(Address(), Address(street = null)))
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "addresses[1].street", message = "is required", code = "required")
@@ -151,7 +178,7 @@ class AccessorsTest {
         fun `given an address with a short phone should report it with the full path`() {
             val customer = Customer(addresses = listOf(Address(phones = listOf("123"))))
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -166,7 +193,7 @@ class AccessorsTest {
         fun `given a customer without an address should report only that it is required`() {
             val customer = Customer(address = null)
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "address", message = "is required", code = "required")
@@ -177,7 +204,7 @@ class AccessorsTest {
         fun `given a contact with a short phone should report it under the contact`() {
             val customer = Customer(contact = Contact(phone = "123"))
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "contact.phone", message = "must have at least 8 characters", code = "minLength")
@@ -188,7 +215,7 @@ class AccessorsTest {
         fun `given a list of contacts should report each one under its index`() {
             val customer = Customer(contacts = listOf(Contact(), Contact(phone = null)))
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "contacts[1].phone", message = "is required", code = "required")
@@ -199,7 +226,7 @@ class AccessorsTest {
         fun `given a customer without a contact should report only that it is required`() {
             val customer = Customer(contact = null)
 
-            val result = customer.validate()
+            val result = customer.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "contact", message = "is required", code = "required")
@@ -210,7 +237,7 @@ class AccessorsTest {
         fun `given an invoice that does not add up should report it at the invoice`() {
             val ledger = Ledger(invoice = Invoice(total = 5))
 
-            val result = ledger.validate()
+            val result = ledger.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "invoice", message = "items must add up to the total", code = "total")
@@ -221,7 +248,7 @@ class AccessorsTest {
         fun `given a list of invoices should report each one at its index`() {
             val ledger = Ledger(invoices = listOf(Invoice(), Invoice(total = 5)))
 
-            val result = ledger.validate()
+            val result = ledger.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "invoices[1]", message = "items must add up to the total", code = "total")

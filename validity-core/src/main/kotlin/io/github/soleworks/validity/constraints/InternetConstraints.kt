@@ -86,7 +86,7 @@ public fun ValidationNode<String>.url(
  */
 public fun ValidationNode<String>.url(
     schemes: Set<String> = WEB_SCHEMES,
-    message: String.(Set<String>) -> String
+    message: suspend String.(Set<String>) -> String
 ): Unit = constraint(
     message = { it.message(schemes) },
     code = "url",

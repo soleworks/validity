@@ -41,7 +41,7 @@ public fun ValidationNode<String>.minLength(
  */
 public fun ValidationNode<String>.minLength(
     min: Int,
-    message: String.(Int) -> String
+    message: suspend String.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minLength",
@@ -75,7 +75,7 @@ public fun ValidationNode<String>.maxLength(
  */
 public fun ValidationNode<String>.maxLength(
     max: Int,
-    message: String.(Int) -> String
+    message: suspend String.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxLength",
@@ -109,7 +109,7 @@ public fun ValidationNode<String>.length(
  */
 public fun ValidationNode<String>.length(
     length: Int,
-    message: String.(Int) -> String
+    message: suspend String.(Int) -> String
 ): Unit = constraint(
     message = { it.message(length) },
     code = "length",
@@ -152,7 +152,7 @@ public fun ValidationNode<String>.lengthBetween(
 public fun ValidationNode<String>.lengthBetween(
     min: Int,
     max: Int,
-    message: String.(Int, Int) -> String
+    message: suspend String.(Int, Int) -> String
 ): Unit = constraint(
     message = { it.message(min, max) },
     code = "lengthBetween",
@@ -191,7 +191,7 @@ public fun ValidationNode<String>.minBytes(
 public fun ValidationNode<String>.minBytes(
     min: Int,
     charset: Charset = Charsets.UTF_8,
-    message: String.(Int) -> String
+    message: suspend String.(Int) -> String
 ): Unit = constraint(
     message = { it.message(min) },
     code = "minBytes",
@@ -234,7 +234,7 @@ public fun ValidationNode<String>.maxBytes(
 public fun ValidationNode<String>.maxBytes(
     max: Int,
     charset: Charset = Charsets.UTF_8,
-    message: String.(Int) -> String
+    message: suspend String.(Int) -> String
 ): Unit = constraint(
     message = { it.message(max) },
     code = "maxBytes",
@@ -363,17 +363,13 @@ public fun ValidationNode<String>.equalTo(
 public fun ValidationNode<String>.equalTo(
     other: String?,
     ignoreCase: Boolean,
-    message: String.(String) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "equalTo",
-        predicate = { it.equals(other, ignoreCase) }
-    )
-}
+    message: suspend String.(String) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "equalTo",
+    predicate = { value, argument -> value.equals(argument, ignoreCase) }
+)
 
 /**
  * Checks that the string is one of [values], ignoring case when [ignoreCase] is `true`.
@@ -411,17 +407,13 @@ public fun ValidationNode<String>.oneOf(
 public fun ValidationNode<String>.oneOf(
     values: Iterable<String>?,
     ignoreCase: Boolean,
-    message: String.(Iterable<String>) -> String
-) {
-    if (values == null)
-        return
-
-    constraint(
-        message = { it.message(values) },
-        code = "oneOf",
-        predicate = { value -> values.any { it.equals(value, ignoreCase) } }
-    )
-}
+    message: suspend String.(Iterable<String>) -> String
+): Unit = constraint(
+    argument = values,
+    message = message,
+    code = "oneOf",
+    predicate = { value, argument -> argument.any { it.equals(value, ignoreCase) } }
+)
 
 /**
  * Checks that the whole of the string matches [regex].
@@ -454,7 +446,7 @@ public fun ValidationNode<String>.matches(
  */
 public fun ValidationNode<String>.matches(
     regex: Regex,
-    message: String.(Regex) -> String
+    message: suspend String.(Regex) -> String
 ): Unit = constraint(
     message = { it.message(regex) },
     code = "matches",
@@ -492,7 +484,7 @@ public fun ValidationNode<String>.notMatches(
  */
 public fun ValidationNode<String>.notMatches(
     regex: Regex,
-    message: String.(Regex) -> String
+    message: suspend String.(Regex) -> String
 ): Unit = constraint(
     message = { it.message(regex) },
     code = "notMatches",
@@ -535,17 +527,13 @@ public fun ValidationNode<String>.contains(
 public fun ValidationNode<String>.contains(
     text: String?,
     ignoreCase: Boolean = false,
-    message: String.(String) -> String
-) {
-    if (text == null)
-        return
-
-    constraint(
-        message = { it.message(text) },
-        code = "contains",
-        predicate = { it.contains(text, ignoreCase) }
-    )
-}
+    message: suspend String.(String) -> String
+): Unit = constraint(
+    argument = text,
+    message = message,
+    code = "contains",
+    predicate = { value, argument -> value.contains(argument, ignoreCase) }
+)
 
 /**
  * Checks that the string does not contain [text].
@@ -583,17 +571,13 @@ public fun ValidationNode<String>.notContains(
 public fun ValidationNode<String>.notContains(
     text: String?,
     ignoreCase: Boolean = false,
-    message: String.(String) -> String
-) {
-    if (text == null)
-        return
-
-    constraint(
-        message = { it.message(text) },
-        code = "notContains",
-        predicate = { !it.contains(text, ignoreCase) }
-    )
-}
+    message: suspend String.(String) -> String
+): Unit = constraint(
+    argument = text,
+    message = message,
+    code = "notContains",
+    predicate = { value, argument -> !value.contains(argument, ignoreCase) }
+)
 
 /**
  * Checks that the string starts with [prefix].
@@ -631,17 +615,13 @@ public fun ValidationNode<String>.startsWith(
 public fun ValidationNode<String>.startsWith(
     prefix: String?,
     ignoreCase: Boolean = false,
-    message: String.(String) -> String
-) {
-    if (prefix == null)
-        return
-
-    constraint(
-        message = { it.message(prefix) },
-        code = "startsWith",
-        predicate = { it.startsWith(prefix, ignoreCase) }
-    )
-}
+    message: suspend String.(String) -> String
+): Unit = constraint(
+    argument = prefix,
+    message = message,
+    code = "startsWith",
+    predicate = { value, argument -> value.startsWith(argument, ignoreCase) }
+)
 
 /**
  * Checks that the string does not start with [prefix].
@@ -679,17 +659,13 @@ public fun ValidationNode<String>.notStartsWith(
 public fun ValidationNode<String>.notStartsWith(
     prefix: String?,
     ignoreCase: Boolean = false,
-    message: String.(String) -> String
-) {
-    if (prefix == null)
-        return
-
-    constraint(
-        message = { it.message(prefix) },
-        code = "notStartsWith",
-        predicate = { !it.startsWith(prefix, ignoreCase) }
-    )
-}
+    message: suspend String.(String) -> String
+): Unit = constraint(
+    argument = prefix,
+    message = message,
+    code = "notStartsWith",
+    predicate = { value, argument -> !value.startsWith(argument, ignoreCase) }
+)
 
 /**
  * Checks that the string ends with [suffix].
@@ -727,17 +703,13 @@ public fun ValidationNode<String>.endsWith(
 public fun ValidationNode<String>.endsWith(
     suffix: String?,
     ignoreCase: Boolean = false,
-    message: String.(String) -> String
-) {
-    if (suffix == null)
-        return
-
-    constraint(
-        message = { it.message(suffix) },
-        code = "endsWith",
-        predicate = { it.endsWith(suffix, ignoreCase) }
-    )
-}
+    message: suspend String.(String) -> String
+): Unit = constraint(
+    argument = suffix,
+    message = message,
+    code = "endsWith",
+    predicate = { value, argument -> value.endsWith(argument, ignoreCase) }
+)
 
 /**
  * Checks that the string does not end with [suffix].
@@ -775,17 +747,13 @@ public fun ValidationNode<String>.notEndsWith(
 public fun ValidationNode<String>.notEndsWith(
     suffix: String?,
     ignoreCase: Boolean = false,
-    message: String.(String) -> String
-) {
-    if (suffix == null)
-        return
-
-    constraint(
-        message = { it.message(suffix) },
-        code = "notEndsWith",
-        predicate = { !it.endsWith(suffix, ignoreCase) }
-    )
-}
+    message: suspend String.(String) -> String
+): Unit = constraint(
+    argument = suffix,
+    message = message,
+    code = "notEndsWith",
+    predicate = { value, argument -> !value.endsWith(argument, ignoreCase) }
+)
 
 /**
  * Checks that the string has no lowercase letters.
@@ -922,17 +890,13 @@ public fun ValidationNode<String>.containsOnly(
  */
 public fun ValidationNode<String>.containsOnly(
     characters: String?,
-    message: String.(String) -> String
-) {
-    if (characters == null)
-        return
-
-    constraint(
-        message = { it.message(characters) },
-        code = "containsOnly",
-        predicate = { it.isNotEmpty() && it.all { char -> char in characters } }
-    )
-}
+    message: suspend String.(String) -> String
+): Unit = constraint(
+    argument = characters,
+    message = message,
+    code = "containsOnly",
+    predicate = { value, argument -> value.isNotEmpty() && value.all { char -> char in argument } }
+)
 
 /**
  * Checks that the string is already in the Unicode normalization [form].
@@ -961,7 +925,7 @@ public fun ValidationNode<String>.normalized(
  */
 public fun ValidationNode<String>.normalized(
     form: Normalizer.Form = Normalizer.Form.NFC,
-    message: String.(Normalizer.Form) -> String
+    message: suspend String.(Normalizer.Form) -> String
 ): Unit = constraint(
     message = { it.message(form) },
     code = "normalized",
@@ -1115,7 +1079,7 @@ public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(
  */
 public inline fun <reified E : Enum<E>> ValidationNode<String>.enum(
     ignoreCase: Boolean = false,
-    noinline message: String.(List<E>) -> String
+    noinline message: suspend String.(List<E>) -> String
 ): Unit = constraint(
     message = { it.message(enumEntries<E>()) },
     code = "enum",

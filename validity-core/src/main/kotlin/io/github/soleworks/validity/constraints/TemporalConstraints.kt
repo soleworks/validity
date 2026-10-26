@@ -683,17 +683,13 @@ public fun ValidationNode<LocalDate>.after(
  */
 public fun ValidationNode<LocalDate>.after(
     other: LocalDate?,
-    message: LocalDate.(LocalDate) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.isAfter(other) }
-    )
-}
+    message: suspend LocalDate.(LocalDate) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.isAfter(argument) }
+)
 
 /**
  * Checks that the date and time is after [other].
@@ -726,17 +722,13 @@ public fun ValidationNode<LocalDateTime>.after(
  */
 public fun ValidationNode<LocalDateTime>.after(
     other: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.isAfter(other) }
-    )
-}
+    message: suspend LocalDateTime.(LocalDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.isAfter(argument) }
+)
 
 /**
  * Checks that the time is after [other].
@@ -769,17 +761,13 @@ public fun ValidationNode<LocalTime>.after(
  */
 public fun ValidationNode<LocalTime>.after(
     other: LocalTime?,
-    message: LocalTime.(LocalTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.isAfter(other) }
-    )
-}
+    message: suspend LocalTime.(LocalTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.isAfter(argument) }
+)
 
 /**
  * Checks that the time is after [other].
@@ -812,17 +800,13 @@ public fun ValidationNode<OffsetTime>.after(
  */
 public fun ValidationNode<OffsetTime>.after(
     other: OffsetTime?,
-    message: OffsetTime.(OffsetTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.isAfter(other) }
-    )
-}
+    message: suspend OffsetTime.(OffsetTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.isAfter(argument) }
+)
 
 /**
  * Checks that the date and time is after [other].
@@ -855,17 +839,13 @@ public fun ValidationNode<ZonedDateTime>.after(
  */
 public fun ValidationNode<ZonedDateTime>.after(
     other: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.isAfter(other) }
-    )
-}
+    message: suspend ZonedDateTime.(ZonedDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.isAfter(argument) }
+)
 
 /**
  * Checks that the date and time is after [other].
@@ -898,17 +878,13 @@ public fun ValidationNode<OffsetDateTime>.after(
  */
 public fun ValidationNode<OffsetDateTime>.after(
     other: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.isAfter(other) }
-    )
-}
+    message: suspend OffsetDateTime.(OffsetDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.isAfter(argument) }
+)
 
 /**
  * Checks that the instant is after [other].
@@ -941,17 +917,13 @@ public fun ValidationNode<Instant>.after(
  */
 public fun ValidationNode<Instant>.after(
     other: Instant?,
-    message: Instant.(Instant) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.isAfter(other) }
-    )
-}
+    message: suspend Instant.(Instant) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.isAfter(argument) }
+)
 
 /**
  * Checks that the month is after [other].
@@ -984,17 +956,13 @@ public fun ValidationNode<YearMonth>.after(
  */
 public fun ValidationNode<YearMonth>.after(
     other: YearMonth?,
-    message: YearMonth.(YearMonth) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.isAfter(other) }
-    )
-}
+    message: suspend YearMonth.(YearMonth) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.isAfter(argument) }
+)
 
 /**
  * Checks that the year is after [other].
@@ -1027,17 +995,13 @@ public fun ValidationNode<Year>.after(
  */
 public fun ValidationNode<Year>.after(
     other: Year?,
-    message: Year.(Year) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.isAfter(other) }
-    )
-}
+    message: suspend Year.(Year) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.isAfter(argument) }
+)
 
 /**
  * Checks that the date is after [other].
@@ -1070,17 +1034,13 @@ public fun ValidationNode<Date>.after(
  */
 public fun ValidationNode<Date>.after(
     other: Date?,
-    message: Date.(Date) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "after",
-        predicate = { it.after(other) }
-    )
-}
+    message: suspend Date.(Date) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "after",
+    predicate = { value, argument -> value.after(argument) }
+)
 
 /**
  * Checks that the date is before [other].
@@ -1113,17 +1073,13 @@ public fun ValidationNode<LocalDate>.before(
  */
 public fun ValidationNode<LocalDate>.before(
     other: LocalDate?,
-    message: LocalDate.(LocalDate) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.isBefore(other) }
-    )
-}
+    message: suspend LocalDate.(LocalDate) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.isBefore(argument) }
+)
 
 /**
  * Checks that the date and time is before [other].
@@ -1156,17 +1112,13 @@ public fun ValidationNode<LocalDateTime>.before(
  */
 public fun ValidationNode<LocalDateTime>.before(
     other: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.isBefore(other) }
-    )
-}
+    message: suspend LocalDateTime.(LocalDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.isBefore(argument) }
+)
 
 /**
  * Checks that the time is before [other].
@@ -1199,17 +1151,13 @@ public fun ValidationNode<LocalTime>.before(
  */
 public fun ValidationNode<LocalTime>.before(
     other: LocalTime?,
-    message: LocalTime.(LocalTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.isBefore(other) }
-    )
-}
+    message: suspend LocalTime.(LocalTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.isBefore(argument) }
+)
 
 /**
  * Checks that the time is before [other].
@@ -1242,17 +1190,13 @@ public fun ValidationNode<OffsetTime>.before(
  */
 public fun ValidationNode<OffsetTime>.before(
     other: OffsetTime?,
-    message: OffsetTime.(OffsetTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.isBefore(other) }
-    )
-}
+    message: suspend OffsetTime.(OffsetTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.isBefore(argument) }
+)
 
 /**
  * Checks that the date and time is before [other].
@@ -1285,17 +1229,13 @@ public fun ValidationNode<ZonedDateTime>.before(
  */
 public fun ValidationNode<ZonedDateTime>.before(
     other: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.isBefore(other) }
-    )
-}
+    message: suspend ZonedDateTime.(ZonedDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.isBefore(argument) }
+)
 
 /**
  * Checks that the date and time is before [other].
@@ -1328,17 +1268,13 @@ public fun ValidationNode<OffsetDateTime>.before(
  */
 public fun ValidationNode<OffsetDateTime>.before(
     other: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.isBefore(other) }
-    )
-}
+    message: suspend OffsetDateTime.(OffsetDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.isBefore(argument) }
+)
 
 /**
  * Checks that the instant is before [other].
@@ -1371,17 +1307,13 @@ public fun ValidationNode<Instant>.before(
  */
 public fun ValidationNode<Instant>.before(
     other: Instant?,
-    message: Instant.(Instant) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.isBefore(other) }
-    )
-}
+    message: suspend Instant.(Instant) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.isBefore(argument) }
+)
 
 /**
  * Checks that the month is before [other].
@@ -1414,17 +1346,13 @@ public fun ValidationNode<YearMonth>.before(
  */
 public fun ValidationNode<YearMonth>.before(
     other: YearMonth?,
-    message: YearMonth.(YearMonth) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.isBefore(other) }
-    )
-}
+    message: suspend YearMonth.(YearMonth) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.isBefore(argument) }
+)
 
 /**
  * Checks that the year is before [other].
@@ -1457,17 +1385,13 @@ public fun ValidationNode<Year>.before(
  */
 public fun ValidationNode<Year>.before(
     other: Year?,
-    message: Year.(Year) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.isBefore(other) }
-    )
-}
+    message: suspend Year.(Year) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.isBefore(argument) }
+)
 
 /**
  * Checks that the date is before [other].
@@ -1500,17 +1424,13 @@ public fun ValidationNode<Date>.before(
  */
 public fun ValidationNode<Date>.before(
     other: Date?,
-    message: Date.(Date) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "before",
-        predicate = { it.before(other) }
-    )
-}
+    message: suspend Date.(Date) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "before",
+    predicate = { value, argument -> value.before(argument) }
+)
 
 /**
  * Checks that the date is [other] or after.
@@ -1543,17 +1463,13 @@ public fun ValidationNode<LocalDate>.afterOrEqual(
  */
 public fun ValidationNode<LocalDate>.afterOrEqual(
     other: LocalDate?,
-    message: LocalDate.(LocalDate) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.isBefore(other) }
-    )
-}
+    message: suspend LocalDate.(LocalDate) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.isBefore(argument) }
+)
 
 /**
  * Checks that the date and time is [other] or after.
@@ -1586,17 +1502,13 @@ public fun ValidationNode<LocalDateTime>.afterOrEqual(
  */
 public fun ValidationNode<LocalDateTime>.afterOrEqual(
     other: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.isBefore(other) }
-    )
-}
+    message: suspend LocalDateTime.(LocalDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.isBefore(argument) }
+)
 
 /**
  * Checks that the time is [other] or after.
@@ -1629,17 +1541,13 @@ public fun ValidationNode<LocalTime>.afterOrEqual(
  */
 public fun ValidationNode<LocalTime>.afterOrEqual(
     other: LocalTime?,
-    message: LocalTime.(LocalTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.isBefore(other) }
-    )
-}
+    message: suspend LocalTime.(LocalTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.isBefore(argument) }
+)
 
 /**
  * Checks that the time is [other] or after.
@@ -1672,17 +1580,13 @@ public fun ValidationNode<OffsetTime>.afterOrEqual(
  */
 public fun ValidationNode<OffsetTime>.afterOrEqual(
     other: OffsetTime?,
-    message: OffsetTime.(OffsetTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.isBefore(other) }
-    )
-}
+    message: suspend OffsetTime.(OffsetTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.isBefore(argument) }
+)
 
 /**
  * Checks that the date and time is [other] or after.
@@ -1715,17 +1619,13 @@ public fun ValidationNode<ZonedDateTime>.afterOrEqual(
  */
 public fun ValidationNode<ZonedDateTime>.afterOrEqual(
     other: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.isBefore(other) }
-    )
-}
+    message: suspend ZonedDateTime.(ZonedDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.isBefore(argument) }
+)
 
 /**
  * Checks that the date and time is [other] or after.
@@ -1758,17 +1658,13 @@ public fun ValidationNode<OffsetDateTime>.afterOrEqual(
  */
 public fun ValidationNode<OffsetDateTime>.afterOrEqual(
     other: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.isBefore(other) }
-    )
-}
+    message: suspend OffsetDateTime.(OffsetDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.isBefore(argument) }
+)
 
 /**
  * Checks that the instant is [other] or after.
@@ -1801,17 +1697,13 @@ public fun ValidationNode<Instant>.afterOrEqual(
  */
 public fun ValidationNode<Instant>.afterOrEqual(
     other: Instant?,
-    message: Instant.(Instant) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.isBefore(other) }
-    )
-}
+    message: suspend Instant.(Instant) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.isBefore(argument) }
+)
 
 /**
  * Checks that the month is [other] or after.
@@ -1844,17 +1736,13 @@ public fun ValidationNode<YearMonth>.afterOrEqual(
  */
 public fun ValidationNode<YearMonth>.afterOrEqual(
     other: YearMonth?,
-    message: YearMonth.(YearMonth) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.isBefore(other) }
-    )
-}
+    message: suspend YearMonth.(YearMonth) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.isBefore(argument) }
+)
 
 /**
  * Checks that the year is [other] or after.
@@ -1887,17 +1775,13 @@ public fun ValidationNode<Year>.afterOrEqual(
  */
 public fun ValidationNode<Year>.afterOrEqual(
     other: Year?,
-    message: Year.(Year) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.isBefore(other) }
-    )
-}
+    message: suspend Year.(Year) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.isBefore(argument) }
+)
 
 /**
  * Checks that the date is [other] or after.
@@ -1930,17 +1814,13 @@ public fun ValidationNode<Date>.afterOrEqual(
  */
 public fun ValidationNode<Date>.afterOrEqual(
     other: Date?,
-    message: Date.(Date) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "afterOrEqual",
-        predicate = { !it.before(other) }
-    )
-}
+    message: suspend Date.(Date) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "afterOrEqual",
+    predicate = { value, argument -> !value.before(argument) }
+)
 
 /**
  * Checks that the date is [other] or before.
@@ -1973,17 +1853,13 @@ public fun ValidationNode<LocalDate>.beforeOrEqual(
  */
 public fun ValidationNode<LocalDate>.beforeOrEqual(
     other: LocalDate?,
-    message: LocalDate.(LocalDate) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.isAfter(other) }
-    )
-}
+    message: suspend LocalDate.(LocalDate) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.isAfter(argument) }
+)
 
 /**
  * Checks that the date and time is [other] or before.
@@ -2016,17 +1892,13 @@ public fun ValidationNode<LocalDateTime>.beforeOrEqual(
  */
 public fun ValidationNode<LocalDateTime>.beforeOrEqual(
     other: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.isAfter(other) }
-    )
-}
+    message: suspend LocalDateTime.(LocalDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.isAfter(argument) }
+)
 
 /**
  * Checks that the time is [other] or before.
@@ -2059,17 +1931,13 @@ public fun ValidationNode<LocalTime>.beforeOrEqual(
  */
 public fun ValidationNode<LocalTime>.beforeOrEqual(
     other: LocalTime?,
-    message: LocalTime.(LocalTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.isAfter(other) }
-    )
-}
+    message: suspend LocalTime.(LocalTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.isAfter(argument) }
+)
 
 /**
  * Checks that the time is [other] or before.
@@ -2102,17 +1970,13 @@ public fun ValidationNode<OffsetTime>.beforeOrEqual(
  */
 public fun ValidationNode<OffsetTime>.beforeOrEqual(
     other: OffsetTime?,
-    message: OffsetTime.(OffsetTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.isAfter(other) }
-    )
-}
+    message: suspend OffsetTime.(OffsetTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.isAfter(argument) }
+)
 
 /**
  * Checks that the date and time is [other] or before.
@@ -2145,17 +2009,13 @@ public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
  */
 public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
     other: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.isAfter(other) }
-    )
-}
+    message: suspend ZonedDateTime.(ZonedDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.isAfter(argument) }
+)
 
 /**
  * Checks that the date and time is [other] or before.
@@ -2188,17 +2048,13 @@ public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
  */
 public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
     other: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.isAfter(other) }
-    )
-}
+    message: suspend OffsetDateTime.(OffsetDateTime) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.isAfter(argument) }
+)
 
 /**
  * Checks that the instant is [other] or before.
@@ -2231,17 +2087,13 @@ public fun ValidationNode<Instant>.beforeOrEqual(
  */
 public fun ValidationNode<Instant>.beforeOrEqual(
     other: Instant?,
-    message: Instant.(Instant) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.isAfter(other) }
-    )
-}
+    message: suspend Instant.(Instant) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.isAfter(argument) }
+)
 
 /**
  * Checks that the month is [other] or before.
@@ -2274,17 +2126,13 @@ public fun ValidationNode<YearMonth>.beforeOrEqual(
  */
 public fun ValidationNode<YearMonth>.beforeOrEqual(
     other: YearMonth?,
-    message: YearMonth.(YearMonth) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.isAfter(other) }
-    )
-}
+    message: suspend YearMonth.(YearMonth) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.isAfter(argument) }
+)
 
 /**
  * Checks that the year is [other] or before.
@@ -2317,17 +2165,13 @@ public fun ValidationNode<Year>.beforeOrEqual(
  */
 public fun ValidationNode<Year>.beforeOrEqual(
     other: Year?,
-    message: Year.(Year) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.isAfter(other) }
-    )
-}
+    message: suspend Year.(Year) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.isAfter(argument) }
+)
 
 /**
  * Checks that the date is [other] or before.
@@ -2360,17 +2204,13 @@ public fun ValidationNode<Date>.beforeOrEqual(
  */
 public fun ValidationNode<Date>.beforeOrEqual(
     other: Date?,
-    message: Date.(Date) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "beforeOrEqual",
-        predicate = { !it.after(other) }
-    )
-}
+    message: suspend Date.(Date) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "beforeOrEqual",
+    predicate = { value, argument -> !value.after(argument) }
+)
 
 /**
  * Checks that the date is between [start] and [end], both included.
@@ -2412,17 +2252,14 @@ public fun ValidationNode<LocalDate>.between(
 public fun ValidationNode<LocalDate>.between(
     start: LocalDate?,
     end: LocalDate?,
-    message: LocalDate.(LocalDate, LocalDate) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.isBefore(start) && !it.isAfter(end) }
-    )
-}
+    message: suspend LocalDate.(LocalDate, LocalDate) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
+)
 
 /**
  * Checks that the date and time is between [start] and [end], both included.
@@ -2460,17 +2297,14 @@ public fun ValidationNode<LocalDateTime>.between(
 public fun ValidationNode<LocalDateTime>.between(
     start: LocalDateTime?,
     end: LocalDateTime?,
-    message: LocalDateTime.(LocalDateTime, LocalDateTime) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.isBefore(start) && !it.isAfter(end) }
-    )
-}
+    message: suspend LocalDateTime.(LocalDateTime, LocalDateTime) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
+)
 
 /**
  * Checks that the time is between [start] and [end], both included.
@@ -2508,17 +2342,14 @@ public fun ValidationNode<LocalTime>.between(
 public fun ValidationNode<LocalTime>.between(
     start: LocalTime?,
     end: LocalTime?,
-    message: LocalTime.(LocalTime, LocalTime) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.isBefore(start) && !it.isAfter(end) }
-    )
-}
+    message: suspend LocalTime.(LocalTime, LocalTime) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
+)
 
 /**
  * Checks that the time is between [start] and [end], both included.
@@ -2556,17 +2387,14 @@ public fun ValidationNode<OffsetTime>.between(
 public fun ValidationNode<OffsetTime>.between(
     start: OffsetTime?,
     end: OffsetTime?,
-    message: OffsetTime.(OffsetTime, OffsetTime) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.isBefore(start) && !it.isAfter(end) }
-    )
-}
+    message: suspend OffsetTime.(OffsetTime, OffsetTime) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
+)
 
 /**
  * Checks that the date and time is between [start] and [end], both included.
@@ -2604,17 +2432,14 @@ public fun ValidationNode<ZonedDateTime>.between(
 public fun ValidationNode<ZonedDateTime>.between(
     start: ZonedDateTime?,
     end: ZonedDateTime?,
-    message: ZonedDateTime.(ZonedDateTime, ZonedDateTime) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.isBefore(start) && !it.isAfter(end) }
-    )
-}
+    message: suspend ZonedDateTime.(ZonedDateTime, ZonedDateTime) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
+)
 
 /**
  * Checks that the date and time is between [start] and [end], both included.
@@ -2652,17 +2477,14 @@ public fun ValidationNode<OffsetDateTime>.between(
 public fun ValidationNode<OffsetDateTime>.between(
     start: OffsetDateTime?,
     end: OffsetDateTime?,
-    message: OffsetDateTime.(OffsetDateTime, OffsetDateTime) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.isBefore(start) && !it.isAfter(end) }
-    )
-}
+    message: suspend OffsetDateTime.(OffsetDateTime, OffsetDateTime) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
+)
 
 /**
  * Checks that the instant is between [start] and [end], both included.
@@ -2700,17 +2522,14 @@ public fun ValidationNode<Instant>.between(
 public fun ValidationNode<Instant>.between(
     start: Instant?,
     end: Instant?,
-    message: Instant.(Instant, Instant) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.isBefore(start) && !it.isAfter(end) }
-    )
-}
+    message: suspend Instant.(Instant, Instant) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
+)
 
 /**
  * Checks that the month is between [start] and [end], both included.
@@ -2748,17 +2567,14 @@ public fun ValidationNode<YearMonth>.between(
 public fun ValidationNode<YearMonth>.between(
     start: YearMonth?,
     end: YearMonth?,
-    message: YearMonth.(YearMonth, YearMonth) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.isBefore(start) && !it.isAfter(end) }
-    )
-}
+    message: suspend YearMonth.(YearMonth, YearMonth) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
+)
 
 /**
  * Checks that the year is between [start] and [end], both included.
@@ -2796,17 +2612,14 @@ public fun ValidationNode<Year>.between(
 public fun ValidationNode<Year>.between(
     start: Year?,
     end: Year?,
-    message: Year.(Year, Year) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.isBefore(start) && !it.isAfter(end) }
-    )
-}
+    message: suspend Year.(Year, Year) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
+)
 
 /**
  * Checks that the date is between [start] and [end], both included.
@@ -2844,17 +2657,14 @@ public fun ValidationNode<Date>.between(
 public fun ValidationNode<Date>.between(
     start: Date?,
     end: Date?,
-    message: Date.(Date, Date) -> String
-) {
-    if (start == null || end == null)
-        return
-
-    constraint(
-        message = { it.message(start, end) },
-        code = "between",
-        predicate = { !it.before(start) && !it.after(end) }
-    )
-}
+    message: suspend Date.(Date, Date) -> String
+): Unit = constraint(
+    first = start,
+    second = end,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> !value.before(first) && !value.after(second) }
+)
 
 /**
  * Checks that the duration is at least [min].
@@ -2887,17 +2697,13 @@ public fun ValidationNode<Duration>.min(
  */
 public fun ValidationNode<Duration>.min(
     min: Duration?,
-    message: Duration.(Duration) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+    message: suspend Duration.(Duration) -> String
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 /**
  * Checks that the duration is at most [max].
@@ -2930,17 +2736,13 @@ public fun ValidationNode<Duration>.max(
  */
 public fun ValidationNode<Duration>.max(
     max: Duration?,
-    message: Duration.(Duration) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+    message: suspend Duration.(Duration) -> String
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 /**
  * Checks that the duration is greater than [other].
@@ -2973,17 +2775,13 @@ public fun ValidationNode<Duration>.greaterThan(
  */
 public fun ValidationNode<Duration>.greaterThan(
     other: Duration?,
-    message: Duration.(Duration) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+    message: suspend Duration.(Duration) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 /**
  * Checks that the duration is less than [other].
@@ -3016,17 +2814,13 @@ public fun ValidationNode<Duration>.lessThan(
  */
 public fun ValidationNode<Duration>.lessThan(
     other: Duration?,
-    message: Duration.(Duration) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+    message: suspend Duration.(Duration) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 /**
  * Checks that the duration is between [min] and [max], both included.
@@ -3064,14 +2858,11 @@ public fun ValidationNode<Duration>.between(
 public fun ValidationNode<Duration>.between(
     min: Duration?,
     max: Duration?,
-    message: Duration.(Duration, Duration) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+    message: suspend Duration.(Duration, Duration) -> String
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)

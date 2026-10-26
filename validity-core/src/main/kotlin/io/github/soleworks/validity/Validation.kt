@@ -1,6 +1,7 @@
 package io.github.soleworks.validity
 
 import kotlin.reflect.KProperty0
+import kotlinx.coroutines.runBlocking
 
 /**
  * The rules of an object, written with [validation].
@@ -13,12 +14,11 @@ import kotlin.reflect.KProperty0
  */
 @ValidityDsl
 public class Validation internal constructor(
-    private val block: Validation.() -> Unit
+    private val block: suspend Validation.() -> Unit
 ) {
-    private val validity: Validity = Validity.current
-
     internal val nodes = mutableListOf<ValidationNode<*>>()
 
+    @PublishedApi
     internal var metadata: Map<String, Any?> = emptyMap()
 
     /**
@@ -53,13 +53,11 @@ public class Validation internal constructor(
         property: KProperty0<*>,
         message: String,
         code: String = "",
-        predicate: () -> Boolean
-    ): Unit = constraint(
-        path = property.name,
-        value = property.get(),
+        predicate: suspend () -> Boolean
+    ): Unit = node(path = property.name, value = property.get()).constraint(
         message = message,
         code = code,
-        predicate = predicate
+        predicate = { predicate() }
     )
 
     /**
@@ -78,13 +76,11 @@ public class Validation internal constructor(
         path: String = "",
         message: String,
         code: String = "",
-        predicate: () -> Boolean
-    ): Unit = constraint(
-        path = path,
-        value = null,
+        predicate: suspend () -> Boolean
+    ): Unit = node(path = path, value = null).constraint(
         message = message,
         code = code,
-        predicate = predicate
+        predicate = { predicate() }
     )
 
     /**
@@ -101,7 +97,7 @@ public class Validation internal constructor(
      * @param entries the keys and values to attach.
      * @param block the rules whose violations get them.
      */
-    public fun metadata(
+    public inline fun metadata(
         vararg entries: Pair<String, Any?>,
         block: Validation.() -> Unit
     ) {
@@ -119,39 +115,32 @@ public class Validation internal constructor(
     /**
      * Runs every rule and returns all the violations, in the order the rules are declared.
      *
-     * With a [validity] other than the one the rules were written under, the block of [validation] runs again under
-     * it, so its messages and its clock apply.
+     * The block of [validation] runs on each call, under [validity], so its messages and its clock apply.
      *
      * @param validity the configuration to validate with, the default one unless it is given.
      * @return the violations, empty when every rule holds.
      */
-    public fun validate(
+    public suspend fun validate(
         validity: Validity = Validity.default
     ): ValidationResult = validity.use {
-        val rules = if (validity === this.validity) this else validation(block)
-
         ValidationResult(
-            violations = rules.nodes.flatMap { it.validate() }
+            violations = built().nodes.flatMap { it.violations() }
         )
     }
 
-    private fun constraint(
-        path: String,
-        value: Any?,
-        message: String,
-        code: String,
-        predicate: () -> Boolean
-    ) {
-        val node = ValidationNode(path = path, value = value).also { node -> node.metadata = metadata }
+    /**
+     * Runs every rule and returns all the violations, blocking the thread until the rules finish.
+     *
+     * Use it outside a coroutine. Inside one, call [validate].
+     *
+     * @param validity the configuration to validate with, the default one unless it is given.
+     * @return the violations, empty when every rule holds.
+     */
+    public fun validateBlocking(
+        validity: Validity = Validity.default
+    ): ValidationResult = runBlocking { validate(validity) }
 
-        add(node)
-
-        node.constraint(
-            message = message,
-            code = code,
-            predicate = { predicate() }
-        )
-    }
+    internal suspend fun built(): Validation = Validation(block).apply { block() }
 }
 
 /**
@@ -173,5 +162,5 @@ public class Validation internal constructor(
  * @return the rules, ready to [validate][Validation.validate].
  */
 public fun validation(
-    block: Validation.() -> Unit
-): Validation = Validation(block).apply(block)
+    block: suspend Validation.() -> Unit
+): Validation = Validation(block)

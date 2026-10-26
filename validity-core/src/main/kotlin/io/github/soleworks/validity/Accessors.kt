@@ -27,10 +27,10 @@ private const val NULL_KEY = "null"
  * @param T the type of the elements.
  * @param block the constraints of each element.
  */
-public fun <T> ValidationNode<out Iterable<T>>.each(
+public inline fun <T> ValidationNode<out Iterable<T>>.each(
     block: ValidationNode<T>.() -> Unit
 ): Unit = add(
-    value.mapIndexed { index, item -> child(path.indexed(index), item, block) }
+    value.mapIndexed { index, item -> child(path.indexed(index), item).apply(block) }
 )
 
 /**
@@ -40,10 +40,10 @@ public fun <T> ValidationNode<out Iterable<T>>.each(
  * @param block the constraints of each element.
  */
 @JvmName("eachArray")
-public fun <T> ValidationNode<Array<T>>.each(
+public inline fun <T> ValidationNode<Array<T>>.each(
     block: ValidationNode<T>.() -> Unit
 ): Unit = add(
-    value.mapIndexed { index, item -> child(path.indexed(index), item, block) }
+    value.mapIndexed { index, item -> child(path.indexed(index), item).apply(block) }
 )
 
 /**
@@ -56,10 +56,10 @@ public fun <T> ValidationNode<Array<T>>.each(
  * @param block the constraints of each entry.
  */
 @JvmName("eachMap")
-public fun <K, V> ValidationNode<out Map<K, V>>.each(
+public inline fun <K, V> ValidationNode<out Map<K, V>>.each(
     block: ValidationNode<Map.Entry<K, V>>.() -> Unit
 ): Unit = add(
-    value.entries.map { entry -> child(path.indexed(entry.key), entry, block) }
+    value.entries.map { entry -> child(path.indexed(entry.key), entry).apply(block) }
 )
 
 /**
@@ -72,10 +72,10 @@ public fun <K, V> ValidationNode<out Map<K, V>>.each(
  * @param K the type of the keys.
  * @param block the constraints of each key.
  */
-public fun <K> ValidationNode<out Map<K, *>>.eachKey(
+public inline fun <K> ValidationNode<out Map<K, *>>.eachKey(
     block: ValidationNode<K>.() -> Unit
 ): Unit = add(
-    value.keys.map { key -> child(path.indexed(key), key, block) }
+    value.keys.map { key -> child(path.indexed(key), key).apply(block) }
 )
 
 /**
@@ -88,10 +88,10 @@ public fun <K> ValidationNode<out Map<K, *>>.eachKey(
  * @param V the type of the values.
  * @param block the constraints of each value.
  */
-public fun <V> ValidationNode<out Map<*, V>>.eachValue(
+public inline fun <V> ValidationNode<out Map<*, V>>.eachValue(
     block: ValidationNode<V>.() -> Unit
 ): Unit = add(
-    value.map { (key, item) -> child(path.indexed(key), item, block) }
+    value.map { (key, item) -> child(path.indexed(key), item).apply(block) }
 )
 
 /**
@@ -109,6 +109,24 @@ public fun <V : Validatable> ValidationNode<V>.valid(): Unit = valid(
 )
 
 /**
+ * Checks the rules that the value gives for [context]. Their paths are nested under the path of the value:
+ * `items[0].quantity`.
+ *
+ * ```kotlin
+ * ::items required { each { valid(stock) } }
+ * ```
+ *
+ * @param C the type of the context.
+ * @param V the type of the value.
+ * @param context what the rules of the value read, such as data loaded by the caller.
+ */
+public fun <C, V : ContextualValidatable<C>> ValidationNode<V>.valid(
+    context: C
+): Unit = valid(
+    validation = { it.validation(context) }
+)
+
+/**
  * Checks the rules that [validation] gives for the value. Their paths are nested under the path of the value:
  * `shipping.zipCode`.
  *
@@ -118,10 +136,14 @@ public fun <V : Validatable> ValidationNode<V>.valid(): Unit = valid(
  * @param validation gives the rules of the value, usually with [validation][io.github.soleworks.validity.validation].
  */
 public fun <V> ValidationNode<V>.valid(
-    validation: (V) -> Validation
-): Unit = add(
-    validation(value).nodes.map { node -> node.relocated(path.nested(node.path), metadata) }
-)
+    validation: suspend (V) -> Validation
+) {
+    val metadata = metadata
+
+    add {
+        validation(value).built().nodes.map { node -> node.relocated(path.nested(node.path), metadata) }
+    }
+}
 
 /**
  * Checks that [converter] can convert the value, and runs [block] on what it returns.
@@ -142,7 +164,7 @@ public fun <V> ValidationNode<V>.valid(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun <V, T : Any> ValidationNode<V>.convert(
+public inline fun <V, T : Any> ValidationNode<V>.convert(
     converter: (V) -> T?,
     message: String = messages.convert,
     block: ValidationNode<T>.() -> Unit
@@ -169,7 +191,7 @@ public fun <V, T : Any> ValidationNode<V>.convert(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToBigDecimal(
+public inline fun ValidationNode<String>.convertToBigDecimal(
     message: String = messages.convertToBigDecimal,
     block: ValidationNode<BigDecimal>.() -> Unit
 ): Unit = convert(
@@ -195,7 +217,7 @@ public fun ValidationNode<String>.convertToBigDecimal(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToInt(
+public inline fun ValidationNode<String>.convertToInt(
     message: String = messages.convertToInt,
     block: ValidationNode<Int>.() -> Unit
 ): Unit = convert(
@@ -217,7 +239,7 @@ public fun ValidationNode<String>.convertToInt(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToLong(
+public inline fun ValidationNode<String>.convertToLong(
     message: String = messages.convertToLong,
     block: ValidationNode<Long>.() -> Unit
 ): Unit = convert(
@@ -239,7 +261,7 @@ public fun ValidationNode<String>.convertToLong(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToBigInteger(
+public inline fun ValidationNode<String>.convertToBigInteger(
     message: String = messages.convertToBigInteger,
     block: ValidationNode<BigInteger>.() -> Unit
 ): Unit = convert(
@@ -262,7 +284,7 @@ public fun ValidationNode<String>.convertToBigInteger(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToDouble(
+public inline fun ValidationNode<String>.convertToDouble(
     message: String = messages.convertToDouble,
     block: ValidationNode<Double>.() -> Unit
 ): Unit = convert(
@@ -284,7 +306,7 @@ public fun ValidationNode<String>.convertToDouble(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToBoolean(
+public inline fun ValidationNode<String>.convertToBoolean(
     message: String = messages.convertToBoolean,
     block: ValidationNode<Boolean>.() -> Unit
 ): Unit = convert(
@@ -306,7 +328,7 @@ public fun ValidationNode<String>.convertToBoolean(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToUuid(
+public inline fun ValidationNode<String>.convertToUuid(
     message: String = messages.convertToUuid,
     block: ValidationNode<UUID>.() -> Unit
 ): Unit = convert(
@@ -336,7 +358,7 @@ public fun ValidationNode<String>.convertToUuid(
 public inline fun <reified E : Enum<E>> ValidationNode<String>.convertToEnum(
     ignoreCase: Boolean = false,
     message: String = messages.convertToEnum,
-    noinline block: ValidationNode<E>.() -> Unit
+    block: ValidationNode<E>.() -> Unit
 ): Unit = convert(
     converter = { text -> enumEntries<E>().firstOrNull { it.name.equals(text, ignoreCase) } },
     message = message.filled("values" to enumEntries<E>().map { it.name }),
@@ -360,7 +382,7 @@ public inline fun <reified E : Enum<E>> ValidationNode<String>.convertToEnum(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToLocalDate(
+public inline fun ValidationNode<String>.convertToLocalDate(
     message: String = messages.convertToLocalDate,
     block: ValidationNode<LocalDate>.() -> Unit
 ): Unit = convert(
@@ -383,7 +405,7 @@ public fun ValidationNode<String>.convertToLocalDate(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToLocalDateTime(
+public inline fun ValidationNode<String>.convertToLocalDateTime(
     message: String = messages.convertToLocalDateTime,
     block: ValidationNode<LocalDateTime>.() -> Unit
 ): Unit = convert(
@@ -405,7 +427,7 @@ public fun ValidationNode<String>.convertToLocalDateTime(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToLocalTime(
+public inline fun ValidationNode<String>.convertToLocalTime(
     message: String = messages.convertToLocalTime,
     block: ValidationNode<LocalTime>.() -> Unit
 ): Unit = convert(
@@ -428,7 +450,7 @@ public fun ValidationNode<String>.convertToLocalTime(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToOffsetDateTime(
+public inline fun ValidationNode<String>.convertToOffsetDateTime(
     message: String = messages.convertToOffsetDateTime,
     block: ValidationNode<OffsetDateTime>.() -> Unit
 ): Unit = convert(
@@ -451,7 +473,7 @@ public fun ValidationNode<String>.convertToOffsetDateTime(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToInstant(
+public inline fun ValidationNode<String>.convertToInstant(
     message: String = messages.convertToInstant,
     block: ValidationNode<Instant>.() -> Unit
 ): Unit = convert(
@@ -473,7 +495,7 @@ public fun ValidationNode<String>.convertToInstant(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToYearMonth(
+public inline fun ValidationNode<String>.convertToYearMonth(
     message: String = messages.convertToYearMonth,
     block: ValidationNode<YearMonth>.() -> Unit
 ): Unit = convert(
@@ -496,7 +518,7 @@ public fun ValidationNode<String>.convertToYearMonth(
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  * @param block the constraints of the converted value.
  */
-public fun ValidationNode<String>.convertToDuration(
+public inline fun ValidationNode<String>.convertToDuration(
     message: String = messages.convertToDuration,
     block: ValidationNode<Duration>.() -> Unit
 ): Unit = convert(
@@ -507,7 +529,7 @@ public fun ValidationNode<String>.convertToDuration(
 )
 
 @PublishedApi
-internal fun <V, T : Any> ValidationNode<V>.convert(
+internal inline fun <V, T : Any> ValidationNode<V>.convert(
     converter: (V) -> T?,
     message: String,
     code: String,
@@ -522,24 +544,25 @@ internal fun <V, T : Any> ValidationNode<V>.convert(
     )
 
     if (converted != null)
-        add(listOf(child(path, converted, block)))
+        add(listOf(child(path, converted).apply(block)))
 }
 
-private fun String.toUuidOrNull(): UUID? = runCatching { UUID.fromString(this) }
+@PublishedApi
+internal fun String.toUuidOrNull(): UUID? = runCatching { UUID.fromString(this) }
     .getOrNull()
     ?.takeIf { uuid -> uuid.toString().equals(this, ignoreCase = true) }
 
-private fun <T> ValidationNode<*>.child(
+@PublishedApi
+internal fun <T> ValidationNode<*>.child(
     path: String,
-    value: T,
-    block: ValidationNode<T>.() -> Unit
+    value: T
 ): ValidationNode<T> {
     val child = ValidationNode(path, value)
 
     child.operator = operator
     child.metadata = metadata
 
-    return child.apply(block)
+    return child
 }
 
 private fun String.nested(
@@ -549,6 +572,7 @@ private fun String.nested(
 else
     "$this.$path"
 
-private fun String.indexed(
+@PublishedApi
+internal fun String.indexed(
     key: Any?
 ): String = "$this[${key ?: NULL_KEY}]"

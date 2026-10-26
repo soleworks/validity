@@ -1,6 +1,8 @@
 package io.github.soleworks.validity
 
 import java.time.Clock
+import kotlinx.coroutines.asContextElement
+import kotlinx.coroutines.withContext
 
 /**
  * A configuration of Validity: the messages of the violations and the clock that says what "now" is.
@@ -26,19 +28,9 @@ public class Validity private constructor(
         blocks.forEach { block -> block() }
     }
 
-    internal fun <T> use(
-        block: () -> T
-    ): T {
-        val outer = active.get()
-
-        active.set(this)
-
-        try {
-            return block()
-        } finally {
-            active.set(outer)
-        }
-    }
+    internal suspend fun <T> use(
+        block: suspend () -> T
+    ): T = withContext(active.asContextElement(this)) { block() }
 
     /** Creates and configures the instances of [Validity], and holds the default one. */
     public companion object {
@@ -87,6 +79,7 @@ public class Validity private constructor(
 internal val messages: Messages
     get() = Validity.current.configuration.messages
 
+@PublishedApi
 internal val clock: Clock
     get() = Validity.current.configuration.clock
 
@@ -104,6 +97,6 @@ internal val clock: Clock
  * @param of reads the time from the clock, such as `LocalDate::now` or `Instant::now`.
  * @return what [of] returns.
  */
-public fun <T> now(
+public inline fun <T> now(
     of: (Clock) -> T
 ): T = of(clock)

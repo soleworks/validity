@@ -20,7 +20,7 @@ class MessagesTest {
         fun `given no configuration should report the default message of the module`() {
             val rules = validation { constraint(message = GREETING_MESSAGES.current.greeting) { false } }
 
-            val result = rules.validate()
+            val result = rules.validateBlocking()
 
             result.violations shouldBe listOf(Violation(path = "", message = "hello", code = ""))
         }
@@ -30,7 +30,7 @@ class MessagesTest {
             Validity.configure { messages { module(GREETING_MESSAGES).greeting = "olá" } }
             val rules = validation { constraint(message = GREETING_MESSAGES.current.greeting) { false } }
 
-            val result = rules.validate()
+            val result = rules.validateBlocking()
 
             result.violations shouldBe listOf(Violation(path = "", message = "olá", code = ""))
         }
@@ -40,7 +40,10 @@ class MessagesTest {
             val validity = Validity { messages { module(GREETING_MESSAGES).greeting = "olá" } }
             val rules = validation { constraint(message = GREETING_MESSAGES.current.greeting) { false } }
 
-            val violations = listOf(rules.validate(validity), rules.validate()).flatMap { it.violations }
+            val violations = listOf(
+                rules.validateBlocking(validity),
+                rules.validateBlocking()
+            ).flatMap { it.violations }
 
             violations shouldBe listOf(
                 Violation(path = "", message = "olá", code = ""),

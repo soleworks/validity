@@ -16,12 +16,16 @@ import io.github.soleworks.validity.constraints.not
 import io.github.soleworks.validity.constraints.or
 import io.github.soleworks.validity.constraints.positive
 import io.github.soleworks.validity.constraints.startsWith
+import io.github.soleworks.validity.constraints.validate
 import io.github.soleworks.validity.samples.Address
 import io.github.soleworks.validity.samples.Company
+import io.github.soleworks.validity.samples.Directory
 import io.github.soleworks.validity.samples.Mailbox
 import io.github.soleworks.validity.samples.Operation
 import io.github.soleworks.validity.samples.Profile
+import io.github.soleworks.validity.samples.Threads
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -30,6 +34,31 @@ class ValidationNodeTest {
     @Nested
     @DisplayName("When constraint is called")
     inner class Constraint {
+        @Test
+        fun `given a predicate that suspends should accept a value it accepts`() {
+            val accounts = Directory("ana@mail.com")
+            val node = ValidationNode(path = "email", value = "bia@mail.com").apply {
+                constraint(message = "is already taken") { !accounts.exists(it) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @Test
+        fun `given a message function that suspends should report its message`() {
+            val node = ValidationNode(path = "amount", value = -1).apply {
+                constraint(message = { withContext(Threads.other) { "$it is not positive" } }) { it > 0 }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "amount", message = "-1 is not positive", code = "")
+            )
+        }
+
         @Test
         fun `given a code should report it with the violation`() {
             val node = ValidationNode(path = "amount", value = -1).apply {
@@ -568,7 +597,7 @@ class ValidationNodeTest {
         fun `given the block in a nested object should report the first failure at the full path`() {
             val profile = Profile(mailbox = Mailbox(email = "ana@"))
 
-            val result = profile.validate()
+            val result = profile.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(path = "mailbox.email", message = "must be a valid email", code = "email")
@@ -579,7 +608,7 @@ class ValidationNodeTest {
         fun `given the block in a list of nested objects should report it at the index with the entries`() {
             val profile = Profile(mailboxes = listOf(Mailbox(), Mailbox(email = "ana@")))
 
-            val result = profile.validate()
+            val result = profile.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(
@@ -595,7 +624,7 @@ class ValidationNodeTest {
         fun `given the block inside an or of a nested object should report the or at the full path`() {
             val profile = Profile(mailbox = Mailbox(login = "ana@"))
 
-            val result = profile.validate()
+            val result = profile.validateBlocking()
 
             result.violations shouldBe listOf(
                 Violation(

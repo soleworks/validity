@@ -36,17 +36,13 @@ public fun ValidationNode<Duration>.min(
  */
 public fun ValidationNode<Duration>.min(
     min: Duration?,
-    message: Duration.(Duration) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+    message: suspend Duration.(Duration) -> String
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 /**
  * Checks that the duration is at most [max].
@@ -79,17 +75,13 @@ public fun ValidationNode<Duration>.max(
  */
 public fun ValidationNode<Duration>.max(
     max: Duration?,
-    message: Duration.(Duration) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+    message: suspend Duration.(Duration) -> String
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 /**
  * Checks that the duration is greater than [other].
@@ -122,17 +114,13 @@ public fun ValidationNode<Duration>.greaterThan(
  */
 public fun ValidationNode<Duration>.greaterThan(
     other: Duration?,
-    message: Duration.(Duration) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+    message: suspend Duration.(Duration) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 /**
  * Checks that the duration is less than [other].
@@ -165,17 +153,13 @@ public fun ValidationNode<Duration>.lessThan(
  */
 public fun ValidationNode<Duration>.lessThan(
     other: Duration?,
-    message: Duration.(Duration) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+    message: suspend Duration.(Duration) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 /**
  * Checks that the duration is between [min] and [max], both included.
@@ -213,14 +197,11 @@ public fun ValidationNode<Duration>.between(
 public fun ValidationNode<Duration>.between(
     min: Duration?,
     max: Duration?,
-    message: Duration.(Duration, Duration) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+    message: suspend Duration.(Duration, Duration) -> String
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)

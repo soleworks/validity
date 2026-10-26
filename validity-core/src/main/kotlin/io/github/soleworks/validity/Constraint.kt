@@ -3,9 +3,9 @@ package io.github.soleworks.validity
 private val PLACEHOLDER_FORMAT = Regex("""\{(\w+)}""")
 
 internal class Constraint<V>(
-    private val check: (path: String, value: V) -> Violation?
+    private val check: suspend (path: String, value: V) -> Violation?
 ) {
-    fun validate(
+    suspend fun validate(
         path: String,
         value: V
     ): List<Violation> = listOfNotNull(check(path, value))

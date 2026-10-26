@@ -65,7 +65,7 @@ public fun ValidationNode<String>.uuid(
  */
 public fun ValidationNode<String>.uuid(
     version: Int? = null,
-    message: String.(Int?) -> String
+    message: suspend String.(Int?) -> String
 ): Unit = constraint(
     message = { it.message(version) },
     code = "uuid",
@@ -293,7 +293,7 @@ public fun ValidationNode<String>.hash(
  */
 public fun ValidationNode<String>.hash(
     algorithm: HashAlgorithm,
-    message: String.(HashAlgorithm) -> String
+    message: suspend String.(HashAlgorithm) -> String
 ): Unit = constraint(
     message = { it.message(algorithm) },
     code = "hash",

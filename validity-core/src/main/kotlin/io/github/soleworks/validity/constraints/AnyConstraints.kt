@@ -66,17 +66,13 @@ public fun <V> ValidationNode<V>.equalTo(
  */
 public fun <V> ValidationNode<V>.equalTo(
     other: V?,
-    message: V.(V) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "equalTo",
-        predicate = { it.isSameValue(other) }
-    )
-}
+    message: suspend V.(V) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "equalTo",
+    predicate = { value, argument -> value.isSameValue(argument) }
+)
 
 /**
  * Checks that the value is not equal to [other].
@@ -115,17 +111,13 @@ public fun <V> ValidationNode<V>.notEqualTo(
  */
 public fun <V> ValidationNode<V>.notEqualTo(
     other: V?,
-    message: V.(V) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "notEqualTo",
-        predicate = { !it.isSameValue(other) }
-    )
-}
+    message: suspend V.(V) -> String
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "notEqualTo",
+    predicate = { value, argument -> !value.isSameValue(argument) }
+)
 
 /**
  * Checks that the value is one of [values].
@@ -168,17 +160,13 @@ public fun <V> ValidationNode<V>.oneOf(
  */
 public fun <V> ValidationNode<V>.oneOf(
     values: Iterable<V>?,
-    message: V.(Iterable<V>) -> String
-) {
-    if (values == null)
-        return
-
-    constraint(
-        message = { it.message(values) },
-        code = "oneOf",
-        predicate = { values.hasValue(it) }
-    )
-}
+    message: suspend V.(Iterable<V>) -> String
+): Unit = constraint(
+    argument = values,
+    message = message,
+    code = "oneOf",
+    predicate = { value, argument -> argument.hasValue(value) }
+)
 
 /**
  * Checks that the value is none of [values].
@@ -217,17 +205,13 @@ public fun <V> ValidationNode<V>.noneOf(
  */
 public fun <V> ValidationNode<V>.noneOf(
     values: Iterable<V>?,
-    message: V.(Iterable<V>) -> String
-) {
-    if (values == null)
-        return
-
-    constraint(
-        message = { it.message(values) },
-        code = "noneOf",
-        predicate = { !values.hasValue(it) }
-    )
-}
+    message: suspend V.(Iterable<V>) -> String
+): Unit = constraint(
+    argument = values,
+    message = message,
+    code = "noneOf",
+    predicate = { value, argument -> !argument.hasValue(value) }
+)
 
 private fun Any?.isSameValue(
     other: Any?
