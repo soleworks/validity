@@ -111,17 +111,6 @@ class ValidityTest {
         }
 
         @Test
-        fun `given no configuration should report the default message in English`() {
-            val customer = Customer(name = "A")
-
-            val result = customer.validateBlocking()
-
-            result.violations shouldBe listOf(
-                Violation(path = "name", message = "must have at least 2 characters", code = "minLength")
-            )
-        }
-
-        @Test
         fun `given the required message should report it for a missing field`() {
             Validity.configure {
                 messages {

@@ -102,16 +102,12 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKey(
 public fun <K> ValidationNode<out Map<K, *>>.containsKey(
     key: K?,
     message: suspend Map<K, *>.(K) -> String
-) {
-    if (key == null)
-        return
-
-    constraint(
-        message = { it.message(key) },
-        code = "containsKey",
-        predicate = { key in it }
-    )
-}
+): Unit = constraint(
+    argument = key,
+    message = message,
+    code = "containsKey",
+    predicate = { value, argument -> argument in value }
+)
 
 public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
     keys: Iterable<K>?,
@@ -124,16 +120,12 @@ public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
 public fun <K> ValidationNode<out Map<K, *>>.containsKeys(
     keys: Iterable<K>?,
     message: suspend Map<K, *>.(Iterable<K>) -> String
-) {
-    if (keys == null)
-        return
-
-    constraint(
-        message = { it.message(keys) },
-        code = "containsKeys",
-        predicate = { keys.all { key -> key in it } }
-    )
-}
+): Unit = constraint(
+    argument = keys,
+    message = message,
+    code = "containsKeys",
+    predicate = { value, argument -> argument.all { key -> key in value } }
+)
 
 public fun <K> ValidationNode<out Map<K, *>>.notContainsKey(
     key: K?,
@@ -146,16 +138,12 @@ public fun <K> ValidationNode<out Map<K, *>>.notContainsKey(
 public fun <K> ValidationNode<out Map<K, *>>.notContainsKey(
     key: K?,
     message: suspend Map<K, *>.(K) -> String
-) {
-    if (key == null)
-        return
-
-    constraint(
-        message = { it.message(key) },
-        code = "notContainsKey",
-        predicate = { key !in it }
-    )
-}
+): Unit = constraint(
+    argument = key,
+    message = message,
+    code = "notContainsKey",
+    predicate = { value, argument -> argument !in value }
+)
 
 public fun <K> ValidationNode<out Map<K, *>>.onlyKeys(
     keys: Iterable<K>?,
@@ -168,16 +156,12 @@ public fun <K> ValidationNode<out Map<K, *>>.onlyKeys(
 public fun <K> ValidationNode<out Map<K, *>>.onlyKeys(
     keys: Iterable<K>?,
     message: suspend Map<K, *>.(Iterable<K>) -> String
-) {
-    if (keys == null)
-        return
-
-    constraint(
-        message = { it.message(keys) },
-        code = "onlyKeys",
-        predicate = { it.keys.all { key -> key in keys } }
-    )
-}
+): Unit = constraint(
+    argument = keys,
+    message = message,
+    code = "onlyKeys",
+    predicate = { value, argument -> value.keys.all { key -> key in argument } }
+)
 
 public fun <V> ValidationNode<out Map<*, V>>.containsValue(
     value: V?,
@@ -190,13 +174,9 @@ public fun <V> ValidationNode<out Map<*, V>>.containsValue(
 public fun <V> ValidationNode<out Map<*, V>>.containsValue(
     value: V?,
     message: suspend Map<*, V>.(V) -> String
-) {
-    if (value == null)
-        return
-
-    constraint(
-        message = { it.message(value) },
-        code = "containsValue",
-        predicate = { value in it.values }
-    )
-}
+): Unit = constraint(
+    argument = value,
+    message = message,
+    code = "containsValue",
+    predicate = { map, argument -> argument in map.values }
+)

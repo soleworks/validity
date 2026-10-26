@@ -15,16 +15,12 @@ public fun ValidationNode<UInt>.min(
 public fun ValidationNode<UInt>.min(
     min: UInt?,
     message: suspend UInt.(UInt) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 @JvmName("minULong")
 public fun ValidationNode<ULong>.min(
@@ -39,16 +35,12 @@ public fun ValidationNode<ULong>.min(
 public fun ValidationNode<ULong>.min(
     min: ULong?,
     message: suspend ULong.(ULong) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 @JvmName("minUShort")
 public fun ValidationNode<UShort>.min(
@@ -63,16 +55,12 @@ public fun ValidationNode<UShort>.min(
 public fun ValidationNode<UShort>.min(
     min: UShort?,
     message: suspend UShort.(UShort) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 @JvmName("minUByte")
 public fun ValidationNode<UByte>.min(
@@ -87,16 +75,12 @@ public fun ValidationNode<UByte>.min(
 public fun ValidationNode<UByte>.min(
     min: UByte?,
     message: suspend UByte.(UByte) -> String
-) {
-    if (min == null)
-        return
-
-    constraint(
-        message = { it.message(min) },
-        code = "min",
-        predicate = { it >= min }
-    )
-}
+): Unit = constraint(
+    argument = min,
+    message = message,
+    code = "min",
+    predicate = { value, argument -> value >= argument }
+)
 
 public fun ValidationNode<UInt>.max(
     max: UInt?,
@@ -109,16 +93,12 @@ public fun ValidationNode<UInt>.max(
 public fun ValidationNode<UInt>.max(
     max: UInt?,
     message: suspend UInt.(UInt) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 @JvmName("maxULong")
 public fun ValidationNode<ULong>.max(
@@ -133,16 +113,12 @@ public fun ValidationNode<ULong>.max(
 public fun ValidationNode<ULong>.max(
     max: ULong?,
     message: suspend ULong.(ULong) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 @JvmName("maxUShort")
 public fun ValidationNode<UShort>.max(
@@ -157,16 +133,12 @@ public fun ValidationNode<UShort>.max(
 public fun ValidationNode<UShort>.max(
     max: UShort?,
     message: suspend UShort.(UShort) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 @JvmName("maxUByte")
 public fun ValidationNode<UByte>.max(
@@ -181,16 +153,12 @@ public fun ValidationNode<UByte>.max(
 public fun ValidationNode<UByte>.max(
     max: UByte?,
     message: suspend UByte.(UByte) -> String
-) {
-    if (max == null)
-        return
-
-    constraint(
-        message = { it.message(max) },
-        code = "max",
-        predicate = { it <= max }
-    )
-}
+): Unit = constraint(
+    argument = max,
+    message = message,
+    code = "max",
+    predicate = { value, argument -> value <= argument }
+)
 
 public fun ValidationNode<UInt>.greaterThan(
     other: UInt?,
@@ -203,16 +171,12 @@ public fun ValidationNode<UInt>.greaterThan(
 public fun ValidationNode<UInt>.greaterThan(
     other: UInt?,
     message: suspend UInt.(UInt) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 @JvmName("greaterThanULong")
 public fun ValidationNode<ULong>.greaterThan(
@@ -227,16 +191,12 @@ public fun ValidationNode<ULong>.greaterThan(
 public fun ValidationNode<ULong>.greaterThan(
     other: ULong?,
     message: suspend ULong.(ULong) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 @JvmName("greaterThanUShort")
 public fun ValidationNode<UShort>.greaterThan(
@@ -251,16 +211,12 @@ public fun ValidationNode<UShort>.greaterThan(
 public fun ValidationNode<UShort>.greaterThan(
     other: UShort?,
     message: suspend UShort.(UShort) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 @JvmName("greaterThanUByte")
 public fun ValidationNode<UByte>.greaterThan(
@@ -275,16 +231,12 @@ public fun ValidationNode<UByte>.greaterThan(
 public fun ValidationNode<UByte>.greaterThan(
     other: UByte?,
     message: suspend UByte.(UByte) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "greaterThan",
-        predicate = { it > other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "greaterThan",
+    predicate = { value, argument -> value > argument }
+)
 
 public fun ValidationNode<UInt>.lessThan(
     other: UInt?,
@@ -297,16 +249,12 @@ public fun ValidationNode<UInt>.lessThan(
 public fun ValidationNode<UInt>.lessThan(
     other: UInt?,
     message: suspend UInt.(UInt) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 @JvmName("lessThanULong")
 public fun ValidationNode<ULong>.lessThan(
@@ -321,16 +269,12 @@ public fun ValidationNode<ULong>.lessThan(
 public fun ValidationNode<ULong>.lessThan(
     other: ULong?,
     message: suspend ULong.(ULong) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 @JvmName("lessThanUShort")
 public fun ValidationNode<UShort>.lessThan(
@@ -345,16 +289,12 @@ public fun ValidationNode<UShort>.lessThan(
 public fun ValidationNode<UShort>.lessThan(
     other: UShort?,
     message: suspend UShort.(UShort) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 @JvmName("lessThanUByte")
 public fun ValidationNode<UByte>.lessThan(
@@ -369,16 +309,12 @@ public fun ValidationNode<UByte>.lessThan(
 public fun ValidationNode<UByte>.lessThan(
     other: UByte?,
     message: suspend UByte.(UByte) -> String
-) {
-    if (other == null)
-        return
-
-    constraint(
-        message = { it.message(other) },
-        code = "lessThan",
-        predicate = { it < other }
-    )
-}
+): Unit = constraint(
+    argument = other,
+    message = message,
+    code = "lessThan",
+    predicate = { value, argument -> value < argument }
+)
 
 public fun ValidationNode<UInt>.between(
     min: UInt?,
@@ -394,16 +330,13 @@ public fun ValidationNode<UInt>.between(
     min: UInt?,
     max: UInt?,
     message: suspend UInt.(UInt, UInt) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 @JvmName("betweenULong")
 public fun ValidationNode<ULong>.between(
@@ -421,16 +354,13 @@ public fun ValidationNode<ULong>.between(
     min: ULong?,
     max: ULong?,
     message: suspend ULong.(ULong, ULong) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 @JvmName("betweenUShort")
 public fun ValidationNode<UShort>.between(
@@ -448,16 +378,13 @@ public fun ValidationNode<UShort>.between(
     min: UShort?,
     max: UShort?,
     message: suspend UShort.(UShort, UShort) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
 
 @JvmName("betweenUByte")
 public fun ValidationNode<UByte>.between(
@@ -475,13 +402,10 @@ public fun ValidationNode<UByte>.between(
     min: UByte?,
     max: UByte?,
     message: suspend UByte.(UByte, UByte) -> String
-) {
-    if (min == null || max == null)
-        return
-
-    constraint(
-        message = { it.message(min, max) },
-        code = "between",
-        predicate = { it in min..max }
-    )
-}
+): Unit = constraint(
+    first = min,
+    second = max,
+    message = message,
+    code = "between",
+    predicate = { value, first, second -> value in first..second }
+)
