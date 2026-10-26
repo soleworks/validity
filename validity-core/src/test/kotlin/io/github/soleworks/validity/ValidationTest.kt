@@ -1,9 +1,9 @@
 package io.github.soleworks.validity
 
 import io.github.soleworks.validity.constraints.minLength
-import io.github.soleworks.validity.samples.Accounts
 import io.github.soleworks.validity.samples.Batch
 import io.github.soleworks.validity.samples.Contact
+import io.github.soleworks.validity.samples.Directory
 import io.github.soleworks.validity.samples.Invoice
 import io.github.soleworks.validity.samples.Operation
 import io.github.soleworks.validity.samples.Payout
@@ -85,7 +85,7 @@ class ValidationTest {
 
         @Test
         fun `given a block that calls a suspend function should report the rule that depends on it`() {
-            val accounts = Accounts("ana@mail.com")
+            val accounts = Directory("ana@mail.com")
             val rules = validation {
                 val isTaken = accounts.exists("ana@mail.com")
                 constraint(path = "email", message = "is already taken") { !isTaken }

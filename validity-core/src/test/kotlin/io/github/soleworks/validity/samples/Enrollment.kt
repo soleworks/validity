@@ -5,11 +5,11 @@ import io.github.soleworks.validity.constraints.email
 import io.github.soleworks.validity.required
 import io.github.soleworks.validity.validation
 
-data class Registration(
+data class Enrollment(
     val email: String? = "ana@mail.com"
-) : ContextualValidatable<Accounts> {
+) : ContextualValidatable<Directory> {
     override fun validation(
-        context: Accounts
+        context: Directory
     ) = validation {
         ::email required {
             email()

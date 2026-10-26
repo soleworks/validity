@@ -7,8 +7,7 @@ public class ValidationNode<V>(
     @PublishedApi
     internal val value: V
 ) {
-    private val constraints = mutableListOf<Constraint<V>>()
-    private val groups = mutableListOf<suspend () -> List<ValidationNode<*>>>()
+    private val rules = mutableListOf<ValidationNodeRule<V>>()
 
     @PublishedApi
     internal var operator: String? = null
@@ -63,29 +62,52 @@ public class ValidationNode<V>(
         }
     }
 
+    public inline fun failFast(
+        block: ValidationNode<V>.() -> Unit
+    ): Unit = chain(child(path, value).apply(block))
+
     internal fun add(
         constraint: Constraint<V>
     ) {
-        constraints += constraint
+        rules += ValidationNodeRule.Check(constraint)
     }
 
     @PublishedApi
     internal fun add(
         nodes: List<ValidationNode<*>>
     ) {
-        groups += { nodes }
+        rules += ValidationNodeRule.Group { nodes }
     }
 
     internal fun add(
         group: suspend () -> List<ValidationNode<*>>
     ) {
-        groups += group
+        rules += ValidationNodeRule.Group(group)
+    }
+
+    @PublishedApi
+    internal fun chain(
+        node: ValidationNode<V>
+    ) {
+        rules += ValidationNodeRule.Chain(node)
     }
 
     internal suspend fun violations(): List<Violation> = branches().flatten()
 
+    internal suspend fun firstFailure(): List<Violation> {
+        for (rule in rules) {
+            val violations = rule.validate(path, value)
+
+            if (violations.isNotEmpty())
+                return violations
+        }
+
+        return emptyList()
+    }
+
     internal suspend fun branches(): List<List<Violation>> =
-        constraints.map { it.validate(path, value) } + groups.map { group -> group().flatMap { it.violations() } }
+        rules.filterNot { rule -> rule is ValidationNodeRule.Group }.map { rule -> rule.validate(path, value) } +
+            rules.filterIsInstance<ValidationNodeRule.Group<V>>().map { rule -> rule.validate(path, value) }
 
     internal fun relocated(
         path: String,
@@ -94,9 +116,6 @@ public class ValidationNode<V>(
         this
     else
         ValidationNode(path, value).also { relocated ->
-            relocated.constraints += constraints.map { constraint -> constraint.inheriting(metadata) }
-            relocated.groups += groups.map { group ->
-                suspend { group().map { node -> node.relocated(path + node.path.removePrefix(this.path), metadata) } }
-            }
+            relocated.rules += rules.map { rule -> rule.relocated(from = this.path, to = path, metadata = metadata) }
         }
 }

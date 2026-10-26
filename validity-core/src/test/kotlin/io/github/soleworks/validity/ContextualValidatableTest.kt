@@ -1,10 +1,10 @@
 package io.github.soleworks.validity
 
-import io.github.soleworks.validity.samples.Accounts
 import io.github.soleworks.validity.samples.Buyer
 import io.github.soleworks.validity.samples.Cart
 import io.github.soleworks.validity.samples.CartItem
-import io.github.soleworks.validity.samples.Registration
+import io.github.soleworks.validity.samples.Directory
+import io.github.soleworks.validity.samples.Enrollment
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
@@ -28,9 +28,9 @@ class ContextualValidatableTest {
 
         @Test
         fun `given an email the accounts already have should report it`() {
-            val registration = Registration(email = "ana@mail.com")
+            val enrollment = Enrollment(email = "ana@mail.com")
 
-            val result = runBlocking { registration.validate(Accounts("ana@mail.com")) }
+            val result = runBlocking { enrollment.validate(Directory("ana@mail.com")) }
 
             result.violations shouldBe listOf(
                 Violation(path = "email", message = "is already taken", code = "taken")
@@ -55,18 +55,18 @@ class ContextualValidatableTest {
     inner class ValidateBlocking {
         @Test
         fun `given an email the accounts do not have should be valid`() {
-            val registration = Registration(email = "bia@mail.com")
+            val enrollment = Enrollment(email = "bia@mail.com")
 
-            val result = registration.validateBlocking(Accounts("ana@mail.com"))
+            val result = enrollment.validateBlocking(Directory("ana@mail.com"))
 
             result.isValid shouldBe true
         }
 
         @Test
         fun `given an email the accounts already have should report it`() {
-            val registration = Registration(email = "ana@mail.com")
+            val enrollment = Enrollment(email = "ana@mail.com")
 
-            val result = registration.validateBlocking(Accounts("ana@mail.com"))
+            val result = enrollment.validateBlocking(Directory("ana@mail.com"))
 
             result.violations shouldBe listOf(
                 Violation(path = "email", message = "is already taken", code = "taken")
@@ -91,17 +91,17 @@ class ContextualValidatableTest {
     inner class ValidateOrThrow {
         @Test
         fun `given an email the accounts do not have should not throw`() {
-            val registration = Registration(email = "bia@mail.com")
+            val enrollment = Enrollment(email = "bia@mail.com")
 
-            shouldNotThrowAny { runBlocking { registration.validateOrThrow(Accounts("ana@mail.com")) } }
+            shouldNotThrowAny { runBlocking { enrollment.validateOrThrow(Directory("ana@mail.com")) } }
         }
 
         @Test
         fun `given an email the accounts already have should throw its violation`() {
-            val registration = Registration(email = "ana@mail.com")
+            val enrollment = Enrollment(email = "ana@mail.com")
 
             val error = shouldThrow<ValidationException> {
-                runBlocking { registration.validateOrThrow(Accounts("ana@mail.com")) }
+                runBlocking { enrollment.validateOrThrow(Directory("ana@mail.com")) }
             }
 
             error.violations shouldBe listOf(

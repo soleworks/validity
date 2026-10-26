@@ -11,8 +11,6 @@ import io.github.soleworks.validity.required
 import io.github.soleworks.validity.validation
 import java.math.BigDecimal
 
-enum class PaymentMethod { CARD, SEPA }
-
 data class Payment(
     val method: String?,
     val amount: BigDecimal?,
