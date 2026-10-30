@@ -6,6 +6,7 @@ import io.github.soleworks.validity.constraints.length
 import io.github.soleworks.validity.constraints.minLength
 import io.github.soleworks.validity.constraints.positive
 import io.github.soleworks.validity.each
+import io.github.soleworks.validity.metadata
 import io.github.soleworks.validity.required
 import io.github.soleworks.validity.validation
 

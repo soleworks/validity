@@ -23,7 +23,30 @@ public interface Validatable {
      *
      * @return the rules of this object.
      */
-    public fun validation(): Validation
+    public fun validation(): SelfValidation
+}
+
+/**
+ * Pairs [value] with the rules in [block], so it validates like a [Validatable].
+ *
+ * Inside the block the value is `this`, so `::email` is the property of [value].
+ *
+ * ```kotlin
+ * validatable(user) {
+ *     ::email required { email() }
+ * }.validate().violations
+ * ```
+ *
+ * @param T the type of the value.
+ * @param value the value to check.
+ * @param block declares the rules, with the value as `this`.
+ * @return the value with its rules, ready to [validate][io.github.soleworks.validity.validate].
+ */
+public fun <T> validatable(
+    value: T,
+    block: suspend context(SelfValidation) T.() -> Unit
+): Validatable = object : Validatable {
+    override fun validation(): SelfValidation = Validation(block).of(value)
 }
 
 /**

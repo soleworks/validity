@@ -18,6 +18,8 @@ import io.github.soleworks.validity.samples.Invoice
 import io.github.soleworks.validity.samples.Ledger
 import io.github.soleworks.validity.samples.Order
 import io.github.soleworks.validity.samples.PaymentMethod
+import io.github.soleworks.validity.samples.readme.Destination
+import io.github.soleworks.validity.samples.readme.Shipping
 import io.kotest.matchers.shouldBe
 import java.time.Duration
 import java.time.Instant
@@ -252,6 +254,17 @@ class AccessorsTest {
 
             result.violations shouldBe listOf(
                 Violation(path = "invoices[1]", message = "items must add up to the total", code = "total")
+            )
+        }
+
+        @Test
+        fun `given a destination with a blank street should report it under the destination`() {
+            val shipping = Shipping(destination = Destination(street = "", zipCode = "01310"))
+
+            val result = shipping.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(path = "destination.street", message = "must not be blank", code = "notBlank")
             )
         }
     }

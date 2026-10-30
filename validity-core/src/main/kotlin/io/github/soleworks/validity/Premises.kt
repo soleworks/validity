@@ -17,7 +17,7 @@ import kotlin.reflect.KProperty0
  * @param V the type of the value.
  * @param block the constraints of the value.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public inline infix fun <V : Any> KProperty0<V?>.required(
     block: ValidationNode<V>.() -> Unit
 ): Unit = required(
@@ -34,7 +34,7 @@ public inline infix fun <V : Any> KProperty0<V?>.required(
  * @param message the message of the violation. `{path}` is filled in.
  * @param block the constraints of the value.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public inline fun <V : Any> KProperty0<V?>.required(
     message: String,
     block: ValidationNode<V>.() -> Unit
@@ -59,7 +59,7 @@ public inline fun <V : Any> KProperty0<V?>.required(
  * @param message the message of the violation. `{path}` is filled in.
  * @param block the constraints of the value.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public inline fun <V : Any> required(
     path: String,
     value: V?,
@@ -88,7 +88,7 @@ public inline fun <V : Any> required(
  * @param V the type of the value.
  * @param block the constraints of the value.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public inline infix fun <V : Any> KProperty0<V?>.ifPresent(
     block: ValidationNode<V>.() -> Unit
 ): Unit = ifPresent(
@@ -107,7 +107,7 @@ public inline infix fun <V : Any> KProperty0<V?>.ifPresent(
  * @param value the value to check.
  * @param block the constraints of the value.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public inline fun <V : Any> ifPresent(
     path: String,
     value: V?,
@@ -128,7 +128,7 @@ public inline fun <V : Any> ifPresent(
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public fun KProperty0<*>.forbidden(
     message: String = messages.forbidden
 ): Unit = validation.add(
@@ -155,7 +155,7 @@ public fun KProperty0<*>.forbidden(
  * @param message the message of the violation. `{fields}` and `{path}` are filled in.
  * @throws IllegalArgumentException when [properties] is empty.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public fun atLeastOneOf(
     vararg properties: KProperty0<*>,
     path: String = "",
@@ -180,7 +180,7 @@ public fun atLeastOneOf(
  * @param message the message of the violation. `{fields}` and `{path}` are filled in.
  * @throws IllegalArgumentException when [properties] is empty.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public fun atMostOneOf(
     vararg properties: KProperty0<*>,
     path: String = "",
@@ -209,7 +209,7 @@ public fun atMostOneOf(
  * @param message the message of the violation. `{fields}` and `{path}` are filled in.
  * @throws IllegalArgumentException when [properties] is empty.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public fun exactlyOneOf(
     vararg properties: KProperty0<*>,
     path: String = "",
@@ -238,7 +238,7 @@ public fun exactlyOneOf(
  * @param message the message of the violation. `{fields}` and `{path}` are filled in.
  * @throws IllegalArgumentException when [properties] is empty.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public fun allOrNoneOf(
     vararg properties: KProperty0<*>,
     path: String = "",
@@ -268,7 +268,7 @@ public fun allOrNoneOf(
  * @throws IllegalArgumentException when [properties] is empty, or [count] is negative or greater than the number of
  * properties.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public fun atLeastOf(
     count: Int,
     vararg properties: KProperty0<*>,
@@ -295,7 +295,7 @@ public fun atLeastOf(
  * @throws IllegalArgumentException when [properties] is empty, or [count] is negative or greater than the number of
  * properties.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public fun atMostOf(
     count: Int,
     vararg properties: KProperty0<*>,
@@ -322,7 +322,7 @@ public fun atMostOf(
  * @throws IllegalArgumentException when [properties] is empty, or [count] is negative or greater than the number of
  * properties.
  */
-context(validation: Validation)
+context(validation: SelfValidation)
 public fun exactlyOf(
     count: Int,
     vararg properties: KProperty0<*>,
@@ -343,7 +343,7 @@ private fun Array<out KProperty0<*>>.counting(
     require(count in 0..distinct().size) { "$code needs a count between 0 and the number of properties" }
 }
 
-context(validation: Validation)
+context(validation: SelfValidation)
 private fun presence(
     properties: Array<out KProperty0<*>>,
     path: String,
@@ -359,7 +359,7 @@ private fun presence(
     val isShort = (filled.size + 1..names.size).any { count -> accepts(count, names.size) }
     val fields = if (isShort) names - filled.toSet() else filled
 
-    validation.metadata("fields" to fields) {
+    metadata("fields" to fields) {
         constraint(
             path = path,
             message = message.filled("fields" to names),
@@ -370,7 +370,7 @@ private fun presence(
 }
 
 @PublishedApi
-internal fun <V> Validation.add(
+internal fun <V> SelfValidation.add(
     path: String,
     value: V,
     message: String,
@@ -385,7 +385,7 @@ internal fun <V> Validation.add(
 }
 
 @PublishedApi
-internal fun <V> Validation.node(
+internal fun <V> SelfValidation.node(
     path: String,
     value: V
 ): ValidationNode<V> = ValidationNode(path = path, value = value).also { node ->

@@ -1,10 +1,12 @@
 package io.github.soleworks.validity
 
+import io.github.soleworks.validity.constraints.digits
 import io.github.soleworks.validity.samples.Booking
 import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Customer
 import io.github.soleworks.validity.samples.Subscription
 import io.github.soleworks.validity.samples.Threads
+import io.github.soleworks.validity.samples.readme.Destination
 import io.github.soleworks.validity.samples.readme.Payment
 import io.github.soleworks.validity.samples.readme.Registration
 import io.github.soleworks.validity.samples.readme.User
@@ -215,6 +217,30 @@ class ValidatableTest {
 
             error.violations shouldBe listOf(
                 Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When validatable is called")
+    inner class Validatable {
+        @Test
+        fun `given a valid destination should be valid`() {
+            val destination = Destination(street = "Rua das Flores", zipCode = "01310")
+
+            val result = validatable(destination) { ::zipCode required { digits() } }.validateBlocking()
+
+            result.isValid shouldBe true
+        }
+
+        @Test
+        fun `given a zip code with letters should report it at the property`() {
+            val destination = Destination(street = "Rua das Flores", zipCode = "0131A")
+
+            val result = validatable(destination) { ::zipCode required { digits() } }.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(path = "zipCode", message = "must contain only digits", code = "digits")
             )
         }
     }
