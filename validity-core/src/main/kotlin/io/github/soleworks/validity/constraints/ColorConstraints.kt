@@ -14,6 +14,15 @@ private val HSL_COLOR_FORMAT = Regex(
     """hsla?\(\s*(\d{1,3}(?:\.\d+)?)\s*,\s*(\d{1,3}(?:\.\d+)?)%\s*,\s*(\d{1,3}(?:\.\d+)?)%$ALPHA\s*\)"""
 )
 
+/**
+ * Checks that the string is a hexadecimal color: `#` and 3, 4, 6 or 8 hexadecimal digits, such as `#fff` or
+ * `#1a2b3c80`.
+ *
+ * Fails with code `hexColor` and, by default, the message `must be a valid hexadecimal color`
+ * ([Messages.hexColor][io.github.soleworks.validity.Messages.hexColor]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.hexColor(
     message: String = messages.hexColor
 ): Unit = constraint(
@@ -22,6 +31,16 @@ public fun ValidationNode<String>.hexColor(
     predicate = { HEX_COLOR_FORMAT.matches(it) }
 )
 
+/**
+ * Checks that the string is a CSS `rgb()` or `rgba()` color, such as `rgb(255, 0, 0)` or `rgba(0, 0, 0, 0.5)`.
+ *
+ * Each channel is a whole number from 0 to 255, and the alpha from 0 to 1.
+ *
+ * Fails with code `rgbColor` and, by default, the message `must be a valid RGB color`
+ * ([Messages.rgbColor][io.github.soleworks.validity.Messages.rgbColor]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.rgbColor(
     message: String = messages.rgbColor
 ): Unit = constraint(
@@ -30,6 +49,16 @@ public fun ValidationNode<String>.rgbColor(
     predicate = { it.isRgbColor() }
 )
 
+/**
+ * Checks that the string is a CSS `hsl()` or `hsla()` color, such as `hsl(120, 100%, 50%)`.
+ *
+ * The hue goes from 0 to 360, saturation and lightness from 0% to 100%, and the alpha from 0 to 1.
+ *
+ * Fails with code `hslColor` and, by default, the message `must be a valid HSL color`
+ * ([Messages.hslColor][io.github.soleworks.validity.Messages.hslColor]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.hslColor(
     message: String = messages.hslColor
 ): Unit = constraint(

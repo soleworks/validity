@@ -16,6 +16,16 @@ private val JSON_NUMBER_FORMAT = Regex("""-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?
 private val JSON_WHITESPACE = setOf(' ', '\t', '\n', '\r')
 private val JSON_ESCAPES = setOf('"', '\\', '/', 'b', 'f', 'n', 'r', 't')
 
+/**
+ * Checks that the string is Base64 with the standard alphabet and its `=` padding.
+ *
+ * The empty string passes.
+ *
+ * Fails with code `base64` and, by default, the message `must be valid Base64`
+ * ([Messages.base64][io.github.soleworks.validity.Messages.base64]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.base64(
     message: String = messages.base64
 ): Unit = constraint(
@@ -24,6 +34,16 @@ public fun ValidationNode<String>.base64(
     predicate = { BASE64_FORMAT.matches(it) }
 )
 
+/**
+ * Checks that the string is Base64 with the URL-safe alphabet (`-` and `_`) and no padding.
+ *
+ * The empty string passes.
+ *
+ * Fails with code `base64Url` and, by default, the message `must be valid URL-safe Base64`
+ * ([Messages.base64Url][io.github.soleworks.validity.Messages.base64Url]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.base64Url(
     message: String = messages.base64Url
 ): Unit = constraint(
@@ -32,6 +52,16 @@ public fun ValidationNode<String>.base64Url(
     predicate = { BASE64_URL_FORMAT.matches(it) }
 )
 
+/**
+ * Checks that the string is Base32 (RFC 4648) in uppercase, with its `=` padding.
+ *
+ * The empty string passes.
+ *
+ * Fails with code `base32` and, by default, the message `must be valid Base32`
+ * ([Messages.base32][io.github.soleworks.validity.Messages.base32]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.base32(
     message: String = messages.base32
 ): Unit = constraint(
@@ -40,6 +70,14 @@ public fun ValidationNode<String>.base32(
     predicate = { BASE32_FORMAT.matches(it) }
 )
 
+/**
+ * Checks that the string is not empty and is Base58, the Bitcoin alphabet without `0`, `O`, `I` and `l`.
+ *
+ * Fails with code `base58` and, by default, the message `must be valid Base58`
+ * ([Messages.base58][io.github.soleworks.validity.Messages.base58]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.base58(
     message: String = messages.base58
 ): Unit = constraint(
@@ -48,6 +86,14 @@ public fun ValidationNode<String>.base58(
     predicate = { BASE58_FORMAT.matches(it) }
 )
 
+/**
+ * Checks that the string is not empty and has only hexadecimal digits, in either case.
+ *
+ * Fails with code `hexadecimal` and, by default, the message `must be hexadecimal`
+ * ([Messages.hexadecimal][io.github.soleworks.validity.Messages.hexadecimal]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.hexadecimal(
     message: String = messages.hexadecimal
 ): Unit = constraint(
@@ -56,6 +102,14 @@ public fun ValidationNode<String>.hexadecimal(
     predicate = { HEXADECIMAL_FORMAT.matches(it) }
 )
 
+/**
+ * Checks that the string is one valid JSON value: an object, an array, a string, a number, `true`, `false` or `null`.
+ *
+ * Fails with code `json` and, by default, the message `must be valid JSON`
+ * ([Messages.json][io.github.soleworks.validity.Messages.json]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.json(
     message: String = messages.json
 ): Unit = constraint(

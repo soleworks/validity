@@ -18,6 +18,14 @@ private const val TWENTY_FIRST_CENTURY = 2000
 private val EGN_FORMAT = Regex("""(\d{2})(\d{2})(\d{2})\d{4}""")
 private val EGN_WEIGHTS = listOf(2, 4, 8, 5, 10, 9, 7, 3, 6)
 
+/**
+ * Checks that the string is a Bulgarian EGN: 10 digits that start with a real birth date, and a valid check digit.
+ *
+ * Fails with code `egn` and, by default, the message `must be a valid EGN`
+ * ([BulgariaMessages.egn][io.github.soleworks.validity.BulgariaMessages.egn]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.egn(
     message: String = messages.bulgaria.egn
 ): Unit = constraint(

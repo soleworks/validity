@@ -104,6 +104,14 @@ private val POSTAL_CODES: Map<String, Regex> = mapOf(
     "ZM" to FIVE_DIGITS_FORMAT
 )
 
+/**
+ * Checks that the string is an ISO 3166-1 alpha-2 country code, such as `BR`, in uppercase.
+ *
+ * Fails with code `isoCountryCode` and, by default, the message `must be a valid ISO 3166-1 alpha-2 country code`
+ * ([Messages.isoCountryCode][io.github.soleworks.validity.Messages.isoCountryCode]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.isoCountryCode(
     message: String = messages.isoCountryCode
 ): Unit = constraint(
@@ -112,6 +120,14 @@ public fun ValidationNode<String>.isoCountryCode(
     predicate = { it in COUNTRY_CODES }
 )
 
+/**
+ * Checks that the string is an ISO 3166-1 alpha-3 country code, such as `BRA`, in uppercase.
+ *
+ * Fails with code `isoCountryCodeAlpha3` and, by default, the message `must be a valid ISO 3166-1 alpha-3 country code`
+ * ([Messages.isoCountryCodeAlpha3][io.github.soleworks.validity.Messages.isoCountryCodeAlpha3]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.isoCountryCodeAlpha3(
     message: String = messages.isoCountryCodeAlpha3
 ): Unit = constraint(
@@ -120,6 +136,16 @@ public fun ValidationNode<String>.isoCountryCodeAlpha3(
     predicate = { it in COUNTRY_CODES_ALPHA3 }
 )
 
+/**
+ * Checks that the string is an ISO 639-1 language code, such as `pt`, in lowercase.
+ *
+ * The withdrawn codes `in`, `iw`, `ji` and `mo` fail.
+ *
+ * Fails with code `languageCode` and, by default, the message `must be a valid ISO 639-1 language code`
+ * ([Messages.languageCode][io.github.soleworks.validity.Messages.languageCode]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.languageCode(
     message: String = messages.languageCode
 ): Unit = constraint(
@@ -128,6 +154,14 @@ public fun ValidationNode<String>.languageCode(
     predicate = { it in LANGUAGE_CODES }
 )
 
+/**
+ * Checks that the string is a well-formed IETF BCP 47 language tag, such as `pt-BR` or `zh-Hant-TW`.
+ *
+ * Fails with code `locale` and, by default, the message `must be a valid locale`
+ * ([Messages.locale][io.github.soleworks.validity.Messages.locale]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.locale(
     message: String = messages.locale
 ): Unit = constraint(
@@ -136,6 +170,14 @@ public fun ValidationNode<String>.locale(
     predicate = { it.isNotEmpty() && runCatching { Locale.Builder().setLanguageTag(it).build() }.isSuccess }
 )
 
+/**
+ * Checks that the string is a time zone id the JVM knows, such as `America/Sao_Paulo` or `UTC`.
+ *
+ * Fails with code `timeZone` and, by default, the message `must be a valid time zone`
+ * ([Messages.timeZone][io.github.soleworks.validity.Messages.timeZone]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.timeZone(
     message: String = messages.timeZone
 ): Unit = constraint(
@@ -144,6 +186,14 @@ public fun ValidationNode<String>.timeZone(
     predicate = { it in TIME_ZONES }
 )
 
+/**
+ * Checks that the number is a latitude, from -90 to 90.
+ *
+ * Fails with code `latitude` and, by default, the message `must be a valid latitude`
+ * ([Messages.latitude][io.github.soleworks.validity.Messages.latitude]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Double>.latitude(
     message: String = messages.latitude
 ): Unit = constraint(
@@ -152,6 +202,14 @@ public fun ValidationNode<Double>.latitude(
     predicate = { it in LATITUDES }
 )
 
+/**
+ * Checks that the number is a latitude, from -90 to 90.
+ *
+ * Fails with code `latitude` and, by default, the message `must be a valid latitude`
+ * ([Messages.latitude][io.github.soleworks.validity.Messages.latitude]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("latitudeFloat")
 public fun ValidationNode<Float>.latitude(
     message: String = messages.latitude
@@ -161,6 +219,14 @@ public fun ValidationNode<Float>.latitude(
     predicate = { it.toDouble() in LATITUDES }
 )
 
+/**
+ * Checks that the number is a latitude, from -90 to 90.
+ *
+ * Fails with code `latitude` and, by default, the message `must be a valid latitude`
+ * ([Messages.latitude][io.github.soleworks.validity.Messages.latitude]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("latitudeBigDecimal")
 public fun ValidationNode<BigDecimal>.latitude(
     message: String = messages.latitude
@@ -170,6 +236,14 @@ public fun ValidationNode<BigDecimal>.latitude(
     predicate = { it in DECIMAL_LATITUDES }
 )
 
+/**
+ * Checks that the string is a decimal number from -90 to 90, such as `-23.5505`.
+ *
+ * Fails with code `latitude` and, by default, the message `must be a valid latitude`
+ * ([Messages.latitude][io.github.soleworks.validity.Messages.latitude]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("latitudeString")
 public fun ValidationNode<String>.latitude(
     message: String = messages.latitude
@@ -179,6 +253,14 @@ public fun ValidationNode<String>.latitude(
     predicate = { NUMERIC_FORMAT.matches(it) && it.toBigDecimal() in DECIMAL_LATITUDES }
 )
 
+/**
+ * Checks that the number is a longitude, from -180 to 180.
+ *
+ * Fails with code `longitude` and, by default, the message `must be a valid longitude`
+ * ([Messages.longitude][io.github.soleworks.validity.Messages.longitude]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Double>.longitude(
     message: String = messages.longitude
 ): Unit = constraint(
@@ -187,6 +269,14 @@ public fun ValidationNode<Double>.longitude(
     predicate = { it in LONGITUDES }
 )
 
+/**
+ * Checks that the number is a longitude, from -180 to 180.
+ *
+ * Fails with code `longitude` and, by default, the message `must be a valid longitude`
+ * ([Messages.longitude][io.github.soleworks.validity.Messages.longitude]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("longitudeFloat")
 public fun ValidationNode<Float>.longitude(
     message: String = messages.longitude
@@ -196,6 +286,14 @@ public fun ValidationNode<Float>.longitude(
     predicate = { it.toDouble() in LONGITUDES }
 )
 
+/**
+ * Checks that the number is a longitude, from -180 to 180.
+ *
+ * Fails with code `longitude` and, by default, the message `must be a valid longitude`
+ * ([Messages.longitude][io.github.soleworks.validity.Messages.longitude]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("longitudeBigDecimal")
 public fun ValidationNode<BigDecimal>.longitude(
     message: String = messages.longitude
@@ -205,6 +303,14 @@ public fun ValidationNode<BigDecimal>.longitude(
     predicate = { it in DECIMAL_LONGITUDES }
 )
 
+/**
+ * Checks that the string is a decimal number from -180 to 180, such as `-46.6333`.
+ *
+ * Fails with code `longitude` and, by default, the message `must be a valid longitude`
+ * ([Messages.longitude][io.github.soleworks.validity.Messages.longitude]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("longitudeString")
 public fun ValidationNode<String>.longitude(
     message: String = messages.longitude
@@ -214,6 +320,15 @@ public fun ValidationNode<String>.longitude(
     predicate = { NUMERIC_FORMAT.matches(it) && it.toBigDecimal() in DECIMAL_LONGITUDES }
 )
 
+/**
+ * Checks that the string is a latitude from -90 to 90 and a longitude from -180 to 180, separated by a comma, such as
+ * `-23.5505, -46.6333`.
+ *
+ * Fails with code `coordinates` and, by default, the message `must be a valid latitude and longitude pair`
+ * ([Messages.coordinates][io.github.soleworks.validity.Messages.coordinates]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.coordinates(
     message: String = messages.coordinates
 ): Unit = constraint(
@@ -222,6 +337,21 @@ public fun ValidationNode<String>.coordinates(
     predicate = { it.isCoordinates() }
 )
 
+/**
+ * Checks that the string is a postal code of [country].
+ *
+ * When [country] is `null` or has no known format, nothing is checked. Codes are known for 72 countries.
+ *
+ * Fails with code `postalCode` and, by default, the message `must be a valid postal code for {country}`
+ * ([Messages.postalCode][io.github.soleworks.validity.Messages.postalCode]).
+ *
+ * ```kotlin
+ * ::zipCode required { postalCode(country) }
+ * ```
+ *
+ * @param country the ISO 3166-1 alpha-2 code of the country, in any case.
+ * @param message the message of the violation. `{country}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<String>.postalCode(
     country: String?,
     message: String = messages.postalCode
@@ -230,6 +360,16 @@ public fun ValidationNode<String>.postalCode(
     message = { message.filled("country" to country) }
 )
 
+/**
+ * Checks that the string is a postal code of [country].
+ *
+ * When [country] is `null` or has no known format, nothing is checked. Codes are known for 72 countries.
+ *
+ * Fails with code `postalCode` and the message that [message] builds.
+ *
+ * @param country the ISO 3166-1 alpha-2 code of the country, in any case.
+ * @param message builds the message from the value (the receiver) and [country].
+ */
 public fun ValidationNode<String>.postalCode(
     country: String?,
     message: suspend String.(String) -> String

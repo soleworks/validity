@@ -16,6 +16,17 @@ import java.time.YearMonth
 import java.time.ZonedDateTime
 import java.util.Date
 
+/**
+ * Checks that the date is before now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `past` and, by default, the message `must be in the past`
+ * ([Messages.past][io.github.soleworks.validity.Messages.past]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.past(
     message: String = messages.past
 ): Unit = constraint(
@@ -24,6 +35,17 @@ public fun ValidationNode<LocalDate>.past(
     predicate = { it.isBefore(LocalDate.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is before now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `past` and, by default, the message `must be in the past`
+ * ([Messages.past][io.github.soleworks.validity.Messages.past]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastLocalDateTime")
 public fun ValidationNode<LocalDateTime>.past(
     message: String = messages.past
@@ -33,6 +55,17 @@ public fun ValidationNode<LocalDateTime>.past(
     predicate = { it.isBefore(LocalDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is before now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `past` and, by default, the message `must be in the past`
+ * ([Messages.past][io.github.soleworks.validity.Messages.past]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.past(
     message: String = messages.past
@@ -42,6 +75,17 @@ public fun ValidationNode<ZonedDateTime>.past(
     predicate = { it.isBefore(ZonedDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is before now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `past` and, by default, the message `must be in the past`
+ * ([Messages.past][io.github.soleworks.validity.Messages.past]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.past(
     message: String = messages.past
@@ -51,6 +95,17 @@ public fun ValidationNode<OffsetDateTime>.past(
     predicate = { it.isBefore(OffsetDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the instant is before now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `past` and, by default, the message `must be in the past`
+ * ([Messages.past][io.github.soleworks.validity.Messages.past]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastInstant")
 public fun ValidationNode<Instant>.past(
     message: String = messages.past
@@ -60,6 +115,17 @@ public fun ValidationNode<Instant>.past(
     predicate = { it.isBefore(Instant.now(clock)) }
 )
 
+/**
+ * Checks that the month is before now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `past` and, by default, the message `must be in the past`
+ * ([Messages.past][io.github.soleworks.validity.Messages.past]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastYearMonth")
 public fun ValidationNode<YearMonth>.past(
     message: String = messages.past
@@ -69,6 +135,17 @@ public fun ValidationNode<YearMonth>.past(
     predicate = { it.isBefore(YearMonth.now(clock)) }
 )
 
+/**
+ * Checks that the year is before now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `past` and, by default, the message `must be in the past`
+ * ([Messages.past][io.github.soleworks.validity.Messages.past]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastYear")
 public fun ValidationNode<Year>.past(
     message: String = messages.past
@@ -78,6 +155,17 @@ public fun ValidationNode<Year>.past(
     predicate = { it.isBefore(Year.now(clock)) }
 )
 
+/**
+ * Checks that the date is before now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `past` and, by default, the message `must be in the past`
+ * ([Messages.past][io.github.soleworks.validity.Messages.past]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastDate")
 public fun ValidationNode<Date>.past(
     message: String = messages.past
@@ -87,6 +175,17 @@ public fun ValidationNode<Date>.past(
     predicate = { it.before(Date(clock.millis())) }
 )
 
+/**
+ * Checks that the date is after now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `future` and, by default, the message `must be in the future`
+ * ([Messages.future][io.github.soleworks.validity.Messages.future]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.future(
     message: String = messages.future
 ): Unit = constraint(
@@ -95,6 +194,17 @@ public fun ValidationNode<LocalDate>.future(
     predicate = { it.isAfter(LocalDate.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is after now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `future` and, by default, the message `must be in the future`
+ * ([Messages.future][io.github.soleworks.validity.Messages.future]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureLocalDateTime")
 public fun ValidationNode<LocalDateTime>.future(
     message: String = messages.future
@@ -104,6 +214,17 @@ public fun ValidationNode<LocalDateTime>.future(
     predicate = { it.isAfter(LocalDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is after now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `future` and, by default, the message `must be in the future`
+ * ([Messages.future][io.github.soleworks.validity.Messages.future]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.future(
     message: String = messages.future
@@ -113,6 +234,17 @@ public fun ValidationNode<ZonedDateTime>.future(
     predicate = { it.isAfter(ZonedDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is after now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `future` and, by default, the message `must be in the future`
+ * ([Messages.future][io.github.soleworks.validity.Messages.future]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.future(
     message: String = messages.future
@@ -122,6 +254,17 @@ public fun ValidationNode<OffsetDateTime>.future(
     predicate = { it.isAfter(OffsetDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the instant is after now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `future` and, by default, the message `must be in the future`
+ * ([Messages.future][io.github.soleworks.validity.Messages.future]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureInstant")
 public fun ValidationNode<Instant>.future(
     message: String = messages.future
@@ -131,6 +274,17 @@ public fun ValidationNode<Instant>.future(
     predicate = { it.isAfter(Instant.now(clock)) }
 )
 
+/**
+ * Checks that the month is after now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `future` and, by default, the message `must be in the future`
+ * ([Messages.future][io.github.soleworks.validity.Messages.future]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureYearMonth")
 public fun ValidationNode<YearMonth>.future(
     message: String = messages.future
@@ -140,6 +294,17 @@ public fun ValidationNode<YearMonth>.future(
     predicate = { it.isAfter(YearMonth.now(clock)) }
 )
 
+/**
+ * Checks that the year is after now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `future` and, by default, the message `must be in the future`
+ * ([Messages.future][io.github.soleworks.validity.Messages.future]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureYear")
 public fun ValidationNode<Year>.future(
     message: String = messages.future
@@ -149,6 +314,17 @@ public fun ValidationNode<Year>.future(
     predicate = { it.isAfter(Year.now(clock)) }
 )
 
+/**
+ * Checks that the date is after now.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `future` and, by default, the message `must be in the future`
+ * ([Messages.future][io.github.soleworks.validity.Messages.future]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureDate")
 public fun ValidationNode<Date>.future(
     message: String = messages.future
@@ -158,6 +334,17 @@ public fun ValidationNode<Date>.future(
     predicate = { it.after(Date(clock.millis())) }
 )
 
+/**
+ * Checks that the date is now or before.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `pastOrPresent` and, by default, the message `must be in the past or present`
+ * ([Messages.pastOrPresent][io.github.soleworks.validity.Messages.pastOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.pastOrPresent(
     message: String = messages.pastOrPresent
 ): Unit = constraint(
@@ -166,6 +353,17 @@ public fun ValidationNode<LocalDate>.pastOrPresent(
     predicate = { !it.isAfter(LocalDate.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is now or before.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `pastOrPresent` and, by default, the message `must be in the past or present`
+ * ([Messages.pastOrPresent][io.github.soleworks.validity.Messages.pastOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastOrPresentLocalDateTime")
 public fun ValidationNode<LocalDateTime>.pastOrPresent(
     message: String = messages.pastOrPresent
@@ -175,6 +373,17 @@ public fun ValidationNode<LocalDateTime>.pastOrPresent(
     predicate = { !it.isAfter(LocalDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is now or before.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `pastOrPresent` and, by default, the message `must be in the past or present`
+ * ([Messages.pastOrPresent][io.github.soleworks.validity.Messages.pastOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastOrPresentZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.pastOrPresent(
     message: String = messages.pastOrPresent
@@ -184,6 +393,17 @@ public fun ValidationNode<ZonedDateTime>.pastOrPresent(
     predicate = { !it.isAfter(ZonedDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is now or before.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `pastOrPresent` and, by default, the message `must be in the past or present`
+ * ([Messages.pastOrPresent][io.github.soleworks.validity.Messages.pastOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastOrPresentOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.pastOrPresent(
     message: String = messages.pastOrPresent
@@ -193,6 +413,17 @@ public fun ValidationNode<OffsetDateTime>.pastOrPresent(
     predicate = { !it.isAfter(OffsetDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the instant is now or before.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `pastOrPresent` and, by default, the message `must be in the past or present`
+ * ([Messages.pastOrPresent][io.github.soleworks.validity.Messages.pastOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastOrPresentInstant")
 public fun ValidationNode<Instant>.pastOrPresent(
     message: String = messages.pastOrPresent
@@ -202,6 +433,17 @@ public fun ValidationNode<Instant>.pastOrPresent(
     predicate = { !it.isAfter(Instant.now(clock)) }
 )
 
+/**
+ * Checks that the month is now or before.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `pastOrPresent` and, by default, the message `must be in the past or present`
+ * ([Messages.pastOrPresent][io.github.soleworks.validity.Messages.pastOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastOrPresentYearMonth")
 public fun ValidationNode<YearMonth>.pastOrPresent(
     message: String = messages.pastOrPresent
@@ -211,6 +453,17 @@ public fun ValidationNode<YearMonth>.pastOrPresent(
     predicate = { !it.isAfter(YearMonth.now(clock)) }
 )
 
+/**
+ * Checks that the year is now or before.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `pastOrPresent` and, by default, the message `must be in the past or present`
+ * ([Messages.pastOrPresent][io.github.soleworks.validity.Messages.pastOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastOrPresentYear")
 public fun ValidationNode<Year>.pastOrPresent(
     message: String = messages.pastOrPresent
@@ -220,6 +473,17 @@ public fun ValidationNode<Year>.pastOrPresent(
     predicate = { !it.isAfter(Year.now(clock)) }
 )
 
+/**
+ * Checks that the date is now or before.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `pastOrPresent` and, by default, the message `must be in the past or present`
+ * ([Messages.pastOrPresent][io.github.soleworks.validity.Messages.pastOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("pastOrPresentDate")
 public fun ValidationNode<Date>.pastOrPresent(
     message: String = messages.pastOrPresent
@@ -229,6 +493,17 @@ public fun ValidationNode<Date>.pastOrPresent(
     predicate = { !it.after(Date(clock.millis())) }
 )
 
+/**
+ * Checks that the date is now or after.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `futureOrPresent` and, by default, the message `must be in the future or present`
+ * ([Messages.futureOrPresent][io.github.soleworks.validity.Messages.futureOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.futureOrPresent(
     message: String = messages.futureOrPresent
 ): Unit = constraint(
@@ -237,6 +512,17 @@ public fun ValidationNode<LocalDate>.futureOrPresent(
     predicate = { !it.isBefore(LocalDate.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is now or after.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `futureOrPresent` and, by default, the message `must be in the future or present`
+ * ([Messages.futureOrPresent][io.github.soleworks.validity.Messages.futureOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureOrPresentLocalDateTime")
 public fun ValidationNode<LocalDateTime>.futureOrPresent(
     message: String = messages.futureOrPresent
@@ -246,6 +532,17 @@ public fun ValidationNode<LocalDateTime>.futureOrPresent(
     predicate = { !it.isBefore(LocalDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is now or after.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `futureOrPresent` and, by default, the message `must be in the future or present`
+ * ([Messages.futureOrPresent][io.github.soleworks.validity.Messages.futureOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureOrPresentZonedDateTime")
 public fun ValidationNode<ZonedDateTime>.futureOrPresent(
     message: String = messages.futureOrPresent
@@ -255,6 +552,17 @@ public fun ValidationNode<ZonedDateTime>.futureOrPresent(
     predicate = { !it.isBefore(ZonedDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the date and time is now or after.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `futureOrPresent` and, by default, the message `must be in the future or present`
+ * ([Messages.futureOrPresent][io.github.soleworks.validity.Messages.futureOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureOrPresentOffsetDateTime")
 public fun ValidationNode<OffsetDateTime>.futureOrPresent(
     message: String = messages.futureOrPresent
@@ -264,6 +572,17 @@ public fun ValidationNode<OffsetDateTime>.futureOrPresent(
     predicate = { !it.isBefore(OffsetDateTime.now(clock)) }
 )
 
+/**
+ * Checks that the instant is now or after.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `futureOrPresent` and, by default, the message `must be in the future or present`
+ * ([Messages.futureOrPresent][io.github.soleworks.validity.Messages.futureOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureOrPresentInstant")
 public fun ValidationNode<Instant>.futureOrPresent(
     message: String = messages.futureOrPresent
@@ -273,6 +592,17 @@ public fun ValidationNode<Instant>.futureOrPresent(
     predicate = { !it.isBefore(Instant.now(clock)) }
 )
 
+/**
+ * Checks that the month is now or after.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `futureOrPresent` and, by default, the message `must be in the future or present`
+ * ([Messages.futureOrPresent][io.github.soleworks.validity.Messages.futureOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureOrPresentYearMonth")
 public fun ValidationNode<YearMonth>.futureOrPresent(
     message: String = messages.futureOrPresent
@@ -282,6 +612,17 @@ public fun ValidationNode<YearMonth>.futureOrPresent(
     predicate = { !it.isBefore(YearMonth.now(clock)) }
 )
 
+/**
+ * Checks that the year is now or after.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `futureOrPresent` and, by default, the message `must be in the future or present`
+ * ([Messages.futureOrPresent][io.github.soleworks.validity.Messages.futureOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureOrPresentYear")
 public fun ValidationNode<Year>.futureOrPresent(
     message: String = messages.futureOrPresent
@@ -291,6 +632,17 @@ public fun ValidationNode<Year>.futureOrPresent(
     predicate = { !it.isBefore(Year.now(clock)) }
 )
 
+/**
+ * Checks that the date is now or after.
+ *
+ * Now comes from the [clock][io.github.soleworks.validity.ValidityConfiguration.clock] of the configuration, so tests
+ * can fix it.
+ *
+ * Fails with code `futureOrPresent` and, by default, the message `must be in the future or present`
+ * ([Messages.futureOrPresent][io.github.soleworks.validity.Messages.futureOrPresent]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("futureOrPresentDate")
 public fun ValidationNode<Date>.futureOrPresent(
     message: String = messages.futureOrPresent
@@ -300,6 +652,17 @@ public fun ValidationNode<Date>.futureOrPresent(
     predicate = { !it.before(Date(clock.millis())) }
 )
 
+/**
+ * Checks that the date is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.after(
     other: LocalDate?,
     message: String = messages.after
@@ -308,6 +671,16 @@ public fun ValidationNode<LocalDate>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalDate>.after(
     other: LocalDate?,
     message: suspend LocalDate.(LocalDate) -> String
@@ -318,6 +691,17 @@ public fun ValidationNode<LocalDate>.after(
     predicate = { value, argument -> value.isAfter(argument) }
 )
 
+/**
+ * Checks that the date and time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDateTime>.after(
     other: LocalDateTime?,
     message: String = messages.after
@@ -326,6 +710,16 @@ public fun ValidationNode<LocalDateTime>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalDateTime>.after(
     other: LocalDateTime?,
     message: suspend LocalDateTime.(LocalDateTime) -> String
@@ -336,6 +730,17 @@ public fun ValidationNode<LocalDateTime>.after(
     predicate = { value, argument -> value.isAfter(argument) }
 )
 
+/**
+ * Checks that the time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalTime>.after(
     other: LocalTime?,
     message: String = messages.after
@@ -344,6 +749,16 @@ public fun ValidationNode<LocalTime>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalTime>.after(
     other: LocalTime?,
     message: suspend LocalTime.(LocalTime) -> String
@@ -354,6 +769,17 @@ public fun ValidationNode<LocalTime>.after(
     predicate = { value, argument -> value.isAfter(argument) }
 )
 
+/**
+ * Checks that the time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetTime>.after(
     other: OffsetTime?,
     message: String = messages.after
@@ -362,6 +788,16 @@ public fun ValidationNode<OffsetTime>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<OffsetTime>.after(
     other: OffsetTime?,
     message: suspend OffsetTime.(OffsetTime) -> String
@@ -372,6 +808,17 @@ public fun ValidationNode<OffsetTime>.after(
     predicate = { value, argument -> value.isAfter(argument) }
 )
 
+/**
+ * Checks that the date and time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<ZonedDateTime>.after(
     other: ZonedDateTime?,
     message: String = messages.after
@@ -380,6 +827,16 @@ public fun ValidationNode<ZonedDateTime>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<ZonedDateTime>.after(
     other: ZonedDateTime?,
     message: suspend ZonedDateTime.(ZonedDateTime) -> String
@@ -390,6 +847,17 @@ public fun ValidationNode<ZonedDateTime>.after(
     predicate = { value, argument -> value.isAfter(argument) }
 )
 
+/**
+ * Checks that the date and time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetDateTime>.after(
     other: OffsetDateTime?,
     message: String = messages.after
@@ -398,6 +866,16 @@ public fun ValidationNode<OffsetDateTime>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<OffsetDateTime>.after(
     other: OffsetDateTime?,
     message: suspend OffsetDateTime.(OffsetDateTime) -> String
@@ -408,6 +886,17 @@ public fun ValidationNode<OffsetDateTime>.after(
     predicate = { value, argument -> value.isAfter(argument) }
 )
 
+/**
+ * Checks that the instant is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Instant>.after(
     other: Instant?,
     message: String = messages.after
@@ -416,6 +905,16 @@ public fun ValidationNode<Instant>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the instant is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Instant>.after(
     other: Instant?,
     message: suspend Instant.(Instant) -> String
@@ -426,6 +925,17 @@ public fun ValidationNode<Instant>.after(
     predicate = { value, argument -> value.isAfter(argument) }
 )
 
+/**
+ * Checks that the month is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<YearMonth>.after(
     other: YearMonth?,
     message: String = messages.after
@@ -434,6 +944,16 @@ public fun ValidationNode<YearMonth>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the month is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<YearMonth>.after(
     other: YearMonth?,
     message: suspend YearMonth.(YearMonth) -> String
@@ -444,6 +964,17 @@ public fun ValidationNode<YearMonth>.after(
     predicate = { value, argument -> value.isAfter(argument) }
 )
 
+/**
+ * Checks that the year is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Year>.after(
     other: Year?,
     message: String = messages.after
@@ -452,6 +983,16 @@ public fun ValidationNode<Year>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the year is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Year>.after(
     other: Year?,
     message: suspend Year.(Year) -> String
@@ -462,6 +1003,17 @@ public fun ValidationNode<Year>.after(
     predicate = { value, argument -> value.isAfter(argument) }
 )
 
+/**
+ * Checks that the date is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and, by default, the message `must be after {other}`
+ * ([Messages.after][io.github.soleworks.validity.Messages.after]).
+ *
+ * @param other the moment it must come after.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Date>.after(
     other: Date?,
     message: String = messages.after
@@ -470,6 +1022,16 @@ public fun ValidationNode<Date>.after(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date is after [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `after` and the message that [message] builds.
+ *
+ * @param other the moment it must come after.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Date>.after(
     other: Date?,
     message: suspend Date.(Date) -> String
@@ -480,6 +1042,17 @@ public fun ValidationNode<Date>.after(
     predicate = { value, argument -> value.after(argument) }
 )
 
+/**
+ * Checks that the date is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.before(
     other: LocalDate?,
     message: String = messages.before
@@ -488,6 +1061,16 @@ public fun ValidationNode<LocalDate>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalDate>.before(
     other: LocalDate?,
     message: suspend LocalDate.(LocalDate) -> String
@@ -498,6 +1081,17 @@ public fun ValidationNode<LocalDate>.before(
     predicate = { value, argument -> value.isBefore(argument) }
 )
 
+/**
+ * Checks that the date and time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDateTime>.before(
     other: LocalDateTime?,
     message: String = messages.before
@@ -506,6 +1100,16 @@ public fun ValidationNode<LocalDateTime>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalDateTime>.before(
     other: LocalDateTime?,
     message: suspend LocalDateTime.(LocalDateTime) -> String
@@ -516,6 +1120,17 @@ public fun ValidationNode<LocalDateTime>.before(
     predicate = { value, argument -> value.isBefore(argument) }
 )
 
+/**
+ * Checks that the time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalTime>.before(
     other: LocalTime?,
     message: String = messages.before
@@ -524,6 +1139,16 @@ public fun ValidationNode<LocalTime>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalTime>.before(
     other: LocalTime?,
     message: suspend LocalTime.(LocalTime) -> String
@@ -534,6 +1159,17 @@ public fun ValidationNode<LocalTime>.before(
     predicate = { value, argument -> value.isBefore(argument) }
 )
 
+/**
+ * Checks that the time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetTime>.before(
     other: OffsetTime?,
     message: String = messages.before
@@ -542,6 +1178,16 @@ public fun ValidationNode<OffsetTime>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<OffsetTime>.before(
     other: OffsetTime?,
     message: suspend OffsetTime.(OffsetTime) -> String
@@ -552,6 +1198,17 @@ public fun ValidationNode<OffsetTime>.before(
     predicate = { value, argument -> value.isBefore(argument) }
 )
 
+/**
+ * Checks that the date and time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<ZonedDateTime>.before(
     other: ZonedDateTime?,
     message: String = messages.before
@@ -560,6 +1217,16 @@ public fun ValidationNode<ZonedDateTime>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<ZonedDateTime>.before(
     other: ZonedDateTime?,
     message: suspend ZonedDateTime.(ZonedDateTime) -> String
@@ -570,6 +1237,17 @@ public fun ValidationNode<ZonedDateTime>.before(
     predicate = { value, argument -> value.isBefore(argument) }
 )
 
+/**
+ * Checks that the date and time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetDateTime>.before(
     other: OffsetDateTime?,
     message: String = messages.before
@@ -578,6 +1256,16 @@ public fun ValidationNode<OffsetDateTime>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<OffsetDateTime>.before(
     other: OffsetDateTime?,
     message: suspend OffsetDateTime.(OffsetDateTime) -> String
@@ -588,6 +1276,17 @@ public fun ValidationNode<OffsetDateTime>.before(
     predicate = { value, argument -> value.isBefore(argument) }
 )
 
+/**
+ * Checks that the instant is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Instant>.before(
     other: Instant?,
     message: String = messages.before
@@ -596,6 +1295,16 @@ public fun ValidationNode<Instant>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the instant is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Instant>.before(
     other: Instant?,
     message: suspend Instant.(Instant) -> String
@@ -606,6 +1315,17 @@ public fun ValidationNode<Instant>.before(
     predicate = { value, argument -> value.isBefore(argument) }
 )
 
+/**
+ * Checks that the month is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<YearMonth>.before(
     other: YearMonth?,
     message: String = messages.before
@@ -614,6 +1334,16 @@ public fun ValidationNode<YearMonth>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the month is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<YearMonth>.before(
     other: YearMonth?,
     message: suspend YearMonth.(YearMonth) -> String
@@ -624,6 +1354,17 @@ public fun ValidationNode<YearMonth>.before(
     predicate = { value, argument -> value.isBefore(argument) }
 )
 
+/**
+ * Checks that the year is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Year>.before(
     other: Year?,
     message: String = messages.before
@@ -632,6 +1373,16 @@ public fun ValidationNode<Year>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the year is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Year>.before(
     other: Year?,
     message: suspend Year.(Year) -> String
@@ -642,6 +1393,17 @@ public fun ValidationNode<Year>.before(
     predicate = { value, argument -> value.isBefore(argument) }
 )
 
+/**
+ * Checks that the date is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and, by default, the message `must be before {other}`
+ * ([Messages.before][io.github.soleworks.validity.Messages.before]).
+ *
+ * @param other the moment it must come before.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Date>.before(
     other: Date?,
     message: String = messages.before
@@ -650,6 +1412,16 @@ public fun ValidationNode<Date>.before(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date is before [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `before` and the message that [message] builds.
+ *
+ * @param other the moment it must come before.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Date>.before(
     other: Date?,
     message: suspend Date.(Date) -> String
@@ -660,6 +1432,17 @@ public fun ValidationNode<Date>.before(
     predicate = { value, argument -> value.before(argument) }
 )
 
+/**
+ * Checks that the date is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.afterOrEqual(
     other: LocalDate?,
     message: String = messages.afterOrEqual
@@ -668,6 +1451,16 @@ public fun ValidationNode<LocalDate>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalDate>.afterOrEqual(
     other: LocalDate?,
     message: suspend LocalDate.(LocalDate) -> String
@@ -678,6 +1471,17 @@ public fun ValidationNode<LocalDate>.afterOrEqual(
     predicate = { value, argument -> !value.isBefore(argument) }
 )
 
+/**
+ * Checks that the date and time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDateTime>.afterOrEqual(
     other: LocalDateTime?,
     message: String = messages.afterOrEqual
@@ -686,6 +1490,16 @@ public fun ValidationNode<LocalDateTime>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalDateTime>.afterOrEqual(
     other: LocalDateTime?,
     message: suspend LocalDateTime.(LocalDateTime) -> String
@@ -696,6 +1510,17 @@ public fun ValidationNode<LocalDateTime>.afterOrEqual(
     predicate = { value, argument -> !value.isBefore(argument) }
 )
 
+/**
+ * Checks that the time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalTime>.afterOrEqual(
     other: LocalTime?,
     message: String = messages.afterOrEqual
@@ -704,6 +1529,16 @@ public fun ValidationNode<LocalTime>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalTime>.afterOrEqual(
     other: LocalTime?,
     message: suspend LocalTime.(LocalTime) -> String
@@ -714,6 +1549,17 @@ public fun ValidationNode<LocalTime>.afterOrEqual(
     predicate = { value, argument -> !value.isBefore(argument) }
 )
 
+/**
+ * Checks that the time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetTime>.afterOrEqual(
     other: OffsetTime?,
     message: String = messages.afterOrEqual
@@ -722,6 +1568,16 @@ public fun ValidationNode<OffsetTime>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<OffsetTime>.afterOrEqual(
     other: OffsetTime?,
     message: suspend OffsetTime.(OffsetTime) -> String
@@ -732,6 +1588,17 @@ public fun ValidationNode<OffsetTime>.afterOrEqual(
     predicate = { value, argument -> !value.isBefore(argument) }
 )
 
+/**
+ * Checks that the date and time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<ZonedDateTime>.afterOrEqual(
     other: ZonedDateTime?,
     message: String = messages.afterOrEqual
@@ -740,6 +1607,16 @@ public fun ValidationNode<ZonedDateTime>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<ZonedDateTime>.afterOrEqual(
     other: ZonedDateTime?,
     message: suspend ZonedDateTime.(ZonedDateTime) -> String
@@ -750,6 +1627,17 @@ public fun ValidationNode<ZonedDateTime>.afterOrEqual(
     predicate = { value, argument -> !value.isBefore(argument) }
 )
 
+/**
+ * Checks that the date and time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetDateTime>.afterOrEqual(
     other: OffsetDateTime?,
     message: String = messages.afterOrEqual
@@ -758,6 +1646,16 @@ public fun ValidationNode<OffsetDateTime>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<OffsetDateTime>.afterOrEqual(
     other: OffsetDateTime?,
     message: suspend OffsetDateTime.(OffsetDateTime) -> String
@@ -768,6 +1666,17 @@ public fun ValidationNode<OffsetDateTime>.afterOrEqual(
     predicate = { value, argument -> !value.isBefore(argument) }
 )
 
+/**
+ * Checks that the instant is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Instant>.afterOrEqual(
     other: Instant?,
     message: String = messages.afterOrEqual
@@ -776,6 +1685,16 @@ public fun ValidationNode<Instant>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the instant is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Instant>.afterOrEqual(
     other: Instant?,
     message: suspend Instant.(Instant) -> String
@@ -786,6 +1705,17 @@ public fun ValidationNode<Instant>.afterOrEqual(
     predicate = { value, argument -> !value.isBefore(argument) }
 )
 
+/**
+ * Checks that the month is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<YearMonth>.afterOrEqual(
     other: YearMonth?,
     message: String = messages.afterOrEqual
@@ -794,6 +1724,16 @@ public fun ValidationNode<YearMonth>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the month is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<YearMonth>.afterOrEqual(
     other: YearMonth?,
     message: suspend YearMonth.(YearMonth) -> String
@@ -804,6 +1744,17 @@ public fun ValidationNode<YearMonth>.afterOrEqual(
     predicate = { value, argument -> !value.isBefore(argument) }
 )
 
+/**
+ * Checks that the year is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Year>.afterOrEqual(
     other: Year?,
     message: String = messages.afterOrEqual
@@ -812,6 +1763,16 @@ public fun ValidationNode<Year>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the year is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Year>.afterOrEqual(
     other: Year?,
     message: suspend Year.(Year) -> String
@@ -822,6 +1783,17 @@ public fun ValidationNode<Year>.afterOrEqual(
     predicate = { value, argument -> !value.isBefore(argument) }
 )
 
+/**
+ * Checks that the date is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and, by default, the message `must be after or equal to {other}`
+ * ([Messages.afterOrEqual][io.github.soleworks.validity.Messages.afterOrEqual]).
+ *
+ * @param other the earliest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Date>.afterOrEqual(
     other: Date?,
     message: String = messages.afterOrEqual
@@ -830,6 +1802,16 @@ public fun ValidationNode<Date>.afterOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date is [other] or after.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `afterOrEqual` and the message that [message] builds.
+ *
+ * @param other the earliest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Date>.afterOrEqual(
     other: Date?,
     message: suspend Date.(Date) -> String
@@ -840,6 +1822,17 @@ public fun ValidationNode<Date>.afterOrEqual(
     predicate = { value, argument -> !value.before(argument) }
 )
 
+/**
+ * Checks that the date is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.beforeOrEqual(
     other: LocalDate?,
     message: String = messages.beforeOrEqual
@@ -848,6 +1841,16 @@ public fun ValidationNode<LocalDate>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalDate>.beforeOrEqual(
     other: LocalDate?,
     message: suspend LocalDate.(LocalDate) -> String
@@ -858,6 +1861,17 @@ public fun ValidationNode<LocalDate>.beforeOrEqual(
     predicate = { value, argument -> !value.isAfter(argument) }
 )
 
+/**
+ * Checks that the date and time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDateTime>.beforeOrEqual(
     other: LocalDateTime?,
     message: String = messages.beforeOrEqual
@@ -866,6 +1880,16 @@ public fun ValidationNode<LocalDateTime>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalDateTime>.beforeOrEqual(
     other: LocalDateTime?,
     message: suspend LocalDateTime.(LocalDateTime) -> String
@@ -876,6 +1900,17 @@ public fun ValidationNode<LocalDateTime>.beforeOrEqual(
     predicate = { value, argument -> !value.isAfter(argument) }
 )
 
+/**
+ * Checks that the time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalTime>.beforeOrEqual(
     other: LocalTime?,
     message: String = messages.beforeOrEqual
@@ -884,6 +1919,16 @@ public fun ValidationNode<LocalTime>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<LocalTime>.beforeOrEqual(
     other: LocalTime?,
     message: suspend LocalTime.(LocalTime) -> String
@@ -894,6 +1939,17 @@ public fun ValidationNode<LocalTime>.beforeOrEqual(
     predicate = { value, argument -> !value.isAfter(argument) }
 )
 
+/**
+ * Checks that the time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetTime>.beforeOrEqual(
     other: OffsetTime?,
     message: String = messages.beforeOrEqual
@@ -902,6 +1958,16 @@ public fun ValidationNode<OffsetTime>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<OffsetTime>.beforeOrEqual(
     other: OffsetTime?,
     message: suspend OffsetTime.(OffsetTime) -> String
@@ -912,6 +1978,17 @@ public fun ValidationNode<OffsetTime>.beforeOrEqual(
     predicate = { value, argument -> !value.isAfter(argument) }
 )
 
+/**
+ * Checks that the date and time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
     other: ZonedDateTime?,
     message: String = messages.beforeOrEqual
@@ -920,6 +1997,16 @@ public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
     other: ZonedDateTime?,
     message: suspend ZonedDateTime.(ZonedDateTime) -> String
@@ -930,6 +2017,17 @@ public fun ValidationNode<ZonedDateTime>.beforeOrEqual(
     predicate = { value, argument -> !value.isAfter(argument) }
 )
 
+/**
+ * Checks that the date and time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
     other: OffsetDateTime?,
     message: String = messages.beforeOrEqual
@@ -938,6 +2036,16 @@ public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date and time is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
     other: OffsetDateTime?,
     message: suspend OffsetDateTime.(OffsetDateTime) -> String
@@ -948,6 +2056,17 @@ public fun ValidationNode<OffsetDateTime>.beforeOrEqual(
     predicate = { value, argument -> !value.isAfter(argument) }
 )
 
+/**
+ * Checks that the instant is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Instant>.beforeOrEqual(
     other: Instant?,
     message: String = messages.beforeOrEqual
@@ -956,6 +2075,16 @@ public fun ValidationNode<Instant>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the instant is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Instant>.beforeOrEqual(
     other: Instant?,
     message: suspend Instant.(Instant) -> String
@@ -966,6 +2095,17 @@ public fun ValidationNode<Instant>.beforeOrEqual(
     predicate = { value, argument -> !value.isAfter(argument) }
 )
 
+/**
+ * Checks that the month is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<YearMonth>.beforeOrEqual(
     other: YearMonth?,
     message: String = messages.beforeOrEqual
@@ -974,6 +2114,16 @@ public fun ValidationNode<YearMonth>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the month is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<YearMonth>.beforeOrEqual(
     other: YearMonth?,
     message: suspend YearMonth.(YearMonth) -> String
@@ -984,6 +2134,17 @@ public fun ValidationNode<YearMonth>.beforeOrEqual(
     predicate = { value, argument -> !value.isAfter(argument) }
 )
 
+/**
+ * Checks that the year is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Year>.beforeOrEqual(
     other: Year?,
     message: String = messages.beforeOrEqual
@@ -992,6 +2153,16 @@ public fun ValidationNode<Year>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the year is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Year>.beforeOrEqual(
     other: Year?,
     message: suspend Year.(Year) -> String
@@ -1002,6 +2173,17 @@ public fun ValidationNode<Year>.beforeOrEqual(
     predicate = { value, argument -> !value.isAfter(argument) }
 )
 
+/**
+ * Checks that the date is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and, by default, the message `must be before or equal to {other}`
+ * ([Messages.beforeOrEqual][io.github.soleworks.validity.Messages.beforeOrEqual]).
+ *
+ * @param other the latest moment accepted.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Date>.beforeOrEqual(
     other: Date?,
     message: String = messages.beforeOrEqual
@@ -1010,6 +2192,16 @@ public fun ValidationNode<Date>.beforeOrEqual(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the date is [other] or before.
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `beforeOrEqual` and the message that [message] builds.
+ *
+ * @param other the latest moment accepted.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Date>.beforeOrEqual(
     other: Date?,
     message: suspend Date.(Date) -> String
@@ -1020,6 +2212,22 @@ public fun ValidationNode<Date>.beforeOrEqual(
     predicate = { value, argument -> !value.after(argument) }
 )
 
+/**
+ * Checks that the date is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * ```kotlin
+ * ::checkOut required { between(checkIn, checkIn?.plusDays(30)) }
+ * ```
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDate>.between(
     start: LocalDate?,
     end: LocalDate?,
@@ -1030,6 +2238,17 @@ public fun ValidationNode<LocalDate>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the date is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<LocalDate>.between(
     start: LocalDate?,
     end: LocalDate?,
@@ -1042,6 +2261,18 @@ public fun ValidationNode<LocalDate>.between(
     predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
 )
 
+/**
+ * Checks that the date and time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalDateTime>.between(
     start: LocalDateTime?,
     end: LocalDateTime?,
@@ -1052,6 +2283,17 @@ public fun ValidationNode<LocalDateTime>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the date and time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<LocalDateTime>.between(
     start: LocalDateTime?,
     end: LocalDateTime?,
@@ -1064,6 +2306,18 @@ public fun ValidationNode<LocalDateTime>.between(
     predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
 )
 
+/**
+ * Checks that the time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<LocalTime>.between(
     start: LocalTime?,
     end: LocalTime?,
@@ -1074,6 +2328,17 @@ public fun ValidationNode<LocalTime>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<LocalTime>.between(
     start: LocalTime?,
     end: LocalTime?,
@@ -1086,6 +2351,18 @@ public fun ValidationNode<LocalTime>.between(
     predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
 )
 
+/**
+ * Checks that the time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetTime>.between(
     start: OffsetTime?,
     end: OffsetTime?,
@@ -1096,6 +2373,17 @@ public fun ValidationNode<OffsetTime>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<OffsetTime>.between(
     start: OffsetTime?,
     end: OffsetTime?,
@@ -1108,6 +2396,18 @@ public fun ValidationNode<OffsetTime>.between(
     predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
 )
 
+/**
+ * Checks that the date and time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<ZonedDateTime>.between(
     start: ZonedDateTime?,
     end: ZonedDateTime?,
@@ -1118,6 +2418,17 @@ public fun ValidationNode<ZonedDateTime>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the date and time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<ZonedDateTime>.between(
     start: ZonedDateTime?,
     end: ZonedDateTime?,
@@ -1130,6 +2441,18 @@ public fun ValidationNode<ZonedDateTime>.between(
     predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
 )
 
+/**
+ * Checks that the date and time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<OffsetDateTime>.between(
     start: OffsetDateTime?,
     end: OffsetDateTime?,
@@ -1140,6 +2463,17 @@ public fun ValidationNode<OffsetDateTime>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the date and time is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<OffsetDateTime>.between(
     start: OffsetDateTime?,
     end: OffsetDateTime?,
@@ -1152,6 +2486,18 @@ public fun ValidationNode<OffsetDateTime>.between(
     predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
 )
 
+/**
+ * Checks that the instant is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Instant>.between(
     start: Instant?,
     end: Instant?,
@@ -1162,6 +2508,17 @@ public fun ValidationNode<Instant>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the instant is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<Instant>.between(
     start: Instant?,
     end: Instant?,
@@ -1174,6 +2531,18 @@ public fun ValidationNode<Instant>.between(
     predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
 )
 
+/**
+ * Checks that the month is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<YearMonth>.between(
     start: YearMonth?,
     end: YearMonth?,
@@ -1184,6 +2553,17 @@ public fun ValidationNode<YearMonth>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the month is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<YearMonth>.between(
     start: YearMonth?,
     end: YearMonth?,
@@ -1196,6 +2576,18 @@ public fun ValidationNode<YearMonth>.between(
     predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
 )
 
+/**
+ * Checks that the year is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Year>.between(
     start: Year?,
     end: Year?,
@@ -1206,6 +2598,17 @@ public fun ValidationNode<Year>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the year is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<Year>.between(
     start: Year?,
     end: Year?,
@@ -1218,6 +2621,18 @@ public fun ValidationNode<Year>.between(
     predicate = { value, first, second -> !value.isBefore(first) && !value.isAfter(second) }
 )
 
+/**
+ * Checks that the date is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {start} and {end}`
+ * ([Messages.betweenDates][io.github.soleworks.validity.Messages.betweenDates]).
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message the message of the violation. `{start}`, `{end}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Date>.between(
     start: Date?,
     end: Date?,
@@ -1228,6 +2643,17 @@ public fun ValidationNode<Date>.between(
     message = { _, _ -> message.filled("start" to start, "end" to end) }
 )
 
+/**
+ * Checks that the date is between [start] and [end], both included.
+ *
+ * When [start] or [end] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param start the earliest moment accepted.
+ * @param end the latest moment accepted.
+ * @param message builds the message from the value (the receiver), [start] and [end].
+ */
 public fun ValidationNode<Date>.between(
     start: Date?,
     end: Date?,
@@ -1240,6 +2666,17 @@ public fun ValidationNode<Date>.between(
     predicate = { value, first, second -> !value.before(first) && !value.after(second) }
 )
 
+/**
+ * Checks that the duration is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Duration>.min(
     min: Duration?,
     message: String = messages.min
@@ -1248,6 +2685,16 @@ public fun ValidationNode<Duration>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the duration is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<Duration>.min(
     min: Duration?,
     message: suspend Duration.(Duration) -> String
@@ -1258,6 +2705,17 @@ public fun ValidationNode<Duration>.min(
     predicate = { value, argument -> value >= argument }
 )
 
+/**
+ * Checks that the duration is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Duration>.max(
     max: Duration?,
     message: String = messages.max
@@ -1266,6 +2724,16 @@ public fun ValidationNode<Duration>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the duration is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<Duration>.max(
     max: Duration?,
     message: suspend Duration.(Duration) -> String
@@ -1276,6 +2744,17 @@ public fun ValidationNode<Duration>.max(
     predicate = { value, argument -> value <= argument }
 )
 
+/**
+ * Checks that the duration is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Duration>.greaterThan(
     other: Duration?,
     message: String = messages.greaterThan
@@ -1284,6 +2763,16 @@ public fun ValidationNode<Duration>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the duration is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Duration>.greaterThan(
     other: Duration?,
     message: suspend Duration.(Duration) -> String
@@ -1294,6 +2783,17 @@ public fun ValidationNode<Duration>.greaterThan(
     predicate = { value, argument -> value > argument }
 )
 
+/**
+ * Checks that the duration is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Duration>.lessThan(
     other: Duration?,
     message: String = messages.lessThan
@@ -1302,6 +2802,16 @@ public fun ValidationNode<Duration>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the duration is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Duration>.lessThan(
     other: Duration?,
     message: suspend Duration.(Duration) -> String
@@ -1312,6 +2822,18 @@ public fun ValidationNode<Duration>.lessThan(
     predicate = { value, argument -> value < argument }
 )
 
+/**
+ * Checks that the duration is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the shortest duration accepted.
+ * @param max the longest duration accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Duration>.between(
     min: Duration?,
     max: Duration?,
@@ -1322,6 +2844,17 @@ public fun ValidationNode<Duration>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the duration is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the shortest duration accepted.
+ * @param max the longest duration accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<Duration>.between(
     min: Duration?,
     max: Duration?,

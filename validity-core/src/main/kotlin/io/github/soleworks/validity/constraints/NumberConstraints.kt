@@ -6,6 +6,17 @@ import io.github.soleworks.validity.messages
 import java.math.BigDecimal
 import java.math.BigInteger
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.min(
     min: Int?,
     message: String = messages.min
@@ -14,6 +25,16 @@ public fun ValidationNode<Int>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<Int>.min(
     min: Int?,
     message: suspend Int.(Int) -> String
@@ -24,6 +45,17 @@ public fun ValidationNode<Int>.min(
     predicate = { value, argument -> value >= argument }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Long>.min(
     min: Long?,
     message: String = messages.min
@@ -32,6 +64,16 @@ public fun ValidationNode<Long>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<Long>.min(
     min: Long?,
     message: suspend Long.(Long) -> String
@@ -42,6 +84,17 @@ public fun ValidationNode<Long>.min(
     predicate = { value, argument -> value >= argument }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Short>.min(
     min: Short?,
     message: String = messages.min
@@ -50,6 +103,16 @@ public fun ValidationNode<Short>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<Short>.min(
     min: Short?,
     message: suspend Short.(Short) -> String
@@ -60,6 +123,17 @@ public fun ValidationNode<Short>.min(
     predicate = { value, argument -> value >= argument }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Byte>.min(
     min: Byte?,
     message: String = messages.min
@@ -68,6 +142,16 @@ public fun ValidationNode<Byte>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<Byte>.min(
     min: Byte?,
     message: suspend Byte.(Byte) -> String
@@ -78,6 +162,17 @@ public fun ValidationNode<Byte>.min(
     predicate = { value, argument -> value >= argument }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Double>.min(
     min: Double?,
     message: String = messages.min
@@ -86,6 +181,16 @@ public fun ValidationNode<Double>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<Double>.min(
     min: Double?,
     message: suspend Double.(Double) -> String
@@ -96,6 +201,17 @@ public fun ValidationNode<Double>.min(
     predicate = { value, argument -> value >= argument }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Float>.min(
     min: Float?,
     message: String = messages.min
@@ -104,6 +220,16 @@ public fun ValidationNode<Float>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<Float>.min(
     min: Float?,
     message: suspend Float.(Float) -> String
@@ -114,6 +240,17 @@ public fun ValidationNode<Float>.min(
     predicate = { value, argument -> value >= argument }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigInteger>.min(
     min: BigInteger?,
     message: String = messages.min
@@ -122,6 +259,16 @@ public fun ValidationNode<BigInteger>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<BigInteger>.min(
     min: BigInteger?,
     message: suspend BigInteger.(BigInteger) -> String
@@ -132,6 +279,17 @@ public fun ValidationNode<BigInteger>.min(
     predicate = { value, argument -> value >= argument }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and, by default, the message `must be at least {min}`
+ * ([Messages.min][io.github.soleworks.validity.Messages.min]).
+ *
+ * @param min the smallest value accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigDecimal>.min(
     min: BigDecimal?,
     message: String = messages.min
@@ -140,6 +298,16 @@ public fun ValidationNode<BigDecimal>.min(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number is at least [min].
+ *
+ * When [min] is `null`, nothing is checked.
+ *
+ * Fails with code `min` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<BigDecimal>.min(
     min: BigDecimal?,
     message: suspend BigDecimal.(BigDecimal) -> String
@@ -150,6 +318,17 @@ public fun ValidationNode<BigDecimal>.min(
     predicate = { value, argument -> value >= argument }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.max(
     max: Int?,
     message: String = messages.max
@@ -158,6 +337,16 @@ public fun ValidationNode<Int>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<Int>.max(
     max: Int?,
     message: suspend Int.(Int) -> String
@@ -168,6 +357,17 @@ public fun ValidationNode<Int>.max(
     predicate = { value, argument -> value <= argument }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Long>.max(
     max: Long?,
     message: String = messages.max
@@ -176,6 +376,16 @@ public fun ValidationNode<Long>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<Long>.max(
     max: Long?,
     message: suspend Long.(Long) -> String
@@ -186,6 +396,17 @@ public fun ValidationNode<Long>.max(
     predicate = { value, argument -> value <= argument }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Short>.max(
     max: Short?,
     message: String = messages.max
@@ -194,6 +415,16 @@ public fun ValidationNode<Short>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<Short>.max(
     max: Short?,
     message: suspend Short.(Short) -> String
@@ -204,6 +435,17 @@ public fun ValidationNode<Short>.max(
     predicate = { value, argument -> value <= argument }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Byte>.max(
     max: Byte?,
     message: String = messages.max
@@ -212,6 +454,16 @@ public fun ValidationNode<Byte>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<Byte>.max(
     max: Byte?,
     message: suspend Byte.(Byte) -> String
@@ -222,6 +474,17 @@ public fun ValidationNode<Byte>.max(
     predicate = { value, argument -> value <= argument }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Double>.max(
     max: Double?,
     message: String = messages.max
@@ -230,6 +493,16 @@ public fun ValidationNode<Double>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<Double>.max(
     max: Double?,
     message: suspend Double.(Double) -> String
@@ -240,6 +513,17 @@ public fun ValidationNode<Double>.max(
     predicate = { value, argument -> value <= argument }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Float>.max(
     max: Float?,
     message: String = messages.max
@@ -248,6 +532,16 @@ public fun ValidationNode<Float>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<Float>.max(
     max: Float?,
     message: suspend Float.(Float) -> String
@@ -258,6 +552,17 @@ public fun ValidationNode<Float>.max(
     predicate = { value, argument -> value <= argument }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigInteger>.max(
     max: BigInteger?,
     message: String = messages.max
@@ -266,6 +571,16 @@ public fun ValidationNode<BigInteger>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<BigInteger>.max(
     max: BigInteger?,
     message: suspend BigInteger.(BigInteger) -> String
@@ -276,6 +591,17 @@ public fun ValidationNode<BigInteger>.max(
     predicate = { value, argument -> value <= argument }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and, by default, the message `must be at most {max}`
+ * ([Messages.max][io.github.soleworks.validity.Messages.max]).
+ *
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigDecimal>.max(
     max: BigDecimal?,
     message: String = messages.max
@@ -284,6 +610,16 @@ public fun ValidationNode<BigDecimal>.max(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number is at most [max].
+ *
+ * When [max] is `null`, nothing is checked.
+ *
+ * Fails with code `max` and the message that [message] builds.
+ *
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<BigDecimal>.max(
     max: BigDecimal?,
     message: suspend BigDecimal.(BigDecimal) -> String
@@ -294,6 +630,17 @@ public fun ValidationNode<BigDecimal>.max(
     predicate = { value, argument -> value <= argument }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.greaterThan(
     other: Int?,
     message: String = messages.greaterThan
@@ -302,6 +649,16 @@ public fun ValidationNode<Int>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Int>.greaterThan(
     other: Int?,
     message: suspend Int.(Int) -> String
@@ -312,6 +669,17 @@ public fun ValidationNode<Int>.greaterThan(
     predicate = { value, argument -> value > argument }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Long>.greaterThan(
     other: Long?,
     message: String = messages.greaterThan
@@ -320,6 +688,16 @@ public fun ValidationNode<Long>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Long>.greaterThan(
     other: Long?,
     message: suspend Long.(Long) -> String
@@ -330,6 +708,17 @@ public fun ValidationNode<Long>.greaterThan(
     predicate = { value, argument -> value > argument }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Short>.greaterThan(
     other: Short?,
     message: String = messages.greaterThan
@@ -338,6 +727,16 @@ public fun ValidationNode<Short>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Short>.greaterThan(
     other: Short?,
     message: suspend Short.(Short) -> String
@@ -348,6 +747,17 @@ public fun ValidationNode<Short>.greaterThan(
     predicate = { value, argument -> value > argument }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Byte>.greaterThan(
     other: Byte?,
     message: String = messages.greaterThan
@@ -356,6 +766,16 @@ public fun ValidationNode<Byte>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Byte>.greaterThan(
     other: Byte?,
     message: suspend Byte.(Byte) -> String
@@ -366,6 +786,17 @@ public fun ValidationNode<Byte>.greaterThan(
     predicate = { value, argument -> value > argument }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Double>.greaterThan(
     other: Double?,
     message: String = messages.greaterThan
@@ -374,6 +805,16 @@ public fun ValidationNode<Double>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Double>.greaterThan(
     other: Double?,
     message: suspend Double.(Double) -> String
@@ -384,6 +825,17 @@ public fun ValidationNode<Double>.greaterThan(
     predicate = { value, argument -> value > argument }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Float>.greaterThan(
     other: Float?,
     message: String = messages.greaterThan
@@ -392,6 +844,16 @@ public fun ValidationNode<Float>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Float>.greaterThan(
     other: Float?,
     message: suspend Float.(Float) -> String
@@ -402,6 +864,17 @@ public fun ValidationNode<Float>.greaterThan(
     predicate = { value, argument -> value > argument }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigInteger>.greaterThan(
     other: BigInteger?,
     message: String = messages.greaterThan
@@ -410,6 +883,16 @@ public fun ValidationNode<BigInteger>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<BigInteger>.greaterThan(
     other: BigInteger?,
     message: suspend BigInteger.(BigInteger) -> String
@@ -420,6 +903,17 @@ public fun ValidationNode<BigInteger>.greaterThan(
     predicate = { value, argument -> value > argument }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and, by default, the message `must be greater than {other}`
+ * ([Messages.greaterThan][io.github.soleworks.validity.Messages.greaterThan]).
+ *
+ * @param other the value it must be greater than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigDecimal>.greaterThan(
     other: BigDecimal?,
     message: String = messages.greaterThan
@@ -428,6 +922,16 @@ public fun ValidationNode<BigDecimal>.greaterThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is greater than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `greaterThan` and the message that [message] builds.
+ *
+ * @param other the value it must be greater than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<BigDecimal>.greaterThan(
     other: BigDecimal?,
     message: suspend BigDecimal.(BigDecimal) -> String
@@ -438,6 +942,17 @@ public fun ValidationNode<BigDecimal>.greaterThan(
     predicate = { value, argument -> value > argument }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.lessThan(
     other: Int?,
     message: String = messages.lessThan
@@ -446,6 +961,16 @@ public fun ValidationNode<Int>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Int>.lessThan(
     other: Int?,
     message: suspend Int.(Int) -> String
@@ -456,6 +981,17 @@ public fun ValidationNode<Int>.lessThan(
     predicate = { value, argument -> value < argument }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Long>.lessThan(
     other: Long?,
     message: String = messages.lessThan
@@ -464,6 +1000,16 @@ public fun ValidationNode<Long>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Long>.lessThan(
     other: Long?,
     message: suspend Long.(Long) -> String
@@ -474,6 +1020,17 @@ public fun ValidationNode<Long>.lessThan(
     predicate = { value, argument -> value < argument }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Short>.lessThan(
     other: Short?,
     message: String = messages.lessThan
@@ -482,6 +1039,16 @@ public fun ValidationNode<Short>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Short>.lessThan(
     other: Short?,
     message: suspend Short.(Short) -> String
@@ -492,6 +1059,17 @@ public fun ValidationNode<Short>.lessThan(
     predicate = { value, argument -> value < argument }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Byte>.lessThan(
     other: Byte?,
     message: String = messages.lessThan
@@ -500,6 +1078,16 @@ public fun ValidationNode<Byte>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Byte>.lessThan(
     other: Byte?,
     message: suspend Byte.(Byte) -> String
@@ -510,6 +1098,17 @@ public fun ValidationNode<Byte>.lessThan(
     predicate = { value, argument -> value < argument }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Double>.lessThan(
     other: Double?,
     message: String = messages.lessThan
@@ -518,6 +1117,16 @@ public fun ValidationNode<Double>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Double>.lessThan(
     other: Double?,
     message: suspend Double.(Double) -> String
@@ -528,6 +1137,17 @@ public fun ValidationNode<Double>.lessThan(
     predicate = { value, argument -> value < argument }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Float>.lessThan(
     other: Float?,
     message: String = messages.lessThan
@@ -536,6 +1156,16 @@ public fun ValidationNode<Float>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<Float>.lessThan(
     other: Float?,
     message: suspend Float.(Float) -> String
@@ -546,6 +1176,17 @@ public fun ValidationNode<Float>.lessThan(
     predicate = { value, argument -> value < argument }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigInteger>.lessThan(
     other: BigInteger?,
     message: String = messages.lessThan
@@ -554,6 +1195,16 @@ public fun ValidationNode<BigInteger>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<BigInteger>.lessThan(
     other: BigInteger?,
     message: suspend BigInteger.(BigInteger) -> String
@@ -564,6 +1215,17 @@ public fun ValidationNode<BigInteger>.lessThan(
     predicate = { value, argument -> value < argument }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and, by default, the message `must be less than {other}`
+ * ([Messages.lessThan][io.github.soleworks.validity.Messages.lessThan]).
+ *
+ * @param other the value it must be less than.
+ * @param message the message of the violation. `{other}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigDecimal>.lessThan(
     other: BigDecimal?,
     message: String = messages.lessThan
@@ -572,6 +1234,16 @@ public fun ValidationNode<BigDecimal>.lessThan(
     message = { message.filled("other" to other) }
 )
 
+/**
+ * Checks that the number is less than [other].
+ *
+ * When [other] is `null`, nothing is checked.
+ *
+ * Fails with code `lessThan` and the message that [message] builds.
+ *
+ * @param other the value it must be less than.
+ * @param message builds the message from the value (the receiver) and [other].
+ */
 public fun ValidationNode<BigDecimal>.lessThan(
     other: BigDecimal?,
     message: suspend BigDecimal.(BigDecimal) -> String
@@ -582,6 +1254,18 @@ public fun ValidationNode<BigDecimal>.lessThan(
     predicate = { value, argument -> value < argument }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.between(
     min: Int?,
     max: Int?,
@@ -592,6 +1276,17 @@ public fun ValidationNode<Int>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<Int>.between(
     min: Int?,
     max: Int?,
@@ -604,6 +1299,18 @@ public fun ValidationNode<Int>.between(
     predicate = { value, first, second -> value in first..second }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Long>.between(
     min: Long?,
     max: Long?,
@@ -614,6 +1321,17 @@ public fun ValidationNode<Long>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<Long>.between(
     min: Long?,
     max: Long?,
@@ -626,6 +1344,18 @@ public fun ValidationNode<Long>.between(
     predicate = { value, first, second -> value in first..second }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Short>.between(
     min: Short?,
     max: Short?,
@@ -636,6 +1366,17 @@ public fun ValidationNode<Short>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<Short>.between(
     min: Short?,
     max: Short?,
@@ -648,6 +1389,18 @@ public fun ValidationNode<Short>.between(
     predicate = { value, first, second -> value in first..second }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Byte>.between(
     min: Byte?,
     max: Byte?,
@@ -658,6 +1411,17 @@ public fun ValidationNode<Byte>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<Byte>.between(
     min: Byte?,
     max: Byte?,
@@ -670,6 +1434,18 @@ public fun ValidationNode<Byte>.between(
     predicate = { value, first, second -> value in first..second }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Double>.between(
     min: Double?,
     max: Double?,
@@ -680,6 +1456,17 @@ public fun ValidationNode<Double>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<Double>.between(
     min: Double?,
     max: Double?,
@@ -692,6 +1479,18 @@ public fun ValidationNode<Double>.between(
     predicate = { value, first, second -> value in first..second }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Float>.between(
     min: Float?,
     max: Float?,
@@ -702,6 +1501,17 @@ public fun ValidationNode<Float>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<Float>.between(
     min: Float?,
     max: Float?,
@@ -714,6 +1524,18 @@ public fun ValidationNode<Float>.between(
     predicate = { value, first, second -> value in first..second }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigInteger>.between(
     min: BigInteger?,
     max: BigInteger?,
@@ -724,6 +1546,17 @@ public fun ValidationNode<BigInteger>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<BigInteger>.between(
     min: BigInteger?,
     max: BigInteger?,
@@ -736,6 +1569,18 @@ public fun ValidationNode<BigInteger>.between(
     predicate = { value, first, second -> value in first..second }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and, by default, the message `must be between {min} and {max}`
+ * ([Messages.between][io.github.soleworks.validity.Messages.between]).
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message the message of the violation. `{min}`, `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigDecimal>.between(
     min: BigDecimal?,
     max: BigDecimal?,
@@ -746,6 +1591,17 @@ public fun ValidationNode<BigDecimal>.between(
     message = { _, _ -> message.filled("min" to min, "max" to max) }
 )
 
+/**
+ * Checks that the number is between [min] and [max], both included.
+ *
+ * When [min] or [max] is `null`, nothing is checked.
+ *
+ * Fails with code `between` and the message that [message] builds.
+ *
+ * @param min the smallest value accepted.
+ * @param max the largest value accepted.
+ * @param message builds the message from the value (the receiver), [min] and [max].
+ */
 public fun ValidationNode<BigDecimal>.between(
     min: BigDecimal?,
     max: BigDecimal?,
@@ -758,6 +1614,14 @@ public fun ValidationNode<BigDecimal>.between(
     predicate = { value, first, second -> value in first..second }
 )
 
+/**
+ * Checks that the number is greater than zero.
+ *
+ * Fails with code `positive` and, by default, the message `must be positive`
+ * ([Messages.positive][io.github.soleworks.validity.Messages.positive]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.positive(
     message: String = messages.positive
 ): Unit = constraint(
@@ -766,6 +1630,14 @@ public fun ValidationNode<Int>.positive(
     predicate = { it > 0 }
 )
 
+/**
+ * Checks that the number is greater than zero.
+ *
+ * Fails with code `positive` and, by default, the message `must be positive`
+ * ([Messages.positive][io.github.soleworks.validity.Messages.positive]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveLong")
 public fun ValidationNode<Long>.positive(
     message: String = messages.positive
@@ -775,6 +1647,14 @@ public fun ValidationNode<Long>.positive(
     predicate = { it > 0 }
 )
 
+/**
+ * Checks that the number is greater than zero.
+ *
+ * Fails with code `positive` and, by default, the message `must be positive`
+ * ([Messages.positive][io.github.soleworks.validity.Messages.positive]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveShort")
 public fun ValidationNode<Short>.positive(
     message: String = messages.positive
@@ -784,6 +1664,14 @@ public fun ValidationNode<Short>.positive(
     predicate = { it > 0 }
 )
 
+/**
+ * Checks that the number is greater than zero.
+ *
+ * Fails with code `positive` and, by default, the message `must be positive`
+ * ([Messages.positive][io.github.soleworks.validity.Messages.positive]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveByte")
 public fun ValidationNode<Byte>.positive(
     message: String = messages.positive
@@ -793,6 +1681,14 @@ public fun ValidationNode<Byte>.positive(
     predicate = { it > 0 }
 )
 
+/**
+ * Checks that the number is greater than zero.
+ *
+ * Fails with code `positive` and, by default, the message `must be positive`
+ * ([Messages.positive][io.github.soleworks.validity.Messages.positive]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveDouble")
 public fun ValidationNode<Double>.positive(
     message: String = messages.positive
@@ -802,6 +1698,14 @@ public fun ValidationNode<Double>.positive(
     predicate = { it > 0.0 }
 )
 
+/**
+ * Checks that the number is greater than zero.
+ *
+ * Fails with code `positive` and, by default, the message `must be positive`
+ * ([Messages.positive][io.github.soleworks.validity.Messages.positive]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveFloat")
 public fun ValidationNode<Float>.positive(
     message: String = messages.positive
@@ -811,6 +1715,14 @@ public fun ValidationNode<Float>.positive(
     predicate = { it > 0f }
 )
 
+/**
+ * Checks that the number is greater than zero.
+ *
+ * Fails with code `positive` and, by default, the message `must be positive`
+ * ([Messages.positive][io.github.soleworks.validity.Messages.positive]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveBigInteger")
 public fun ValidationNode<BigInteger>.positive(
     message: String = messages.positive
@@ -820,6 +1732,14 @@ public fun ValidationNode<BigInteger>.positive(
     predicate = { it.signum() > 0 }
 )
 
+/**
+ * Checks that the number is greater than zero.
+ *
+ * Fails with code `positive` and, by default, the message `must be positive`
+ * ([Messages.positive][io.github.soleworks.validity.Messages.positive]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveBigDecimal")
 public fun ValidationNode<BigDecimal>.positive(
     message: String = messages.positive
@@ -829,6 +1749,14 @@ public fun ValidationNode<BigDecimal>.positive(
     predicate = { it.signum() > 0 }
 )
 
+/**
+ * Checks that the number is less than zero.
+ *
+ * Fails with code `negative` and, by default, the message `must be negative`
+ * ([Messages.negative][io.github.soleworks.validity.Messages.negative]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.negative(
     message: String = messages.negative
 ): Unit = constraint(
@@ -837,6 +1765,14 @@ public fun ValidationNode<Int>.negative(
     predicate = { it < 0 }
 )
 
+/**
+ * Checks that the number is less than zero.
+ *
+ * Fails with code `negative` and, by default, the message `must be negative`
+ * ([Messages.negative][io.github.soleworks.validity.Messages.negative]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeLong")
 public fun ValidationNode<Long>.negative(
     message: String = messages.negative
@@ -846,6 +1782,14 @@ public fun ValidationNode<Long>.negative(
     predicate = { it < 0 }
 )
 
+/**
+ * Checks that the number is less than zero.
+ *
+ * Fails with code `negative` and, by default, the message `must be negative`
+ * ([Messages.negative][io.github.soleworks.validity.Messages.negative]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeShort")
 public fun ValidationNode<Short>.negative(
     message: String = messages.negative
@@ -855,6 +1799,14 @@ public fun ValidationNode<Short>.negative(
     predicate = { it < 0 }
 )
 
+/**
+ * Checks that the number is less than zero.
+ *
+ * Fails with code `negative` and, by default, the message `must be negative`
+ * ([Messages.negative][io.github.soleworks.validity.Messages.negative]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeByte")
 public fun ValidationNode<Byte>.negative(
     message: String = messages.negative
@@ -864,6 +1816,14 @@ public fun ValidationNode<Byte>.negative(
     predicate = { it < 0 }
 )
 
+/**
+ * Checks that the number is less than zero.
+ *
+ * Fails with code `negative` and, by default, the message `must be negative`
+ * ([Messages.negative][io.github.soleworks.validity.Messages.negative]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeDouble")
 public fun ValidationNode<Double>.negative(
     message: String = messages.negative
@@ -873,6 +1833,14 @@ public fun ValidationNode<Double>.negative(
     predicate = { it < 0.0 }
 )
 
+/**
+ * Checks that the number is less than zero.
+ *
+ * Fails with code `negative` and, by default, the message `must be negative`
+ * ([Messages.negative][io.github.soleworks.validity.Messages.negative]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeFloat")
 public fun ValidationNode<Float>.negative(
     message: String = messages.negative
@@ -882,6 +1850,14 @@ public fun ValidationNode<Float>.negative(
     predicate = { it < 0f }
 )
 
+/**
+ * Checks that the number is less than zero.
+ *
+ * Fails with code `negative` and, by default, the message `must be negative`
+ * ([Messages.negative][io.github.soleworks.validity.Messages.negative]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeBigInteger")
 public fun ValidationNode<BigInteger>.negative(
     message: String = messages.negative
@@ -891,6 +1867,14 @@ public fun ValidationNode<BigInteger>.negative(
     predicate = { it.signum() < 0 }
 )
 
+/**
+ * Checks that the number is less than zero.
+ *
+ * Fails with code `negative` and, by default, the message `must be negative`
+ * ([Messages.negative][io.github.soleworks.validity.Messages.negative]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeBigDecimal")
 public fun ValidationNode<BigDecimal>.negative(
     message: String = messages.negative
@@ -900,6 +1884,14 @@ public fun ValidationNode<BigDecimal>.negative(
     predicate = { it.signum() < 0 }
 )
 
+/**
+ * Checks that the number is zero or greater.
+ *
+ * Fails with code `positiveOrZero` and, by default, the message `must be positive or zero`
+ * ([Messages.positiveOrZero][io.github.soleworks.validity.Messages.positiveOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.positiveOrZero(
     message: String = messages.positiveOrZero
 ): Unit = constraint(
@@ -908,6 +1900,14 @@ public fun ValidationNode<Int>.positiveOrZero(
     predicate = { it >= 0 }
 )
 
+/**
+ * Checks that the number is zero or greater.
+ *
+ * Fails with code `positiveOrZero` and, by default, the message `must be positive or zero`
+ * ([Messages.positiveOrZero][io.github.soleworks.validity.Messages.positiveOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveOrZeroLong")
 public fun ValidationNode<Long>.positiveOrZero(
     message: String = messages.positiveOrZero
@@ -917,6 +1917,14 @@ public fun ValidationNode<Long>.positiveOrZero(
     predicate = { it >= 0 }
 )
 
+/**
+ * Checks that the number is zero or greater.
+ *
+ * Fails with code `positiveOrZero` and, by default, the message `must be positive or zero`
+ * ([Messages.positiveOrZero][io.github.soleworks.validity.Messages.positiveOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveOrZeroShort")
 public fun ValidationNode<Short>.positiveOrZero(
     message: String = messages.positiveOrZero
@@ -926,6 +1934,14 @@ public fun ValidationNode<Short>.positiveOrZero(
     predicate = { it >= 0 }
 )
 
+/**
+ * Checks that the number is zero or greater.
+ *
+ * Fails with code `positiveOrZero` and, by default, the message `must be positive or zero`
+ * ([Messages.positiveOrZero][io.github.soleworks.validity.Messages.positiveOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveOrZeroByte")
 public fun ValidationNode<Byte>.positiveOrZero(
     message: String = messages.positiveOrZero
@@ -935,6 +1951,14 @@ public fun ValidationNode<Byte>.positiveOrZero(
     predicate = { it >= 0 }
 )
 
+/**
+ * Checks that the number is zero or greater.
+ *
+ * Fails with code `positiveOrZero` and, by default, the message `must be positive or zero`
+ * ([Messages.positiveOrZero][io.github.soleworks.validity.Messages.positiveOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveOrZeroDouble")
 public fun ValidationNode<Double>.positiveOrZero(
     message: String = messages.positiveOrZero
@@ -944,6 +1968,14 @@ public fun ValidationNode<Double>.positiveOrZero(
     predicate = { it >= 0.0 }
 )
 
+/**
+ * Checks that the number is zero or greater.
+ *
+ * Fails with code `positiveOrZero` and, by default, the message `must be positive or zero`
+ * ([Messages.positiveOrZero][io.github.soleworks.validity.Messages.positiveOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveOrZeroFloat")
 public fun ValidationNode<Float>.positiveOrZero(
     message: String = messages.positiveOrZero
@@ -953,6 +1985,14 @@ public fun ValidationNode<Float>.positiveOrZero(
     predicate = { it >= 0f }
 )
 
+/**
+ * Checks that the number is zero or greater.
+ *
+ * Fails with code `positiveOrZero` and, by default, the message `must be positive or zero`
+ * ([Messages.positiveOrZero][io.github.soleworks.validity.Messages.positiveOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveOrZeroBigInteger")
 public fun ValidationNode<BigInteger>.positiveOrZero(
     message: String = messages.positiveOrZero
@@ -962,6 +2002,14 @@ public fun ValidationNode<BigInteger>.positiveOrZero(
     predicate = { it.signum() >= 0 }
 )
 
+/**
+ * Checks that the number is zero or greater.
+ *
+ * Fails with code `positiveOrZero` and, by default, the message `must be positive or zero`
+ * ([Messages.positiveOrZero][io.github.soleworks.validity.Messages.positiveOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("positiveOrZeroBigDecimal")
 public fun ValidationNode<BigDecimal>.positiveOrZero(
     message: String = messages.positiveOrZero
@@ -971,6 +2019,14 @@ public fun ValidationNode<BigDecimal>.positiveOrZero(
     predicate = { it.signum() >= 0 }
 )
 
+/**
+ * Checks that the number is zero or less.
+ *
+ * Fails with code `negativeOrZero` and, by default, the message `must be negative or zero`
+ * ([Messages.negativeOrZero][io.github.soleworks.validity.Messages.negativeOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.negativeOrZero(
     message: String = messages.negativeOrZero
 ): Unit = constraint(
@@ -979,6 +2035,14 @@ public fun ValidationNode<Int>.negativeOrZero(
     predicate = { it <= 0 }
 )
 
+/**
+ * Checks that the number is zero or less.
+ *
+ * Fails with code `negativeOrZero` and, by default, the message `must be negative or zero`
+ * ([Messages.negativeOrZero][io.github.soleworks.validity.Messages.negativeOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeOrZeroLong")
 public fun ValidationNode<Long>.negativeOrZero(
     message: String = messages.negativeOrZero
@@ -988,6 +2052,14 @@ public fun ValidationNode<Long>.negativeOrZero(
     predicate = { it <= 0 }
 )
 
+/**
+ * Checks that the number is zero or less.
+ *
+ * Fails with code `negativeOrZero` and, by default, the message `must be negative or zero`
+ * ([Messages.negativeOrZero][io.github.soleworks.validity.Messages.negativeOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeOrZeroShort")
 public fun ValidationNode<Short>.negativeOrZero(
     message: String = messages.negativeOrZero
@@ -997,6 +2069,14 @@ public fun ValidationNode<Short>.negativeOrZero(
     predicate = { it <= 0 }
 )
 
+/**
+ * Checks that the number is zero or less.
+ *
+ * Fails with code `negativeOrZero` and, by default, the message `must be negative or zero`
+ * ([Messages.negativeOrZero][io.github.soleworks.validity.Messages.negativeOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeOrZeroByte")
 public fun ValidationNode<Byte>.negativeOrZero(
     message: String = messages.negativeOrZero
@@ -1006,6 +2086,14 @@ public fun ValidationNode<Byte>.negativeOrZero(
     predicate = { it <= 0 }
 )
 
+/**
+ * Checks that the number is zero or less.
+ *
+ * Fails with code `negativeOrZero` and, by default, the message `must be negative or zero`
+ * ([Messages.negativeOrZero][io.github.soleworks.validity.Messages.negativeOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeOrZeroDouble")
 public fun ValidationNode<Double>.negativeOrZero(
     message: String = messages.negativeOrZero
@@ -1015,6 +2103,14 @@ public fun ValidationNode<Double>.negativeOrZero(
     predicate = { it <= 0.0 }
 )
 
+/**
+ * Checks that the number is zero or less.
+ *
+ * Fails with code `negativeOrZero` and, by default, the message `must be negative or zero`
+ * ([Messages.negativeOrZero][io.github.soleworks.validity.Messages.negativeOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeOrZeroFloat")
 public fun ValidationNode<Float>.negativeOrZero(
     message: String = messages.negativeOrZero
@@ -1024,6 +2120,14 @@ public fun ValidationNode<Float>.negativeOrZero(
     predicate = { it <= 0f }
 )
 
+/**
+ * Checks that the number is zero or less.
+ *
+ * Fails with code `negativeOrZero` and, by default, the message `must be negative or zero`
+ * ([Messages.negativeOrZero][io.github.soleworks.validity.Messages.negativeOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeOrZeroBigInteger")
 public fun ValidationNode<BigInteger>.negativeOrZero(
     message: String = messages.negativeOrZero
@@ -1033,6 +2137,14 @@ public fun ValidationNode<BigInteger>.negativeOrZero(
     predicate = { it.signum() <= 0 }
 )
 
+/**
+ * Checks that the number is zero or less.
+ *
+ * Fails with code `negativeOrZero` and, by default, the message `must be negative or zero`
+ * ([Messages.negativeOrZero][io.github.soleworks.validity.Messages.negativeOrZero]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("negativeOrZeroBigDecimal")
 public fun ValidationNode<BigDecimal>.negativeOrZero(
     message: String = messages.negativeOrZero
@@ -1042,6 +2154,16 @@ public fun ValidationNode<BigDecimal>.negativeOrZero(
     predicate = { it.signum() <= 0 }
 )
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and, by default, the message `must be a multiple of {factor}`
+ * ([Messages.multipleOf][io.github.soleworks.validity.Messages.multipleOf]).
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message the message of the violation. `{factor}`, `{path}` and `{value}` are filled in.
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<Int>.multipleOf(
     factor: Int,
     message: String = messages.multipleOf
@@ -1050,6 +2172,15 @@ public fun ValidationNode<Int>.multipleOf(
     message = { message.filled("factor" to factor) }
 )
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and the message that [message] builds.
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message builds the message from the value (the receiver) and [factor].
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<Int>.multipleOf(
     factor: Int,
     message: suspend Int.(Int) -> String
@@ -1063,6 +2194,16 @@ public fun ValidationNode<Int>.multipleOf(
     )
 }
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and, by default, the message `must be a multiple of {factor}`
+ * ([Messages.multipleOf][io.github.soleworks.validity.Messages.multipleOf]).
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message the message of the violation. `{factor}`, `{path}` and `{value}` are filled in.
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<Long>.multipleOf(
     factor: Long,
     message: String = messages.multipleOf
@@ -1071,6 +2212,15 @@ public fun ValidationNode<Long>.multipleOf(
     message = { message.filled("factor" to factor) }
 )
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and the message that [message] builds.
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message builds the message from the value (the receiver) and [factor].
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<Long>.multipleOf(
     factor: Long,
     message: suspend Long.(Long) -> String
@@ -1084,6 +2234,16 @@ public fun ValidationNode<Long>.multipleOf(
     )
 }
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and, by default, the message `must be a multiple of {factor}`
+ * ([Messages.multipleOf][io.github.soleworks.validity.Messages.multipleOf]).
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message the message of the violation. `{factor}`, `{path}` and `{value}` are filled in.
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<Short>.multipleOf(
     factor: Short,
     message: String = messages.multipleOf
@@ -1092,6 +2252,15 @@ public fun ValidationNode<Short>.multipleOf(
     message = { message.filled("factor" to factor) }
 )
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and the message that [message] builds.
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message builds the message from the value (the receiver) and [factor].
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<Short>.multipleOf(
     factor: Short,
     message: suspend Short.(Short) -> String
@@ -1105,6 +2274,16 @@ public fun ValidationNode<Short>.multipleOf(
     )
 }
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and, by default, the message `must be a multiple of {factor}`
+ * ([Messages.multipleOf][io.github.soleworks.validity.Messages.multipleOf]).
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message the message of the violation. `{factor}`, `{path}` and `{value}` are filled in.
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<Byte>.multipleOf(
     factor: Byte,
     message: String = messages.multipleOf
@@ -1113,6 +2292,15 @@ public fun ValidationNode<Byte>.multipleOf(
     message = { message.filled("factor" to factor) }
 )
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and the message that [message] builds.
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message builds the message from the value (the receiver) and [factor].
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<Byte>.multipleOf(
     factor: Byte,
     message: suspend Byte.(Byte) -> String
@@ -1126,6 +2314,16 @@ public fun ValidationNode<Byte>.multipleOf(
     )
 }
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and, by default, the message `must be a multiple of {factor}`
+ * ([Messages.multipleOf][io.github.soleworks.validity.Messages.multipleOf]).
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message the message of the violation. `{factor}`, `{path}` and `{value}` are filled in.
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<BigInteger>.multipleOf(
     factor: BigInteger,
     message: String = messages.multipleOf
@@ -1134,6 +2332,15 @@ public fun ValidationNode<BigInteger>.multipleOf(
     message = { message.filled("factor" to factor) }
 )
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and the message that [message] builds.
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message builds the message from the value (the receiver) and [factor].
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<BigInteger>.multipleOf(
     factor: BigInteger,
     message: suspend BigInteger.(BigInteger) -> String
@@ -1147,6 +2354,16 @@ public fun ValidationNode<BigInteger>.multipleOf(
     )
 }
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and, by default, the message `must be a multiple of {factor}`
+ * ([Messages.multipleOf][io.github.soleworks.validity.Messages.multipleOf]).
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message the message of the violation. `{factor}`, `{path}` and `{value}` are filled in.
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<BigDecimal>.multipleOf(
     factor: BigDecimal,
     message: String = messages.multipleOf
@@ -1155,6 +2372,15 @@ public fun ValidationNode<BigDecimal>.multipleOf(
     message = { message.filled("factor" to factor) }
 )
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * Fails with code `multipleOf` and the message that [message] builds.
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message builds the message from the value (the receiver) and [factor].
+ * @throws IllegalArgumentException when [factor] is zero.
+ */
 public fun ValidationNode<BigDecimal>.multipleOf(
     factor: BigDecimal,
     message: suspend BigDecimal.(BigDecimal) -> String
@@ -1168,6 +2394,18 @@ public fun ValidationNode<BigDecimal>.multipleOf(
     )
 }
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * The remainder is computed in decimal, so `0.3` is a multiple of `0.1`. Infinity and `NaN` fail.
+ *
+ * Fails with code `multipleOf` and, by default, the message `must be a multiple of {factor}`
+ * ([Messages.multipleOf][io.github.soleworks.validity.Messages.multipleOf]).
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message the message of the violation. `{factor}`, `{path}` and `{value}` are filled in.
+ * @throws IllegalArgumentException when [factor] is zero, infinite or `NaN`.
+ */
 public fun ValidationNode<Double>.multipleOf(
     factor: Double,
     message: String = messages.multipleOf
@@ -1176,6 +2414,17 @@ public fun ValidationNode<Double>.multipleOf(
     message = { message.filled("factor" to factor) }
 )
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * The remainder is computed in decimal, so `0.3` is a multiple of `0.1`. Infinity and `NaN` fail.
+ *
+ * Fails with code `multipleOf` and the message that [message] builds.
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message builds the message from the value (the receiver) and [factor].
+ * @throws IllegalArgumentException when [factor] is zero, infinite or `NaN`.
+ */
 public fun ValidationNode<Double>.multipleOf(
     factor: Double,
     message: suspend Double.(Double) -> String
@@ -1189,6 +2438,18 @@ public fun ValidationNode<Double>.multipleOf(
     )
 }
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * The remainder is computed in decimal, so `0.3` is a multiple of `0.1`. Infinity and `NaN` fail.
+ *
+ * Fails with code `multipleOf` and, by default, the message `must be a multiple of {factor}`
+ * ([Messages.multipleOf][io.github.soleworks.validity.Messages.multipleOf]).
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message the message of the violation. `{factor}`, `{path}` and `{value}` are filled in.
+ * @throws IllegalArgumentException when [factor] is zero, infinite or `NaN`.
+ */
 public fun ValidationNode<Float>.multipleOf(
     factor: Float,
     message: String = messages.multipleOf
@@ -1197,6 +2458,17 @@ public fun ValidationNode<Float>.multipleOf(
     message = { message.filled("factor" to factor) }
 )
 
+/**
+ * Checks that the number is a multiple of [factor].
+ *
+ * The remainder is computed in decimal, so `0.3` is a multiple of `0.1`. Infinity and `NaN` fail.
+ *
+ * Fails with code `multipleOf` and the message that [message] builds.
+ *
+ * @param factor the number it must be a multiple of. It cannot be zero.
+ * @param message builds the message from the value (the receiver) and [factor].
+ * @throws IllegalArgumentException when [factor] is zero, infinite or `NaN`.
+ */
 public fun ValidationNode<Float>.multipleOf(
     factor: Float,
     message: suspend Float.(Float) -> String
@@ -1210,6 +2482,16 @@ public fun ValidationNode<Float>.multipleOf(
     )
 }
 
+/**
+ * Checks that the number has no fractional part.
+ *
+ * Infinity and `NaN` fail.
+ *
+ * Fails with code `integer` and, by default, the message `must be an integer`
+ * ([Messages.integer][io.github.soleworks.validity.Messages.integer]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Double>.integer(
     message: String = messages.integer
 ): Unit = constraint(
@@ -1218,6 +2500,16 @@ public fun ValidationNode<Double>.integer(
     predicate = { it.isFinite() && it % 1.0 == 0.0 }
 )
 
+/**
+ * Checks that the number has no fractional part.
+ *
+ * Infinity and `NaN` fail.
+ *
+ * Fails with code `integer` and, by default, the message `must be an integer`
+ * ([Messages.integer][io.github.soleworks.validity.Messages.integer]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("integerFloat")
 public fun ValidationNode<Float>.integer(
     message: String = messages.integer
@@ -1227,6 +2519,16 @@ public fun ValidationNode<Float>.integer(
     predicate = { it.isFinite() && it % 1f == 0f }
 )
 
+/**
+ * Checks that the number has no fractional part.
+ *
+ * Trailing zeros do not count, so `2.00` passes.
+ *
+ * Fails with code `integer` and, by default, the message `must be an integer`
+ * ([Messages.integer][io.github.soleworks.validity.Messages.integer]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("integerBigDecimal")
 public fun ValidationNode<BigDecimal>.integer(
     message: String = messages.integer
@@ -1236,6 +2538,14 @@ public fun ValidationNode<BigDecimal>.integer(
     predicate = { it.signum() == 0 || it.stripTrailingZeros().scale() <= 0 }
 )
 
+/**
+ * Checks that the number is neither infinite nor `NaN`.
+ *
+ * Fails with code `finite` and, by default, the message `must be finite`
+ * ([Messages.finite][io.github.soleworks.validity.Messages.finite]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Double>.finite(
     message: String = messages.finite
 ): Unit = constraint(
@@ -1244,6 +2554,14 @@ public fun ValidationNode<Double>.finite(
     predicate = { it.isFinite() }
 )
 
+/**
+ * Checks that the number is neither infinite nor `NaN`.
+ *
+ * Fails with code `finite` and, by default, the message `must be finite`
+ * ([Messages.finite][io.github.soleworks.validity.Messages.finite]).
+ *
+ * @param message the message of the violation. `{path}` and `{value}` are filled in.
+ */
 @JvmName("finiteFloat")
 public fun ValidationNode<Float>.finite(
     message: String = messages.finite
@@ -1253,6 +2571,21 @@ public fun ValidationNode<Float>.finite(
     predicate = { it.isFinite() }
 )
 
+/**
+ * Checks that the number has at most [max] digits after the decimal point.
+ *
+ * Trailing zeros do not count, so `1.50` has one decimal place.
+ *
+ * Fails with code `maxDecimalPlaces` and, by default, the message `must have at most {max} decimal places`
+ * ([Messages.maxDecimalPlaces][io.github.soleworks.validity.Messages.maxDecimalPlaces]).
+ *
+ * ```kotlin
+ * ::amount required { maxDecimalPlaces(2) }
+ * ```
+ *
+ * @param max the most decimal places accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigDecimal>.maxDecimalPlaces(
     max: Int,
     message: String = messages.maxDecimalPlaces
@@ -1261,6 +2594,16 @@ public fun ValidationNode<BigDecimal>.maxDecimalPlaces(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number has at most [max] digits after the decimal point.
+ *
+ * Trailing zeros do not count, so `1.50` has one decimal place.
+ *
+ * Fails with code `maxDecimalPlaces` and the message that [message] builds.
+ *
+ * @param max the most decimal places accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<BigDecimal>.maxDecimalPlaces(
     max: Int,
     message: suspend BigDecimal.(Int) -> String
@@ -1270,6 +2613,15 @@ public fun ValidationNode<BigDecimal>.maxDecimalPlaces(
     predicate = { it.stripTrailingZeros().scale() <= max }
 )
 
+/**
+ * Checks that the number has at most [max] digits before the decimal point.
+ *
+ * Fails with code `maxIntegerDigits` and, by default, the message `must have at most {max} integer digits`
+ * ([Messages.maxIntegerDigits][io.github.soleworks.validity.Messages.maxIntegerDigits]).
+ *
+ * @param max the most integer digits accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigDecimal>.maxIntegerDigits(
     max: Int,
     message: String = messages.maxIntegerDigits
@@ -1278,6 +2630,14 @@ public fun ValidationNode<BigDecimal>.maxIntegerDigits(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number has at most [max] digits before the decimal point.
+ *
+ * Fails with code `maxIntegerDigits` and the message that [message] builds.
+ *
+ * @param max the most integer digits accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<BigDecimal>.maxIntegerDigits(
     max: Int,
     message: suspend BigDecimal.(Int) -> String
@@ -1287,6 +2647,15 @@ public fun ValidationNode<BigDecimal>.maxIntegerDigits(
     predicate = { it.stripTrailingZeros().run { precision() - scale() } <= max }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and, by default, the message `must have at least {min} digits`
+ * ([Messages.minDigits][io.github.soleworks.validity.Messages.minDigits]).
+ *
+ * @param min the fewest digits accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.minDigits(
     min: Int,
     message: String = messages.minDigits
@@ -1295,6 +2664,14 @@ public fun ValidationNode<Int>.minDigits(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and the message that [message] builds.
+ *
+ * @param min the fewest digits accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<Int>.minDigits(
     min: Int,
     message: suspend Int.(Int) -> String
@@ -1304,6 +2681,15 @@ public fun ValidationNode<Int>.minDigits(
     predicate = { it.toString().removePrefix("-").length >= min }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and, by default, the message `must have at least {min} digits`
+ * ([Messages.minDigits][io.github.soleworks.validity.Messages.minDigits]).
+ *
+ * @param min the fewest digits accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("minDigitsLong")
 public fun ValidationNode<Long>.minDigits(
     min: Int,
@@ -1313,6 +2699,14 @@ public fun ValidationNode<Long>.minDigits(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and the message that [message] builds.
+ *
+ * @param min the fewest digits accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 @JvmName("minDigitsLong")
 public fun ValidationNode<Long>.minDigits(
     min: Int,
@@ -1323,6 +2717,15 @@ public fun ValidationNode<Long>.minDigits(
     predicate = { it.toString().removePrefix("-").length >= min }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and, by default, the message `must have at least {min} digits`
+ * ([Messages.minDigits][io.github.soleworks.validity.Messages.minDigits]).
+ *
+ * @param min the fewest digits accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("minDigitsShort")
 public fun ValidationNode<Short>.minDigits(
     min: Int,
@@ -1332,6 +2735,14 @@ public fun ValidationNode<Short>.minDigits(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and the message that [message] builds.
+ *
+ * @param min the fewest digits accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 @JvmName("minDigitsShort")
 public fun ValidationNode<Short>.minDigits(
     min: Int,
@@ -1342,6 +2753,15 @@ public fun ValidationNode<Short>.minDigits(
     predicate = { it.toString().removePrefix("-").length >= min }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and, by default, the message `must have at least {min} digits`
+ * ([Messages.minDigits][io.github.soleworks.validity.Messages.minDigits]).
+ *
+ * @param min the fewest digits accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("minDigitsByte")
 public fun ValidationNode<Byte>.minDigits(
     min: Int,
@@ -1351,6 +2771,14 @@ public fun ValidationNode<Byte>.minDigits(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and the message that [message] builds.
+ *
+ * @param min the fewest digits accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 @JvmName("minDigitsByte")
 public fun ValidationNode<Byte>.minDigits(
     min: Int,
@@ -1361,6 +2789,15 @@ public fun ValidationNode<Byte>.minDigits(
     predicate = { it.toString().removePrefix("-").length >= min }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and, by default, the message `must have at least {min} digits`
+ * ([Messages.minDigits][io.github.soleworks.validity.Messages.minDigits]).
+ *
+ * @param min the fewest digits accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("minDigitsBigInteger")
 public fun ValidationNode<BigInteger>.minDigits(
     min: Int,
@@ -1370,6 +2807,14 @@ public fun ValidationNode<BigInteger>.minDigits(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number has at least [min] digits, not counting the sign.
+ *
+ * Fails with code `minDigits` and the message that [message] builds.
+ *
+ * @param min the fewest digits accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 @JvmName("minDigitsBigInteger")
 public fun ValidationNode<BigInteger>.minDigits(
     min: Int,
@@ -1380,6 +2825,15 @@ public fun ValidationNode<BigInteger>.minDigits(
     predicate = { it.toString().removePrefix("-").length >= min }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and, by default, the message `must have at most {max} digits`
+ * ([Messages.maxDigits][io.github.soleworks.validity.Messages.maxDigits]).
+ *
+ * @param max the most digits accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.maxDigits(
     max: Int,
     message: String = messages.maxDigits
@@ -1388,6 +2842,14 @@ public fun ValidationNode<Int>.maxDigits(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and the message that [message] builds.
+ *
+ * @param max the most digits accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 public fun ValidationNode<Int>.maxDigits(
     max: Int,
     message: suspend Int.(Int) -> String
@@ -1397,6 +2859,15 @@ public fun ValidationNode<Int>.maxDigits(
     predicate = { it.toString().removePrefix("-").length <= max }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and, by default, the message `must have at most {max} digits`
+ * ([Messages.maxDigits][io.github.soleworks.validity.Messages.maxDigits]).
+ *
+ * @param max the most digits accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("maxDigitsLong")
 public fun ValidationNode<Long>.maxDigits(
     max: Int,
@@ -1406,6 +2877,14 @@ public fun ValidationNode<Long>.maxDigits(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and the message that [message] builds.
+ *
+ * @param max the most digits accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 @JvmName("maxDigitsLong")
 public fun ValidationNode<Long>.maxDigits(
     max: Int,
@@ -1416,6 +2895,15 @@ public fun ValidationNode<Long>.maxDigits(
     predicate = { it.toString().removePrefix("-").length <= max }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and, by default, the message `must have at most {max} digits`
+ * ([Messages.maxDigits][io.github.soleworks.validity.Messages.maxDigits]).
+ *
+ * @param max the most digits accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("maxDigitsShort")
 public fun ValidationNode<Short>.maxDigits(
     max: Int,
@@ -1425,6 +2913,14 @@ public fun ValidationNode<Short>.maxDigits(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and the message that [message] builds.
+ *
+ * @param max the most digits accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 @JvmName("maxDigitsShort")
 public fun ValidationNode<Short>.maxDigits(
     max: Int,
@@ -1435,6 +2931,15 @@ public fun ValidationNode<Short>.maxDigits(
     predicate = { it.toString().removePrefix("-").length <= max }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and, by default, the message `must have at most {max} digits`
+ * ([Messages.maxDigits][io.github.soleworks.validity.Messages.maxDigits]).
+ *
+ * @param max the most digits accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("maxDigitsByte")
 public fun ValidationNode<Byte>.maxDigits(
     max: Int,
@@ -1444,6 +2949,14 @@ public fun ValidationNode<Byte>.maxDigits(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and the message that [message] builds.
+ *
+ * @param max the most digits accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 @JvmName("maxDigitsByte")
 public fun ValidationNode<Byte>.maxDigits(
     max: Int,
@@ -1454,6 +2967,15 @@ public fun ValidationNode<Byte>.maxDigits(
     predicate = { it.toString().removePrefix("-").length <= max }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and, by default, the message `must have at most {max} digits`
+ * ([Messages.maxDigits][io.github.soleworks.validity.Messages.maxDigits]).
+ *
+ * @param max the most digits accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("maxDigitsBigInteger")
 public fun ValidationNode<BigInteger>.maxDigits(
     max: Int,
@@ -1463,6 +2985,14 @@ public fun ValidationNode<BigInteger>.maxDigits(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number has at most [max] digits, not counting the sign.
+ *
+ * Fails with code `maxDigits` and the message that [message] builds.
+ *
+ * @param max the most digits accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 @JvmName("maxDigitsBigInteger")
 public fun ValidationNode<BigInteger>.maxDigits(
     max: Int,
@@ -1473,6 +3003,15 @@ public fun ValidationNode<BigInteger>.maxDigits(
     predicate = { it.toString().removePrefix("-").length <= max }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and, by default, the message `must have exactly {count} digits`
+ * ([Messages.digitCount][io.github.soleworks.validity.Messages.digitCount]).
+ *
+ * @param count the number of digits required.
+ * @param message the message of the violation. `{count}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<Int>.digitCount(
     count: Int,
     message: String = messages.digitCount
@@ -1481,6 +3020,14 @@ public fun ValidationNode<Int>.digitCount(
     message = { message.filled("count" to count) }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and the message that [message] builds.
+ *
+ * @param count the number of digits required.
+ * @param message builds the message from the value (the receiver) and [count].
+ */
 public fun ValidationNode<Int>.digitCount(
     count: Int,
     message: suspend Int.(Int) -> String
@@ -1490,6 +3037,15 @@ public fun ValidationNode<Int>.digitCount(
     predicate = { it.toString().removePrefix("-").length == count }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and, by default, the message `must have exactly {count} digits`
+ * ([Messages.digitCount][io.github.soleworks.validity.Messages.digitCount]).
+ *
+ * @param count the number of digits required.
+ * @param message the message of the violation. `{count}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("digitCountLong")
 public fun ValidationNode<Long>.digitCount(
     count: Int,
@@ -1499,6 +3055,14 @@ public fun ValidationNode<Long>.digitCount(
     message = { message.filled("count" to count) }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and the message that [message] builds.
+ *
+ * @param count the number of digits required.
+ * @param message builds the message from the value (the receiver) and [count].
+ */
 @JvmName("digitCountLong")
 public fun ValidationNode<Long>.digitCount(
     count: Int,
@@ -1509,6 +3073,15 @@ public fun ValidationNode<Long>.digitCount(
     predicate = { it.toString().removePrefix("-").length == count }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and, by default, the message `must have exactly {count} digits`
+ * ([Messages.digitCount][io.github.soleworks.validity.Messages.digitCount]).
+ *
+ * @param count the number of digits required.
+ * @param message the message of the violation. `{count}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("digitCountShort")
 public fun ValidationNode<Short>.digitCount(
     count: Int,
@@ -1518,6 +3091,14 @@ public fun ValidationNode<Short>.digitCount(
     message = { message.filled("count" to count) }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and the message that [message] builds.
+ *
+ * @param count the number of digits required.
+ * @param message builds the message from the value (the receiver) and [count].
+ */
 @JvmName("digitCountShort")
 public fun ValidationNode<Short>.digitCount(
     count: Int,
@@ -1528,6 +3109,15 @@ public fun ValidationNode<Short>.digitCount(
     predicate = { it.toString().removePrefix("-").length == count }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and, by default, the message `must have exactly {count} digits`
+ * ([Messages.digitCount][io.github.soleworks.validity.Messages.digitCount]).
+ *
+ * @param count the number of digits required.
+ * @param message the message of the violation. `{count}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("digitCountByte")
 public fun ValidationNode<Byte>.digitCount(
     count: Int,
@@ -1537,6 +3127,14 @@ public fun ValidationNode<Byte>.digitCount(
     message = { message.filled("count" to count) }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and the message that [message] builds.
+ *
+ * @param count the number of digits required.
+ * @param message builds the message from the value (the receiver) and [count].
+ */
 @JvmName("digitCountByte")
 public fun ValidationNode<Byte>.digitCount(
     count: Int,
@@ -1547,6 +3145,15 @@ public fun ValidationNode<Byte>.digitCount(
     predicate = { it.toString().removePrefix("-").length == count }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and, by default, the message `must have exactly {count} digits`
+ * ([Messages.digitCount][io.github.soleworks.validity.Messages.digitCount]).
+ *
+ * @param count the number of digits required.
+ * @param message the message of the violation. `{count}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("digitCountBigInteger")
 public fun ValidationNode<BigInteger>.digitCount(
     count: Int,
@@ -1556,6 +3163,14 @@ public fun ValidationNode<BigInteger>.digitCount(
     message = { message.filled("count" to count) }
 )
 
+/**
+ * Checks that the number has exactly [count] digits, not counting the sign.
+ *
+ * Fails with code `digitCount` and the message that [message] builds.
+ *
+ * @param count the number of digits required.
+ * @param message builds the message from the value (the receiver) and [count].
+ */
 @JvmName("digitCountBigInteger")
 public fun ValidationNode<BigInteger>.digitCount(
     count: Int,
@@ -1566,6 +3181,17 @@ public fun ValidationNode<BigInteger>.digitCount(
     predicate = { it.toString().removePrefix("-").length == count }
 )
 
+/**
+ * Checks that the number has exactly [count] digits after the decimal point.
+ *
+ * Trailing zeros count, so `1.50` has two decimal places, and a whole number has none.
+ *
+ * Fails with code `decimalPlaces` and, by default, the message `must have exactly {count} decimal places`
+ * ([Messages.decimalPlaces][io.github.soleworks.validity.Messages.decimalPlaces]).
+ *
+ * @param count the number of decimal places required.
+ * @param message the message of the violation. `{count}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigDecimal>.decimalPlaces(
     count: Int,
     message: String = messages.decimalPlaces
@@ -1574,6 +3200,16 @@ public fun ValidationNode<BigDecimal>.decimalPlaces(
     message = { message.filled("count" to count) }
 )
 
+/**
+ * Checks that the number has exactly [count] digits after the decimal point.
+ *
+ * Trailing zeros count, so `1.50` has two decimal places, and a whole number has none.
+ *
+ * Fails with code `decimalPlaces` and the message that [message] builds.
+ *
+ * @param count the number of decimal places required.
+ * @param message builds the message from the value (the receiver) and [count].
+ */
 public fun ValidationNode<BigDecimal>.decimalPlaces(
     count: Int,
     message: suspend BigDecimal.(Int) -> String
@@ -1583,6 +3219,17 @@ public fun ValidationNode<BigDecimal>.decimalPlaces(
     predicate = { it.scale().coerceAtLeast(0) == count }
 )
 
+/**
+ * Checks that the number has at least [min] digits after the decimal point.
+ *
+ * Trailing zeros count, so `1.50` has two decimal places.
+ *
+ * Fails with code `minDecimalPlaces` and, by default, the message `must have at least {min} decimal places`
+ * ([Messages.minDecimalPlaces][io.github.soleworks.validity.Messages.minDecimalPlaces]).
+ *
+ * @param min the fewest decimal places accepted.
+ * @param message the message of the violation. `{min}`, `{path}` and `{value}` are filled in.
+ */
 public fun ValidationNode<BigDecimal>.minDecimalPlaces(
     min: Int,
     message: String = messages.minDecimalPlaces
@@ -1591,6 +3238,16 @@ public fun ValidationNode<BigDecimal>.minDecimalPlaces(
     message = { message.filled("min" to min) }
 )
 
+/**
+ * Checks that the number has at least [min] digits after the decimal point.
+ *
+ * Trailing zeros count, so `1.50` has two decimal places.
+ *
+ * Fails with code `minDecimalPlaces` and the message that [message] builds.
+ *
+ * @param min the fewest decimal places accepted.
+ * @param message builds the message from the value (the receiver) and [min].
+ */
 public fun ValidationNode<BigDecimal>.minDecimalPlaces(
     min: Int,
     message: suspend BigDecimal.(Int) -> String
@@ -1600,6 +3257,19 @@ public fun ValidationNode<BigDecimal>.minDecimalPlaces(
     predicate = { it.scale() >= min }
 )
 
+/**
+ * Checks that the number has at most [max] digits after the decimal point.
+ *
+ * Trailing zeros do not count, so `1.50` has one decimal place.
+ *
+ * The number is read in decimal, the way it prints. Infinity and `NaN` fail.
+ *
+ * Fails with code `maxDecimalPlaces` and, by default, the message `must have at most {max} decimal places`
+ * ([Messages.maxDecimalPlaces][io.github.soleworks.validity.Messages.maxDecimalPlaces]).
+ *
+ * @param max the most decimal places accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("maxDecimalPlacesDouble")
 public fun ValidationNode<Double>.maxDecimalPlaces(
     max: Int,
@@ -1609,6 +3279,18 @@ public fun ValidationNode<Double>.maxDecimalPlaces(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number has at most [max] digits after the decimal point.
+ *
+ * Trailing zeros do not count, so `1.50` has one decimal place.
+ *
+ * The number is read in decimal, the way it prints. Infinity and `NaN` fail.
+ *
+ * Fails with code `maxDecimalPlaces` and the message that [message] builds.
+ *
+ * @param max the most decimal places accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 @JvmName("maxDecimalPlacesDouble")
 public fun ValidationNode<Double>.maxDecimalPlaces(
     max: Int,
@@ -1619,6 +3301,19 @@ public fun ValidationNode<Double>.maxDecimalPlaces(
     predicate = { it.isFinite() && it.toBigDecimal().stripTrailingZeros().scale() <= max }
 )
 
+/**
+ * Checks that the number has at most [max] digits after the decimal point.
+ *
+ * Trailing zeros do not count, so `1.50` has one decimal place.
+ *
+ * The number is read in decimal, the way it prints. Infinity and `NaN` fail.
+ *
+ * Fails with code `maxDecimalPlaces` and, by default, the message `must have at most {max} decimal places`
+ * ([Messages.maxDecimalPlaces][io.github.soleworks.validity.Messages.maxDecimalPlaces]).
+ *
+ * @param max the most decimal places accepted.
+ * @param message the message of the violation. `{max}`, `{path}` and `{value}` are filled in.
+ */
 @JvmName("maxDecimalPlacesFloat")
 public fun ValidationNode<Float>.maxDecimalPlaces(
     max: Int,
@@ -1628,6 +3323,18 @@ public fun ValidationNode<Float>.maxDecimalPlaces(
     message = { message.filled("max" to max) }
 )
 
+/**
+ * Checks that the number has at most [max] digits after the decimal point.
+ *
+ * Trailing zeros do not count, so `1.50` has one decimal place.
+ *
+ * The number is read in decimal, the way it prints. Infinity and `NaN` fail.
+ *
+ * Fails with code `maxDecimalPlaces` and the message that [message] builds.
+ *
+ * @param max the most decimal places accepted.
+ * @param message builds the message from the value (the receiver) and [max].
+ */
 @JvmName("maxDecimalPlacesFloat")
 public fun ValidationNode<Float>.maxDecimalPlaces(
     max: Int,
