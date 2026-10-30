@@ -127,6 +127,23 @@ public fun <C, V : ContextualValidatable<C>> ValidationNode<V>.valid(
 )
 
 /**
+ * Checks the value against the rules of its type in [validation]. Their paths are nested under the path of the value:
+ * `owner.email`.
+ *
+ * ```kotlin
+ * ::owner required { valid(userValidation) }
+ * ```
+ *
+ * @param V the type of the value.
+ * @param validation the rules of the type, written with [validation][io.github.soleworks.validity.validation].
+ */
+public fun <V> ValidationNode<V>.valid(
+    validation: Validation<V>
+): Unit = valid(
+    validation = { validation.of(it) }
+)
+
+/**
  * Checks the rules that [validation] gives for the value. Their paths are nested under the path of the value:
  * `shipping.zipCode`.
  *
@@ -136,7 +153,7 @@ public fun <C, V : ContextualValidatable<C>> ValidationNode<V>.valid(
  * @param validation gives the rules of the value, usually with [validation][io.github.soleworks.validity.validation].
  */
 public fun <V> ValidationNode<V>.valid(
-    validation: suspend (V) -> Validation
+    validation: suspend (V) -> SelfValidation
 ) {
     val metadata = metadata
 

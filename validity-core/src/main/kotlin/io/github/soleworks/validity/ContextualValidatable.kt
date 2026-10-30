@@ -30,7 +30,7 @@ public interface ContextualValidatable<in C> {
      */
     public fun validation(
         context: C
-    ): Validation
+    ): SelfValidation
 }
 
 /**

@@ -159,6 +159,53 @@ Violation(path=age, message=must be at least 18, code=min)
 At the edge of your system, `user.validateOrThrow()` (or `validateOrThrowBlocking()`) throws a `ValidationException`
 that carries the same list, so one error handler can turn every invalid request into a response.
 
+### Rules beside the class
+
+When the class is not yours, such as one from a library, or when its rules belong somewhere else, write them for the
+type with `validation<T> { }`. Inside the block the value being checked is `this`, so `::street` is its property:
+
+```kotlin
+data class Destination(
+    val street: String?,
+    val zipCode: String?
+)
+
+val destinationValidation = validation<Destination> {
+    ::street required { notBlank() }
+    ::zipCode required {
+        minLength(5)
+        digits()
+    }
+}
+
+destinationValidation.validate(Destination(street = "", zipCode = "013")).violations
+```
+
+```text
+Violation(path=street, message=must not be blank, code=notBlank)
+Violation(path=zipCode, message=must have at least 5 characters, code=minLength)
+```
+
+The same rules check a property of that type with `valid`, nested under the property:
+
+```kotlin
+data class Shipping(
+    val destination: Destination?
+) : Validatable {
+    override fun validation() = validation {
+        ::destination required { valid(destinationValidation) }
+    }
+}
+
+Shipping(destination = Destination(street = "", zipCode = "01310")).validate().violations
+```
+
+```text
+Violation(path=destination.street, message=must not be blank, code=notBlank)
+```
+
+For a single value, `validatable(destination) { ... }` pairs it with its rules and validates like a `Validatable`.
+
 ### Stopping at the first failure
 
 Every rule runs by default, so one request reports every error. When a rule only makes sense after another, such as a

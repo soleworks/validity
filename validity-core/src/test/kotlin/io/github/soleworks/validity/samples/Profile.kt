@@ -2,6 +2,7 @@ package io.github.soleworks.validity.samples
 
 import io.github.soleworks.validity.Validatable
 import io.github.soleworks.validity.each
+import io.github.soleworks.validity.metadata
 import io.github.soleworks.validity.required
 import io.github.soleworks.validity.valid
 import io.github.soleworks.validity.validation
