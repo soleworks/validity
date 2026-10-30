@@ -110,6 +110,7 @@ Multiplatform, and Jakarta Validation plugs straight into the frameworks that re
 > repository next to your project and add `includeBuild("../validity")` to your `settings.gradle.kts`. Gradle then
 > builds the dependencies below from the clone.
 
+<!-- x-release-please-start-version -->
 ```kotlin
 dependencies {
     implementation("io.github.soleworks:validity-core:0.1.0")
@@ -118,6 +119,7 @@ dependencies {
     implementation("io.github.soleworks:validity-phone:0.1.0")
 }
 ```
+<!-- x-release-please-end -->
 
 Validity runs on Java 17 or newer and is built with Kotlin 2.4.
 
@@ -354,6 +356,9 @@ None of these tools, nor Kotest, is a dependency of a published module.
 The examples in this README are samples in
 [validity-core/src/test/.../samples/readme](validity-core/src/test/kotlin/io/github/soleworks/validity/samples/readme),
 and a test checks the output shown next to them. When you change an example, change its sample too.
+
+The public API of each published module is kept in `api/<module>.api`, and `./gradlew check` fails when it changes
+without `./gradlew updateKotlinAbi`. [RELEASING.md](RELEASING.md) describes how a version is born and published.
 
 ## License
 
