@@ -4,18 +4,18 @@ import kotlin.reflect.KProperty0
 import kotlinx.coroutines.runBlocking
 
 /**
- * The rules of one object, written with [validation] where the object is in scope, usually in
+ * The block where the rules of one object are written, with [validation] where the object is in scope, usually in
  * [Validatable.validation].
  *
  * Inside the block, [required][io.github.soleworks.validity.required],
  * [ifPresent][io.github.soleworks.validity.ifPresent]
  * and [forbidden][io.github.soleworks.validity.forbidden] start the rules of a property, the presence rules such as
  * [atLeastOneOf][io.github.soleworks.validity.atLeastOneOf] relate several properties, and
- * [constraint][io.github.soleworks.validity.constraint] checks anything about the object. Nothing is checked until
- * [validate] runs.
+ * [constraint][io.github.soleworks.validity.constraint] checks anything about the object.
  *
- * The object is already known, so [validate] takes none. For rules written once and checked against any value of a
- * type, see [Validation].
+ * It has nothing to call on its own: the rules run when the object is validated, with
+ * [validate][io.github.soleworks.validity.validate] on a [Validatable], or with [Validation.validate] for the rules
+ * of a type.
  */
 @ValidityDsl
 public class SelfValidation internal constructor(
@@ -26,15 +26,7 @@ public class SelfValidation internal constructor(
     @PublishedApi
     internal var metadata: Map<String, Any?> = emptyMap()
 
-    /**
-     * Runs every rule and returns all the violations, in the order the rules are declared.
-     *
-     * The block of [validation] runs on each call, under [validity], so its messages and its clock apply.
-     *
-     * @param validity the configuration to validate with, the default one unless it is given.
-     * @return the violations, empty when every rule holds.
-     */
-    public suspend fun validate(
+    internal suspend fun validate(
         validity: Validity = Validity.default
     ): ValidationResult = validity.use {
         ValidationResult(
@@ -42,15 +34,7 @@ public class SelfValidation internal constructor(
         )
     }
 
-    /**
-     * Runs every rule and returns all the violations, blocking the thread until the rules finish.
-     *
-     * Use it outside a coroutine. Inside one, call [validate].
-     *
-     * @param validity the configuration to validate with, the default one unless it is given.
-     * @return the violations, empty when every rule holds.
-     */
-    public fun validateBlocking(
+    internal fun validateBlocking(
         validity: Validity = Validity.default
     ): ValidationResult = runBlocking { validate(validity) }
 
@@ -73,7 +57,7 @@ public class SelfValidation internal constructor(
  * ```
  *
  * @param block declares the rules.
- * @return the rules, ready to [validate][SelfValidation.validate].
+ * @return the rules of the object, which run when it is validated.
  */
 public fun validation(
     block: suspend SelfValidation.() -> Unit

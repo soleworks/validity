@@ -1,7 +1,7 @@
 package io.github.soleworks.validity
 
 /**
- * What [validate][SelfValidation.validate] found.
+ * What [validate][io.github.soleworks.validity.validate] or [Validation.validate] found.
  *
  * @property violations every broken rule, in the order the rules are declared.
  */
