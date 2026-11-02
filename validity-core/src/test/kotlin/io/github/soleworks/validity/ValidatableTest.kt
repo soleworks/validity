@@ -11,7 +11,7 @@ import io.github.soleworks.validity.samples.readme.Payment
 import io.github.soleworks.validity.samples.readme.Registration
 import io.github.soleworks.validity.samples.readme.User
 import io.kotest.assertions.throwables.shouldNotThrowAny
-import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import java.time.Clock
 import java.time.Instant
@@ -179,7 +179,7 @@ class ValidatableTest {
         fun `given an invalid object should throw its violations`() {
             val customer = Customer(name = "A")
 
-            val error = shouldThrow<ValidationException> { runBlocking { customer.validateOrThrow() } }
+            val error = shouldThrowExactly<ValidationException> { runBlocking { customer.validateOrThrow() } }
 
             error.violations shouldBe listOf(
                 Violation(path = "name", message = "must have at least 2 characters", code = "minLength")
@@ -201,7 +201,7 @@ class ValidatableTest {
         fun `given an invalid object should throw its violations`() {
             val customer = Customer(name = "A")
 
-            val error = shouldThrow<ValidationException> { customer.validateOrThrowBlocking() }
+            val error = shouldThrowExactly<ValidationException> { customer.validateOrThrowBlocking() }
 
             error.violations shouldBe listOf(
                 Violation(path = "name", message = "must have at least 2 characters", code = "minLength")
@@ -213,7 +213,7 @@ class ValidatableTest {
             val validity = Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
             val customer = Customer(name = "A")
 
-            val error = shouldThrow<ValidationException> { customer.validateOrThrowBlocking(validity) }
+            val error = shouldThrowExactly<ValidationException> { customer.validateOrThrowBlocking(validity) }
 
             error.violations shouldBe listOf(
                 Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength")

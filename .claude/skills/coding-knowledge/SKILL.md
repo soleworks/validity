@@ -8,7 +8,8 @@ starts with `index.md`: an overview of the component and a table of its concepts
 file that covers it. In a folder, `conventions.md` holds the rules, which hold always. A recipe, in a
 folder's `recipes/`, gives the steps of an action.
 
-Most rules here are also checked by the build: the `harness` module (Konsist), Detekt and the ABI dump.
+Most rules here are also checked by the build: the `harness` module (Konsist), ktlint (`.editorconfig`),
+Detekt and the ABI dump.
 A rule a check holds says which check, so a failure points back to its rule.
 
 1. Name the components you are about to create or change.

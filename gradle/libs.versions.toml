@@ -1,6 +1,7 @@
 [versions]
 kotlin = "2.4.20"
 detekt = "2.0.0-alpha.6"
+ktlint = "1.8.0"
 kover = "0.9.11"
 maven-publish = "0.34.0"
 konsist = "0.18.1"
@@ -12,8 +13,8 @@ libphonenumber = "9.0.40"
 [libraries]
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 detekt-gradle-plugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
-detekt-rules-ktlint-wrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
 detekt-rules-libraries = { module = "dev.detekt:detekt-rules-libraries", version.ref = "detekt" }
+ktlint-cli = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 kover-gradle-plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 maven-publish-gradle-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "maven-publish" }
 konsist = { module = "com.lemonappdev:konsist", version.ref = "konsist" }
