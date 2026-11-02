@@ -1,7 +1,6 @@
 # Add a constraint
 
-1. Check that no constraint already does it, under another name or as an overload, and whether
-   `docs/research/constraint-gaps.md` proposes it: take its name, signature and message from there.
+1. Check that no constraint already does it, under another name or as an overload.
 2. Add its default message ([message/recipes/add-message.md](../../message/recipes/add-message.md)).
 3. Write its tests first ([testing/conventions.md](../../testing/conventions.md#testing-a-constraint)),
    and see them fail.

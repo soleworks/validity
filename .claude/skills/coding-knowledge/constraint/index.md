@@ -24,4 +24,3 @@ General constraints live in `validity-core`, in `constraints/`, one file per kin
 | Its tests | [testing/conventions.md](../testing/conventions.md#testing-a-constraint) |
 | Add a constraint | [recipes/add-constraint.md](recipes/add-constraint.md) |
 | Add the constraints of a country | [recipes/add-country.md](recipes/add-country.md) |
-| Constraints proposed and not built yet | `docs/research/constraint-gaps.md` |
