@@ -18,7 +18,8 @@ one top-level class.
   not a value (`given false`).
 - The body is a Given, one When and one Then, separated by blank lines. The When is
   `val violations = …`, `val result = …`, `val error = …` or `….validate()`; the Then is one assertion
-  with Kotest (`shouldBe`). A test of an exception is `shouldThrow<X> { }` alone.
+  with Kotest (`shouldBe`). A test of an exception is `shouldThrowExactly<X> { }` alone (Detekt forbids `shouldThrow`, which
+  also passes for a subclass of X).
 - `Violation(...)` and `ValidationNode(...)` always name their arguments.
 
 ```kotlin
@@ -52,6 +53,7 @@ whose result a test checks. A change to the README's examples changes those file
 
 ## Running the checks
 
-`./gradlew build` runs everything: the tests, the harness, Detekt and the ABI check. Run the tests of
+`./gradlew build` runs everything: the tests, the harness, ktlint, Detekt, the coverage floor and the ABI
+check. Run the tests of
 the module you change while working (`./gradlew :validity-core:test`), and `./gradlew build` once
 before declaring the task done.

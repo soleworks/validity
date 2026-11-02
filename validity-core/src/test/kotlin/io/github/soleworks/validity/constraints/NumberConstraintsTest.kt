@@ -2,7 +2,7 @@ package io.github.soleworks.validity.constraints
 
 import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Violation
-import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -3112,7 +3112,7 @@ class NumberConstraintsTest {
 
         @Test
         fun `given a zero Int factor should fail when the rule is declared`() {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 ValidationNode(
                     path = "quantity",
                     value = 6
@@ -3124,7 +3124,7 @@ class NumberConstraintsTest {
 
         @Test
         fun `given a zero Long factor should fail when the rule is declared`() {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 ValidationNode(
                     path = "quantity",
                     value = 6L
@@ -3136,7 +3136,7 @@ class NumberConstraintsTest {
 
         @Test
         fun `given a zero Short factor should fail when the rule is declared`() {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 ValidationNode<Short>(
                     path = "quantity",
                     value = 6
@@ -3148,7 +3148,7 @@ class NumberConstraintsTest {
 
         @Test
         fun `given a zero Byte factor should fail when the rule is declared`() {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 ValidationNode<Byte>(
                     path = "quantity",
                     value = 6
@@ -3160,7 +3160,7 @@ class NumberConstraintsTest {
 
         @Test
         fun `given a zero BigInteger factor should fail when the rule is declared`() {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 ValidationNode(
                     path = "quantity",
                     value = BigInteger("6")
@@ -3172,7 +3172,7 @@ class NumberConstraintsTest {
 
         @Test
         fun `given a zero BigDecimal factor should fail when the rule is declared`() {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 ValidationNode(
                     path = "amount",
                     value = "6".toBigDecimal()
@@ -3215,7 +3215,7 @@ class NumberConstraintsTest {
         fun `given a Double factor that is zero or not finite should fail when the rule is declared`(
             factor: Double
         ) {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 ValidationNode(path = "price", value = 1.0).apply { multipleOf(factor) }
             }
 
@@ -3227,7 +3227,7 @@ class NumberConstraintsTest {
         fun `given a Float factor that is zero or not finite should fail when the rule is declared`(
             factor: Float
         ) {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 ValidationNode(path = "price", value = 1f).apply { multipleOf(factor) }
             }
 

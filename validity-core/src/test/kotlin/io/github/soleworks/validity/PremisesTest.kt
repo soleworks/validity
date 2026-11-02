@@ -8,7 +8,7 @@ import io.github.soleworks.validity.samples.Login
 import io.github.soleworks.validity.samples.Recipient
 import io.github.soleworks.validity.samples.Shipment
 import io.github.soleworks.validity.samples.Signup
-import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -340,7 +340,9 @@ class PremisesTest {
 
         @Test
         fun `given no properties should fail when it is validated`() {
-            val error = shouldThrow<IllegalArgumentException> { validation { exactlyOneOf() }.validateBlocking() }
+            val error = shouldThrowExactly<IllegalArgumentException> {
+                validation { exactlyOneOf() }.validateBlocking()
+            }
 
             error.message shouldBe "exactlyOneOf needs at least one property"
         }
@@ -414,7 +416,7 @@ class PremisesTest {
 
         @Test
         fun `given a count larger than the properties should fail when it is validated`() {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 Signup().run { validation { atLeastOf(4, ::email, ::phone, ::whatsapp) }.validateBlocking() }
             }
 
@@ -452,7 +454,7 @@ class PremisesTest {
 
         @Test
         fun `given a negative count should fail when it is validated`() {
-            val error = shouldThrow<IllegalArgumentException> {
+            val error = shouldThrowExactly<IllegalArgumentException> {
                 Signup().run { validation { atMostOf(-1, ::coupon, ::giftCard, ::cashback) }.validateBlocking() }
             }
 

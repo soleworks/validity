@@ -344,12 +344,13 @@ A documentation site is on its way, with every concept, the full list of constra
 
 ## Development
 
-`./gradlew build` compiles, tests and checks every module. Two tools keep the code in one style:
+`./gradlew build` compiles, tests and checks every module. Three tools keep the code in one style:
 
-- **Detekt** runs every rule it has, the ktlint and libraries rule sets included. [config/detekt/detekt.yml](config/detekt/detekt.yml) lists the few rules this project tunes, each with its reason. `./gradlew detektMain detektTest -PautoCorrect=true` fixes the formatting it can.
-- **Konsist**, in the internal `harness` module, checks the conventions Detekt cannot see: how a constraint is declared, how values are named, and that every test is a Given, a When and a Then, ordered by what it checks.
+- **ktlint** formats every Kotlin file with the rules in [.editorconfig](.editorconfig). `./gradlew ktlintFormat` fixes what it can and lists the rest.
+- **Detekt** runs every rule it has, the libraries rule set included. [config/detekt/detekt.yml](config/detekt/detekt.yml) lists the few rules this project tunes, each with its reason.
+- **Konsist**, in the internal `harness` module, checks the conventions Detekt cannot see: how a constraint is declared, how values are named, what a production file may import, and that every test is a Given, a When and a Then, ordered by what it checks.
 
-**Kover** measures what the tests cover in `validity-core` and `validity-phone`. `./gradlew :koverHtmlReport` writes the report to `build/reports/kover/html`, and CI uploads it to [Codecov](https://codecov.io/gh/soleworks/validity).
+**Kover** measures what the tests cover in `validity-core` and `validity-phone`, and the build fails below 99% of the lines or 93% of the branches. `./gradlew :koverHtmlReport` writes the report to `build/reports/kover/html`, and CI uploads it to [Codecov](https://codecov.io/gh/soleworks/validity), which asks every line a pull request changes to be covered ([codecov.yml](codecov.yml)).
 
 None of these tools, nor Kotest, is a dependency of a published module.
 

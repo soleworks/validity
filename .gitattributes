@@ -1,6 +1,6 @@
-#
-# https://help.github.com/articles/dealing-with-line-endings/
-#
+# Every text file is checked out with LF, as .editorconfig asks, whatever core.autocrlf says.
+* text=auto eol=lf
+
 # Linux start script should use lf
 /gradlew        text eol=lf
 
