@@ -12,3 +12,10 @@ build
 *.iml
 .DS_Store
 local.properties
+
+# Request runs
+.runs/
+
+# Claude Code, per person
+.claude/worktrees/
+.claude/settings.local.json
