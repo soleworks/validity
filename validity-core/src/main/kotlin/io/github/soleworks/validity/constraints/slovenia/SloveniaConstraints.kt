@@ -11,6 +11,10 @@ private const val DECIMAL_MODULUS = 10
 private val DAVCNA_STEVILKA_FORMAT = Regex("""[1-9]\d{7}""")
 private val DAVCNA_STEVILKA_WEIGHTS = listOf(8, 7, 6, 5, 4, 3, 2)
 
+internal val SLOVENIA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
+    "DAVCNA_STEVILKA" to String::isDavcnaStevilka
+)
+
 /**
  * Checks that the string is a Slovenian tax number (davčna številka): 8 digits, not starting with 0, with a valid check
  * digit.
@@ -25,8 +29,10 @@ public fun ValidationNode<String>.davcnaStevilka(
 ): Unit = constraint(
     message = message,
     code = "davcnaStevilka",
-    predicate = { DAVCNA_STEVILKA_FORMAT.matches(it) && it.digits().isDavcnaStevilka() }
+    predicate = String::isDavcnaStevilka
 )
+
+private fun String.isDavcnaStevilka(): Boolean = DAVCNA_STEVILKA_FORMAT.matches(this) && digits().isDavcnaStevilka()
 
 private fun List<Int>.isDavcnaStevilka(): Boolean {
     val checkDigit = MODULUS - weightedSum(DAVCNA_STEVILKA_WEIGHTS) % MODULUS

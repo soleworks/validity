@@ -11,6 +11,10 @@ private const val DECIMAL_MODULUS = 10
 private val RNOKPP_FORMAT = Regex("""\d{10}""")
 private val RNOKPP_WEIGHTS = listOf(-1, 5, 7, 9, 4, 6, 10, 5, 7)
 
+internal val UKRAINE_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
+    "RNOKPP" to String::isRnokpp
+)
+
 /**
  * Checks that the string is a Ukrainian RNOKPP (tax number): 10 digits with a valid check digit.
  *
@@ -24,7 +28,9 @@ public fun ValidationNode<String>.rnokpp(
 ): Unit = constraint(
     message = message,
     code = "rnokpp",
-    predicate = { RNOKPP_FORMAT.matches(it) && it.digits().isRnokpp() }
+    predicate = String::isRnokpp
 )
+
+private fun String.isRnokpp(): Boolean = RNOKPP_FORMAT.matches(this) && digits().isRnokpp()
 
 private fun List<Int>.isRnokpp(): Boolean = last() == weightedSum(RNOKPP_WEIGHTS) % MODULUS % DECIMAL_MODULUS

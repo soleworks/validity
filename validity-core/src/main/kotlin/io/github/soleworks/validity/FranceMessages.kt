@@ -9,4 +9,10 @@ package io.github.soleworks.validity
 public class FranceMessages internal constructor() {
     /** Default message of `spi`. */
     public var spi: String = "must be a valid SPI"
+
+    /** Default message of `siren`. */
+    public var siren: String = "must be a valid SIREN"
+
+    /** Default message of `siret`. */
+    public var siret: String = "must be a valid SIRET"
 }

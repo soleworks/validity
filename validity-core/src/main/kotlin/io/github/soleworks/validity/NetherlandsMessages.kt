@@ -10,4 +10,7 @@ package io.github.soleworks.validity
 public class NetherlandsMessages internal constructor() {
     /** Default message of `bsn`. */
     public var bsn: String = "must be a valid BSN"
+
+    /** Default message of `kvk`. */
+    public var kvk: String = "must be a valid KvK number"
 }

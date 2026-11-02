@@ -300,10 +300,14 @@ public fun ValidationNode<String>.hash(
     predicate = { it.length == algorithm.length && HEXADECIMAL_FORMAT.matches(it) }
 )
 
-internal fun String.hasLuhnCheckDigit(): Boolean = digits()
+internal fun String.hasLuhnCheckDigit(): Boolean = luhnSum() % DECIMAL_MODULUS == 0
+
+internal fun String.luhnCheckDigit(): Int = (DECIMAL_MODULUS - "${this}0".luhnSum() % DECIMAL_MODULUS) % DECIMAL_MODULUS
+
+private fun String.luhnSum(): Int = digits()
     .reversed()
     .mapIndexed { index, digit -> if (index % 2 == 1) digit.luhnDoubled() else digit }
-    .sum() % DECIMAL_MODULUS == 0
+    .sum()
 
 private fun Int.luhnDoubled(): Int =
     (this * 2).let { doubled -> if (doubled > MAX_DIGIT) doubled - MAX_DIGIT else doubled }
@@ -329,7 +333,7 @@ private fun String.isIssn(): Boolean {
     return last() == if (checkDigit == CHECK_TEN_VALUE) CHECK_TEN else checkDigit.digitToChar()
 }
 
-private fun String.hasGtinCheckDigit(): Boolean {
+internal fun String.hasGtinCheckDigit(): Boolean {
     val digits = digits()
     val sum = digits.dropLast(1).reversed().weightedSum(GTIN_WEIGHTS)
 

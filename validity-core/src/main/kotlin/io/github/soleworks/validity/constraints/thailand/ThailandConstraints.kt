@@ -11,6 +11,10 @@ private const val DECIMAL_MODULUS = 10
 private val NATIONAL_ID_FORMAT = Regex("""[1-8]\d{12}""")
 private val NATIONAL_ID_WEIGHTS = (13 downTo 2).toList()
 
+internal val THAILAND_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
+    "NATIONAL_ID" to String::isNationalId
+)
+
 /**
  * Checks that the string is a Thai national ID number: 13 digits with a valid check digit, with no dashes.
  *
@@ -24,8 +28,10 @@ public fun ValidationNode<String>.nationalId(
 ): Unit = constraint(
     message = message,
     code = "nationalId",
-    predicate = { NATIONAL_ID_FORMAT.matches(it) && it.digits().isNationalId() }
+    predicate = String::isNationalId
 )
+
+private fun String.isNationalId(): Boolean = NATIONAL_ID_FORMAT.matches(this) && digits().isNationalId()
 
 private fun List<Int>.isNationalId(): Boolean =
     last() == (MODULUS - weightedSum(NATIONAL_ID_WEIGHTS) % MODULUS) % DECIMAL_MODULUS

@@ -5,6 +5,10 @@ import io.github.soleworks.validity.messages
 
 private val CNIC_FORMAT = Regex("""[1-7]\d{4}-\d{7}-[1-9]""")
 
+internal val PAKISTAN_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
+    "CNIC" to String::isCnic
+)
+
 /**
  * Checks that the string is a Pakistani CNIC written as `00000-0000000-0`.
  *
@@ -20,5 +24,7 @@ public fun ValidationNode<String>.cnic(
 ): Unit = constraint(
     message = message,
     code = "cnic",
-    predicate = { CNIC_FORMAT.matches(it.trim()) }
+    predicate = String::isCnic
 )
+
+private fun String.isCnic(): Boolean = CNIC_FORMAT.matches(trim())

@@ -525,6 +525,9 @@ public class Messages internal constructor() {
     /** Default message of `postalCode`. Takes `{country}`. */
     public var postalCode: String = "must be a valid postal code for {country}"
 
+    /** Default message of `taxId`. Takes `{country}` and `{type}`. */
+    public var taxId: String = "must be a valid {type} for {country}"
+
     /** Default message of `numeric`. */
     public var numeric: String = "must be numeric"
 
@@ -563,20 +566,69 @@ public class Messages internal constructor() {
 
     private val modules = ConcurrentHashMap<MessagesKey<*>, Any>()
 
+    internal val argentina: ArgentinaMessages = ArgentinaMessages()
+    internal val australia: AustraliaMessages = AustraliaMessages()
+    internal val belgium: BelgiumMessages = BelgiumMessages()
     internal val brazil: BrazilMessages = BrazilMessages()
     internal val bulgaria: BulgariaMessages = BulgariaMessages()
     internal val canada: CanadaMessages = CanadaMessages()
+    internal val chile: ChileMessages = ChileMessages()
+    internal val china: ChinaMessages = ChinaMessages()
+    internal val colombia: ColombiaMessages = ColombiaMessages()
     internal val france: FranceMessages = FranceMessages()
+    internal val germany: GermanyMessages = GermanyMessages()
+    internal val india: IndiaMessages = IndiaMessages()
     internal val israel: IsraelMessages = IsraelMessages()
+    internal val italy: ItalyMessages = ItalyMessages()
+    internal val japan: JapanMessages = JapanMessages()
+    internal val mexico: MexicoMessages = MexicoMessages()
     internal val netherlands: NetherlandsMessages = NetherlandsMessages()
+    internal val norway: NorwayMessages = NorwayMessages()
     internal val pakistan: PakistanMessages = PakistanMessages()
+    internal val paraguay: ParaguayMessages = ParaguayMessages()
+    internal val peru: PeruMessages = PeruMessages()
     internal val poland: PolandMessages = PolandMessages()
+    internal val portugal: PortugalMessages = PortugalMessages()
     internal val russia: RussiaMessages = RussiaMessages()
     internal val slovenia: SloveniaMessages = SloveniaMessages()
+    internal val southAfrica: SouthAfricaMessages = SouthAfricaMessages()
+    internal val southKorea: SouthKoreaMessages = SouthKoreaMessages()
     internal val spain: SpainMessages = SpainMessages()
+    internal val sweden: SwedenMessages = SwedenMessages()
+    internal val switzerland: SwitzerlandMessages = SwitzerlandMessages()
     internal val thailand: ThailandMessages = ThailandMessages()
     internal val ukraine: UkraineMessages = UkraineMessages()
+    internal val unitedArabEmirates: UnitedArabEmiratesMessages = UnitedArabEmiratesMessages()
+    internal val unitedKingdom: UnitedKingdomMessages = UnitedKingdomMessages()
     internal val unitedStates: UnitedStatesMessages = UnitedStatesMessages()
+    internal val uruguay: UruguayMessages = UruguayMessages()
+
+    /**
+     * Changes the messages of the constraints of Argentina.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun argentina(
+        block: ArgentinaMessages.() -> Unit
+    ): Unit = argentina.block()
+
+    /**
+     * Changes the messages of the constraints of Australia.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun australia(
+        block: AustraliaMessages.() -> Unit
+    ): Unit = australia.block()
+
+    /**
+     * Changes the messages of the constraints of Belgium.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun belgium(
+        block: BelgiumMessages.() -> Unit
+    ): Unit = belgium.block()
 
     /**
      * Changes the messages of the constraints of Brazil.
@@ -606,6 +658,33 @@ public class Messages internal constructor() {
     ): Unit = canada.block()
 
     /**
+     * Changes the messages of the constraints of Chile.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun chile(
+        block: ChileMessages.() -> Unit
+    ): Unit = chile.block()
+
+    /**
+     * Changes the messages of the constraints of China.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun china(
+        block: ChinaMessages.() -> Unit
+    ): Unit = china.block()
+
+    /**
+     * Changes the messages of the constraints of Colombia.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun colombia(
+        block: ColombiaMessages.() -> Unit
+    ): Unit = colombia.block()
+
+    /**
      * Changes the messages of the constraints of France.
      *
      * @param block sets the messages it changes. The others keep their default.
@@ -613,6 +692,24 @@ public class Messages internal constructor() {
     public fun france(
         block: FranceMessages.() -> Unit
     ): Unit = france.block()
+
+    /**
+     * Changes the messages of the constraints of Germany.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun germany(
+        block: GermanyMessages.() -> Unit
+    ): Unit = germany.block()
+
+    /**
+     * Changes the messages of the constraints of India.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun india(
+        block: IndiaMessages.() -> Unit
+    ): Unit = india.block()
 
     /**
      * Changes the messages of the constraints of Israel.
@@ -624,6 +721,33 @@ public class Messages internal constructor() {
     ): Unit = israel.block()
 
     /**
+     * Changes the messages of the constraints of Italy.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun italy(
+        block: ItalyMessages.() -> Unit
+    ): Unit = italy.block()
+
+    /**
+     * Changes the messages of the constraints of Japan.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun japan(
+        block: JapanMessages.() -> Unit
+    ): Unit = japan.block()
+
+    /**
+     * Changes the messages of the constraints of Mexico.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun mexico(
+        block: MexicoMessages.() -> Unit
+    ): Unit = mexico.block()
+
+    /**
      * Changes the messages of the constraints of the Netherlands.
      *
      * @param block sets the messages it changes. The others keep their default.
@@ -631,6 +755,15 @@ public class Messages internal constructor() {
     public fun netherlands(
         block: NetherlandsMessages.() -> Unit
     ): Unit = netherlands.block()
+
+    /**
+     * Changes the messages of the constraints of Norway.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun norway(
+        block: NorwayMessages.() -> Unit
+    ): Unit = norway.block()
 
     /**
      * Changes the messages of the constraints of Pakistan.
@@ -642,6 +775,24 @@ public class Messages internal constructor() {
     ): Unit = pakistan.block()
 
     /**
+     * Changes the messages of the constraints of Paraguay.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun paraguay(
+        block: ParaguayMessages.() -> Unit
+    ): Unit = paraguay.block()
+
+    /**
+     * Changes the messages of the constraints of Peru.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun peru(
+        block: PeruMessages.() -> Unit
+    ): Unit = peru.block()
+
+    /**
      * Changes the messages of the constraints of Poland.
      *
      * @param block sets the messages it changes. The others keep their default.
@@ -649,6 +800,15 @@ public class Messages internal constructor() {
     public fun poland(
         block: PolandMessages.() -> Unit
     ): Unit = poland.block()
+
+    /**
+     * Changes the messages of the constraints of Portugal.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun portugal(
+        block: PortugalMessages.() -> Unit
+    ): Unit = portugal.block()
 
     /**
      * Changes the messages of the constraints of Russia.
@@ -669,6 +829,24 @@ public class Messages internal constructor() {
     ): Unit = slovenia.block()
 
     /**
+     * Changes the messages of the constraints of South Africa.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun southAfrica(
+        block: SouthAfricaMessages.() -> Unit
+    ): Unit = southAfrica.block()
+
+    /**
+     * Changes the messages of the constraints of South Korea.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun southKorea(
+        block: SouthKoreaMessages.() -> Unit
+    ): Unit = southKorea.block()
+
+    /**
      * Changes the messages of the constraints of Spain.
      *
      * @param block sets the messages it changes. The others keep their default.
@@ -676,6 +854,24 @@ public class Messages internal constructor() {
     public fun spain(
         block: SpainMessages.() -> Unit
     ): Unit = spain.block()
+
+    /**
+     * Changes the messages of the constraints of Sweden.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun sweden(
+        block: SwedenMessages.() -> Unit
+    ): Unit = sweden.block()
+
+    /**
+     * Changes the messages of the constraints of Switzerland.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun switzerland(
+        block: SwitzerlandMessages.() -> Unit
+    ): Unit = switzerland.block()
 
     /**
      * Changes the messages of the constraints of Thailand.
@@ -696,6 +892,24 @@ public class Messages internal constructor() {
     ): Unit = ukraine.block()
 
     /**
+     * Changes the messages of the constraints of the United Arab Emirates.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun unitedArabEmirates(
+        block: UnitedArabEmiratesMessages.() -> Unit
+    ): Unit = unitedArabEmirates.block()
+
+    /**
+     * Changes the messages of the constraints of the United Kingdom.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun unitedKingdom(
+        block: UnitedKingdomMessages.() -> Unit
+    ): Unit = unitedKingdom.block()
+
+    /**
      * Changes the messages of the constraints of the United States.
      *
      * @param block sets the messages it changes. The others keep their default.
@@ -703,6 +917,15 @@ public class Messages internal constructor() {
     public fun unitedStates(
         block: UnitedStatesMessages.() -> Unit
     ): Unit = unitedStates.block()
+
+    /**
+     * Changes the messages of the constraints of Uruguay.
+     *
+     * @param block sets the messages it changes. The others keep their default.
+     */
+    public fun uruguay(
+        block: UruguayMessages.() -> Unit
+    ): Unit = uruguay.block()
 
     /**
      * Returns the messages of a module that is not part of `validity-core`, such as `validity-phone`, to change them.

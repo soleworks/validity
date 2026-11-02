@@ -9,4 +9,7 @@ package io.github.soleworks.validity
 public class IsraelMessages internal constructor() {
     /** Default message of `teudatZehut`. */
     public var teudatZehut: String = "must be a valid teudat zehut"
+
+    /** Default message of `companyNumber`. */
+    public var companyNumber: String = "must be a valid company number"
 }

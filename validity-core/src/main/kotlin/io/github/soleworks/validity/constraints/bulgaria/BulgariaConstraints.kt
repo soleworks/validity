@@ -18,6 +18,10 @@ private const val TWENTY_FIRST_CENTURY = 2000
 private val EGN_FORMAT = Regex("""(\d{2})(\d{2})(\d{2})\d{4}""")
 private val EGN_WEIGHTS = listOf(2, 4, 8, 5, 10, 9, 7, 3, 6)
 
+internal val BULGARIA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
+    "EGN" to String::isEgn
+)
+
 /**
  * Checks that the string is a Bulgarian EGN: 10 digits that start with a real birth date, and a valid check digit.
  *
@@ -31,7 +35,7 @@ public fun ValidationNode<String>.egn(
 ): Unit = constraint(
     message = message,
     code = "egn",
-    predicate = { it.isEgn() }
+    predicate = String::isEgn
 )
 
 private fun String.isEgn(): Boolean {

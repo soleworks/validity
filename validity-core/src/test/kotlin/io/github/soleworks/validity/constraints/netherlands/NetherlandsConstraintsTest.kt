@@ -50,4 +50,34 @@ class NetherlandsConstraintsTest {
             )
         }
     }
+
+    @Nested
+    @DisplayName("When kvk is called")
+    inner class Kvk {
+        @ParameterizedTest
+        @ValueSource(strings = ["69599084"])
+        fun `given a valid KvK should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "kvk", value = value).apply { kvk() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["6959908", "695990841"])
+        fun `given an invalid KvK should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "kvk", value = value).apply { kvk() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "kvk", message = "must be a valid KvK number", code = "kvk")
+            )
+        }
+    }
 }

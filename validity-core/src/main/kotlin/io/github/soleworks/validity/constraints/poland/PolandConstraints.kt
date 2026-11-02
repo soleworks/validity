@@ -17,6 +17,11 @@ private val PESEL_CENTURIES = listOf(1900, 2000, 2100, 2200, 1800)
 private val PESEL_WEIGHTS = listOf(1, 3, 7, 9, 1, 3, 7, 9, 1, 3)
 private val NIP_WEIGHTS = listOf(6, 5, 7, 2, 3, 4, 5, 6, 7)
 
+internal val POLAND_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
+    "PESEL" to String::isPesel,
+    "NIP" to String::isNip
+)
+
 /**
  * Checks that the string is a Polish PESEL: 11 digits that start with a real birth date, and a valid check digit.
  *
@@ -30,7 +35,7 @@ public fun ValidationNode<String>.pesel(
 ): Unit = constraint(
     message = message,
     code = "pesel",
-    predicate = { it.isPesel() }
+    predicate = String::isPesel
 )
 
 /**
@@ -46,8 +51,10 @@ public fun ValidationNode<String>.nip(
 ): Unit = constraint(
     message = message,
     code = "nip",
-    predicate = { NIP_FORMAT.matches(it) && it.digits().isNip() }
+    predicate = String::isNip
 )
+
+private fun String.isNip(): Boolean = NIP_FORMAT.matches(this) && digits().isNip()
 
 private fun String.isPesel(): Boolean {
     val (year, encodedMonth, day) = PESEL_FORMAT.groups(this)?.map(String::toInt) ?: return false
