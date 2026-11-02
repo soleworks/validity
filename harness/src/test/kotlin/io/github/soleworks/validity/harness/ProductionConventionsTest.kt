@@ -2,7 +2,7 @@ package io.github.soleworks.validity.harness
 
 import com.lemonappdev.konsist.api.declaration.KoFunctionDeclaration
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
-import com.lemonappdev.konsist.api.verify.assertFalse
+import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -13,7 +13,18 @@ private const val COUNTRY_PACKAGE_PREFIX = "io.github.soleworks.validity.constra
 private val UPPER_SNAKE_CASE_FORMAT = Regex("""[A-Z][A-Z0-9_]*""")
 private val MESSAGE_DEFAULT_FORMAT = Regex("""(messages|phoneMessages)\..+""")
 private val TRAILING_LAMBDAS = setOf("block", "selector")
-private val TEST_LIBRARIES = listOf("io.kotest", "org.junit", "com.lemonappdev.konsist")
+private val ALLOWED_IMPORTS = listOf(
+    "io.github.soleworks.validity.",
+    "kotlin.",
+    "kotlinx.coroutines.",
+    "java.math.",
+    "java.net.",
+    "java.nio.",
+    "java.text.",
+    "java.time.",
+    "java.util."
+)
+private val MODULE_IMPORTS = mapOf("validity-phone" to listOf("com.google.i18n.phonenumbers."))
 
 class ProductionConventionsTest {
     private val constraints = production
@@ -24,9 +35,14 @@ class ProductionConventionsTest {
     @DisplayName("Dependencies")
     inner class Dependencies {
         @Test
-        fun `every production file should import no test library`() {
-            production.files.assertFalse { file ->
-                file.imports.any { import -> TEST_LIBRARIES.any { library -> import.name.startsWith(library) } }
+        fun `every production file should import only Kotlin, Java, Validity and its module's library`() {
+            production.files.assertTrue { file ->
+                val allowed = ALLOWED_IMPORTS + MODULE_IMPORTS
+                    .filterKeys { module -> file.moduleName == module }
+                    .values
+                    .flatten()
+
+                file.imports.all { import -> allowed.any { prefix -> import.name.startsWith(prefix) } }
             }
         }
     }
@@ -136,6 +152,11 @@ class ProductionConventionsTest {
         @Test
         fun `every file should declare at most one top-level type`() {
             production.files.assertTrue { file -> file.topLevelTypes <= 1 }
+        }
+
+        @Test
+        fun `every file should declare no typealias`() {
+            production.typeAliases.assertEmpty()
         }
 
         @Test

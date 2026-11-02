@@ -1,4 +1,5 @@
-# Detekt runs every rule it has (allRules = true), including the ktlint and libraries rule sets.
+# Detekt runs every rule it has (allRules = true), including the libraries rule set. ktlint formats the code
+# apart from Detekt, with the rules in .editorconfig.
 # This file only lists the rules this project tunes or turns off, each with the reason.
 
 complexity:
@@ -31,6 +32,27 @@ naming:
     excludes: ['**/test/**']
 
 style:
+  # Tests assert with Kotest, and the library writes nothing to the console.
+  ForbiddenImport:
+    forbiddenImports:
+      - value: 'org.junit.jupiter.api.Assertions*'
+        reason: 'Use Kotest matchers such as shouldBe.'
+      - value: 'org.junit.jupiter.api.assertAll'
+        reason: 'Use Kotest assertSoftly { }.'
+      - value: 'org.junit.jupiter.api.assertThrows'
+        reason: 'Use Kotest shouldThrowExactly<X> { }.'
+      - value: 'org.junit.jupiter.api.assertDoesNotThrow'
+        reason: 'Use Kotest shouldNotThrowAny { }.'
+      - value: 'java.util.stream.*'
+        reason: 'Use Kotlin collections or sequences.'
+  ForbiddenMethodCall:
+    methods:
+      - value: 'kotlin.io.print'
+        reason: 'A library writes nothing to the console.'
+      - value: 'kotlin.io.println'
+        reason: 'A library writes nothing to the console.'
+      - value: 'io.kotest.assertions.throwables.shouldThrow'
+        reason: 'Use shouldThrowExactly<X> { }: shouldThrow also passes when a subclass of X is thrown.'
   # A branch with one statement has no braces, on one line or on many.
   BracesOnIfStatements:
     singleLine: 'never'
@@ -60,28 +82,3 @@ style:
   UseDataClass:
     active: false
 
-ktlint:
-  # Every parameter goes on its own line, in a function and in a class.
-  ClassSignature:
-    forceMultilineWhenParameterCountGreaterOrEqualThan: '1'
-  FunctionSignature:
-    forceMultilineWhenParameterCountGreaterOrEqualThan: 1
-  # Imports are sorted alphabetically, with no groups.
-  ImportOrdering:
-    layout: '*'
-  # style > MaxLineLength reports the same lines.
-  MaximumLineLength:
-    active: false
-  # An expression body starts on the signature line: `): Unit = constraint(`.
-  MultilineExpressionWrapping:
-    active: false
-  # style > BracesOnIfStatements and the `if` rule above decide braces.
-  MultiLineIfElse:
-    active: false
-  MultilineLoop:
-    active: false
-  # No trailing commas.
-  TrailingCommaOnCallSite:
-    useTrailingCommaOnCallSite: false
-  TrailingCommaOnDeclarationSite:
-    useTrailingCommaOnDeclarationSite: false

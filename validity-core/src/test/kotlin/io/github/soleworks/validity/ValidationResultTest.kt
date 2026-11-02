@@ -2,7 +2,7 @@ package io.github.soleworks.validity
 
 import io.github.soleworks.validity.samples.Customer
 import io.kotest.assertions.throwables.shouldNotThrowAny
-import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -25,7 +25,7 @@ class ValidationResultTest {
             val customer = Customer(name = "A", email = null)
             val result = customer.validateBlocking()
 
-            val error = shouldThrow<ValidationException> { result.orThrow() }
+            val error = shouldThrowExactly<ValidationException> { result.orThrow() }
 
             error.message shouldBe "name: must have at least 2 characters, email: email is mandatory"
         }
@@ -35,7 +35,7 @@ class ValidationResultTest {
             val customer = Customer(name = "A", email = null)
             val result = customer.validateBlocking()
 
-            val error = shouldThrow<ValidationException> { result.orThrow() }
+            val error = shouldThrowExactly<ValidationException> { result.orThrow() }
 
             error.violations shouldBe listOf(
                 Violation(path = "name", message = "must have at least 2 characters", code = "minLength"),

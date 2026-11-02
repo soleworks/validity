@@ -11,7 +11,7 @@ import io.github.soleworks.validity.samples.readme.Customer
 import io.github.soleworks.validity.samples.readme.Invitation
 import io.github.soleworks.validity.samples.readme.Item
 import io.kotest.assertions.throwables.shouldNotThrowAny
-import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.DisplayName
@@ -148,7 +148,7 @@ class ContextualValidatableTest {
         fun `given an email the accounts already have should throw its violation`() {
             val enrollment = Enrollment(email = "ana@mail.com")
 
-            val error = shouldThrow<ValidationException> {
+            val error = shouldThrowExactly<ValidationException> {
                 runBlocking { enrollment.validateOrThrow(Directory("ana@mail.com")) }
             }
 
@@ -172,7 +172,9 @@ class ContextualValidatableTest {
         fun `given a cart over the limit of the buyer should throw its violation`() {
             val cart = Cart(total = 150)
 
-            val error = shouldThrow<ValidationException> { cart.validateOrThrowBlocking(Buyer(creditLimit = 100)) }
+            val error = shouldThrowExactly<ValidationException> {
+                cart.validateOrThrowBlocking(Buyer(creditLimit = 100))
+            }
 
             error.violations shouldBe listOf(
                 Violation(path = "total", message = "must be at most 100", code = "max")
