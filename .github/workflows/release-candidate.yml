@@ -1,0 +1,93 @@
+name: Release candidate
+
+# Run from the Actions tab (Release candidate → Run workflow): publishes the next release candidate of the version the
+# open release pull request proposes (1.0.0-RC1, then 1.0.0-RC2...), from the commit of main it was cut from. The
+# version is not an input: a candidate is always of the version that merging the release pull request would release.
+# A candidate is a GitHub prerelease, so releases/latest and the docs keep showing the last stable version, and it
+# commits nothing: the release pull request stays as it is, and merging it releases the stable version. Only a user
+# with write access can run it.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: maven-central
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Find the release pull request
+        run: |
+          pr=$(gh pr list --label "autorelease: pending" --json number,headRefOid --jq '.[0] // empty')
+          if [ -z "$pr" ]; then
+            echo "No release pull request is open, so there is no next version to publish a candidate of."
+            exit 1
+          fi
+          head=$(jq -r .headRefOid <<< "$pr")
+          echo "PR=$(jq -r .number <<< "$pr")" >> "$GITHUB_ENV"
+          echo "HEAD=$head" >> "$GITHUB_ENV"
+          echo "BASE=$(gh api "repos/$GH_REPO/commits/$head" --jq '.parents[0].sha')" >> "$GITHUB_ENV"
+      # The candidate is the commit of main the release pull request was cut from, so its code is the code that merging
+      # the pull request releases, even while the pull request is still catching up with a push to main.
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.BASE }}
+          fetch-depth: 0
+      - name: Work out the version
+        id: version
+        run: |
+          next=$(gh api "repos/$GH_REPO/contents/.release-please-manifest.json?ref=$HEAD" --jq .content | base64 -d | jq -r '."."')
+          last=$(git tag --list "v$next-RC*" | sed "s/^v$next-RC//" | sort --numeric-sort | tail -n 1)
+          echo "version=$next-RC$(( ${last:-0} + 1 ))" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          if [ -n "$last" ] && [ "$(git rev-parse "v$next-RC$last^{commit}")" = "$(git rev-parse HEAD)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::main has not changed since $next-RC$last, so there is no new candidate to publish."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-java@v6
+        if: steps.version.outputs.changed == 'true'
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v6
+        if: steps.version.outputs.changed == 'true'
+      - run: ./gradlew build -Pversion=${{ steps.version.outputs.version }}
+        if: steps.version.outputs.changed == 'true'
+      - run: ./gradlew publishToMavenCentral --no-configuration-cache -Pversion=${{ steps.version.outputs.version }}
+        if: steps.version.outputs.changed == 'true'
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      # Right after the upload, so the number is taken even if Maven Central is slow: Maven Central never takes the same
+      # version twice, so running the workflow again goes on to the next number.
+      - name: Create the prerelease
+        if: steps.version.outputs.changed == 'true'
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" --target "${{ steps.version.outputs.sha }}" \
+            --title "${{ steps.version.outputs.version }}" --prerelease --generate-notes
+      - run: bash .github/scripts/wait-for-maven-central.sh "${{ steps.version.outputs.version }}"
+        if: steps.version.outputs.changed == 'true'
+      - name: Tell the release pull request
+        if: steps.version.outputs.changed == 'true'
+        run: |
+          gh api "repos/$GH_REPO/statuses/$HEAD" -f state=success -f context="Release candidate" \
+            -f description="${{ steps.version.outputs.version }} is on Maven Central."
+          gh pr comment "$PR" --body "\`${{ steps.version.outputs.version }}\` is on Maven Central, as a prerelease."
+      - name: Report a failure on the release pull request
+        if: failure() && env.PR != ''
+        run: gh pr comment "$PR" --body "A release candidate failed to publish. See ${{ github.server_url }}/$GH_REPO/actions/runs/${{ github.run_id }}."

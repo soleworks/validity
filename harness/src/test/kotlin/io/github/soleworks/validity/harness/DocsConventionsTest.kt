@@ -1,6 +1,8 @@
 package io.github.soleworks.validity.harness
 
+import io.kotest.matchers.comparables.shouldBeLessThanOrEqualTo
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldMatch
 import java.io.File
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -26,9 +28,12 @@ private val VARIABLE_USE_FORMAT = Regex("""\{\{(\w+)}}""")
 private val SNIPPET_IMPORT_FORMAT = Regex("""^import \w+ from "/snippets/([\w-]+\.mdx)";""", RegexOption.MULTILINE)
 private val NAVIGATION_PAGES_FORMAT = Regex(""""pages":\s*\[(.*?)]""", RegexOption.DOT_MATCHES_ALL)
 private val QUOTED_FORMAT = Regex(""""([^"]+)"""")
+private val STABLE_VERSION_FORMAT = Regex("""\d+\.\d+\.\d+""")
 private val RELEASED_VERSION_FORMAT = Regex(""""\.":\s*"([^"]+)"""")
 private val VERSION_LINK_FORMAT = Regex("""\{[^{}]*"href":\s*"[^"]*/releases/latest"[^{}]*}""")
 private val LABEL_FORMAT = Regex(""""label":\s*"([^"]*)"""")
+private val README_DEPENDENCY_FORMAT = Regex("""io\.github\.soleworks:validity-[a-z]+(?::([^"]+))?"""")
+private val README_BADGE_FORMAT = Regex("""label=Maven%20Central&message=([^&]+)""")
 private val KOTLIN_VERSION_FORMAT = Regex("""^kotlin = "(\d+\.\d+)""", RegexOption.MULTILINE)
 private val JAVA_VERSION_FORMAT = Regex("""JavaLanguageVersion\.of\((\d+)\)""")
 private val POSTAL_CODE_FORMAT = Regex(""""[A-Z]{2}" to """)
@@ -71,21 +76,27 @@ class DocsConventionsTest {
         private val released = RELEASED_VERSION_FORMAT
             .find(repository.resolve(".release-please-manifest.json").readText())
             ?.run { groupValues[1] }
+            .orEmpty()
         private val versionLink = VERSION_LINK_FORMAT.find(docs.resolve("docs.json").readText())?.value
 
         @Test
-        fun `the version variable should be the version last released, which the release-please manifest holds`() {
-            docsVariables["version"] shouldBe released
+        fun `the version variable should be at most the version last released, since it follows the release`() {
+            docsVariables["version"].orEmpty().toKotlinVersion() shouldBeLessThanOrEqualTo released.toKotlinVersion()
         }
 
         @Test
-        fun `before the first release, nothing should show the version, since no version exists yet`() {
+        fun `the version variable should be a stable version, since a release candidate never reaches the docs`() {
+            docsVariables["version"].orEmpty() shouldMatch STABLE_VERSION_FORMAT
+        }
+
+        @Test
+        fun `while the docs show no release, nothing should show the version, since none can be downloaded`() {
             val showing = sources
                 .filter { source -> "version" in source.variablesUsed() }
                 .map { source -> source.docsPath } + listOfNotNull(versionLink?.let { "docs.json: the version link" })
 
             showing
-                .filter { released == UNRELEASED }
+                .filter { docsVariables["version"] == UNRELEASED }
                 .shouldListNothing()
         }
 
@@ -94,6 +105,16 @@ class DocsConventionsTest {
             val label = LABEL_FORMAT.find(versionLink.orEmpty())?.run { groupValues[1] }
 
             label shouldBe versionLink?.let { docsVariables["version"] }
+        }
+
+        @Test
+        fun `the README should name the version the docs show, and none while they show no release`() {
+            val readme = repository.resolve("README.md").readText()
+            val named = (README_DEPENDENCY_FORMAT.findAll(readme) + README_BADGE_FORMAT.findAll(readme))
+                .map { match -> match.groupValues[1] }
+                .toSet()
+
+            named shouldBe setOf(docsVariables["version"].takeUnless { version -> version == UNRELEASED }.orEmpty())
         }
 
         @Test
@@ -453,3 +474,9 @@ private fun File.messageDefaults(): Sequence<Pair<Pair<String, String>, String>>
 private fun MatchResult.toMessageDefault(
     block: String
 ): Pair<Pair<String, String>, String> = (block to groupValues[1]) to groupValues[2]
+
+private fun String.toKotlinVersion(): KotlinVersion {
+    val (major, minor, patch) = split(".").map(String::toInt)
+
+    return KotlinVersion(major, minor, patch)
+}

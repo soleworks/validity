@@ -3,24 +3,14 @@
   "release-type": "simple",
   "include-component-in-tag": false,
   "bump-minor-pre-major": true,
+  "always-update": true,
   "bootstrap-sha": "85afa0720fd59338d7d43213e4e9de217d0cface",
   "packages": {
     ".": {
       "package-name": "validity",
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
-        "gradle.properties",
-        "README.md",
-        {
-          "type": "json",
-          "path": "docs/docs.json",
-          "jsonpath": "$.variables.version"
-        },
-        {
-          "type": "json",
-          "path": "docs/docs.json",
-          "jsonpath": "$.navbar.links[?(@.href=='https://github.com/soleworks/validity/releases/latest')].label"
-        }
+        "gradle.properties"
       ]
     }
   }
