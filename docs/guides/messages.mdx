@@ -97,8 +97,10 @@ messages {
 }
 ```
 
-The blocks are `brazil`, `bulgaria`, `canada`, `france`, `israel`, `netherlands`, `pakistan`, `poland`, `russia`,
-`slovenia`, `spain`, `thailand`, `ukraine` and `unitedStates`.
+The blocks are `argentina`, `australia`, `belgium`, `brazil`, `bulgaria`, `canada`, `chile`, `china`, `colombia`,
+`france`, `germany`, `india`, `israel`, `italy`, `japan`, `mexico`, `netherlands`, `norway`, `pakistan`, `paraguay`,
+`peru`, `poland`, `portugal`, `russia`, `slovenia`, `southAfrica`, `southKorea`, `spain`, `sweden`, `switzerland`,
+`thailand`, `ukraine`, `unitedArabEmirates`, `unitedKingdom`, `unitedStates` and `uruguay`.
 
 ## Messages of a module
 
@@ -315,6 +317,7 @@ Validity.configure {
         longitude = "must be a valid longitude"
         coordinates = "must be a valid latitude and longitude pair"
         postalCode = "must be a valid postal code for {country}"
+        taxId = "must be a valid {type} for {country}"
         numeric = "must be numeric"
         integer = "must be an integer"
         boolean = "must be true or false"
@@ -327,6 +330,18 @@ Validity.configure {
         isoDateTime = "must be an ISO 8601 date and time with offset"
         isoDuration = "must be an ISO 8601 duration"
         dateFormat = "must match the date format {pattern}"
+        argentina {
+            cuit = "must be a valid CUIT"
+            cuil = "must be a valid CUIL"
+        }
+        australia {
+            abn = "must be a valid ABN"
+            tfn = "must be a valid TFN"
+        }
+        belgium {
+            bce = "must be a valid enterprise number"
+            nationalNumber = "must be a valid national number"
+        }
         brazil {
             cpf = "must be a valid CPF"
             cnpj = "must be a valid CNPJ"
@@ -340,22 +355,72 @@ Validity.configure {
         }
         canada {
             sin = "must be a valid SIN"
+            bn = "must be a valid business number"
+        }
+        chile {
+            rut = "must be a valid RUT"
+        }
+        china {
+            uscc = "must be a valid unified social credit code"
+        }
+        colombia {
+            nit = "must be a valid NIT"
+            cc = "must be a valid CC"
         }
         france {
             spi = "must be a valid SPI"
+            siren = "must be a valid SIREN"
+            siret = "must be a valid SIRET"
+        }
+        germany {
+            ustIdNr = "must be a valid USt-IdNr."
+            steuerId = "must be a valid Steuer-ID"
+        }
+        india {
+            pan = "must be a valid PAN"
+            gstin = "must be a valid GSTIN"
         }
         israel {
             teudatZehut = "must be a valid teudat zehut"
+            companyNumber = "must be a valid company number"
+        }
+        italy {
+            partitaIva = "must be a valid partita IVA"
+            codiceFiscale = "must be a valid codice fiscale"
+        }
+        japan {
+            corporateNumber = "must be a valid corporate number"
+            myNumber = "must be a valid My Number"
+        }
+        mexico {
+            rfc = "must be a valid RFC"
         }
         netherlands {
             bsn = "must be a valid BSN"
+            kvk = "must be a valid KvK number"
+        }
+        norway {
+            organisasjonsnummer = "must be a valid organisasjonsnummer"
+            fodselsnummer = "must be a valid fødselsnummer"
         }
         pakistan {
             cnic = "must be a valid CNIC"
         }
+        paraguay {
+            ruc = "must be a valid RUC"
+            ci = "must be a valid CI"
+        }
+        peru {
+            ruc = "must be a valid RUC"
+            dni = "must be a valid DNI"
+        }
         poland {
             pesel = "must be a valid PESEL"
             nip = "must be a valid NIP"
+        }
+        portugal {
+            nif = "must be a valid NIF"
+            nipc = "must be a valid NIPC"
         }
         russia {
             innIndividual = "must be a valid individual INN"
@@ -364,9 +429,26 @@ Validity.configure {
         slovenia {
             davcnaStevilka = "must be a valid davčna številka"
         }
+        southAfrica {
+            cipc = "must be a valid company registration number"
+            idNumber = "must be a valid ID number"
+        }
+        southKorea {
+            brn = "must be a valid business registration number"
+            rrn = "must be a valid resident registration number"
+        }
         spain {
             dni = "must be a valid DNI"
             nie = "must be a valid NIE"
+            cif = "must be a valid CIF"
+        }
+        sweden {
+            organisationsnummer = "must be a valid organisationsnummer"
+            personnummer = "must be a valid personnummer"
+        }
+        switzerland {
+            uid = "must be a valid UID"
+            ahv = "must be a valid AHV number"
         }
         thailand {
             nationalId = "must be a valid national identification number"
@@ -374,8 +456,22 @@ Validity.configure {
         ukraine {
             rnokpp = "must be a valid RNOKPP"
         }
+        unitedArabEmirates {
+            tradeLicense = "must be a valid trade license number"
+            emiratesId = "must be a valid Emirates ID"
+        }
+        unitedKingdom {
+            vat = "must be a valid VAT number"
+            nino = "must be a valid National Insurance number"
+        }
         unitedStates {
             ein = "must be a valid EIN"
+            ssn = "must be a valid SSN"
+            itin = "must be a valid ITIN"
+        }
+        uruguay {
+            rut = "must be a valid RUT"
+            ci = "must be a valid CI"
         }
         phone {
             phone = "must be a valid phone number"
