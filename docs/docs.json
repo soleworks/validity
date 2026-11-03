@@ -40,7 +40,7 @@
     }
   },
   "appearance": {
-    "default": "system"
+    "default": "light"
   },
   "contextual": {
     "options": [
@@ -59,13 +59,29 @@
       {
         "type": "github",
         "href": "https://github.com/soleworks/validity"
+      },
+      {
+        "label": "Sponsor",
+        "icon": "heart",
+        "href": "https://github.com/sponsors/marioalvial"
       }
     ]
   },
   "footer": {
     "socials": {
       "github": "https://github.com/soleworks/validity"
-    }
+    },
+    "links": [
+      {
+        "header": "Support",
+        "items": [
+          {
+            "label": "Sponsor Validity",
+            "href": "https://github.com/sponsors/marioalvial"
+          }
+        ]
+      }
+    ]
   },
   "navigation": {
     "tabs": [
