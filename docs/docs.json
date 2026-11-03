@@ -191,7 +191,7 @@
     "version": "0.1.0",
     "kotlin": "2.4",
     "java": "17",
-    "site": "https://soleworks.mintlify.site",
+    "site": "https://validity-kt.dev",
     "constraints": "175",
     "postalCountries": "72",
     "documentCountries": "14"

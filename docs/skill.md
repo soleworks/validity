@@ -5,7 +5,7 @@ license: Apache-2.0
 compatibility: Kotlin 2.4 on the JVM, Java 17 or newer. Phone numbers need io.github.soleworks:validity-phone.
 metadata:
   author: soleworks
-  docs: https://soleworks.mintlify.site
+  docs: https://validity-kt.dev
 ---
 
 # Validity
@@ -13,8 +13,8 @@ metadata:
 Validity validates Kotlin objects with a DSL and reports every broken rule at once. Each `Violation` has a `path`
 (`items[1].quantity`), a `message` for people and a `code` for programs (the name of the constraint, such as `minLength`).
 
-Before writing rules, search these docs (MCP server `https://soleworks.mintlify.site/mcp`) or read the page you need as
-Markdown: `https://soleworks.mintlify.site/<page>.md`. The constraints are listed by type of value under
+Before writing rules, search these docs (MCP server `https://validity-kt.dev/mcp`) or read the page you need as
+Markdown: `https://validity-kt.dev/<page>.md`. The constraints are listed by type of value under
 `/constraints/<type>.md` (`strings`, `numbers`, `collections`, `dates-and-times`, `internet`, `countries`, ...).
 
 ## Writing rules

@@ -340,14 +340,14 @@ clock and messages.
 
 ## Documentation
 
-**[soleworks.mintlify.site](https://soleworks.mintlify.site)** has every concept, the full list of constraints, the
+**[validity-kt.dev](https://validity-kt.dev)** has every concept, the full list of constraints, the
 messages and the configuration.
 
 It is written for AI agents too: every page is also Markdown (add `.md` to its address), the whole site is in
-[`/llms.txt`](https://soleworks.mintlify.site/llms.txt), and an MCP server lets Claude, Cursor or VS Code search it:
+[`/llms.txt`](https://validity-kt.dev/llms.txt), and an MCP server lets Claude, Cursor or VS Code search it:
 
 ```bash
-claude mcp add --transport http validity https://soleworks.mintlify.site/mcp
+claude mcp add --transport http validity https://validity-kt.dev/mcp
 ```
 
 ## Development
