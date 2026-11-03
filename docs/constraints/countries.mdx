@@ -37,6 +37,13 @@ data class Supplier(
 
 | Constraint | Checks |
 |---|---|
+| [`taxId`](#taxid) | Is a document of a `TaxIdType`, or of a country and a type given as text. |
+| [`cuit`](#cuit) | Is an Argentine CUIT with a valid check digit, as 11 digits or as `20-30824628-1`. |
+| [`cuil`](#cuil) | Is an Argentine CUIL with a valid check digit, as 11 digits or as `20-30824628-1`. |
+| [`abn`](#abn) | Is an Australian ABN: 11 digits with valid check digits, as `51824753556` or `51 824 753 556`. |
+| [`tfn`](#tfn) | Is an Australian TFN (tax file number): 8 or 9 digits with a valid check digit, as `123456782` or `123 456 782`. |
+| [`bce`](#bce) | Is a Belgian enterprise number (BCE/KBO, also the VAT number): 10 digits with valid check digits, as `0403170701` or `0403.170.701`. |
+| [`nationalNumber`](#nationalnumber) | Is a Belgian national number (rijksregisternummer / numéro de registre national): 11 digits with valid check digits, as `85073003328` or `85.07.30-033.28`. |
 | [`cpf`](#cpf) | Is a Brazilian CPF with valid check digits, as 11 digits or as `000.000.000-00`. |
 | [`cnpj`](#cnpj) | Is a Brazilian CNPJ with valid check digits, as 14 characters or as `00.000.000/0000-00`. |
 | [`cnh`](#cnh) | Is a Brazilian CNH (driver's license number): 11 digits with valid check digits. |
@@ -45,20 +52,140 @@ data class Supplier(
 | [`placa`](#placa) | Is a Brazilian license plate, in the old (`ABC-1234`) or the Mercosul (`ABC1D23`) layout. |
 | [`egn`](#egn) | Is a Bulgarian EGN: 10 digits that start with a real birth date, and a valid check digit. |
 | [`sin`](#sin) | Is a Canadian SIN: 9 digits with a valid Luhn check digit, with no spaces. |
+| [`bn`](#bn) | Is a Canadian BN (business number) with a valid Luhn check digit: the 9-digit root, such as `123456782`, or the 15-character program account, such as `123456782RT0001`. |
+| [`rut`](#rut) | Is a Chilean RUT (or RUN) with a valid check character, such as `12345678-5` or `12.345.678-5`. |
+| [`uscc`](#uscc) | Is a Chinese USCC (unified social credit code): 18 characters with a valid check character, such as `91110000600037341L`. |
+| [`nit`](#nit) | Is a Colombian NIT with a valid check digit, as 8 to 16 digits or as `900.123.456-8`. |
+| [`cc`](#cc) | Is a Colombian CC (cédula de ciudadanía): 6 to 10 digits. |
 | [`spi`](#spi) | Is a French tax number (SPI): 13 digits with a valid check, as one block or as `00 00 000 000 000`. |
+| [`siren`](#siren) | Is a French SIREN (the number of a company): 9 digits with a valid Luhn check digit, as `732829320` or `732 829 320`. |
+| [`siret`](#siret) | Is a French SIRET (the number of an establishment): 14 digits, as `73282932000074` or `732 829 320 00074`. |
+| [`ustIdNr`](#ustidnr) | Is a German USt-IdNr. (VAT number) with a valid check digit, as 9 digits or with the `DE` prefix, such as `DE136695976`. |
+| [`steuerId`](#steuerid) | Is a German Steuer-ID (Steueridentifikationsnummer): 11 digits with a valid check digit, such as `36574261809`. |
+| [`pan`](#pan) | Is an Indian PAN (permanent account number): 5 letters, 4 digits and a letter, such as `ABCPE1234F`. |
+| [`gstin`](#gstin) | Is an Indian GSTIN: 15 characters with a valid check character, such as `27AAPFU0939F1ZV`. |
 | [`teudatZehut`](#teudatzehut) | Is an Israeli Teudat Zehut number: 9 digits with a valid check digit. |
+| [`companyNumber`](#companynumber) | Is the number of an Israeli company (ח.פ.): 9 digits that start with `5` and end with a valid Luhn check digit, such as `516179157`. |
+| [`partitaIva`](#partitaiva) | Is an Italian partita IVA: 11 digits with a valid Luhn check digit, such as `00743110157`. |
+| [`codiceFiscale`](#codicefiscale) | Is the Italian codice fiscale of a person: 16 characters with a valid check letter, such as `RSSMRA85T10A562S`. |
+| [`corporateNumber`](#corporatenumber) | Is a Japanese corporate number (法人番号): 13 digits whose first digit is a valid check digit, such as `5835678256246`. |
+| [`myNumber`](#mynumber) | Is a Japanese My Number (個人番号): 12 digits with a valid check digit, as `123456789018` or `1234 5678 9018`. |
+| [`rfc`](#rfc) | Is a Mexican RFC: 3 letters (a company) or 4 letters (a person), the date of registration or birth as `YYMMDD`, and a 3-character homoclave, such as `GODE561231GR8`. |
 | [`bsn`](#bsn) | Is a Dutch BSN: 9 digits that pass the eleven test. |
+| [`kvk`](#kvk) | Is a Dutch KvK number (Kamer van Koophandel): 8 digits, such as `69599084`. |
+| [`organisasjonsnummer`](#organisasjonsnummer) | Is a Norwegian organisasjonsnummer: 9 digits with a valid check digit, as `988077917` or `988 077 917`. |
+| [`fodselsnummer`](#fodselsnummer) | Is a Norwegian fødselsnummer (or D-nummer): 11 digits with two valid check digits, as `15108695088` or `151086 95088`. |
 | [`cnic`](#cnic) | Is a Pakistani CNIC written as `00000-0000000-0`. |
+| [`ruc`](#ruc) | Is a Paraguayan RUC with a valid check digit, as 6 to 9 digits or as `80028061-0`. |
+| [`ci`](#ci) | Is a Paraguayan CI (cédula de identidad): 5 to 10 digits. |
+| [`ruc`](#ruc-2) | Is a Peruvian RUC: 11 digits with a valid check digit, such as `20131312955`. |
+| [`dni`](#dni) | Is a Spanish DNI: 8 digits and the matching control letter, such as `12345678Z`. |
 | [`pesel`](#pesel) | Is a Polish PESEL: 11 digits that start with a real birth date, and a valid check digit. |
 | [`nip`](#nip) | Is a Polish NIP (tax number): 10 digits with a valid check digit, with no dashes. |
+| [`nif`](#nif) | Is the NIF of a person in Portugal: 9 digits with a valid check digit, such as `123456789`. |
+| [`nipc`](#nipc) | Is the NIPC of a company or other entity in Portugal: 9 digits with a valid check digit, such as `503504564`. |
 | [`innIndividual`](#innindividual) | Is the INN of a Russian individual: 12 digits with two valid check digits. |
 | [`innLegalEntity`](#innlegalentity) | Is the INN of a Russian legal entity: 10 digits with a valid check digit. |
 | [`davcnaStevilka`](#davcnastevilka) | Is a Slovenian tax number (davčna številka): 8 digits, not starting with 0, with a valid check digit. |
-| [`dni`](#dni) | Is a Spanish DNI: 8 digits and the matching control letter, such as `12345678Z`. |
+| [`cipc`](#cipc) | Is a South African company registration number from the CIPC, as `YYYY/NNNNNN/NN`, such as `2015/123456/07`. |
+| [`idNumber`](#idnumber) | Is a South African ID number: 13 digits with a valid Luhn check digit, such as `8001015009087`. |
+| [`brn`](#brn) | Is a South Korean BRN (business registration number): 10 digits, as `1348672683` or `134-86-72683`. |
+| [`rrn`](#rrn) | Is a South Korean RRN (resident registration number): 13 digits with a valid check digit, as `9710139019902` or `971013-9019902`. |
+| [`dni`](#dni-2) | Is a Spanish DNI: 8 digits and the matching control letter, such as `12345678Z`. |
 | [`nie`](#nie) | Is a Spanish NIE: `X`, `Y` or `Z`, 7 digits and the matching control letter, such as `X1234567L`. |
+| [`cif`](#cif) | Is a Spanish CIF (the tax number of a company): a letter, 7 digits and a check character, such as `B12345674`. |
+| [`organisationsnummer`](#organisationsnummer) | Is a Swedish organisationsnummer: 10 digits with a valid Luhn check digit, as `5560360793` or `556036-0793`. |
+| [`personnummer`](#personnummer) | Is a Swedish personnummer (or samordningsnummer) with a valid Luhn check digit, as `YYMMDD-NNNN`, `YYYYMMDD-NNNN` or without the separator, such as `811218-9876`. |
+| [`uid`](#uid) | Is a Swiss UID (business identification number) with a valid check digit, as `CHE-116.281.710`, `CHE116281710` or the 9 digits alone. |
+| [`ahv`](#ahv) | Is a Swiss AHV number (AVS, social security number): 13 digits that start with `756` and end with a valid EAN-13 check digit, as `7569217076985` or `756.9217.0769.85`. |
 | [`nationalId`](#nationalid) | Is a Thai national ID number: 13 digits with a valid check digit, with no dashes. |
 | [`rnokpp`](#rnokpp) | Is a Ukrainian RNOKPP (tax number): 10 digits with a valid check digit. |
+| [`tradeLicense`](#tradelicense) | Looks like a trade license number of the United Arab Emirates: 5 to 20 uppercase letters, digits, dashes or slashes, starting and ending with a letter or a digit, such as `CN-1234567`. |
+| [`emiratesId`](#emiratesid) | Is an Emirates ID: 15 digits that start with `784` and end with a valid Luhn check digit, as `784196865703050` or `784-1968-6570305-0`. |
+| [`vat`](#vat) | Is a UK VAT registration number with valid check digits, as 9 or 12 digits, with or without the `GB` prefix, such as `GB980780684` or `GB 980 7806 84`. |
+| [`nino`](#nino) | Is a UK National Insurance number: 2 letters, 6 digits and a letter from `A` to `D`, as `AB123456C` or `AB 12 34 56 C`. |
 | [`ein`](#ein) | Is a US EIN with a prefix the IRS assigns, such as `12-3456789`. |
+| [`ssn`](#ssn) | Is a US SSN that can be assigned, as `123-45-6789` or `123456789`. |
+| [`itin`](#itin) | Is a US ITIN, as `912-70-1234` or `912701234`. |
+| [`rut`](#rut-2) | Is a Uruguayan RUT: 12 digits with a valid check digit, such as `211003420017`. |
+| [`ci`](#ci-2) | Is a Uruguayan CI (cédula de identidad) with a valid check digit, as 7 or 8 digits or as `1.234.567-2`. |
+
+## Any country · `taxId`
+
+### `taxId`
+
+`taxId(type)` or `taxId(country, type)` on `String`
+
+Checks that the string is a document of `type`, with the same rules as the constraint of that document on this page.
+`type` is a `TaxIdType`, one entry per document named after its country and its type, such as `TaxIdType.AR_CUIT`.
+When the country and the type come as text, such as from a request, `country` is an ISO 3166-1 alpha-2 code and
+`type` the name of the constraint in upper snake case, such as `CUIT` or `PARTITA_IVA`, both in any case.
+
+When `type` is `null`, or the pair of `country` and `type` is not known, nothing is checked.
+
+<ConstraintFacts code="taxId" message="must be a valid {type} for {country}" change='taxId = "…"' />
+
+## Argentina · `constraints.argentina`
+
+### `cuit`
+
+`cuit()` on `String`
+
+Checks that the string is an Argentine CUIT with a valid check digit, as 11 digits or as `20-30824628-1`.
+
+The first two digits must be a prefix AFIP assigns: `20`, `23`, `24`, `27`, `30`, `33`, `34`, `50`, `51` or `55`.
+
+<ConstraintFacts code="cuit" message="must be a valid CUIT" change='argentina { cuit = "…" }' />
+
+### `cuil`
+
+`cuil()` on `String`
+
+Checks that the string is an Argentine CUIL with a valid check digit, as 11 digits or as `20-30824628-1`.
+
+The CUIL is the CUIT of a person, so the first two digits must be `20`, `23`, `24` or `27`.
+
+<ConstraintFacts code="cuil" message="must be a valid CUIL" change='argentina { cuil = "…" }' />
+
+## Australia · `constraints.australia`
+
+### `abn`
+
+`abn()` on `String`
+
+Checks that the string is an Australian ABN: 11 digits with valid check digits, as `51824753556` or `51 824 753 556`.
+
+<ConstraintFacts code="abn" message="must be a valid ABN" change='australia { abn = "…" }' />
+
+### `tfn`
+
+`tfn()` on `String`
+
+Checks that the string is an Australian TFN (tax file number): 8 or 9 digits with a valid check digit, as `123456782` or `123 456 782`.
+
+<ConstraintFacts code="tfn" message="must be a valid TFN" change='australia { tfn = "…" }' />
+
+## Belgium · `constraints.belgium`
+
+### `bce`
+
+`bce()` on `String`
+
+Checks that the string is a Belgian enterprise number (BCE/KBO, also the VAT number): 10 digits with valid check digits, as `0403170701` or `0403.170.701`.
+
+The first digit is `0` or `1`, and the last two digits are 97 minus the first eight modulo 97.
+
+<ConstraintFacts code="bce" message="must be a valid enterprise number" change='belgium { bce = "…" }' />
+
+### `nationalNumber`
+
+`nationalNumber()` on `String`
+
+Checks that the string is a Belgian national number (rijksregisternummer / numéro de registre national): 11 digits with valid check digits, as `85073003328` or `85.07.30-033.28`.
+
+The month of birth is from `00` to `12`, and the check digits must match for a birth in the 1900s or the 2000s.
+
+<ConstraintFacts code="nationalNumber" message="must be a valid national number" change='belgium { nationalNumber = "…" }' />
 
 ## Brazil · `constraints.brazil`
 
@@ -136,6 +263,62 @@ Checks that the string is a Canadian SIN: 9 digits with a valid Luhn check digit
 
 <ConstraintFacts code="sin" message="must be a valid SIN" change='canada { sin = "…" }' />
 
+### `bn`
+
+`bn()` on `String`
+
+Checks that the string is a Canadian BN (business number) with a valid Luhn check digit: the 9-digit root, such as `123456782`, or the 15-character program account, such as `123456782RT0001`.
+
+A program account adds the program (`RC`, `RM`, `RP` or `RT`, in uppercase) and 4 digits to the root.
+
+<ConstraintFacts code="bn" message="must be a valid business number" change='canada { bn = "…" }' />
+
+## Chile · `constraints.chile`
+
+### `rut`
+
+`rut()` on `String`
+
+Checks that the string is a Chilean RUT (or RUN) with a valid check character, such as `12345678-5` or `12.345.678-5`.
+
+The check character is a digit or an uppercase `K`, and the dash before it is optional when there are no dots.
+
+<ConstraintFacts code="rut" message="must be a valid RUT" change='chile { rut = "…" }' />
+
+## China · `constraints.china`
+
+### `uscc`
+
+`uscc()` on `String`
+
+Checks that the string is a Chinese USCC (unified social credit code): 18 characters with a valid check character, such as `91110000600037341L`.
+
+The first 8 characters are digits, and the others are digits or uppercase letters other than `I`, `O`, `S`, `V` and `Z`.
+
+<ConstraintFacts code="uscc" message="must be a valid unified social credit code" change='china { uscc = "…" }' />
+
+## Colombia · `constraints.colombia`
+
+### `nit`
+
+`nit()` on `String`
+
+Checks that the string is a Colombian NIT with a valid check digit, as 8 to 16 digits or as `900.123.456-8`.
+
+The check digit is the last one, and the dash before it is optional when there are no dots.
+
+<ConstraintFacts code="nit" message="must be a valid NIT" change='colombia { nit = "…" }' />
+
+### `cc`
+
+`cc()` on `String`
+
+Checks that the string is a Colombian CC (cédula de ciudadanía): 6 to 10 digits.
+
+The CC has no check digit, so only the format is checked.
+
+<ConstraintFacts code="cc" message="must be a valid CC" change='colombia { cc = "…" }' />
+
 ## France · `constraints.france`
 
 ### `spi`
@@ -145,6 +328,68 @@ Checks that the string is a Canadian SIN: 9 digits with a valid Luhn check digit
 Checks that the string is a French tax number (SPI): 13 digits with a valid check, as one block or as `00 00 000 000 000`.
 
 <ConstraintFacts code="spi" message="must be a valid SPI" change='france { spi = "…" }' />
+
+### `siren`
+
+`siren()` on `String`
+
+Checks that the string is a French SIREN (the number of a company): 9 digits with a valid Luhn check digit, as `732829320` or `732 829 320`.
+
+<ConstraintFacts code="siren" message="must be a valid SIREN" change='france { siren = "…" }' />
+
+### `siret`
+
+`siret()` on `String`
+
+Checks that the string is a French SIRET (the number of an establishment): 14 digits, as `73282932000074` or `732 829 320 00074`.
+
+The first 9 digits are a valid SIREN, and all 14 have a valid Luhn check digit. The establishments of La Poste (SIREN `356000000`) are checked by La Poste's rule instead: the sum of their digits is a multiple of 5.
+
+<ConstraintFacts code="siret" message="must be a valid SIRET" change='france { siret = "…" }' />
+
+## Germany · `constraints.germany`
+
+### `ustIdNr`
+
+`ustIdNr()` on `String`
+
+Checks that the string is a German USt-IdNr. (VAT number) with a valid check digit, as 9 digits or with the `DE` prefix, such as `DE136695976`.
+
+The first digit is not `0`, and the check digit is the ISO 7064 MOD 11,10 of the others.
+
+<ConstraintFacts code="ustIdNr" message="must be a valid USt-IdNr." change='germany { ustIdNr = "…" }' />
+
+### `steuerId`
+
+`steuerId()` on `String`
+
+Checks that the string is a German Steuer-ID (Steueridentifikationsnummer): 11 digits with a valid check digit, such as `36574261809`.
+
+The first digit is not `0`, and in the first 10 digits exactly one digit appears two or three times. The check digit is the ISO 7064 MOD 11,10 of the others.
+
+<ConstraintFacts code="steuerId" message="must be a valid Steuer-ID" change='germany { steuerId = "…" }' />
+
+## India · `constraints.india`
+
+### `pan`
+
+`pan()` on `String`
+
+Checks that the string is an Indian PAN (permanent account number): 5 letters, 4 digits and a letter, such as `ABCPE1234F`.
+
+Letters are uppercase. The 4th letter is the type of holder (`A`, `B`, `C`, `F`, `G`, `H`, `J`, `L`, `P`, `T` or `K`), and the digits are not all zeros.
+
+<ConstraintFacts code="pan" message="must be a valid PAN" change='india { pan = "…" }' />
+
+### `gstin`
+
+`gstin()` on `String`
+
+Checks that the string is an Indian GSTIN: 15 characters with a valid check character, such as `27AAPFU0939F1ZV`.
+
+Letters are uppercase. The first 2 digits are a state code (`01` to `38`, `97` or `99`), the next 10 characters are a valid PAN, the 13th is not `0` and the 14th is `Z`.
+
+<ConstraintFacts code="gstin" message="must be a valid GSTIN" change='india { gstin = "…" }' />
 
 ## Israel · `constraints.israel`
 
@@ -158,6 +403,66 @@ Shorter numbers need their leading zeros, and the whitespace around them is igno
 
 <ConstraintFacts code="teudatZehut" message="must be a valid teudat zehut" change='israel { teudatZehut = "…" }' />
 
+### `companyNumber`
+
+`companyNumber()` on `String`
+
+Checks that the string is the number of an Israeli company (ח.פ.): 9 digits that start with `5` and end with a valid Luhn check digit, such as `516179157`.
+
+<ConstraintFacts code="companyNumber" message="must be a valid company number" change='israel { companyNumber = "…" }' />
+
+## Italy · `constraints.italy`
+
+### `partitaIva`
+
+`partitaIva()` on `String`
+
+Checks that the string is an Italian partita IVA: 11 digits with a valid Luhn check digit, such as `00743110157`.
+
+The first 7 digits are not all zeros, and digits 8 to 10 are the code of a tax office: `001` to `100`, `120`, `121`, `888` or `999`.
+
+<ConstraintFacts code="partitaIva" message="must be a valid partita IVA" change='italy { partitaIva = "…" }' />
+
+### `codiceFiscale`
+
+`codiceFiscale()` on `String`
+
+Checks that the string is the Italian codice fiscale of a person: 16 characters with a valid check letter, such as `RSSMRA85T10A562S`.
+
+Letters are uppercase. The digits can be replaced by the letters `L` to `V`, as the Agenzia delle Entrate does for codes that repeat (omocodia), and the day of birth must be from 1 to 31, plus 40 for women.
+
+<ConstraintFacts code="codiceFiscale" message="must be a valid codice fiscale" change='italy { codiceFiscale = "…" }' />
+
+## Japan · `constraints.japan`
+
+### `corporateNumber`
+
+`corporateNumber()` on `String`
+
+Checks that the string is a Japanese corporate number (法人番号): 13 digits whose first digit is a valid check digit, such as `5835678256246`.
+
+<ConstraintFacts code="corporateNumber" message="must be a valid corporate number" change='japan { corporateNumber = "…" }' />
+
+### `myNumber`
+
+`myNumber()` on `String`
+
+Checks that the string is a Japanese My Number (個人番号): 12 digits with a valid check digit, as `123456789018` or `1234 5678 9018`.
+
+<ConstraintFacts code="myNumber" message="must be a valid My Number" change='japan { myNumber = "…" }' />
+
+## Mexico · `constraints.mexico`
+
+### `rfc`
+
+`rfc()` on `String`
+
+Checks that the string is a Mexican RFC: 3 letters (a company) or 4 letters (a person), the date of registration or birth as `YYMMDD`, and a 3-character homoclave, such as `GODE561231GR8`.
+
+Letters are uppercase, and `Ñ` and `&` are accepted in the first part. The date must exist. The homoclave is not checked against the name, since it is assigned by the SAT.
+
+<ConstraintFacts code="rfc" message="must be a valid RFC" change='mexico { rfc = "…" }' />
+
 ## Netherlands · `constraints.netherlands`
 
 ### `bsn`
@@ -167,6 +472,34 @@ Shorter numbers need their leading zeros, and the whitespace around them is igno
 Checks that the string is a Dutch BSN: 9 digits that pass the eleven test.
 
 <ConstraintFacts code="bsn" message="must be a valid BSN" change='netherlands { bsn = "…" }' />
+
+### `kvk`
+
+`kvk()` on `String`
+
+Checks that the string is a Dutch KvK number (Kamer van Koophandel): 8 digits, such as `69599084`.
+
+The KvK number has had no check digit since 2016, so only the format is checked.
+
+<ConstraintFacts code="kvk" message="must be a valid KvK number" change='netherlands { kvk = "…" }' />
+
+## Norway · `constraints.norway`
+
+### `organisasjonsnummer`
+
+`organisasjonsnummer()` on `String`
+
+Checks that the string is a Norwegian organisasjonsnummer: 9 digits with a valid check digit, as `988077917` or `988 077 917`.
+
+<ConstraintFacts code="organisasjonsnummer" message="must be a valid organisasjonsnummer" change='norway { organisasjonsnummer = "…" }' />
+
+### `fodselsnummer`
+
+`fodselsnummer()` on `String`
+
+Checks that the string is a Norwegian fødselsnummer (or D-nummer): 11 digits with two valid check digits, as `15108695088` or `151086 95088`.
+
+<ConstraintFacts code="fodselsnummer" message="must be a valid fødselsnummer" change='norway { fodselsnummer = "…" }' />
 
 ## Pakistan · `constraints.pakistan`
 
@@ -179,6 +512,48 @@ Checks that the string is a Pakistani CNIC written as `00000-0000000-0`.
 Whitespace around the number is ignored.
 
 <ConstraintFacts code="cnic" message="must be a valid CNIC" change='pakistan { cnic = "…" }' />
+
+## Paraguay · `constraints.paraguay`
+
+### `ruc`
+
+`ruc()` on `String`
+
+Checks that the string is a Paraguayan RUC with a valid check digit, as 6 to 9 digits or as `80028061-0`.
+
+<ConstraintFacts code="ruc" message="must be a valid RUC" change='paraguay { ruc = "…" }' />
+
+### `ci`
+
+`ci()` on `String`
+
+Checks that the string is a Paraguayan CI (cédula de identidad): 5 to 10 digits.
+
+The CI has no check digit, so only the format is checked.
+
+<ConstraintFacts code="ci" message="must be a valid CI" change='paraguay { ci = "…" }' />
+
+## Peru · `constraints.peru`
+
+### `ruc`
+
+`ruc()` on `String`
+
+Checks that the string is a Peruvian RUC: 11 digits with a valid check digit, such as `20131312955`.
+
+The first two digits must be `10`, `15`, `17` or `20`.
+
+<ConstraintFacts code="ruc" message="must be a valid RUC" change='peru { ruc = "…" }' />
+
+### `dni`
+
+`dni()` on `String`
+
+Checks that the string is a Peruvian DNI: 8 digits, optionally followed by its check character, such as `10117410` or `10117410-2`.
+
+The check character is a digit or a letter from `A` to `K`, and it must match the 8 digits when it is there.
+
+<ConstraintFacts code="dni" message="must be a valid DNI" change='peru { dni = "…" }' />
 
 ## Poland · `constraints.poland`
 
@@ -197,6 +572,28 @@ Checks that the string is a Polish PESEL: 11 digits that start with a real birth
 Checks that the string is a Polish NIP (tax number): 10 digits with a valid check digit, with no dashes.
 
 <ConstraintFacts code="nip" message="must be a valid NIP" change='poland { nip = "…" }' />
+
+## Portugal · `constraints.portugal`
+
+### `nif`
+
+`nif()` on `String`
+
+Checks that the string is the NIF of a person in Portugal: 9 digits with a valid check digit, such as `123456789`.
+
+The first digit must be `1`, `2` or `3`, or the first two `45` (a person who does not live in Portugal).
+
+<ConstraintFacts code="nif" message="must be a valid NIF" change='portugal { nif = "…" }' />
+
+### `nipc`
+
+`nipc()` on `String`
+
+Checks that the string is the NIPC of a company or other entity in Portugal: 9 digits with a valid check digit, such as `503504564`.
+
+The first digit must be `5`, `6`, `7`, `8` or `9`.
+
+<ConstraintFacts code="nipc" message="must be a valid NIPC" change='portugal { nipc = "…" }' />
 
 ## Russia · `constraints.russia`
 
@@ -226,6 +623,50 @@ Checks that the string is a Slovenian tax number (davčna številka): 8 digits, 
 
 <ConstraintFacts code="davcnaStevilka" message="must be a valid davčna številka" change='slovenia { davcnaStevilka = "…" }' />
 
+## South Africa · `constraints.southafrica`
+
+### `cipc`
+
+`cipc()` on `String`
+
+Checks that the string is a South African company registration number from the CIPC, as `YYYY/NNNNNN/NN`, such as `2015/123456/07`.
+
+The number has no check digit, so only the format is checked.
+
+<ConstraintFacts code="cipc" message="must be a valid company registration number" change='southAfrica { cipc = "…" }' />
+
+### `idNumber`
+
+`idNumber()` on `String`
+
+Checks that the string is a South African ID number: 13 digits with a valid Luhn check digit, such as `8001015009087`.
+
+The first 6 digits are a date of birth that exists (`YYMMDD`), and the 11th digit is `0` (a citizen) or `1` (a permanent resident).
+
+<ConstraintFacts code="idNumber" message="must be a valid ID number" change='southAfrica { idNumber = "…" }' />
+
+## South Korea · `constraints.southkorea`
+
+### `brn`
+
+`brn()` on `String`
+
+Checks that the string is a South Korean BRN (business registration number): 10 digits, as `1348672683` or `134-86-72683`.
+
+The first 3 digits are a tax office from `101`, and neither the next 2 (the type of business) nor the 4 after them (the serial) are all zeros.
+
+<ConstraintFacts code="brn" message="must be a valid business registration number" change='southKorea { brn = "…" }' />
+
+### `rrn`
+
+`rrn()` on `String`
+
+Checks that the string is a South Korean RRN (resident registration number): 13 digits with a valid check digit, as `9710139019902` or `971013-9019902`.
+
+The first 6 digits are a date of birth that exists, in the century the 7th digit gives, and the place of birth (digits 8 and 9) is at most `96`.
+
+<ConstraintFacts code="rrn" message="must be a valid resident registration number" change='southKorea { rrn = "…" }' />
+
 ## Spain · `constraints.spain`
 
 Both ignore case, and the whitespace around the number.
@@ -245,6 +686,54 @@ Checks that the string is a Spanish DNI: 8 digits and the matching control lette
 Checks that the string is a Spanish NIE: `X`, `Y` or `Z`, 7 digits and the matching control letter, such as `X1234567L`.
 
 <ConstraintFacts code="nie" message="must be a valid NIE" change='spain { nie = "…" }' />
+
+### `cif`
+
+`cif()` on `String`
+
+Checks that the string is a Spanish CIF (the tax number of a company): a letter, 7 digits and a check character, such as `B12345674`.
+
+The first letter is the type of entity (`A` to `H`, `J`, `N`, `P` to `S`, `U` to `W`), and the check character is the Luhn check digit of the 7 digits or the letter that stands for it (`J` for 0, `A` for 1, ..., `I` for 9). Letters are uppercase.
+
+<ConstraintFacts code="cif" message="must be a valid CIF" change='spain { cif = "…" }' />
+
+## Sweden · `constraints.sweden`
+
+### `organisationsnummer`
+
+`organisationsnummer()` on `String`
+
+Checks that the string is a Swedish organisationsnummer: 10 digits with a valid Luhn check digit, as `5560360793` or `556036-0793`.
+
+<ConstraintFacts code="organisationsnummer" message="must be a valid organisationsnummer" change='sweden { organisationsnummer = "…" }' />
+
+### `personnummer`
+
+`personnummer()` on `String`
+
+Checks that the string is a Swedish personnummer (or samordningsnummer) with a valid Luhn check digit, as `YYMMDD-NNNN`, `YYYYMMDD-NNNN` or without the separator, such as `811218-9876`.
+
+The separator can be a dash or a `+` (a person 100 or older). The month is from 1 to 12 and the day from 1 to 31, or from 61 to 91 for a samordningsnummer.
+
+<ConstraintFacts code="personnummer" message="must be a valid personnummer" change='sweden { personnummer = "…" }' />
+
+## Switzerland · `constraints.switzerland`
+
+### `uid`
+
+`uid()` on `String`
+
+Checks that the string is a Swiss UID (business identification number) with a valid check digit, as `CHE-116.281.710`, `CHE116281710` or the 9 digits alone.
+
+<ConstraintFacts code="uid" message="must be a valid UID" change='switzerland { uid = "…" }' />
+
+### `ahv`
+
+`ahv()` on `String`
+
+Checks that the string is a Swiss AHV number (AVS, social security number): 13 digits that start with `756` and end with a valid EAN-13 check digit, as `7569217076985` or `756.9217.0769.85`.
+
+<ConstraintFacts code="ahv" message="must be a valid AHV number" change='switzerland { ahv = "…" }' />
 
 ## Thailand · `constraints.thailand`
 
@@ -266,6 +755,48 @@ Checks that the string is a Ukrainian RNOKPP (tax number): 10 digits with a vali
 
 <ConstraintFacts code="rnokpp" message="must be a valid RNOKPP" change='ukraine { rnokpp = "…" }' />
 
+## United Arab Emirates · `constraints.unitedarabemirates`
+
+### `tradeLicense`
+
+`tradeLicense()` on `String`
+
+Checks that the string looks like a trade license number of the United Arab Emirates: 5 to 20 uppercase letters, digits, dashes or slashes, starting and ending with a letter or a digit, such as `CN-1234567`.
+
+Each emirate issues its own numbers and none has a check digit, so only the format is checked.
+
+<ConstraintFacts code="tradeLicense" message="must be a valid trade license number" change='unitedArabEmirates { tradeLicense = "…" }' />
+
+### `emiratesId`
+
+`emiratesId()` on `String`
+
+Checks that the string is an Emirates ID: 15 digits that start with `784` and end with a valid Luhn check digit, as `784196865703050` or `784-1968-6570305-0`.
+
+<ConstraintFacts code="emiratesId" message="must be a valid Emirates ID" change='unitedArabEmirates { emiratesId = "…" }' />
+
+## United Kingdom · `constraints.unitedkingdom`
+
+### `vat`
+
+`vat()` on `String`
+
+Checks that the string is a UK VAT registration number with valid check digits, as 9 or 12 digits, with or without the `GB` prefix, such as `GB980780684` or `GB 980 7806 84`.
+
+The 12-digit form is a branch of a company: the first 9 digits are checked and the last 3 are its branch number. Numbers for government departments and health authorities (`GD` and `HA`) are not accepted.
+
+<ConstraintFacts code="vat" message="must be a valid VAT number" change='unitedKingdom { vat = "…" }' />
+
+### `nino`
+
+`nino()` on `String`
+
+Checks that the string is a UK National Insurance number: 2 letters, 6 digits and a letter from `A` to `D`, as `AB123456C` or `AB 12 34 56 C`.
+
+Letters are uppercase. The first two letters follow HMRC's rules: `D`, `F`, `I`, `Q`, `U` and `V` are never used, `O` is never the second letter, and `BG`, `GB`, `NK`, `KN`, `TN`, `NT` and `ZZ` are not assigned.
+
+<ConstraintFacts code="nino" message="must be a valid National Insurance number" change='unitedKingdom { nino = "…" }' />
+
 ## United States · `constraints.unitedstates`
 
 ### `ein`
@@ -277,6 +808,46 @@ Checks that the string is a US EIN with a prefix the IRS assigns, such as `12-34
 The separator can be a dash, a space or nothing.
 
 <ConstraintFacts code="ein" message="must be a valid EIN" change='unitedStates { ein = "…" }' />
+
+### `ssn`
+
+`ssn()` on `String`
+
+Checks that the string is a US SSN that can be assigned, as `123-45-6789` or `123456789`.
+
+The area (first 3 digits) is not `000`, `666` or `900` to `999`, the group (next 2) is not `00` and the serial (last 4) is not `0000`. Numbers the SSA has published as examples, such as `078-05-1120`, fail too.
+
+<ConstraintFacts code="ssn" message="must be a valid SSN" change='unitedStates { ssn = "…" }' />
+
+### `itin`
+
+`itin()` on `String`
+
+Checks that the string is a US ITIN, as `912-70-1234` or `912701234`.
+
+The first digit is `9`, and the group (digits 4 and 5) is from `70` to `99`, except `89` and `93`.
+
+<ConstraintFacts code="itin" message="must be a valid ITIN" change='unitedStates { itin = "…" }' />
+
+## Uruguay · `constraints.uruguay`
+
+### `rut`
+
+`rut()` on `String`
+
+Checks that the string is a Uruguayan RUT: 12 digits with a valid check digit, such as `211003420017`.
+
+The first two digits are a region from `01` to `22`, the next six are not all zeros, and digits 9 to 11 are `001`.
+
+<ConstraintFacts code="rut" message="must be a valid RUT" change='uruguay { rut = "…" }' />
+
+### `ci`
+
+`ci()` on `String`
+
+Checks that the string is a Uruguayan CI (cédula de identidad) with a valid check digit, as 7 or 8 digits or as `1.234.567-2`.
+
+<ConstraintFacts code="ci" message="must be a valid CI" change='uruguay { ci = "…" }' />
 
 <Tip>
   A document that can be of two kinds, such as a CPF or a CNPJ, is one rule with [`or`](/guides/combining-constraints):

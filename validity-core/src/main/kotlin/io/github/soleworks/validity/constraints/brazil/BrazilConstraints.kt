@@ -21,6 +21,11 @@ private val PIS_WEIGHTS = listOf(3, 2, 9, 8, 7, 6, 5, 4, 3, 2)
 private val CNH_FIRST_WEIGHTS = (9 downTo 1).toList()
 private val CNH_SECOND_WEIGHTS = (1..9).toList()
 
+internal val BRAZIL_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
+    "CPF" to String::isCpf,
+    "CNPJ" to String::isCnpj
+)
+
 /**
  * Checks that the string is a Brazilian CPF with valid check digits, as 11 digits or as `000.000.000-00`.
  *
@@ -36,7 +41,7 @@ public fun ValidationNode<String>.cpf(
 ): Unit = constraint(
     message = message,
     code = "cpf",
-    predicate = { CPF_FORMAT.matches(it) && it.digits().isCpf() }
+    predicate = String::isCpf
 )
 
 /**
@@ -54,7 +59,7 @@ public fun ValidationNode<String>.cnpj(
 ): Unit = constraint(
     message = message,
     code = "cnpj",
-    predicate = { CNPJ_FORMAT.matches(it) && it.cnpjValues().isCnpj() }
+    predicate = String::isCnpj
 )
 
 /**
@@ -126,6 +131,10 @@ public fun ValidationNode<String>.placa(
     code = "placa",
     predicate = { PLACA_FORMAT.matches(it) }
 )
+
+private fun String.isCpf(): Boolean = CPF_FORMAT.matches(this) && digits().isCpf()
+
+private fun String.isCnpj(): Boolean = CNPJ_FORMAT.matches(this) && cnpjValues().isCnpj()
 
 private fun String.cnpjValues(): List<Int> = filter(Char::isLetterOrDigit).map { char -> char.code - '0'.code }
 

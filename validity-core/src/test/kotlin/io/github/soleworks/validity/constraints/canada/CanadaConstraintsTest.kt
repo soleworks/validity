@@ -39,4 +39,34 @@ class CanadaConstraintsTest {
             )
         }
     }
+
+    @Nested
+    @DisplayName("When bn is called")
+    inner class Bn {
+        @ParameterizedTest
+        @ValueSource(strings = ["235396504", "901329284RT0001", "970437695RC0002"])
+        fun `given a valid BN should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "bn", value = value).apply { bn() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["235396500", "235396504XX0001", "235396504rt0001"])
+        fun `given an invalid BN should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "bn", value = value).apply { bn() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "bn", message = "must be a valid business number", code = "bn")
+            )
+        }
+    }
 }

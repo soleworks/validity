@@ -225,8 +225,8 @@
     "kotlin": "2.4",
     "java": "17",
     "site": "https://validity-kt.dev",
-    "constraints": "175",
+    "constraints": "221",
     "postalCountries": "72",
-    "documentCountries": "14"
+    "documentCountries": "36"
   }
 }

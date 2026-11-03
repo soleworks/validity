@@ -12,4 +12,7 @@ public class SpainMessages internal constructor() {
 
     /** Default message of `nie`. */
     public var nie: String = "must be a valid NIE"
+
+    /** Default message of `cif`. */
+    public var cif: String = "must be a valid CIF"
 }

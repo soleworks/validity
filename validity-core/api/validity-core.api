@@ -44,6 +44,27 @@ public final class io/github/soleworks/validity/AccessorsKt {
 	public static final fun valid (Lio/github/soleworks/validity/ValidationNode;Lkotlin/jvm/functions/Function2;)V
 }
 
+public final class io/github/soleworks/validity/ArgentinaMessages {
+	public final fun getCuil ()Ljava/lang/String;
+	public final fun getCuit ()Ljava/lang/String;
+	public final fun setCuil (Ljava/lang/String;)V
+	public final fun setCuit (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/AustraliaMessages {
+	public final fun getAbn ()Ljava/lang/String;
+	public final fun getTfn ()Ljava/lang/String;
+	public final fun setAbn (Ljava/lang/String;)V
+	public final fun setTfn (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/BelgiumMessages {
+	public final fun getBce ()Ljava/lang/String;
+	public final fun getNationalNumber ()Ljava/lang/String;
+	public final fun setBce (Ljava/lang/String;)V
+	public final fun setNationalNumber (Ljava/lang/String;)V
+}
+
 public final class io/github/soleworks/validity/BrazilMessages {
 	public final fun getCep ()Ljava/lang/String;
 	public final fun getCnh ()Ljava/lang/String;
@@ -65,8 +86,27 @@ public final class io/github/soleworks/validity/BulgariaMessages {
 }
 
 public final class io/github/soleworks/validity/CanadaMessages {
+	public final fun getBn ()Ljava/lang/String;
 	public final fun getSin ()Ljava/lang/String;
+	public final fun setBn (Ljava/lang/String;)V
 	public final fun setSin (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/ChileMessages {
+	public final fun getRut ()Ljava/lang/String;
+	public final fun setRut (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/ChinaMessages {
+	public final fun getUscc ()Ljava/lang/String;
+	public final fun setUscc (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/ColombiaMessages {
+	public final fun getCc ()Ljava/lang/String;
+	public final fun getNit ()Ljava/lang/String;
+	public final fun setCc (Ljava/lang/String;)V
+	public final fun setNit (Ljava/lang/String;)V
 }
 
 public final class io/github/soleworks/validity/ConstraintKt {
@@ -89,20 +129,61 @@ public final class io/github/soleworks/validity/ContextualValidatableKt {
 }
 
 public final class io/github/soleworks/validity/FranceMessages {
+	public final fun getSiren ()Ljava/lang/String;
+	public final fun getSiret ()Ljava/lang/String;
 	public final fun getSpi ()Ljava/lang/String;
+	public final fun setSiren (Ljava/lang/String;)V
+	public final fun setSiret (Ljava/lang/String;)V
 	public final fun setSpi (Ljava/lang/String;)V
 }
 
+public final class io/github/soleworks/validity/GermanyMessages {
+	public final fun getSteuerId ()Ljava/lang/String;
+	public final fun getUstIdNr ()Ljava/lang/String;
+	public final fun setSteuerId (Ljava/lang/String;)V
+	public final fun setUstIdNr (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/IndiaMessages {
+	public final fun getGstin ()Ljava/lang/String;
+	public final fun getPan ()Ljava/lang/String;
+	public final fun setGstin (Ljava/lang/String;)V
+	public final fun setPan (Ljava/lang/String;)V
+}
+
 public final class io/github/soleworks/validity/IsraelMessages {
+	public final fun getCompanyNumber ()Ljava/lang/String;
 	public final fun getTeudatZehut ()Ljava/lang/String;
+	public final fun setCompanyNumber (Ljava/lang/String;)V
 	public final fun setTeudatZehut (Ljava/lang/String;)V
 }
 
+public final class io/github/soleworks/validity/ItalyMessages {
+	public final fun getCodiceFiscale ()Ljava/lang/String;
+	public final fun getPartitaIva ()Ljava/lang/String;
+	public final fun setCodiceFiscale (Ljava/lang/String;)V
+	public final fun setPartitaIva (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/JapanMessages {
+	public final fun getCorporateNumber ()Ljava/lang/String;
+	public final fun getMyNumber ()Ljava/lang/String;
+	public final fun setCorporateNumber (Ljava/lang/String;)V
+	public final fun setMyNumber (Ljava/lang/String;)V
+}
+
 public final class io/github/soleworks/validity/Messages {
+	public final fun argentina (Lkotlin/jvm/functions/Function1;)V
+	public final fun australia (Lkotlin/jvm/functions/Function1;)V
+	public final fun belgium (Lkotlin/jvm/functions/Function1;)V
 	public final fun brazil (Lkotlin/jvm/functions/Function1;)V
 	public final fun bulgaria (Lkotlin/jvm/functions/Function1;)V
 	public final fun canada (Lkotlin/jvm/functions/Function1;)V
+	public final fun chile (Lkotlin/jvm/functions/Function1;)V
+	public final fun china (Lkotlin/jvm/functions/Function1;)V
+	public final fun colombia (Lkotlin/jvm/functions/Function1;)V
 	public final fun france (Lkotlin/jvm/functions/Function1;)V
+	public final fun germany (Lkotlin/jvm/functions/Function1;)V
 	public final fun getAfter ()Ljava/lang/String;
 	public final fun getAfterOrEqual ()Ljava/lang/String;
 	public final fun getAllOrNoneOf ()Ljava/lang/String;
@@ -271,6 +352,7 @@ public final class io/github/soleworks/validity/Messages {
 	public final fun getSizeBetween ()Ljava/lang/String;
 	public final fun getSlug ()Ljava/lang/String;
 	public final fun getStartsWith ()Ljava/lang/String;
+	public final fun getTaxId ()Ljava/lang/String;
 	public final fun getTimeZone ()Ljava/lang/String;
 	public final fun getToday ()Ljava/lang/String;
 	public final fun getTrimmed ()Ljava/lang/String;
@@ -282,11 +364,19 @@ public final class io/github/soleworks/validity/Messages {
 	public final fun getWeekend ()Ljava/lang/String;
 	public final fun getWithinLast ()Ljava/lang/String;
 	public final fun getWithinNext ()Ljava/lang/String;
+	public final fun india (Lkotlin/jvm/functions/Function1;)V
 	public final fun israel (Lkotlin/jvm/functions/Function1;)V
+	public final fun italy (Lkotlin/jvm/functions/Function1;)V
+	public final fun japan (Lkotlin/jvm/functions/Function1;)V
+	public final fun mexico (Lkotlin/jvm/functions/Function1;)V
 	public final fun module (Lio/github/soleworks/validity/MessagesKey;)Ljava/lang/Object;
 	public final fun netherlands (Lkotlin/jvm/functions/Function1;)V
+	public final fun norway (Lkotlin/jvm/functions/Function1;)V
 	public final fun pakistan (Lkotlin/jvm/functions/Function1;)V
+	public final fun paraguay (Lkotlin/jvm/functions/Function1;)V
+	public final fun peru (Lkotlin/jvm/functions/Function1;)V
 	public final fun poland (Lkotlin/jvm/functions/Function1;)V
+	public final fun portugal (Lkotlin/jvm/functions/Function1;)V
 	public final fun russia (Lkotlin/jvm/functions/Function1;)V
 	public final fun setAfter (Ljava/lang/String;)V
 	public final fun setAfterOrEqual (Ljava/lang/String;)V
@@ -456,6 +546,7 @@ public final class io/github/soleworks/validity/Messages {
 	public final fun setSizeBetween (Ljava/lang/String;)V
 	public final fun setSlug (Ljava/lang/String;)V
 	public final fun setStartsWith (Ljava/lang/String;)V
+	public final fun setTaxId (Ljava/lang/String;)V
 	public final fun setTimeZone (Ljava/lang/String;)V
 	public final fun setToday (Ljava/lang/String;)V
 	public final fun setTrimmed (Ljava/lang/String;)V
@@ -468,10 +559,17 @@ public final class io/github/soleworks/validity/Messages {
 	public final fun setWithinLast (Ljava/lang/String;)V
 	public final fun setWithinNext (Ljava/lang/String;)V
 	public final fun slovenia (Lkotlin/jvm/functions/Function1;)V
+	public final fun southAfrica (Lkotlin/jvm/functions/Function1;)V
+	public final fun southKorea (Lkotlin/jvm/functions/Function1;)V
 	public final fun spain (Lkotlin/jvm/functions/Function1;)V
+	public final fun sweden (Lkotlin/jvm/functions/Function1;)V
+	public final fun switzerland (Lkotlin/jvm/functions/Function1;)V
 	public final fun thailand (Lkotlin/jvm/functions/Function1;)V
 	public final fun ukraine (Lkotlin/jvm/functions/Function1;)V
+	public final fun unitedArabEmirates (Lkotlin/jvm/functions/Function1;)V
+	public final fun unitedKingdom (Lkotlin/jvm/functions/Function1;)V
 	public final fun unitedStates (Lkotlin/jvm/functions/Function1;)V
+	public final fun uruguay (Lkotlin/jvm/functions/Function1;)V
 }
 
 public final class io/github/soleworks/validity/MessagesKey {
@@ -479,9 +577,23 @@ public final class io/github/soleworks/validity/MessagesKey {
 	public final fun getCurrent ()Ljava/lang/Object;
 }
 
+public final class io/github/soleworks/validity/MexicoMessages {
+	public final fun getRfc ()Ljava/lang/String;
+	public final fun setRfc (Ljava/lang/String;)V
+}
+
 public final class io/github/soleworks/validity/NetherlandsMessages {
 	public final fun getBsn ()Ljava/lang/String;
+	public final fun getKvk ()Ljava/lang/String;
 	public final fun setBsn (Ljava/lang/String;)V
+	public final fun setKvk (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/NorwayMessages {
+	public final fun getFodselsnummer ()Ljava/lang/String;
+	public final fun getOrganisasjonsnummer ()Ljava/lang/String;
+	public final fun setFodselsnummer (Ljava/lang/String;)V
+	public final fun setOrganisasjonsnummer (Ljava/lang/String;)V
 }
 
 public final class io/github/soleworks/validity/PakistanMessages {
@@ -489,11 +601,32 @@ public final class io/github/soleworks/validity/PakistanMessages {
 	public final fun setCnic (Ljava/lang/String;)V
 }
 
+public final class io/github/soleworks/validity/ParaguayMessages {
+	public final fun getCi ()Ljava/lang/String;
+	public final fun getRuc ()Ljava/lang/String;
+	public final fun setCi (Ljava/lang/String;)V
+	public final fun setRuc (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/PeruMessages {
+	public final fun getDni ()Ljava/lang/String;
+	public final fun getRuc ()Ljava/lang/String;
+	public final fun setDni (Ljava/lang/String;)V
+	public final fun setRuc (Ljava/lang/String;)V
+}
+
 public final class io/github/soleworks/validity/PolandMessages {
 	public final fun getNip ()Ljava/lang/String;
 	public final fun getPesel ()Ljava/lang/String;
 	public final fun setNip (Ljava/lang/String;)V
 	public final fun setPesel (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/PortugalMessages {
+	public final fun getNif ()Ljava/lang/String;
+	public final fun getNipc ()Ljava/lang/String;
+	public final fun setNif (Ljava/lang/String;)V
+	public final fun setNipc (Ljava/lang/String;)V
 }
 
 public final class io/github/soleworks/validity/PremisesKt {
@@ -550,11 +683,41 @@ public final class io/github/soleworks/validity/SloveniaMessages {
 	public final fun setDavcnaStevilka (Ljava/lang/String;)V
 }
 
+public final class io/github/soleworks/validity/SouthAfricaMessages {
+	public final fun getCipc ()Ljava/lang/String;
+	public final fun getIdNumber ()Ljava/lang/String;
+	public final fun setCipc (Ljava/lang/String;)V
+	public final fun setIdNumber (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/SouthKoreaMessages {
+	public final fun getBrn ()Ljava/lang/String;
+	public final fun getRrn ()Ljava/lang/String;
+	public final fun setBrn (Ljava/lang/String;)V
+	public final fun setRrn (Ljava/lang/String;)V
+}
+
 public final class io/github/soleworks/validity/SpainMessages {
+	public final fun getCif ()Ljava/lang/String;
 	public final fun getDni ()Ljava/lang/String;
 	public final fun getNie ()Ljava/lang/String;
+	public final fun setCif (Ljava/lang/String;)V
 	public final fun setDni (Ljava/lang/String;)V
 	public final fun setNie (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/SwedenMessages {
+	public final fun getOrganisationsnummer ()Ljava/lang/String;
+	public final fun getPersonnummer ()Ljava/lang/String;
+	public final fun setOrganisationsnummer (Ljava/lang/String;)V
+	public final fun setPersonnummer (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/SwitzerlandMessages {
+	public final fun getAhv ()Ljava/lang/String;
+	public final fun getUid ()Ljava/lang/String;
+	public final fun setAhv (Ljava/lang/String;)V
+	public final fun setUid (Ljava/lang/String;)V
 }
 
 public final class io/github/soleworks/validity/ThailandMessages {
@@ -567,9 +730,34 @@ public final class io/github/soleworks/validity/UkraineMessages {
 	public final fun setRnokpp (Ljava/lang/String;)V
 }
 
+public final class io/github/soleworks/validity/UnitedArabEmiratesMessages {
+	public final fun getEmiratesId ()Ljava/lang/String;
+	public final fun getTradeLicense ()Ljava/lang/String;
+	public final fun setEmiratesId (Ljava/lang/String;)V
+	public final fun setTradeLicense (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/UnitedKingdomMessages {
+	public final fun getNino ()Ljava/lang/String;
+	public final fun getVat ()Ljava/lang/String;
+	public final fun setNino (Ljava/lang/String;)V
+	public final fun setVat (Ljava/lang/String;)V
+}
+
 public final class io/github/soleworks/validity/UnitedStatesMessages {
 	public final fun getEin ()Ljava/lang/String;
+	public final fun getItin ()Ljava/lang/String;
+	public final fun getSsn ()Ljava/lang/String;
 	public final fun setEin (Ljava/lang/String;)V
+	public final fun setItin (Ljava/lang/String;)V
+	public final fun setSsn (Ljava/lang/String;)V
+}
+
+public final class io/github/soleworks/validity/UruguayMessages {
+	public final fun getCi ()Ljava/lang/String;
+	public final fun getRut ()Ljava/lang/String;
+	public final fun setCi (Ljava/lang/String;)V
+	public final fun setRut (Ljava/lang/String;)V
 }
 
 public abstract interface class io/github/soleworks/validity/Validatable {
@@ -1486,6 +1674,90 @@ public final class io/github/soleworks/validity/constraints/StringConstraintsKt 
 	public static synthetic fun uppercase$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
+public final class io/github/soleworks/validity/constraints/TaxIdConstraintsKt {
+	public static final fun taxId (Lio/github/soleworks/validity/ValidationNode;Lio/github/soleworks/validity/constraints/TaxIdType;Ljava/lang/String;)V
+	public static final fun taxId (Lio/github/soleworks/validity/ValidationNode;Lio/github/soleworks/validity/constraints/TaxIdType;Lkotlin/jvm/functions/Function3;)V
+	public static final fun taxId (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public static final fun taxId (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function4;)V
+	public static synthetic fun taxId$default (Lio/github/soleworks/validity/ValidationNode;Lio/github/soleworks/validity/constraints/TaxIdType;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun taxId$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/TaxIdType : java/lang/Enum {
+	public static final field AE_EMIRATES_ID Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field AE_TRADE_LICENSE Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field AR_CUIL Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field AR_CUIT Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field AU_ABN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field AU_TFN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field BE_BCE Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field BE_NATIONAL_NUMBER Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field BG_EGN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field BR_CNPJ Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field BR_CPF Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field CA_BN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field CA_SIN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field CH_AHV Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field CH_UID Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field CL_RUT Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field CN_USCC Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field CO_CC Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field CO_NIT Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field DE_STEUER_ID Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field DE_UST_ID_NR Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field ES_CIF Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field ES_DNI Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field ES_NIE Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field FR_SIREN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field FR_SIRET Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field FR_SPI Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field GB_NINO Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field GB_VAT Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field IL_COMPANY_NUMBER Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field IL_TEUDAT_ZEHUT Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field IN_GSTIN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field IN_PAN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field IT_CODICE_FISCALE Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field IT_PARTITA_IVA Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field JP_CORPORATE_NUMBER Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field JP_MY_NUMBER Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field KR_BRN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field KR_RRN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field MX_RFC Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field NL_BSN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field NL_KVK Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field NO_FODSELSNUMMER Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field NO_ORGANISASJONSNUMMER Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field PE_DNI Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field PE_RUC Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field PK_CNIC Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field PL_NIP Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field PL_PESEL Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field PT_NIF Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field PT_NIPC Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field PY_CI Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field PY_RUC Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field RU_INN_INDIVIDUAL Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field RU_INN_LEGAL_ENTITY Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field SE_ORGANISATIONSNUMMER Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field SE_PERSONNUMMER Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field SI_DAVCNA_STEVILKA Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field TH_NATIONAL_ID Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field UA_RNOKPP Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field US_EIN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field US_ITIN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field US_SSN Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field UY_CI Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field UY_RUT Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field ZA_CIPC Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static final field ZA_ID_NUMBER Lio/github/soleworks/validity/constraints/TaxIdType;
+	public final fun getCountry ()Ljava/lang/String;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getType ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/soleworks/validity/constraints/TaxIdType;
+	public static fun values ()[Lio/github/soleworks/validity/constraints/TaxIdType;
+}
+
 public final class io/github/soleworks/validity/constraints/TemporalConstraintsKt {
 	public static final fun after (Lio/github/soleworks/validity/ValidationNode;Ljava/time/Instant;Ljava/lang/String;)V
 	public static final fun after (Lio/github/soleworks/validity/ValidationNode;Ljava/time/Instant;Lkotlin/jvm/functions/Function3;)V
@@ -1781,6 +2053,27 @@ public final class io/github/soleworks/validity/constraints/UnsignedConstraintsK
 	public static synthetic fun minUShort$default (Lio/github/soleworks/validity/ValidationNode;Lkotlin/UShort;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
+public final class io/github/soleworks/validity/constraints/argentina/ArgentinaConstraintsKt {
+	public static final fun cuil (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun cuil$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun cuit (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun cuit$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/australia/AustraliaConstraintsKt {
+	public static final fun abn (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun abn$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun tfn (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun tfn$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/belgium/BelgiumConstraintsKt {
+	public static final fun bce (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun bce$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun nationalNumber (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun nationalNumber$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
 public final class io/github/soleworks/validity/constraints/brazil/BrazilConstraintsKt {
 	public static final fun cep (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun cep$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
@@ -1802,23 +2095,90 @@ public final class io/github/soleworks/validity/constraints/bulgaria/BulgariaCon
 }
 
 public final class io/github/soleworks/validity/constraints/canada/CanadaConstraintsKt {
+	public static final fun bn (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun bn$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun sin (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun sin$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
+public final class io/github/soleworks/validity/constraints/chile/ChileConstraintsKt {
+	public static final fun rut (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun rut$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/china/ChinaConstraintsKt {
+	public static final fun uscc (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun uscc$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/colombia/ColombiaConstraintsKt {
+	public static final fun cc (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun cc$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun nit (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun nit$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
 public final class io/github/soleworks/validity/constraints/france/FranceConstraintsKt {
+	public static final fun siren (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun siren$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun siret (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun siret$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun spi (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun spi$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
+public final class io/github/soleworks/validity/constraints/germany/GermanyConstraintsKt {
+	public static final fun steuerId (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun steuerId$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun ustIdNr (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun ustIdNr$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/india/IndiaConstraintsKt {
+	public static final fun gstin (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun gstin$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun pan (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun pan$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
 public final class io/github/soleworks/validity/constraints/israel/IsraelConstraintsKt {
+	public static final fun companyNumber (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun companyNumber$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun teudatZehut (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun teudatZehut$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/italy/ItalyConstraintsKt {
+	public static final fun codiceFiscale (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun codiceFiscale$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun partitaIva (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun partitaIva$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/japan/JapanConstraintsKt {
+	public static final fun corporateNumber (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun corporateNumber$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun myNumber (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun myNumber$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/mexico/MexicoConstraintsKt {
+	public static final fun rfc (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun rfc$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
 public final class io/github/soleworks/validity/constraints/netherlands/NetherlandsConstraintsKt {
 	public static final fun bsn (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun bsn$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun kvk (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun kvk$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/norway/NorwayConstraintsKt {
+	public static final fun fodselsnummer (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun fodselsnummer$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun organisasjonsnummer (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun organisasjonsnummer$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
 public final class io/github/soleworks/validity/constraints/pakistan/PakistanConstraintsKt {
@@ -1826,11 +2186,32 @@ public final class io/github/soleworks/validity/constraints/pakistan/PakistanCon
 	public static synthetic fun cnic$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
+public final class io/github/soleworks/validity/constraints/paraguay/ParaguayConstraintsKt {
+	public static final fun ci (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun ci$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun ruc (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun ruc$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/peru/PeruConstraintsKt {
+	public static final fun dni (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun dni$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun ruc (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun ruc$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
 public final class io/github/soleworks/validity/constraints/poland/PolandConstraintsKt {
 	public static final fun nip (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun nip$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun pesel (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun pesel$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/portugal/PortugalConstraintsKt {
+	public static final fun nif (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun nif$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun nipc (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun nipc$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
 public final class io/github/soleworks/validity/constraints/russia/RussiaConstraintsKt {
@@ -1845,11 +2226,41 @@ public final class io/github/soleworks/validity/constraints/slovenia/SloveniaCon
 	public static synthetic fun davcnaStevilka$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
+public final class io/github/soleworks/validity/constraints/southafrica/SouthAfricaConstraintsKt {
+	public static final fun cipc (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun cipc$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun idNumber (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun idNumber$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/southkorea/SouthKoreaConstraintsKt {
+	public static final fun brn (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun brn$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun rrn (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun rrn$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
 public final class io/github/soleworks/validity/constraints/spain/SpainConstraintsKt {
+	public static final fun cif (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun cif$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun dni (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun dni$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun nie (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun nie$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/sweden/SwedenConstraintsKt {
+	public static final fun organisationsnummer (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun organisationsnummer$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun personnummer (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun personnummer$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/switzerland/SwitzerlandConstraintsKt {
+	public static final fun ahv (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun ahv$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun uid (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun uid$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
 public final class io/github/soleworks/validity/constraints/thailand/ThailandConstraintsKt {
@@ -1862,8 +2273,33 @@ public final class io/github/soleworks/validity/constraints/ukraine/UkraineConst
 	public static synthetic fun rnokpp$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
+public final class io/github/soleworks/validity/constraints/unitedarabemirates/UnitedArabEmiratesConstraintsKt {
+	public static final fun emiratesId (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun emiratesId$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun tradeLicense (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun tradeLicense$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/unitedkingdom/UnitedKingdomConstraintsKt {
+	public static final fun nino (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun nino$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun vat (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun vat$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
 public final class io/github/soleworks/validity/constraints/unitedstates/UnitedStatesConstraintsKt {
 	public static final fun ein (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
 	public static synthetic fun ein$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun itin (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun itin$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun ssn (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun ssn$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/constraints/uruguay/UruguayConstraintsKt {
+	public static final fun ci (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun ci$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun rut (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;)V
+	public static synthetic fun rut$default (Lio/github/soleworks/validity/ValidationNode;Ljava/lang/String;ILjava/lang/Object;)V
 }
 

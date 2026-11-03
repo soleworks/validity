@@ -39,4 +39,34 @@ class IsraelConstraintsTest {
             )
         }
     }
+
+    @Nested
+    @DisplayName("When companyNumber is called")
+    inner class CompanyNumber {
+        @ParameterizedTest
+        @ValueSource(strings = ["521387803", "527736680", "516179157"])
+        fun `given a valid company number should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "companyNumber", value = value).apply { companyNumber() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["521387800", "421387803"])
+        fun `given an invalid company number should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "companyNumber", value = value).apply { companyNumber() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "companyNumber", message = "must be a valid company number", code = "companyNumber")
+            )
+        }
+    }
 }

@@ -9,4 +9,7 @@ package io.github.soleworks.validity
 public class CanadaMessages internal constructor() {
     /** Default message of `sin`. */
     public var sin: String = "must be a valid SIN"
+
+    /** Default message of `bn`. */
+    public var bn: String = "must be a valid business number"
 }

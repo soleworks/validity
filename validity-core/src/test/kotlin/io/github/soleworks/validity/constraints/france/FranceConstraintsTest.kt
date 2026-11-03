@@ -48,4 +48,72 @@ class FranceConstraintsTest {
             )
         }
     }
+
+    @Nested
+    @DisplayName("When siren is called")
+    inner class Siren {
+        @ParameterizedTest
+        @ValueSource(strings = ["934461799", "462 042 078", "732829320"])
+        fun `given a valid SIREN should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "siren", value = value).apply { siren() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["934461790", "93446179"])
+        fun `given an invalid SIREN should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "siren", value = value).apply { siren() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "siren", message = "must be a valid SIREN", code = "siren")
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When siret is called")
+    inner class Siret {
+        @ParameterizedTest
+        @ValueSource(
+            strings = [
+                "82247920095500",
+                "372 157 586 22246",
+                "73282932000074",
+                "35600000000048",
+                "35600000000010"
+            ]
+        )
+        fun `given a valid SIRET should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "siret", value = value).apply { siret() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["82247920095501", "35600000000011"])
+        fun `given an invalid SIRET should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "siret", value = value).apply { siret() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "siret", message = "must be a valid SIRET", code = "siret")
+            )
+        }
+    }
 }

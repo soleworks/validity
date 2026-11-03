@@ -14,6 +14,11 @@ private val INN_INDIVIDUAL_FIRST_WEIGHTS = listOf(7, 2, 4, 10, 3, 5, 9, 4, 6, 8)
 private val INN_INDIVIDUAL_SECOND_WEIGHTS = listOf(3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8)
 private val INN_LEGAL_ENTITY_WEIGHTS = listOf(2, 4, 10, 3, 5, 9, 4, 6, 8)
 
+internal val RUSSIA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
+    "INN_INDIVIDUAL" to String::isInnIndividual,
+    "INN_LEGAL_ENTITY" to String::isInnLegalEntity
+)
+
 /**
  * Checks that the string is the INN of a Russian individual: 12 digits with two valid check digits.
  *
@@ -27,7 +32,7 @@ public fun ValidationNode<String>.innIndividual(
 ): Unit = constraint(
     message = message,
     code = "innIndividual",
-    predicate = { INN_INDIVIDUAL_FORMAT.matches(it) && it.digits().isInnIndividual() }
+    predicate = String::isInnIndividual
 )
 
 /**
@@ -43,8 +48,12 @@ public fun ValidationNode<String>.innLegalEntity(
 ): Unit = constraint(
     message = message,
     code = "innLegalEntity",
-    predicate = { INN_LEGAL_ENTITY_FORMAT.matches(it) && it.digits().isInnLegalEntity() }
+    predicate = String::isInnLegalEntity
 )
+
+private fun String.isInnIndividual(): Boolean = INN_INDIVIDUAL_FORMAT.matches(this) && digits().isInnIndividual()
+
+private fun String.isInnLegalEntity(): Boolean = INN_LEGAL_ENTITY_FORMAT.matches(this) && digits().isInnLegalEntity()
 
 private fun List<Int>.checkDigit(
     weights: List<Int>

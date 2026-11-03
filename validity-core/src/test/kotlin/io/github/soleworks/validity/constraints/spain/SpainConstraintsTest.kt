@@ -69,4 +69,34 @@ class SpainConstraintsTest {
             )
         }
     }
+
+    @Nested
+    @DisplayName("When cif is called")
+    inner class Cif {
+        @ParameterizedTest
+        @ValueSource(strings = ["B7905597F", "B79055976", "N1851369G"])
+        fun `given a valid CIF should accept it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "cif", value = value).apply { cif() }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["B7905597A", "I7905597F", "b7905597f"])
+        fun `given an invalid CIF should report it`(
+            value: String
+        ) {
+            val node = ValidationNode(path = "cif", value = value).apply { cif() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "cif", message = "must be a valid CIF", code = "cif")
+            )
+        }
+    }
 }

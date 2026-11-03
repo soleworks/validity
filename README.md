@@ -85,7 +85,7 @@ Violation(path=iban, message=is required, code=required)
   `shipping.zipCode`, `items[1].quantity`, `prices[USD]`.
 - **Every error at once, for two audiences.** A `message` for people, configurable and translatable, and a stable
   `code` for programs, plus the `metadata` you attach, and `failFast { }` where a rule only makes sense after another.
-- **Batteries included.** 175 constraints, postal codes of 72 countries, national documents of 14, and phone
+- **Batteries included.** 221 constraints, postal codes of 72 countries, national documents of 36, and phone
   numbers in their own module.
 - **Nothing hidden.** No annotations, no code generation, no `kotlin-reflect`. `validity-core` depends on nothing but
   the Kotlin standard library and kotlinx.coroutines.
