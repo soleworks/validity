@@ -19,9 +19,9 @@
       }
     ],
     "selector-class-pattern": [
-      "^(v-[a-z0-9-]+|card|code-block|dark)$",
+      "^(v-[a-z0-9-]+|card|code-block|code-group|dark)$",
       {
-        "message": "Style only the v- classes of these pages and the hooks Mintlify documents (.card, .code-block, .dark), never the utility classes it renders."
+        "message": "Style only the v- classes of these pages and the hooks Mintlify documents (.card, .code-block, .code-group, .dark), never the utility classes it renders."
       }
     ],
     "selector-id-pattern": [

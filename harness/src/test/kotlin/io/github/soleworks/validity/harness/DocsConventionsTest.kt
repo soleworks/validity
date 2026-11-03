@@ -10,6 +10,7 @@ private const val CORE_SOURCES = "validity-core/src/main/kotlin/io/github/solewo
 private const val PHONE_SOURCES = "validity-phone/src/main/kotlin/io/github/soleworks/validity/phone"
 private const val COUNTRY_PACKAGE_PREFIX = "io.github.soleworks.validity.constraints."
 private const val MAX_DESCRIPTION_LENGTH = 160
+private const val UNRELEASED = "0.0.0"
 
 private val CONSTRAINT_HEADING_FORMAT = Regex("""^### `(\w+)`""", RegexOption.MULTILINE)
 private val CONSTRAINT_SECTION_FORMAT = Regex(
@@ -25,7 +26,9 @@ private val VARIABLE_USE_FORMAT = Regex("""\{\{(\w+)}}""")
 private val SNIPPET_IMPORT_FORMAT = Regex("""^import \w+ from "/snippets/([\w-]+\.mdx)";""", RegexOption.MULTILINE)
 private val NAVIGATION_PAGES_FORMAT = Regex(""""pages":\s*\[(.*?)]""", RegexOption.DOT_MATCHES_ALL)
 private val QUOTED_FORMAT = Regex(""""([^"]+)"""")
-private val VERSION_FORMAT = Regex("""^version=([\d.]+)""", RegexOption.MULTILINE)
+private val RELEASED_VERSION_FORMAT = Regex(""""\.":\s*"([^"]+)"""")
+private val VERSION_LINK_FORMAT = Regex("""\{[^{}]*"href":\s*"[^"]*/releases/latest"[^{}]*}""")
+private val LABEL_FORMAT = Regex(""""label":\s*"([^"]*)"""")
 private val KOTLIN_VERSION_FORMAT = Regex("""^kotlin = "(\d+\.\d+)""", RegexOption.MULTILINE)
 private val JAVA_VERSION_FORMAT = Regex("""JavaLanguageVersion\.of\((\d+)\)""")
 private val POSTAL_CODE_FORMAT = Regex(""""[A-Z]{2}" to """)
@@ -65,11 +68,32 @@ class DocsConventionsTest {
     @Nested
     @DisplayName("Facts")
     inner class Facts {
-        @Test
-        fun `the version variable should be the version the build publishes`() {
-            val properties = repository.resolve("gradle.properties").readText()
+        private val released = RELEASED_VERSION_FORMAT
+            .find(repository.resolve(".release-please-manifest.json").readText())
+            ?.run { groupValues[1] }
+        private val versionLink = VERSION_LINK_FORMAT.find(docs.resolve("docs.json").readText())?.value
 
-            docsVariables["version"] shouldBe VERSION_FORMAT.find(properties)?.run { groupValues[1] }
+        @Test
+        fun `the version variable should be the version last released, which the release-please manifest holds`() {
+            docsVariables["version"] shouldBe released
+        }
+
+        @Test
+        fun `before the first release, nothing should show the version, since no version exists yet`() {
+            val showing = sources
+                .filter { source -> "version" in source.variablesUsed() }
+                .map { source -> source.docsPath } + listOfNotNull(versionLink?.let { "docs.json: the version link" })
+
+            showing
+                .filter { released == UNRELEASED }
+                .shouldListNothing()
+        }
+
+        @Test
+        fun `the version link of the navbar should name the version variable, since Mintlify does not fill it in`() {
+            val label = LABEL_FORMAT.find(versionLink.orEmpty())?.run { groupValues[1] }
+
+            label shouldBe versionLink?.let { docsVariables["version"] }
         }
 
         @Test

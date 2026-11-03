@@ -15,6 +15,11 @@
           "type": "json",
           "path": "docs/docs.json",
           "jsonpath": "$.variables.version"
+        },
+        {
+          "type": "json",
+          "path": "docs/docs.json",
+          "jsonpath": "$.navbar.links[?(@.href=='https://github.com/soleworks/validity/releases/latest')].label"
         }
       ]
     }
