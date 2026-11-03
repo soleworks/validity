@@ -21,7 +21,7 @@ Every broken rule at once, each with a path, a message for people and a code for
 [![License](https://img.shields.io/badge/license-Apache%202.0-2F81F7?style=flat-square)](LICENSE)
 [![Maven Central](https://img.shields.io/static/v1?label=Maven%20Central&message=0.1.0&color=2F81F7&style=flat-square&logo=apachemaven&logoColor=white)](https://central.sonatype.com/artifact/io.github.soleworks/validity-core)
 
-[Why Validity](#why-validity) · [Installation](#installation) · [Quick start](#quick-start) · [Modules](#modules) · [Documentation](#documentation)
+**[Documentation](https://validity-kt.dev)** · [Quick start](#quick-start) · [Installation](#installation) · [Why Validity](#why-validity)
 
 </div>
 
@@ -72,36 +72,17 @@ Violation(path=iban, message=is required, code=required)
 
 - **Rules read like the requirements.** `::email required { email() }` is the sentence from the ticket, written next
   to the data it protects.
-- **Conditions are plain Kotlin.** "Required if", "only for companies" and "after the check-in" are an `if`, a `when`
-  and a field of the object. No validation groups, no class-level annotations.
+- **Conditions are plain Kotlin.** "Required if" and "only for companies" are an `if` and a `when`. No validation
+  groups, no class-level annotations.
 - **`null` is decided once.** `required`, `ifPresent` and `forbidden` settle what `null` means, and every constraint
-  after them works on the non-null type, so autocomplete offers only the ones that fit.
-- **Rules across fields are built in.** `atLeastOneOf`, `exactlyOneOf` and `allOrNoneOf` cover the rules that forms
-  and payment APIs are full of, `exactlyOf(2, ::a, ::b, ::c)` counts any number of them, `constraint(::total, message = "...") { }` checks any rule about the whole object,
-  and `or`, `and` and `not` combine any constraints.
-- **Context and coroutines.** A rule can read data the caller passes, such as the logged-in user, and call `suspend`
-  functions, such as a database lookup, without a separate API for either.
-- **Nested objects and collections.** `valid()` and `each` follow the data, and every violation says where it is:
-  `shipping.zipCode`, `items[1].quantity`, `prices[USD]`.
+  after them works on the non-null type.
 - **Every error at once, for two audiences.** A `message` for people, configurable and translatable, and a stable
-  `code` for programs, plus the `metadata` you attach, and `failFast { }` where a rule only makes sense after another.
+  `code` for programs, each with the path where it happened.
 - **Batteries included.** 221 constraints, postal codes of 72 countries, national documents of 36, and phone
   numbers in their own module.
-- **Nothing hidden.** No annotations, no code generation, no `kotlin-reflect`. `validity-core` depends on nothing but
-  the Kotlin standard library and kotlinx.coroutines.
+- **Nothing hidden.** No annotations, no code generation, no `kotlin-reflect`.
 
-How it compares, in each library's own terms:
-
-| | Validity | Konform | Valiktor | Akkurate | Jakarta Validation |
-|---|---|---|---|---|---|
-| Rules are | Kotlin DSL | Kotlin DSL | Kotlin DSL | Kotlin DSL | annotations |
-| They live | in the class, or beside it | in a `Validation<T>` | usually in `init` | in a `Validator<T>` | on fields and classes |
-| A rule on another field | `if`, `when` | `dynamic { }` | code in the block | code in the block | class-level constraint, groups |
-| Code generation | none | none | none | KSP plugin | none |
-| Platforms | JVM 17+ | Multiplatform | JVM | Multiplatform | JVM |
-
-Each of them is a solid choice, and some go where Validity does not yet: Konform and Akkurate run on Kotlin
-Multiplatform, and Jakarta Validation plugs straight into the frameworks that read its annotations.
+The [documentation](https://validity-kt.dev) compares it with Konform, Valiktor, Akkurate and Jakarta Validation.
 
 ## Installation
 
@@ -154,175 +135,12 @@ Violation(path=age, message=must be at least 18, code=min)
 At the edge of your system, `user.validateOrThrow()` (or `validateOrThrowBlocking()`) throws a `ValidationException`
 that carries the same list, so one error handler can turn every invalid request into a response.
 
-### Rules beside the class
+Going further:
 
-When the class is not yours, such as one from a library, or when its rules belong somewhere else, write them for the
-type with `validation<T> { }`. Inside the block the value being checked is `this`, so `::street` is its property:
-
-```kotlin
-data class Destination(
-    val street: String?,
-    val zipCode: String?
-)
-
-val destinationValidation = validation<Destination> {
-    ::street required { notBlank() }
-    ::zipCode required {
-        minLength(5)
-        digits()
-    }
-}
-
-destinationValidation.validate(Destination(street = "", zipCode = "013")).violations
-```
-
-```text
-Violation(path=street, message=must not be blank, code=notBlank)
-Violation(path=zipCode, message=must have at least 5 characters, code=minLength)
-```
-
-The same rules check a property of that type with `valid`, nested under the property:
-
-```kotlin
-data class Shipping(
-    val destination: Destination?
-) : Validatable {
-    override fun validation() = validation {
-        ::destination required { valid(destinationValidation) }
-    }
-}
-
-Shipping(destination = Destination(street = "", zipCode = "01310")).validate().violations
-```
-
-```text
-Violation(path=destination.street, message=must not be blank, code=notBlank)
-```
-
-For a single value, `validatable(destination) { ... }` pairs it with its rules and validates like a `Validatable`.
-
-### Stopping at the first failure
-
-Every rule runs by default, so one request reports every error. When a rule only makes sense after another, such as a
-lookup after a format check, put both in `failFast { }`: its rules run in order, and the ones after the first failure
-are not evaluated.
-
-```kotlin
-data class Registration(
-    val email: String?
-) : Validatable {
-    override fun validation() = validation {
-        ::email required {
-            failFast {
-                email()
-                constraint("is already registered", code = "registered") { !Accounts.exists(it) }
-            }
-        }
-    }
-}
-
-Registration(email = "ana@").validate().violations           // Accounts.exists is never called
-Registration(email = "ana@mail.com").validate().violations   // when it is taken
-```
-
-```text
-Violation(path=email, message=must be a valid email, code=email)
-Violation(path=email, message=is already registered, code=registered)
-```
-
-The rules after the block, and the other fields, run as usual. Each call in the block is one rule: an `each { }` or a
-`valid()` counts once, with all its elements.
-
-> [!IMPORTANT]
-> `failFast` skips rules, not code. The rules are declared first and checked later, so work written in the block but
-> outside a rule runs every time:
->
-> ```kotlin
-> failFast {
->     email()
->     val taken = Accounts.exists(email)              // runs even for "ana@"
->     constraint("is already registered") { !taken }
-> }
-> ```
->
-> Put the work inside `constraint { }`, after the rule it depends on.
-
-### Rules that need the caller's data
-
-Some rules depend on who is asking: the credit limit of the logged-in customer, the catalog of a tenant, a repository.
-Implement `ContextualValidatable` and the rules receive that context, with its type checked by the compiler:
-
-```kotlin
-data class Checkout(
-    val total: Int?,
-    val items: List<Item>?
-) : ContextualValidatable<Customer> {
-    override fun validation(
-        context: Customer
-    ) = validation {
-        ::total required { max(context.creditLimit) }
-        ::items required { each { valid(context) } }
-    }
-}
-
-data class Item(
-    val sku: String?
-) : ContextualValidatable<Customer> {
-    override fun validation(
-        context: Customer
-    ) = validation {
-        ::sku required { constraint("is not in your catalog", code = "catalog") { it in context.catalog } }
-    }
-}
-
-val customer = Customer(creditLimit = 100, catalog = setOf("BOOK-1", "PEN-2"))
-
-Checkout(total = 150, items = listOf(Item(sku = "BOOK-1"), Item(sku = "LAPTOP-9"))).validate(customer).violations
-```
-
-```text
-Violation(path=total, message=must be at most 100, code=max)
-Violation(path=items[1].sku, message=is not in your catalog, code=catalog)
-```
-
-Nested objects receive the context explicitly, with `valid(context)`, so a child can also take a part of it, such as
-`valid(context.tenant)`. `validateBlocking(context)`, `validateOrThrow(context)` and `validateOrThrowBlocking(context)`
-work as their `Validatable` counterparts.
-
-### Rules that suspend
-
-Every piece of code you hand to Validity can call a `suspend` function, under the same names: the condition of a
-`constraint`, a message built from the value, a converter, and the blocks of `validation`, `required`, `each`, `or` and
-the others. A lookup is one more rule:
-
-```kotlin
-interface Users {
-    suspend fun exists(
-        email: String
-    ): Boolean
-}
-
-data class Invitation(
-    val email: String?
-) : ContextualValidatable<Users> {
-    override fun validation(
-        context: Users
-    ) = validation {
-        ::email required {
-            failFast {
-                email()
-                constraint("is already registered", code = "registered") { !context.exists(it) }
-            }
-        }
-    }
-}
-
-invitation.validate(users)           // inside a coroutine: Ktor, Spring WebFlux
-invitation.validateBlocking(users)   // anywhere else: waits for the lookup
-```
-
-The `Validity` in use goes with the coroutine, so a rule that resumes on another thread still reads the configured
-clock and messages.
+- [Rules beside the class](https://validity-kt.dev/guides/beside-the-class), for a type that is not yours.
+- [Stopping at the first failure](https://validity-kt.dev/guides/fail-fast), when a rule only makes sense after another.
+- [Rules that need the caller's data](https://validity-kt.dev/guides/context), such as the logged-in user.
+- [Rules that suspend](https://validity-kt.dev/guides/coroutines), such as a database lookup.
 
 ## Modules
 
@@ -343,38 +161,10 @@ It is written for AI agents too: every page is also Markdown (add `.md` to its a
 claude mcp add --transport http validity https://validity-kt.dev/mcp
 ```
 
-## Development
+## Contributing
 
-`./gradlew build` compiles, tests and checks every module. Three tools keep the code in one style:
-
-- **ktlint** formats every Kotlin file with the rules in [.editorconfig](.editorconfig). `./gradlew ktlintFormat` fixes what it can and lists the rest.
-- **Detekt** runs every rule it has, the libraries rule set included. [config/detekt/detekt.yml](config/detekt/detekt.yml) lists the few rules this project tunes, each with its reason.
-- **Konsist**, in the internal `harness` module, checks the conventions Detekt cannot see: how a constraint is declared, how values are named, what a production file may import, and that every test is a Given, a When and a Then, ordered by what it checks.
-
-**Kover** measures what the tests cover in `validity-core` and `validity-phone`, and the build fails below 99% of the lines or 93% of the branches. `./gradlew :koverHtmlReport` writes the report to `build/reports/kover/html`, and CI uploads it to [Codecov](https://codecov.io/gh/soleworks/validity), which asks every line a pull request changes to be covered ([codecov.yml](codecov.yml)).
-
-None of these tools, nor Kotest, is a dependency of a published module.
-
-The examples in this README are samples in
-[validity-core/src/test/.../samples/readme](validity-core/src/test/kotlin/io/github/soleworks/validity/samples/readme),
-and a test checks the output shown next to them. When you change an example, change its sample too.
-
-The docs site lives in [docs](docs), built by [Mintlify](https://www.mintlify.com) from `docs.json` and its `.mdx`
-pages, and published on every push to `main`. After `npm ci`, `npm run docs:dev` serves it at `localhost:3000`. Each fact
-has one home: the version and the counts are variables of `docs.json`, a block shown twice is a snippet, and a code block
-titled with a file name, such as `Account.kt`, is a sample in
-[samples/docs](validity-core/src/test/kotlin/io/github/soleworks/validity/samples/docs). Four tools hold that:
-
-- **The harness** checks the samples, the facts against the code, the facts of each constraint against its messages,
-  and that no sentence or code block is written twice.
-- **The Mintlify CLI** checks the MDX, the navigation, the links and their anchors, and accessibility.
-- **Stylelint** keeps colors in `tokens.css` and the layout free of pixel offsets and of Mintlify's internal classes.
-- **[Vale](https://vale.sh)** checks spelling and the voice of the prose.
-
-`./gradlew build` runs the harness, `npm run docs:check` the Mintlify CLI and Stylelint, and `vale .` in `docs` the prose.
-
-The public API of each published module is kept in `api/<module>.api`, and `./gradlew check` fails when it changes
-without `./gradlew updateKotlinAbi`. [RELEASING.md](RELEASING.md) describes how a version is born and published.
+[CONTRIBUTING.md](CONTRIBUTING.md) explains how to build the project, the checks every change passes and how the docs
+site is made.
 
 ## License
 
