@@ -1,19 +1,18 @@
 name: Release candidate
 
-# Adding the label "release-candidate" to the release pull request publishes the next release candidate of the version
-# it proposes (1.0.0-RC1, then 1.0.0-RC2...) from main. A candidate is a GitHub prerelease, so releases/latest and the
-# docs keep showing the last stable version, and it commits nothing: the release pull request stays as it is, and
-# merging it releases the stable version.
+# Run from the Actions tab (Release candidate → Run workflow): publishes the next release candidate of the version the
+# open release pull request proposes (1.0.0-RC1, then 1.0.0-RC2...) from main. A candidate is a GitHub prerelease, so
+# releases/latest and the docs keep showing the last stable version, and it commits nothing: the release pull request
+# stays as it is, and merging it releases the stable version. Only a user with write access can run it.
 on:
-  pull_request:
-    types: [labeled]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   publish:
-    if: github.event.label.name == 'release-candidate' && startsWith(github.event.pull_request.head.ref, 'release-please--')
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     concurrency:
       group: maven-central
@@ -25,16 +24,16 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      PR: ${{ github.event.pull_request.number }}
-      HEAD: ${{ github.event.pull_request.head.sha }}
     steps:
-      - name: Check that a maintainer added the label
+      - name: Find the release pull request
         run: |
-          permission=$(gh api "repos/$GH_REPO/collaborators/${{ github.event.sender.login }}/permission" --jq .permission)
-          case "$permission" in
-            admin|maintain|write) ;;
-            *) echo "Only a maintainer publishes a release candidate."; exit 1 ;;
-          esac
+          pr=$(gh pr list --label "autorelease: pending" --json number,headRefOid --jq '.[0] // empty')
+          if [ -z "$pr" ]; then
+            echo "No release pull request is open, so there is no next version to publish a candidate of."
+            exit 1
+          fi
+          echo "PR=$(jq -r .number <<< "$pr")" >> "$GITHUB_ENV"
+          echo "HEAD=$(jq -r .headRefOid <<< "$pr")" >> "$GITHUB_ENV"
       - uses: actions/checkout@v7
         with:
           ref: main
@@ -48,7 +47,7 @@ jobs:
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           if [ -n "$last" ] && [ "$(git rev-parse "v$next-RC$last^{commit}")" = "$(git rev-parse HEAD)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            gh pr comment "$PR" --body "\`main\` has not changed since \`$next-RC$last\`, so there is no new candidate to publish."
+            echo "::notice::main has not changed since $next-RC$last, so there is no new candidate to publish."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
@@ -76,9 +75,6 @@ jobs:
           gh api "repos/$GH_REPO/statuses/$HEAD" -f state=success -f context="Release candidate" \
             -f description="${{ steps.version.outputs.version }} is on Maven Central."
           gh pr comment "$PR" --body "Published \`${{ steps.version.outputs.version }}\` to Maven Central as a prerelease."
-      - name: Report a failure
-        if: failure()
-        run: gh pr comment "$PR" --body "The release candidate failed to publish. See ${{ github.server_url }}/$GH_REPO/actions/runs/${{ github.run_id }}."
-      - name: Take the label off, so adding it again publishes the next candidate
-        if: always()
-        run: gh pr edit "$PR" --remove-label "release-candidate"
+      - name: Report a failure on the release pull request
+        if: failure() && env.PR != ''
+        run: gh pr comment "$PR" --body "A release candidate failed to publish. See ${{ github.server_url }}/$GH_REPO/actions/runs/${{ github.run_id }}."

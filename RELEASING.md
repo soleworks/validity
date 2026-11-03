@@ -52,15 +52,14 @@ The script behind the last two commit checks is [.github/scripts/check-commits.s
 
 ## Other versions
 
-- **A release candidate**, which a new major version (`1.0.0`, `2.0.0`) goes through first. When the release pull
-  request proposes one, the Release workflow sets a red *Release candidate* status on it. Adding the label
-  `release-candidate` to the pull request runs the
-  [Release candidate workflow](.github/workflows/release-candidate.yml): it publishes the next candidate (`1.0.0-RC1`,
-  then `1.0.0-RC2`) from `main` to Maven Central, creates it as a GitHub prerelease, turns the status green, comments
-  on the pull request and takes the label off. After fixes from the feedback are merged into `main`, adding the label
-  again publishes the next candidate; with no change in `main` since the last one, it publishes nothing and says so
-  on the pull request. A candidate commits nothing: the docs, the changelog and `releases/latest` stay on the last
-  stable version, and merging the pull request releases the major version itself.
+- **A release candidate**, which a new major version (`1.0.0`, `2.0.0`) goes through first, and any other version may.
+  In the Actions tab, *Release candidate* → *Run workflow* publishes the next candidate of the version the release pull
+  request proposes (`1.0.0-RC1`, then `1.0.0-RC2`) from `main` to Maven Central, creates it as a GitHub prerelease and
+  comments on the pull request. After fixes from the feedback are merged into `main`, running it again publishes the
+  next candidate; with no change in `main` since the last one, it publishes nothing and says so. A candidate commits
+  nothing: the docs, the changelog and `releases/latest` stay on the last stable version, and merging the release pull
+  request releases the stable version itself. While the pull request proposes a major version with no candidate
+  published, the Release workflow sets a red *Release candidate* status on it.
 - **A version other than the one proposed**: a commit with the footer `Release-As: x.y.z`, merged before the release.
 
 ## When something fails
@@ -70,8 +69,8 @@ The script behind the last two commit checks is [.github/scripts/check-commits.s
   `show-release` job runs after it.
 - **The `show-release` job failed**: the version is on Maven Central and the docs do not show it yet. Run the job again;
   the script changes only what is missing.
-- **A release candidate failed**: the workflow comments on the release pull request with the link to the run. Add the
-  label again once the cause is fixed: the number of the candidate goes up only when one is published.
+- **A release candidate failed**: the workflow comments on the release pull request with the link to the run. Run it
+  again once the cause is fixed: the number of the candidate goes up only when one is published.
 - **The release pull request does not open**: the repository must allow GitHub Actions to create pull requests
   (*Settings → Actions → General → Workflow permissions*).
 

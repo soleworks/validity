@@ -43,7 +43,7 @@ jobs:
           if [ "$(gh api "repos/$GH_REPO/git/matching-refs/tags/v$next-RC" --jq length)" -gt 0 ]; then
             state=success description="A release candidate of $next is on Maven Central."
           else
-            state=failure description="Add the label 'release-candidate' to publish $next-RC1 first."
+            state=failure description="Run the Release candidate workflow to publish $next-RC1 first."
           fi
           gh api "repos/$GH_REPO/statuses/$pr" -f state="$state" -f context="Release candidate" -f description="$description"
 
