@@ -19,7 +19,7 @@ Every broken rule at once, each with a path, a message for people and a code for
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.20-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Java](https://img.shields.io/badge/Java-17%2B-E76F00?style=flat-square&logo=openjdk&logoColor=white)](https://adoptium.net)
 [![License](https://img.shields.io/badge/license-Apache%202.0-2F81F7?style=flat-square)](LICENSE)
-[![Maven Central](https://img.shields.io/badge/Maven%20Central-coming%20soon-8B949E?style=flat-square&logo=apachemaven&logoColor=white)](#installation)
+[![Maven Central](https://img.shields.io/static/v1?label=Maven%20Central&message=0.1.0&color=2F81F7&style=flat-square&logo=apachemaven&logoColor=white)](https://central.sonatype.com/artifact/io.github.soleworks/validity-core)
 
 [Why Validity](#why-validity) · [Installation](#installation) · [Quick start](#quick-start) · [Modules](#modules) · [Documentation](#documentation)
 
@@ -105,17 +105,12 @@ Multiplatform, and Jakarta Validation plugs straight into the frameworks that re
 
 ## Installation
 
-> [!NOTE]
-> Validity is not on Maven Central yet: the first release is on its way. Until it lands, clone this repository next
-> to your project and add `includeBuild("../validity")` to your `settings.gradle.kts`. Gradle then builds the
-> dependencies below from the clone, so they name no version.
-
 ```kotlin
 dependencies {
-    implementation("io.github.soleworks:validity-core")
+    implementation("io.github.soleworks:validity-core:0.1.0")
 
     // Optional: phone numbers, with Google's libphonenumber
-    implementation("io.github.soleworks:validity-phone")
+    implementation("io.github.soleworks:validity-phone:0.1.0")
 }
 ```
 
