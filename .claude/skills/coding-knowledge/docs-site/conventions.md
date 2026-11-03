@@ -68,7 +68,7 @@ Messages, which also checks that `reference/messages.mdx` lists every message wi
 Every color is a variable of `docs/tokens.css`; `docs/style.css` uses them with `var()`. Lengths are in `rem`
 or `em`, except a `1px` border. Nothing is placed with a negative margin or an absolute position: the theme
 owns the spacing, so a page that compensates for it breaks when the theme changes. Selectors target only the
-hooks Mintlify documents (`#page-title`, `.card`, `.code-block`, `[data-component-part="…"]`) and the `v-`
+hooks Mintlify documents (`#page-title`, `.card`, `.code-block`, `.code-group`, `[data-component-part="…"]`) and the `v-`
 classes of these pages. Checked by Stylelint.
 
 A page uses only `v-` classes that the stylesheets define, never an inline `style` or a color, and every `v-`

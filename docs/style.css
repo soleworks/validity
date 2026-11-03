@@ -2,9 +2,9 @@
 
 /*
  * The styles of the site, on top of the Aspen theme of Mintlify. Colors come from tokens.css. Selectors target only
- * the hooks Mintlify documents (ids such as #page-title, the .card and .code-block classes, data-component-part
- * attributes) and the v- classes of these pages, never the utility classes Mintlify renders, which change without
- * notice. Stylelint holds these rules (.stylelintrc.json).
+ * the hooks Mintlify documents (ids such as #page-title, the .card, .code-block and .code-group classes,
+ * data-component-part attributes) and the v- classes of these pages, never the utility classes Mintlify renders, which
+ * change without notice. Stylelint holds these rules (.stylelintrc.json).
  */
 
 /* ---------- Code ---------- */
@@ -16,7 +16,9 @@ kbd {
   font-feature-settings: "calt" 1, "liga" 1;
 }
 
-.code-block {
+/* A group of tabbed blocks looks like a single block. */
+.code-block,
+.code-group {
   --mint-foreground: var(--mint-color-text);
 
   background-color: var(--v-code) !important;
@@ -24,9 +26,14 @@ kbd {
   box-shadow: none !important;
 }
 
-[data-component-part="code-block-header-filename"] {
+[data-component-part="code-block-header-filename"],
+[data-component-part="code-group-tab-bar"] [role="tab"] {
   color: var(--v-faint) !important;
   font-weight: 500;
+}
+
+[data-component-part="code-group-tab-bar"] [aria-selected="true"] {
+  color: var(--v-violet) !important;
 }
 
 /* Inline code reads as a small lavender chip. */
