@@ -7,6 +7,14 @@ version or the public API.
 
 Load the `coding-knowledge` skill. Before changing the docs site in `docs/`, read its `docs-site/` folder.
 
+### One pattern per thing
+
+The same thing looks and works the same everywhere: in the code, in the docs and in the site. When
+something already exists for a job (a function, a type, a snippet, a style, a page structure), reuse it;
+when a second form of the same job appears (a code group beside a code block, an overload beside a
+function), it extends the first instead of starting its own rules. Before adding something, look for what
+already does that job. When two places do the same job differently, make them one, or say why they differ.
+
 ## Done
 
 NEVER say a task is done before `./gradlew build` passes: it runs the tests, the harness, ktlint, Detekt,
