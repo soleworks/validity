@@ -26,7 +26,7 @@ class ItalyConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["55396190010", "00000001017", "5539619001"])
+        @ValueSource(strings = ["55396190010", "00000001017", "5539619001", "12345671019"])
         fun `given an invalid partita IVA should report it`(
             value: String
         ) {
@@ -44,7 +44,16 @@ class ItalyConstraintsTest {
     @DisplayName("When codiceFiscale is called")
     inner class CodiceFiscale {
         @ParameterizedTest
-        @ValueSource(strings = ["XUFIAX24L20X122G", "AGOCIH30M01S510A", "RSSMRA85T10A562S"])
+        @ValueSource(
+            strings = [
+                "XUFIAX24L20X122G",
+                "AGOCIH30M01S510A",
+                "RSSMRA85T10A562S",
+                "RSSMRA85T50A562W",
+                "RSSMRA85T1MA562J",
+                "RSSMRA85TLMAN6NP"
+            ]
+        )
         fun `given a valid codice fiscale should accept it`(
             value: String
         ) {
@@ -56,7 +65,16 @@ class ItalyConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["XUFIAX24L20X122A", "AGOCIH30M01S510B", "rssmra85t10a562s", "RSSMRA85T10A56"])
+        @ValueSource(
+            strings = [
+                "XUFIAX24L20X122A",
+                "AGOCIH30M01S510B",
+                "rssmra85t10a562s",
+                "RSSMRA85T10A56",
+                "RSSMRA85T35A562S",
+                "RSSMRA85T75A562S"
+            ]
+        )
         fun `given an invalid codice fiscale should report it`(
             value: String
         ) {

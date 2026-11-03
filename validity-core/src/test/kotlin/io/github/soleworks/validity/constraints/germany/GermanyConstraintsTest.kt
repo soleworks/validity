@@ -56,7 +56,7 @@ class GermanyConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["84159263275", "12345678903", "04159263274"])
+        @ValueSource(strings = ["84159263275", "12345678903", "04159263274", "11112345670", "11223456780"])
         fun `given an invalid Steuer-ID should report it`(
             value: String
         ) {

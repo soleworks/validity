@@ -26,7 +26,7 @@ class BelgiumConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["0661488531", "2661488530", "066148853"])
+        @ValueSource(strings = ["0661488531", "2661488530", "066148853", "0000000000"])
         fun `given an invalid enterprise number should report it`(
             value: String
         ) {
@@ -44,7 +44,7 @@ class BelgiumConstraintsTest {
     @DisplayName("When nationalNumber is called")
     inner class NationalNumber {
         @ParameterizedTest
-        @ValueSource(strings = ["74022569427", "94.06.08-365.53", "85073003328"])
+        @ValueSource(strings = ["74022569427", "94.06.08-365.53", "85073003328", "06092264181"])
         fun `given a valid national number should accept it`(
             value: String
         ) {

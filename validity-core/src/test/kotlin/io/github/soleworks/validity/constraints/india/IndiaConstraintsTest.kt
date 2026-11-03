@@ -56,7 +56,7 @@ class IndiaConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["10GXMFD3255G2ZA", "40GXMFD3255G2ZB", "10GXMFD3255G0ZB"])
+        @ValueSource(strings = ["10GXMFD3255G2ZA", "40GXMFD3255G2ZB", "10GXMFD3255G0ZB", "10GXMDD3255G2ZB"])
         fun `given an invalid GSTIN should report it`(
             value: String
         ) {

@@ -63,7 +63,8 @@ class UnitedStatesConstraintsTest {
                 "900-70-1234",
                 "123-00-4567",
                 "123-45-0000",
-                "078-05-1120"
+                "078-05-1120",
+                "12-345-6789"
             ]
         )
         fun `given an invalid SSN should report it`(
@@ -95,7 +96,7 @@ class UnitedStatesConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["912-89-1234", "812-70-1234", "912-93-1234"])
+        @ValueSource(strings = ["912-89-1234", "812-70-1234", "912-93-1234", "9127-01234"])
         fun `given an invalid ITIN should report it`(
             value: String
         ) {

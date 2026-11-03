@@ -26,7 +26,7 @@ class UruguayConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["164121540010", "234121540012", "160000000017", "21100342001"])
+        @ValueSource(strings = ["164121540010", "234121540012", "160000000017", "21100342001", "000000000017"])
         fun `given an invalid RUT should report it`(
             value: String
         ) {

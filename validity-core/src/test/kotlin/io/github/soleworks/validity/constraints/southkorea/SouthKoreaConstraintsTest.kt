@@ -26,7 +26,7 @@ class SouthKoreaConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["100-12-34567", "101-00-12345", "101-12-00000"])
+        @ValueSource(strings = ["100-12-34567", "101-00-12345", "101-12-00000", "12345"])
         fun `given an invalid BRN should report it`(
             value: String
         ) {
@@ -56,7 +56,7 @@ class SouthKoreaConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["5605231067970", "5613231067971"])
+        @ValueSource(strings = ["5605231067970", "5613231067971", "56052-31067971", "5605231977971"])
         fun `given an invalid RRN should report it`(
             value: String
         ) {

@@ -48,7 +48,7 @@ class SwedenConstraintsTest {
     @DisplayName("When personnummer is called")
     inner class Personnummer {
         @ParameterizedTest
-        @ValueSource(strings = ["811211-2225", "19811211-2225", "8112112225", "811211+2225"])
+        @ValueSource(strings = ["811211-2225", "19811211-2225", "8112112225", "811211+2225", "630383-2015"])
         fun `given a valid personnummer should accept it`(
             value: String
         ) {
@@ -60,7 +60,7 @@ class SwedenConstraintsTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["811211-2220", "811311-2225", "81121-12225"])
+        @ValueSource(strings = ["811211-2220", "811311-2225", "81121-12225", "811245-2225", "811200-2225"])
         fun `given an invalid personnummer should report it`(
             value: String
         ) {

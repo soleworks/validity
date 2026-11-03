@@ -14,7 +14,7 @@ class ArgentinaConstraintsTest {
     @DisplayName("When cuit is called")
     inner class Cuit {
         @ParameterizedTest
-        @ValueSource(strings = ["33301661318", "30091390996", "20-30824628-1"])
+        @ValueSource(strings = ["33301661318", "30091390996", "20-30824628-1", "20945807300", "20003322459"])
         fun `given a valid CUIT should accept it`(
             value: String
         ) {
