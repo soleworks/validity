@@ -17,7 +17,32 @@ private val CODICE_FISCALE_FORMAT = Regex(
     """[A-Z]{6}[\dLMNPQRSTUV]{2}[ABCDEHLMPRST]([\dLMNPQRSTUV]{2})[A-Z][\dLMNPQRSTUV]{3}[A-Z]"""
 )
 private val ODD_VALUES = listOf(
-    1, 0, 5, 7, 9, 13, 15, 17, 19, 21, 2, 4, 18, 20, 11, 3, 6, 8, 12, 14, 16, 10, 22, 25, 24, 23
+    1,
+    0,
+    5,
+    7,
+    9,
+    13,
+    15,
+    17,
+    19,
+    21,
+    2,
+    4,
+    18,
+    20,
+    11,
+    3,
+    6,
+    8,
+    12,
+    14,
+    16,
+    10,
+    22,
+    25,
+    24,
+    23
 )
 private val PARTITA_IVA_OFFICES = (1..100).toSet() + setOf(120, 121, 888, 999)
 private val DAYS = 1..31

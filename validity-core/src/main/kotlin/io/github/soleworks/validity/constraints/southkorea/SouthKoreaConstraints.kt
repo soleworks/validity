@@ -20,9 +20,16 @@ private val BRN_FORMAT = Regex("""(\d{3})-?(\d{2})-?(\d{4})\d""")
 private val RRN_FORMAT = Regex("""(\d{2})(\d{2})(\d{2})-?\d{7}""")
 private val RRN_WEIGHTS = listOf(2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5)
 private val RRN_CENTURIES = mapOf(
-    1 to 1900, 2 to 1900, 5 to 1900, 6 to 1900,
-    3 to 2000, 4 to 2000, 7 to 2000, 8 to 2000,
-    9 to 1800, 0 to 1800
+    1 to 1900,
+    2 to 1900,
+    5 to 1900,
+    6 to 1900,
+    3 to 2000,
+    4 to 2000,
+    7 to 2000,
+    8 to 2000,
+    9 to 1800,
+    0 to 1800
 )
 
 internal val SOUTH_KOREA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
