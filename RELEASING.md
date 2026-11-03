@@ -79,21 +79,27 @@ The script behind the commit, title and break checks is
 - **A release candidate failed**: the workflow comments on the release pull request with the link to the run. Run it
   again once the cause is fixed. A failure before the upload keeps the number; once a candidate is uploaded its tag
   exists, and the next run takes the next number, since Maven Central never takes the same version twice.
-- **The release pull request does not open**: the repository must allow GitHub Actions to create pull requests
-  (*Settings → Actions → General → Workflow permissions*).
-
-The release pull request is opened with the workflow's own token, so CI does not run on it. It only changes the
-changelog and the versions, and CI runs on `main` after the merge.
+- **The release pull request does not open, or the docs are not pushed**: the `validity-release` GitHub App must be
+  installed on the repository, and its client ID and private key set as below. A new private key replaces a lost one.
 
 ## One-time setup
 
-The Release workflow reads four repository secrets:
+The Release workflows read four repository secrets for Maven Central:
 
 | Secret | What it is |
 |---|---|
 | `MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD` | A user token of the [Central Portal](https://central.sonatype.com) account that owns the `io.github.soleworks` namespace |
 | `SIGNING_KEY` | The ASCII-armored private GPG key that signs the artifacts, with its public key on a keyserver |
 | `SIGNING_KEY_PASSWORD` | The passphrase of that key |
+
+release-please and the `show-release` job act as the `validity-release` GitHub App of the `soleworks` organization,
+installed on this repository only, with read and write access to contents, pull requests, issues and commit statuses.
+A pull request that the workflow's own token opens runs no workflow, so without the App CI would not run on the release
+pull request, and `main` would not accept it. The App is set by the repository variable `RELEASE_APP_CLIENT_ID` and the
+secret `RELEASE_APP_PRIVATE_KEY`.
+
+`main` has a ruleset: changes come through pull requests, with the `build`, `docs` and `commits` checks passing, and no
+force push or deletion. The App is on its bypass list, since `show-release` pushes the docs straight to `main`.
 
 The history before `0.1.0` is not in the changelog: `bootstrap-sha` in `release-please-config.json` starts it at the
 commit that set up this flow.

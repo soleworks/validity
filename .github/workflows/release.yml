@@ -9,20 +9,24 @@ permissions:
 
 jobs:
   # Keeps a release pull request open with the next version and its changelog, read from the commits since the last
-  # release. Merging it tags the commit and creates the GitHub release.
+  # release. Merging it tags the commit and creates the GitHub release. It acts as the validity-release GitHub App, not
+  # with the workflow's token: GitHub runs no workflow on a pull request the workflow's token opens, and CI has to run on
+  # the release pull request for main to accept it.
   release-please:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      statuses: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       version: ${{ steps.release.outputs.version }}
     steps:
+      - uses: actions/create-github-app-token@v3
+        id: app
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
       - uses: googleapis/release-please-action@v5
         id: release
         with:
+          token: ${{ steps.app.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
@@ -31,7 +35,7 @@ jobs:
       - name: Ask for a release candidate before a major version
         if: steps.release.outputs.prs_created == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app.outputs.token }}
           GH_REPO: ${{ github.repository }}
         run: |
           pr=$(gh pr list --label "autorelease: pending" --json headRefOid --jq '.[0].headRefOid // empty')
@@ -81,18 +85,22 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
 
   # Once the version can be downloaded from Maven Central, shows it in the docs and the README: before that, a reader
-  # would be told to add a version that does not exist yet. A push of the workflow's token runs no workflow, so the job
-  # runs the docs checks itself before it pushes.
+  # would be told to add a version that does not exist yet. It pushes to main as the validity-release GitHub App, which
+  # the ruleset of main lets through, and runs the docs checks itself before it pushes.
   show-release:
     needs: [release-please, publish]
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
+      - uses: actions/create-github-app-token@v3
+        id: app
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 0
+          token: ${{ steps.app.outputs.token }}
       - run: bash .github/scripts/wait-for-maven-central.sh "${{ needs.release-please.outputs.version }}"
       - run: node .github/scripts/show-release.mjs "${{ needs.release-please.outputs.version }}"
       - name: Look for changes
@@ -119,8 +127,8 @@ jobs:
       - name: Push the docs
         if: steps.changes.outputs.changed == 'true'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "validity-release[bot]"
+          git config user.email "352137640+validity-release[bot]@users.noreply.github.com"
           git add --all
           git commit --message "docs: show version ${{ needs.release-please.outputs.version }}"
           git pull --rebase origin main
