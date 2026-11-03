@@ -10,7 +10,12 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         "gradle.properties",
-        "README.md"
+        "README.md",
+        {
+          "type": "json",
+          "path": "docs/docs.json",
+          "jsonpath": "$.variables.version"
+        }
       ]
     }
   }

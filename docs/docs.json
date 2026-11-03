@@ -1,0 +1,199 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "aspen",
+  "name": "Validity",
+  "description": "Validation for Kotlin, written in plain Kotlin.",
+  "colors": {
+    "primary": "#7F52FF",
+    "light": "#A98BFF",
+    "dark": "#7F52FF"
+  },
+  "logo": {
+    "light": "/logo/wordmark-light.svg",
+    "dark": "/logo/wordmark-dark.svg",
+    "href": "/"
+  },
+  "favicon": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "fonts": {
+    "family": "Inter",
+    "heading": {
+      "family": "Inter",
+      "weight": 650
+    }
+  },
+  "icons": {
+    "library": "lucide"
+  },
+  "background": {
+    "color": {
+      "light": "#FFFFFF",
+      "dark": "#0C0A14"
+    }
+  },
+  "styling": {
+    "eyebrows": "section",
+    "codeblocks": {
+      "theme": "css-variables"
+    }
+  },
+  "appearance": {
+    "default": "system"
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "claude",
+      "chatgpt",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "type": "github",
+        "href": "https://github.com/soleworks/validity"
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/soleworks/validity"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "index",
+              "introduction",
+              "installation",
+              "reference/modules",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Writing rules",
+            "pages": [
+              "guides/rules-in-the-class",
+              "guides/rules-beside-the-class",
+              "guides/null-values",
+              "guides/nested-objects",
+              "guides/collections-and-maps",
+              "guides/rules-across-fields",
+              "guides/custom-constraints",
+              "guides/combining-constraints",
+              "guides/fail-fast",
+              "guides/converting-values"
+            ]
+          },
+          {
+            "group": "Beyond the object",
+            "pages": [
+              "guides/context",
+              "guides/coroutines"
+            ]
+          },
+          {
+            "group": "Reading the result",
+            "pages": [
+              "guides/results",
+              "guides/exceptions",
+              "guides/metadata"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "guides/configuration",
+              "guides/messages",
+              "guides/time"
+            ]
+          },
+          {
+            "group": "For AI agents",
+            "pages": [
+              "ai-agents"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Constraints",
+        "icon": "list-checks",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "constraints/overview"
+            ]
+          },
+          {
+            "group": "Values",
+            "pages": [
+              "constraints/any",
+              "constraints/booleans",
+              "constraints/strings",
+              "constraints/numbers",
+              "constraints/collections",
+              "constraints/maps"
+            ]
+          },
+          {
+            "group": "Time",
+            "pages": [
+              "constraints/dates-and-times",
+              "constraints/calendar",
+              "constraints/durations"
+            ]
+          },
+          {
+            "group": "Formats",
+            "pages": [
+              "constraints/internet",
+              "constraints/identifiers",
+              "constraints/encodings",
+              "constraints/finance",
+              "constraints/location",
+              "constraints/colors",
+              "constraints/date-formats"
+            ]
+          },
+          {
+            "group": "Countries and phones",
+            "pages": [
+              "constraints/countries",
+              "constraints/phone"
+            ]
+          },
+          {
+            "group": "Messages",
+            "pages": [
+              "reference/messages"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "variables": {
+    "version": "0.1.0",
+    "kotlin": "2.4",
+    "java": "17",
+    "site": "https://validity-kt.dev",
+    "constraints": "175",
+    "postalCountries": "72",
+    "documentCountries": "14"
+  }
+}

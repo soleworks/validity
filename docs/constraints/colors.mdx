@@ -1,0 +1,55 @@
+---
+title: "Colors"
+description: "Hexadecimal, RGB and HSL colors, as CSS writes them."
+icon: "palette"
+---
+
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Colors written as CSS writes them, checked on strings.
+
+```kotlin Theme.kt
+data class Theme(
+    val accent: String?,
+    val overlay: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::accent required { hexColor() }
+        ::overlay ifPresent { rgbColor() }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`hexColor`](#hexcolor) | Is a hexadecimal color: `#` and 3, 4, 6 or 8 hexadecimal digits, such as `#fff` or `#1a2b3c80`. |
+| [`rgbColor`](#rgbcolor) | Is a CSS `rgb()` or `rgba()` color, such as `rgb(255, 0, 0)` or `rgba(0, 0, 0, 0.5)`. |
+| [`hslColor`](#hslcolor) | Is a CSS `hsl()` or `hsla()` color, such as `hsl(120, 100%, 50%)`. |
+
+### `hexColor`
+
+`hexColor()` on `String`
+
+Checks that the string is a hexadecimal color: `#` and 3, 4, 6 or 8 hexadecimal digits, such as `#fff` or `#1a2b3c80`.
+
+<ConstraintFacts code="hexColor" message="must be a valid hexadecimal color" change='hexColor = "…"' />
+
+### `rgbColor`
+
+`rgbColor()` on `String`
+
+Checks that the string is a CSS `rgb()` or `rgba()` color, such as `rgb(255, 0, 0)` or `rgba(0, 0, 0, 0.5)`.
+
+Each channel is a whole number from 0 to 255, and the alpha from 0 to 1.
+
+<ConstraintFacts code="rgbColor" message="must be a valid RGB color" change='rgbColor = "…"' />
+
+### `hslColor`
+
+`hslColor()` on `String`
+
+Checks that the string is a CSS `hsl()` or `hsla()` color, such as `hsl(120, 100%, 50%)`.
+
+The hue goes from 0 to 360, saturation and lightness from 0% to 100%, and the alpha from 0 to 1.
+
+<ConstraintFacts code="hslColor" message="must be a valid HSL color" change='hslColor = "…"' />

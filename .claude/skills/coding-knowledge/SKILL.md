@@ -28,3 +28,4 @@ A rule a check holds says which check, so a failure points back to its rule.
 - `entry/`: how a user starts a validation: `Validatable`, `ContextualValidatable`, `validation<T>`.
 - `module/`: a published module beside `validity-core`, such as `validity-phone`.
 - `public-api/`: what a user compiles against, and what a change to it costs.
+- `docs-site/`: the documentation site in `docs/`: where each fact lives, and the checks that hold it.

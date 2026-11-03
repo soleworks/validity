@@ -1,0 +1,106 @@
+---
+title: "Rules beside the class"
+description: "validation<T> { } writes the rules of a type outside it, for a class that is not yours or rules that live elsewhere."
+icon: "panel-right"
+---
+
+Not every class can implement `Validatable`: it may come from a library, be generated, or have its rules in another
+module. `validation<T> { }` writes the rules of a type from outside it, and returns a `Validation<T>` that
+checks any value of that type.
+
+```kotlin Address.kt
+data class Address(
+    val street: String?,
+    val zipCode: String?,
+    val country: String?
+)
+
+val addressValidation = validation<Address> {
+    ::street required { notBlank() }
+    ::country required { isoCountryCode() }
+    ::zipCode required { postalCode(country) }
+}
+```
+
+Inside the block, the value being checked is `this`, so `::street` is its property and `country` its value, exactly as
+inside a `Validatable`. The constraints are the same, and so is the result.
+
+## Validating a value
+
+`Validation<T>` takes the value to check:
+
+```kotlin
+addressValidation.validate(Address(street = "", zipCode = "1234", country = "USA"))          // suspends
+addressValidation.validateBlocking(Address(street = "", zipCode = "1234", country = "USA"))  // blocks
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `street` | must not be blank | `notBlank` |
+| `country` | must be a valid ISO 3166-1 alpha-2 country code | `isoCountryCode` |
+
+The zip code is not checked here: `postalCode` knows the formats of {{postalCountries}} countries by their alpha-2 code, and `USA` is not
+one of them, so it has nothing to compare against.
+
+## Validating a property with these rules
+
+A property of that type is checked with `valid(rules)`, and its violations are nested under the property:
+
+```kotlin Delivery.kt
+data class Delivery(
+    val address: Address?,
+    val scheduledFor: LocalDate?
+) : Validatable {
+    override fun validation() = validation {
+        ::address required { valid(addressValidation) }
+        ::scheduledFor required { future() }
+    }
+}
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `address.street` | must not be blank | `notBlank` |
+| `address.zipCode` | must be a valid postal code for US | `postalCode` |
+| `scheduledFor` | must be in the future | `future` |
+
+## One value, once
+
+When you have a single value and do not need to reuse the rules, `validatable(value) { }` pairs the value with its
+rules and returns a `Validatable`, with all four ways to run it:
+
+```kotlin
+validatable(address) {
+    ::street required { notBlank() }
+}.validate().violations
+```
+
+## Rules as an extension
+
+The block that `Validatable` uses, `validation { }`, also works in an extension, which is another way to keep the rules
+of a foreign class next to your code. The extension is then passed to `valid` as a function reference:
+
+```kotlin
+fun Address.validation() = validation {
+    ::street required { notBlank() }
+}
+
+::address required { valid(Address::validation) }
+```
+
+## Which one to pick
+
+<AccordionGroup>
+  <Accordion title="The class is yours and its rules never change" icon="box">
+    Implement [`Validatable`](/guides/rules-in-the-class). The rules travel with the class, and `valid()` needs no
+    argument.
+  </Accordion>
+  <Accordion title="The class is not yours, or it has more than one set of rules" icon="panel-right">
+    Write a `Validation<T>` with `validation<T> { }`, one per set of rules, such as `addressForShipping` and
+    `addressForBilling`, and pass the one you need to `valid(...)`.
+  </Accordion>
+  <Accordion title="The rules depend on who is asking" icon="user-round-check">
+    Implement [`ContextualValidatable<C>`](/guides/context): the caller passes the context, such as the logged-in
+    customer.
+  </Accordion>
+</AccordionGroup>

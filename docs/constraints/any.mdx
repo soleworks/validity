@@ -1,0 +1,127 @@
+---
+title: "Any value"
+description: "Constraints that work on a value of any type: equality, membership, and the combinators that join other constraints."
+icon: "equal"
+---
+
+import NullArguments from "/snippets/null-arguments.mdx";
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+These constraints accept a value of any type: a string, a number, an enum, a data class. They compare it with values
+you give, so they also cover rules across fields, such as a confirmation equal to the password. `or`, `and` and `not`
+combine other constraints into one rule, as [Combining constraints](/guides/combining-constraints) explains.
+
+<NullArguments />
+
+```kotlin Preferences.kt
+private val RESERVED_NAMES = listOf("admin", "root", "support")
+
+data class Preferences(
+    val theme: String?,
+    val username: String?,
+    val password: String?,
+    val confirmation: String?
+) : Validatable {
+    override fun validation() = validation {
+        ::theme required { oneOf(listOf("light", "dark", "system")) }
+        ::username required { noneOf(RESERVED_NAMES) }
+        ::confirmation required { equalTo(password) }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`equalTo`](#equalto) | Is equal to `other`. |
+| [`notEqualTo`](#notequalto) | Is not equal to `other`. |
+| [`oneOf`](#oneof) | Is one of `values`. |
+| [`noneOf`](#noneof) | Is none of `values`. |
+| [`notNull`](#notnull) | Is not `null`. |
+| [`or`](#or) | At least one of the constraints of `block` holds. |
+| [`and`](#and) | Every constraint of `block` holds, as one rule. |
+| [`not`](#not) | None of the constraints of `block` holds. |
+
+## Equality
+
+### `equalTo`
+
+`equalTo(other)` on any value
+
+Checks that the value is equal to `other`.
+
+`BigDecimal` values are compared by `compareTo`, so `1.0` equals `1.00`, and zoned or offset dates and times by the instant they stand for.
+
+<ConstraintFacts code="equalTo" message="must be equal to {other}" change='equalTo = "…"' />
+
+### `notEqualTo`
+
+`notEqualTo(other)` on any value
+
+Checks that the value is not equal to `other`.
+
+<ConstraintFacts code="notEqualTo" message="must not be equal to {other}" change='notEqualTo = "…"' />
+
+## Membership
+
+### `oneOf`
+
+`oneOf(values)` on any value
+
+Checks that the value is one of `values`.
+
+<ConstraintFacts code="oneOf" message="must be one of {values}" change='oneOf = "…"' />
+
+### `noneOf`
+
+`noneOf(values)` on any value
+
+Checks that the value is none of `values`.
+
+<ConstraintFacts code="noneOf" message="must not be one of {values}" change='noneOf = "…"' />
+
+## Null
+
+### `notNull`
+
+`notNull()` on a nullable value
+
+Checks that the value is not `null`.
+
+Prefer `required` on a property: it also gives the block the non-null type.
+
+<ConstraintFacts code="notNull" message="is required" change='required = "…"' />
+
+## Combining constraints
+
+### `or`
+
+`or { }` on any value
+
+Checks that at least one of the constraints of `block` holds.
+
+Each call in the block is a branch, and an `and` groups several constraints into one branch. An empty block holds.
+
+<ConstraintFacts code="or" />
+
+### `and`
+
+`and { }` on any value
+
+Checks that every constraint of `block` holds, as one rule.
+
+Inside an `or`, it makes one branch of several constraints. On its own, it reports one violation instead of one per constraint.
+
+<ConstraintFacts code="and" />
+
+### `not`
+
+`not { }` on any value
+
+Checks that none of the constraints of `block` holds.
+
+<ConstraintFacts code="not" message="is not allowed" change='not = "…"' />
+
+<Tip>
+  `BigDecimal` values compare by value, so `1.0` equals `1.00`, and zoned or offset dates and times by the instant they
+  stand for.
+</Tip>

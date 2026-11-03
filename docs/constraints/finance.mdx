@@ -1,0 +1,107 @@
+---
+title: "Finance"
+description: "Card numbers, IBANs, BICs, ISINs, currency codes and crypto addresses."
+icon: "landmark"
+---
+
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Formats of money and payments, checked on strings, with their check digits where they have them.
+
+```kotlin BankDetails.kt
+data class BankDetails(
+    val iban: String?,
+    val bic: String?,
+    val currency: String?
+) : Validatable {
+    override fun validation() = validation {
+        ::iban required { iban() }
+        ::bic required { bic() }
+        ::currency required { currencyCode() }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`creditCard`](#creditcard) | Is a card number: 12 to 19 digits with a valid Luhn check digit. |
+| [`iban`](#iban) | Is an IBAN: the length and layout of its country, and valid check digits. |
+| [`bic`](#bic) | Is a BIC (SWIFT code) of 8 or 11 characters, with a known country code. |
+| [`isin`](#isin) | Is an ISIN: a country code, 9 letters or digits and a valid check digit, such as `US0378331005`. |
+| [`currencyCode`](#currencycode) | Is an ISO 4217 currency code the JVM knows, such as `EUR` or `USD`. |
+| [`bitcoinAddress`](#bitcoinaddress) | Has the format of a Bitcoin address: legacy (`1...`), script (`3...`) or Bech32 (`bc1...`). |
+| [`ethereumAddress`](#ethereumaddress) | Is an Ethereum address: `0x` and 40 hexadecimal digits. |
+
+## Cards and accounts
+
+### `creditCard`
+
+`creditCard()` on `String`
+
+Checks that the string is a card number: 12 to 19 digits with a valid Luhn check digit.
+
+Spaces and dashes are not accepted.
+
+<ConstraintFacts code="creditCard" message="must be a valid credit card number" change='creditCard = "…"' />
+
+### `iban`
+
+`iban()` on `String`
+
+Checks that the string is an IBAN: the length and layout of its country, and valid check digits.
+
+It is written in uppercase with no spaces, such as `DE89370400440532013000`.
+
+<ConstraintFacts code="iban" message="must be a valid IBAN" change='iban = "…"' />
+
+### `bic`
+
+`bic()` on `String`
+
+Checks that the string is a BIC (SWIFT code) of 8 or 11 characters, with a known country code.
+
+It is written in uppercase, such as `DEUTDEFF` or `DEUTDEFF500`.
+
+<ConstraintFacts code="bic" message="must be a valid BIC" change='bic = "…"' />
+
+## Markets and currencies
+
+### `isin`
+
+`isin()` on `String`
+
+Checks that the string is an ISIN: a country code, 9 letters or digits and a valid check digit, such as `US0378331005`.
+
+<ConstraintFacts code="isin" message="must be a valid ISIN" change='isin = "…"' />
+
+### `currencyCode`
+
+`currencyCode()` on `String`
+
+Checks that the string is an ISO 4217 currency code the JVM knows, such as `EUR` or `USD`.
+
+The code is in uppercase.
+
+<ConstraintFacts code="currencyCode" message="must be a valid ISO 4217 currency code" change='currencyCode = "…"' />
+
+## Crypto
+
+### `bitcoinAddress`
+
+`bitcoinAddress()` on `String`
+
+Checks that the string has the format of a Bitcoin address: legacy (`1...`), script (`3...`) or Bech32 (`bc1...`).
+
+Only the format is checked, not the checksum.
+
+<ConstraintFacts code="bitcoinAddress" message="must be a valid Bitcoin address" change='bitcoinAddress = "…"' />
+
+### `ethereumAddress`
+
+`ethereumAddress()` on `String`
+
+Checks that the string is an Ethereum address: `0x` and 40 hexadecimal digits.
+
+The EIP-55 mixed-case checksum is not checked.
+
+<ConstraintFacts code="ethereumAddress" message="must be a valid Ethereum address" change='ethereumAddress = "…"' />

@@ -13,5 +13,5 @@ shape of every test, so a test in the wrong shape fails the build.
 | Where a test lives and its name | [conventions.md](conventions.md#where-a-test-lives-and-its-name) |
 | The format of a test | [conventions.md](conventions.md#the-format) |
 | Testing a constraint | [conventions.md](conventions.md#testing-a-constraint) |
-| Samples and the README | [conventions.md](conventions.md#samples-and-the-readme) |
+| Samples, the README and the docs | [conventions.md](conventions.md#samples-the-readme-and-the-docs) |
 | Running the checks | [conventions.md](conventions.md#running-the-checks) |

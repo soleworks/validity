@@ -1,0 +1,169 @@
+---
+title: "Identifiers"
+description: "UUIDs, ULIDs, ObjectIds, semantic versions, ISBNs, barcodes, IMEIs, check digits and hashes."
+icon: "fingerprint"
+---
+
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Identifiers with a known layout, checked on strings. Those with a check digit, such as an ISBN or an IMEI, fail when
+the digit does not match, which catches most typos.
+
+```kotlin Book.kt
+data class Book(
+    val id: String?,
+    val isbn: String?,
+    val schemaVersion: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::id required { uuid(version = 4) }
+        ::isbn required { isbn13() }
+        ::schemaVersion ifPresent { semver() }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`uuid`](#uuid) | Is a UUID in its 36-character form, such as `123e4567-e89b-12d3-a456-426614174000`, in either case. |
+| [`ulid`](#ulid) | Is a ULID: 26 Crockford Base32 characters, in either case. |
+| [`objectId`](#objectid) | Is a MongoDB ObjectId: 24 hexadecimal digits. |
+| [`semver`](#semver) | Is a Semantic Versioning 2.0 version, such as `1.4.0`, `2.0.0-rc.1` or `1.0.0+build.5`. |
+| [`isbn`](#isbn) | Is an ISBN-10 or an ISBN-13 with a valid check digit. |
+| [`isbn10`](#isbn10) | Is an ISBN-10 with a valid check digit, which can be `X`. |
+| [`isbn13`](#isbn13) | Is an ISBN-13, starting with 978 or 979, with a valid check digit. |
+| [`issn`](#issn) | Is an ISSN, such as `0317-8471`, with a valid check digit, which can be `X`. |
+| [`ean`](#ean) | Is an EAN-8, EAN-13 or GTIN-14 barcode number with a valid check digit. |
+| [`isrc`](#isrc) | Is an ISRC with no dashes, such as `USRC17607839`. |
+| [`imei`](#imei) | Is an IMEI: 15 digits with a valid Luhn check digit. |
+| [`luhn`](#luhn) | Has only digits, at least two, and its last digit is a valid Luhn check digit. |
+| [`hash`](#hash) | Is a hexadecimal digest of the length `algorithm` produces. |
+
+## Generated ids
+
+### `uuid`
+
+`uuid(version)` on `String`
+
+Checks that the string is a UUID in its 36-character form, such as `123e4567-e89b-12d3-a456-426614174000`, in either case.
+
+<ConstraintFacts code="uuid" message="must be a valid UUID" change='uuid = "…"' />
+
+### `ulid`
+
+`ulid()` on `String`
+
+Checks that the string is a ULID: 26 Crockford Base32 characters, in either case.
+
+<ConstraintFacts code="ulid" message="must be a valid ULID" change='ulid = "…"' />
+
+### `objectId`
+
+`objectId()` on `String`
+
+Checks that the string is a MongoDB ObjectId: 24 hexadecimal digits.
+
+<ConstraintFacts code="objectId" message="must be a valid ObjectId" change='objectId = "…"' />
+
+## Versions
+
+### `semver`
+
+`semver()` on `String`
+
+Checks that the string is a Semantic Versioning 2.0 version, such as `1.4.0`, `2.0.0-rc.1` or `1.0.0+build.5`.
+
+A leading `v` is not accepted.
+
+<ConstraintFacts code="semver" message="must be a valid semantic version" change='semver = "…"' />
+
+## Books, music and products
+
+### `isbn`
+
+`isbn()` on `String`
+
+Checks that the string is an ISBN-10 or an ISBN-13 with a valid check digit.
+
+Spaces and dashes are ignored.
+
+<ConstraintFacts code="isbn" message="must be a valid ISBN" change='isbn = "…"' />
+
+### `isbn10`
+
+`isbn10()` on `String`
+
+Checks that the string is an ISBN-10 with a valid check digit, which can be `X`.
+
+Spaces and dashes are ignored.
+
+<ConstraintFacts code="isbn10" message="must be a valid ISBN-10" change='isbn10 = "…"' />
+
+### `isbn13`
+
+`isbn13()` on `String`
+
+Checks that the string is an ISBN-13, starting with 978 or 979, with a valid check digit.
+
+Spaces and dashes are ignored.
+
+<ConstraintFacts code="isbn13" message="must be a valid ISBN-13" change='isbn13 = "…"' />
+
+### `issn`
+
+`issn()` on `String`
+
+Checks that the string is an ISSN, such as `0317-8471`, with a valid check digit, which can be `X`.
+
+The dash is optional.
+
+<ConstraintFacts code="issn" message="must be a valid ISSN" change='issn = "…"' />
+
+### `ean`
+
+`ean()` on `String`
+
+Checks that the string is an EAN-8, EAN-13 or GTIN-14 barcode number with a valid check digit.
+
+<ConstraintFacts code="ean" message="must be a valid EAN" change='ean = "…"' />
+
+### `isrc`
+
+`isrc()` on `String`
+
+Checks that the string is an ISRC with no dashes, such as `USRC17607839`.
+
+<ConstraintFacts code="isrc" message="must be a valid ISRC" change='isrc = "…"' />
+
+## Devices and check digits
+
+### `imei`
+
+`imei()` on `String`
+
+Checks that the string is an IMEI: 15 digits with a valid Luhn check digit.
+
+<ConstraintFacts code="imei" message="must be a valid IMEI" change='imei = "…"' />
+
+### `luhn`
+
+`luhn()` on `String`
+
+Checks that the string has only digits, at least two, and its last digit is a valid Luhn check digit.
+
+<ConstraintFacts code="luhn" message="must have a valid Luhn check digit" change='luhn = "…"' />
+
+## Hashes
+
+### `hash`
+
+`hash(algorithm)` on `String`
+
+Checks that the string is a hexadecimal digest of the length `algorithm` produces.
+
+Only the length and the digits are checked: an MD5 and an MD4 hash look the same.
+
+<ConstraintFacts code="hash" message="must be a valid {algorithm} hash" change='hash = "…"' />
+
+`hash` takes a `HashAlgorithm`: `MD4`, `MD5`, `SHA1`, `SHA256`, `SHA384`, `SHA512`, `RIPEMD128`, `RIPEMD160`,
+`TIGER128`, `TIGER160`, `TIGER192`, `CRC32` or `CRC32B`. It checks the length of the digest and its hexadecimal digits.

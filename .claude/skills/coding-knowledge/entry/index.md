@@ -20,4 +20,4 @@ Each entry offers `validate()` (returns a `ValidationResult`), `validateOrThrow(
 | One engine, many entries | [conventions.md](conventions.md#one-engine-many-entries) |
 | The four ways to run an entry | [conventions.md](conventions.md#the-four-ways-to-run) |
 | The result and the violation | [conventions.md](conventions.md#the-result) |
-| Tests of an entry | [testing/conventions.md](../testing/conventions.md#samples-and-the-readme) |
+| Tests of an entry | [testing/conventions.md](../testing/conventions.md#samples-the-readme-and-the-docs) |

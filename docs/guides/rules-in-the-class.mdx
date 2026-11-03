@@ -1,0 +1,98 @@
+---
+title: "Rules in the class"
+description: "Validatable: a class that declares its own rules, and the four ways to check them."
+icon: "box"
+---
+
+When the class is yours, its rules belong next to its fields. Implement `Validatable` and return the rules from
+`validation()`, written with the `validation { }` block:
+
+```kotlin Account.kt
+data class Account(
+    val username: String?,
+    val password: String?,
+    val bio: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::username required {
+            lengthBetween(min = 3, max = 20)
+            lettersOrDigits()
+        }
+        ::password required {
+            minLength(8)
+            containsDigit()
+        }
+        ::bio ifPresent { maxLength(160) }
+    }
+}
+```
+
+Inside the block, `::username` is the property of the object being validated. Each rule starts from a property, says
+what `null` means for it ([`required`, `ifPresent` or `forbidden`](/guides/null-values)), and lists the constraints of
+its value in the block that follows. Several constraints in one block are all checked, in order.
+
+## Checking the rules
+
+A `Validatable` has four ways to run its rules. They run the same rules and differ only in how they wait and how they
+answer:
+
+| | Returns the violations | Throws when a rule is broken |
+|---|---|---|
+| Inside a coroutine | `validate()` | `validateOrThrow()` |
+| Anywhere else | `validateBlocking()` | `validateOrThrowBlocking()` |
+
+```kotlin
+val account = Account(username = "a!", password = "secret")
+
+account.validate().violations           // suspends while the rules run
+account.validateBlocking().violations   // blocks the thread instead
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `username` | must have between 3 and 20 characters | `lengthBetween` |
+| `username` | must contain only letters or digits | `lettersOrDigits` |
+| `password` | must have at least 8 characters | `minLength` |
+| `password` | must contain a digit | `containsDigit` |
+
+Every rule runs: one object reports every broken rule at once, in the order the rules are declared. When a rule only
+makes sense after another, [`failFast`](/guides/fail-fast) stops at the first failure.
+
+<Tip>
+  The suspending functions are the main path: rules can [call `suspend` functions](/guides/coroutines). The blocking
+  ones exist for code that cannot suspend, such as a plain servlet or a `main` function.
+</Tip>
+
+## Conditions are plain Kotlin
+
+The block is ordinary Kotlin code that runs when the object is validated, so the values of the object are there to
+read. A rule that applies only sometimes is an `if` or a `when`:
+
+```kotlin
+override fun validation() = validation {
+    ::country required { isoCountryCode() }
+
+    if (country == "BR") ::document required { cpf() }
+    if (newsletter == true) ::email required { email() }
+}
+```
+
+There are no validation groups and no class-level annotations: the condition is written where it applies.
+
+## The configuration of one call
+
+Each of the four functions takes an optional `Validity`, a [configuration](/guides/configuration) for that call only:
+other messages, or another clock.
+
+```kotlin
+account.validate(portuguese)
+```
+
+<CardGroup cols={2}>
+  <Card title="Rules beside the class" icon="panel-right" href="/guides/rules-beside-the-class">
+    For a class that is not yours, or rules that belong elsewhere.
+  </Card>
+  <Card title="Reading the result" icon="list" href="/guides/results">
+    `ValidationResult`, `Violation` and what each field holds.
+  </Card>
+</CardGroup>

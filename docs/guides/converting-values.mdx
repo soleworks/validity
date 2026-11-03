@@ -1,0 +1,87 @@
+---
+title: "Converting values"
+description: "convert and the convertTo shortcuts check text that carries a number, a date or an enum, then validate the converted value."
+icon: "arrow-right-left"
+---
+
+Query strings, form fields and CSV columns carry numbers, dates and enums as text. A `convertTo` call checks that the
+text converts, and runs its block on the converted value, with the constraints of that type:
+
+```kotlin SortOrder.kt
+enum class SortOrder { NEWEST, CHEAPEST, BEST_RATED }
+```
+
+```kotlin SearchQuery.kt
+data class SearchQuery(
+    val page: String? = null,
+    val size: String? = null,
+    val since: String? = null,
+    val sort: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::page ifPresent { convertToInt { min(1) } }
+        ::size ifPresent { convertToInt { between(min = 1, max = 100) } }
+        ::since ifPresent { convertToLocalDate { pastOrPresent() } }
+        ::sort ifPresent { convertToEnum<SortOrder>(ignoreCase = true) {} }
+    }
+}
+```
+
+```kotlin
+SearchQuery(page = "0", size = "ten", since = "2999-01-01", sort = "price").validate().violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `page` | must be at least 1 | `min` |
+| `size` | must be a valid integer | `convertToInt` |
+| `since` | must be in the past or present | `pastOrPresent` |
+| `sort` | must be one of NEWEST, CHEAPEST, BEST_RATED | `convertToEnum` |
+
+When the text does not convert, there is one violation with the code of the conversion, and the block does not run. When
+it converts, the block checks the value, and its violations keep the path of the text.
+
+## The shortcuts
+
+| Call | Converts to | Accepts |
+|---|---|---|
+| `convertToInt { }` | `Int` | a whole number that fits in an `Int` |
+| `convertToLong { }` | `Long` | a whole number that fits in a `Long` |
+| `convertToBigInteger { }` | `BigInteger` | any whole number |
+| `convertToBigDecimal { }` | `BigDecimal` | a decimal number, such as `-12.5` or `1e3` |
+| `convertToDouble { }` | `Double` | what `String.toDouble()` reads, such as `3.14` |
+| `convertToBoolean { }` | `Boolean` | `true` or `false`, in lowercase |
+| `convertToUuid { }` | `UUID` | the 36-character form, in either case |
+| `convertToEnum<E>(ignoreCase) { }` | the entry of `E` | the name of an entry |
+| `convertToLocalDate { }` | `LocalDate` | `2024-02-29` |
+| `convertToLocalDateTime { }` | `LocalDateTime` | `2024-02-29T13:45` |
+| `convertToLocalTime { }` | `LocalTime` | `13:45` |
+| `convertToOffsetDateTime { }` | `OffsetDateTime` | `2024-02-29T13:45Z` |
+| `convertToInstant { }` | `Instant` | `2024-02-29T13:45:00Z` |
+| `convertToYearMonth { }` | `YearMonth` | `2024-02` |
+| `convertToDuration { }` | `java.time.Duration` | `PT1H30M` |
+
+The dates and times are ISO 8601. Each shortcut has its own message, such as `must be a valid integer`, which can be
+changed for one call (`convertToInt("must be a page number") { }`) or for all of them, in
+[the messages](/reference/messages).
+
+<Tip>
+  A block can be empty: `convertToEnum<SortOrder>(ignoreCase = true) {}` only checks that the text names an entry.
+</Tip>
+
+## Your own conversion
+
+`convert` takes any function that returns the converted value, or `null` when it cannot convert:
+
+```kotlin
+::color required { convert({ Color.fromHex(it) }) { notEqualTo(Color.BLACK) } }
+```
+
+It reports `has an invalid format`, with the code `convert`, when the function returns `null`. Exceptions it throws are
+not caught: return `null` instead.
+
+## Convert or check?
+
+When you only need to know that the text has a shape, without validating the value, a format constraint is enough:
+[`numeric()`, `integer()` or `boolean()`](/constraints/strings#numeric) on a string, or
+[`isoDate()`](/constraints/date-formats). Convert when the value has rules of its own, such as a page that starts at 1.

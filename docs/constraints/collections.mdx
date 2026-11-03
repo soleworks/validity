@@ -1,0 +1,159 @@
+---
+title: "Collections"
+description: "Size, content and duplicates of lists, sets and arrays."
+icon: "list"
+---
+
+import NullArguments from "/snippets/null-arguments.mdx";
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+The constraints of a collection as a whole. The size rules work on any `Collection`, on arrays and on `ByteArray`; the
+content rules on `List`, `Set` and arrays. To check every element, use [`each`](/guides/collections-and-maps).
+
+<NullArguments />
+
+```kotlin Playlist.kt
+private val BANNED_TAGS = listOf("spam", "nsfw")
+
+data class Playlist(
+    val tracks: List<Track>?,
+    val tags: Set<String>? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::tracks required {
+            sizeBetween(min = 1, max = 200)
+            distinctBy { it.id }
+        }
+        ::tags ifPresent {
+            containsNone(BANNED_TAGS)
+            each { notBlank() }
+        }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`minSize`](#minsize) | Has at least `min` elements. |
+| [`maxSize`](#maxsize) | Has at most `max` elements. |
+| [`size`](#size) | Has exactly `size` elements. |
+| [`sizeBetween`](#sizebetween) | Has between `min` and `max` elements, both included. |
+| [`notEmpty`](#notempty) | Has at least one element. |
+| [`empty`](#empty) | Has no elements. |
+| [`contains`](#contains) | Contains `element`. |
+| [`notContains`](#notcontains) | Does not contain `element`. |
+| [`containsAll`](#containsall) | Contains every one of `elements`. |
+| [`containsAny`](#containsany) | Contains at least one of `elements`. |
+| [`containsNone`](#containsnone) | Contains none of `elements`. |
+| [`distinct`](#distinct) | Has no element twice, by `equals`. |
+| [`distinctBy`](#distinctby) | No two elements of the list have the same key, as `selector` picks it. |
+
+## How many
+
+### `minSize`
+
+`minSize(min)` on `Collection`, `Array`, `ByteArray`
+
+Checks that the collection has at least `min` elements.
+
+<ConstraintFacts code="minSize" message="must have at least {min} items" change='minSize = "…"' />
+
+### `maxSize`
+
+`maxSize(max)` on `Collection`, `Array`, `ByteArray`
+
+Checks that the collection has at most `max` elements.
+
+<ConstraintFacts code="maxSize" message="must have at most {max} items" change='maxSize = "…"' />
+
+### `size`
+
+`size(size)` on `Collection`, `Array`, `ByteArray`
+
+Checks that the collection has exactly `size` elements.
+
+<ConstraintFacts code="size" message="must have exactly {size} items" change='size = "…"' />
+
+### `sizeBetween`
+
+`sizeBetween(min, max)` on `Collection`, `Array`, `ByteArray`
+
+Checks that the collection has between `min` and `max` elements, both included.
+
+<ConstraintFacts code="sizeBetween" message="must have between {min} and {max} items" change='sizeBetween = "…"' />
+
+### `notEmpty`
+
+`notEmpty()` on `Collection`, `Array`, `ByteArray`
+
+Checks that the collection has at least one element.
+
+<ConstraintFacts code="notEmpty" message="must not be empty" change='notEmpty = "…"' />
+
+### `empty`
+
+`empty()` on `Collection`, `Array`, `ByteArray`
+
+Checks that the collection has no elements.
+
+<ConstraintFacts code="empty" message="must be empty" change='empty = "…"' />
+
+## Content
+
+### `contains`
+
+`contains(element)` on `List`, `Set`, `Array`
+
+Checks that the list contains `element`.
+
+<ConstraintFacts code="contains" message="must contain {element}" change='containsElement = "…"' />
+
+### `notContains`
+
+`notContains(element)` on `List`, `Set`, `Array`
+
+Checks that the list does not contain `element`.
+
+<ConstraintFacts code="notContains" message="must not contain {element}" change='notContainsElement = "…"' />
+
+### `containsAll`
+
+`containsAll(elements)` on `List`, `Set`, `Array`
+
+Checks that the list contains every one of `elements`.
+
+<ConstraintFacts code="containsAll" message="must contain all of {elements}" change='containsAll = "…"' />
+
+### `containsAny`
+
+`containsAny(elements)` on `List`, `Set`, `Array`
+
+Checks that the list contains at least one of `elements`.
+
+<ConstraintFacts code="containsAny" message="must contain any of {elements}" change='containsAny = "…"' />
+
+### `containsNone`
+
+`containsNone(elements)` on `List`, `Set`, `Array`
+
+Checks that the list contains none of `elements`.
+
+<ConstraintFacts code="containsNone" message="must not contain any of {elements}" change='containsNone = "…"' />
+
+## Duplicates
+
+### `distinct`
+
+`distinct()` on `Collection`, `Array`
+
+Checks that the collection has no element twice, by `equals`.
+
+<ConstraintFacts code="distinct" message="must not contain duplicates" change='distinct = "…"' />
+
+### `distinctBy`
+
+`distinctBy(selector)` on `List`, `Set`, `Array`
+
+Checks that no two elements of the list have the same key, as `selector` picks it.
+
+<ConstraintFacts code="distinctBy" />

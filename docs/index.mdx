@@ -1,0 +1,90 @@
+---
+title: "Validity"
+sidebarTitle: "Introduction"
+description: "Validation for Kotlin, written in plain Kotlin."
+icon: "house"
+---
+
+import Dependency from "/snippets/dependency.mdx";
+import MavenCentralNote from "/snippets/maven-central-note.mdx";
+
+<div className="v-banner">
+  <div className="v-badges">
+    <span>Kotlin {{kotlin}}</span>
+    <span>Java {{java}}+</span>
+    <span>Apache 2.0</span>
+  </div>
+  <p className="v-banner-links">
+    <a href="https://github.com/soleworks/validity">GitHub</a> · <a href="/quickstart">Quick start</a> · <a href="/constraints/overview">Constraints</a> · <a href="/ai-agents">For AI agents</a>
+  </p>
+</div>
+
+## Introduction
+
+Validity is a validation library for Kotlin. You describe the rules of your data in plain Kotlin, next to the data,
+and Validity reports every rule that is broken, each with a path, a message for people and a code for programs.
+
+```kotlin User.kt
+data class User(
+    val name: String?,
+    val email: String?,
+    val age: Int?
+) : Validatable {
+    override fun validation() = validation {
+        ::name required { minLength(2) }
+        ::email required { email() }
+        ::age ifPresent { min(18) }
+    }
+}
+```
+
+```kotlin
+User(name = "A", email = "ana@", age = 16).validate().violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `name` | must have at least 2 characters | `minLength` |
+| `email` | must be a valid email | `email` |
+| `age` | must be at least 18 | `min` |
+
+## Features
+
+- Plain Kotlin: no annotations, no code generation, no reflection
+- Every broken rule at once, with paths into nested objects, lists and maps
+- Conditions are ordinary `if` and `when`
+- Rules across fields, and rules that depend on the caller
+- Rules can call `suspend` functions, such as a database lookup
+- {{constraints}} built-in constraints, with documents of {{documentCountries}} countries and postal codes of {{postalCountries}}
+- Messages you can translate, and codes that never change
+- Depends only on the Kotlin standard library and kotlinx.coroutines
+
+## Installation
+
+<Dependency artifact="validity-core" />
+
+Phone numbers are in a separate module, `validity-phone`. See [Installation](/installation) for the modules
+and the imports.
+
+<MavenCentralNote />
+
+Validity provides an [MCP server](/ai-agents) that agents can use to search these docs, and an
+`/llms.txt` file at the root of this site.
+
+## Requirements
+
+Validity runs on Java {{java}} or newer and is built with Kotlin {{kotlin}}.
+
+## Next
+
+<CardGroup cols={3}>
+  <Card title="Quick start" icon="rocket" href="/quickstart">
+    Validate your first class.
+  </Card>
+  <Card title="Why Validity" icon="lightbulb" href="/introduction">
+    The ideas, and how it compares.
+  </Card>
+  <Card title="Constraints" icon="list-checks" href="/constraints/overview">
+    All {{constraints}}, by type of value.
+  </Card>
+</CardGroup>
