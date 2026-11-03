@@ -52,7 +52,7 @@ heading, the call and the types it works on, what it checks, and its facts throu
 `code` is the name of the constraint, `message` its default as the messages class holds it, and `change` the
 line that changes it in `messages { }`, with its block for a country or a module (`brazil { cpf = "…" }`). A
 constraint with no default message, such as `or`, gives only its code. Checked by the harness (Constraints,
-Messages, which also checks that `reference/messages.mdx` lists every message with its default).
+Messages, which also checks that the template of `guides/messages.mdx` gives every message with its default).
 
 ## Styles
 

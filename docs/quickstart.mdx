@@ -1,10 +1,18 @@
 ---
 title: "Quick start"
-description: "Declare the rules of a class, validate it and read every broken rule, in five minutes."
+description: "Add the dependency, declare the rules of a class, validate it and read every broken rule, in five minutes."
 icon: "rocket"
 ---
 
+import Dependency from "/snippets/dependency.mdx";
+
 <Steps>
+  <Step title="Add the dependency">
+    <Dependency artifact="validity-core" />
+
+    Phone numbers, the imports and the versions are in [Modules](/modules).
+  </Step>
+
   <Step title="Implement Validatable and declare the rules">
     A class that knows its own rules implements `Validatable` and returns them from `validation()`. Each line starts
     with a property, says what `null` means for it, and lists its constraints:
@@ -73,7 +81,7 @@ user.validateOrThrow()   // or validateOrThrowBlocking()
   <Card title="Nested objects" icon="network" href="/guides/nested-objects">
     `valid()` follows the data, and the path follows it too.
   </Card>
-  <Card title="Rules across fields" icon="git-merge" href="/guides/rules-across-fields">
+  <Card title="Across fields" icon="git-merge" href="/guides/across-fields">
     One of two fields, a total that matches its items.
   </Card>
   <Card title="Every constraint" icon="list-checks" href="/constraints/overview">

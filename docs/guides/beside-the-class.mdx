@@ -1,5 +1,5 @@
 ---
-title: "Rules beside the class"
+title: "Beside the class"
 description: "validation<T> { } writes the rules of a type outside it, for a class that is not yours or rules that live elsewhere."
 icon: "panel-right"
 ---
@@ -92,7 +92,7 @@ fun Address.validation() = validation {
 
 <AccordionGroup>
   <Accordion title="The class is yours and its rules never change" icon="box">
-    Implement [`Validatable`](/guides/rules-in-the-class). The rules travel with the class, and `valid()` needs no
+    Implement [`Validatable`](/guides/in-the-class). The rules travel with the class, and `valid()` needs no
     argument.
   </Accordion>
   <Accordion title="The class is not yours, or it has more than one set of rules" icon="panel-right">

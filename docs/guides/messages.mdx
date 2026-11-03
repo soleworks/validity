@@ -22,8 +22,8 @@ Validity.configure {
 }
 ```
 
-The others keep their default. The [messages reference](/reference/messages) lists all of them, with their defaults and
-placeholders.
+The others keep their default. Each constraint gives its default on [its page](/constraints/overview), and the
+[template](#a-template-to-translate) at the end of this page lists every message, ready to translate.
 
 ## For one call
 
@@ -133,3 +133,256 @@ Validity.configure { messages { module(SHOP_MESSAGES).sku = "SKU inválido" } }
 
 `MessagesKey.current` reads the messages of the configuration that is validating, so `Validity { }` for one call works
 for them too.
+
+## A template to translate
+
+Every message with its default, ready to copy and translate. Keep the placeholders in braces: they are
+filled in when a violation is built. The `phone { }` block needs `validity-phone` and the import
+`io.github.soleworks.validity.phone.phone`; remove it when you do not use the module.
+
+<Tip>
+  Ask your agent: "Translate this Validity messages template to Spanish, keeping the placeholders." It can read
+  this page as Markdown at `/guides/messages.md`.
+</Tip>
+
+```kotlin Every message
+Validity.configure {
+    messages {
+        required = "is required"
+        forbidden = "must be null"
+        atLeastOneOf = "at least one of {fields} is required"
+        atMostOneOf = "at most one of {fields} can be filled"
+        exactlyOneOf = "exactly one of {fields} must be filled"
+        allOrNoneOf = "{fields} must be filled together"
+        atLeastOf = "at least {count} of {fields} must be filled"
+        atMostOf = "at most {count} of {fields} can be filled"
+        exactlyOf = "exactly {count} of {fields} must be filled"
+        equalTo = "must be equal to {other}"
+        notEqualTo = "must not be equal to {other}"
+        oneOf = "must be one of {values}"
+        enum = "must be one of {values}"
+        noneOf = "must not be one of {values}"
+        or = "{left} or {right}"
+        and = "{left} and {right}"
+        not = "is not allowed"
+        convert = "has an invalid format"
+        convertToBigDecimal = "must be a valid number"
+        convertToInt = "must be a valid integer"
+        convertToLong = "must be a valid integer"
+        convertToBigInteger = "must be a valid integer"
+        convertToDouble = "must be a valid number"
+        convertToBoolean = "must be true or false"
+        convertToUuid = "must be a valid UUID"
+        convertToEnum = "must be one of {values}"
+        convertToLocalDate = "must be a valid ISO 8601 date"
+        convertToLocalDateTime = "must be a valid ISO 8601 date and time"
+        convertToLocalTime = "must be a valid ISO 8601 time"
+        convertToOffsetDateTime = "must be a valid ISO 8601 date and time with offset"
+        convertToInstant = "must be a valid ISO 8601 instant"
+        convertToYearMonth = "must be a valid ISO 8601 year and month"
+        convertToDuration = "must be a valid ISO 8601 duration"
+        mustBeTrue = "must be true"
+        mustBeFalse = "must be false"
+        min = "must be at least {min}"
+        max = "must be at most {max}"
+        greaterThan = "must be greater than {other}"
+        lessThan = "must be less than {other}"
+        between = "must be between {min} and {max}"
+        minLength = "must have at least {min} characters"
+        maxLength = "must have at most {max} characters"
+        length = "must have exactly {length} characters"
+        lengthBetween = "must have between {min} and {max} characters"
+        minBytes = "must have at least {min} bytes"
+        maxBytes = "must have at most {max} bytes"
+        notEmpty = "must not be empty"
+        empty = "must be empty"
+        notBlank = "must not be blank"
+        blank = "must be blank"
+        trimmed = "must not start or end with whitespace"
+        matches = "must match {regex}"
+        notMatches = "must not match {regex}"
+        contains = "must contain {text}"
+        notContains = "must not contain {text}"
+        startsWith = "must start with {prefix}"
+        notStartsWith = "must not start with {prefix}"
+        endsWith = "must end with {suffix}"
+        notEndsWith = "must not end with {suffix}"
+        uppercase = "must be uppercase"
+        lowercase = "must be lowercase"
+        letters = "must contain only letters"
+        digits = "must contain only digits"
+        lettersOrDigits = "must contain only letters or digits"
+        ascii = "must contain only ASCII characters"
+        containsOnly = "must contain only the characters {characters}"
+        normalized = "must be in Unicode {form} form"
+        positive = "must be positive"
+        negative = "must be negative"
+        positiveOrZero = "must be positive or zero"
+        negativeOrZero = "must be negative or zero"
+        multipleOf = "must be a multiple of {factor}"
+        finite = "must be finite"
+        maxDecimalPlaces = "must have at most {max} decimal places"
+        maxIntegerDigits = "must have at most {max} integer digits"
+        decimalPlaces = "must have exactly {count} decimal places"
+        minDecimalPlaces = "must have at least {min} decimal places"
+        minDigits = "must have at least {min} digits"
+        maxDigits = "must have at most {max} digits"
+        digitCount = "must have exactly {count} digits"
+        past = "must be in the past"
+        future = "must be in the future"
+        pastOrPresent = "must be in the past or present"
+        futureOrPresent = "must be in the future or present"
+        after = "must be after {other}"
+        before = "must be before {other}"
+        afterOrEqual = "must be after or equal to {other}"
+        beforeOrEqual = "must be before or equal to {other}"
+        betweenDates = "must be between {start} and {end}"
+        minAge = "must be at least {min} years old"
+        maxAge = "must be at most {max} years old"
+        withinNext = "must be within the next {duration}"
+        withinLast = "must be within the last {duration}"
+        today = "must be today"
+        weekday = "must be a weekday"
+        weekend = "must be on a weekend"
+        minSize = "must have at least {min} items"
+        maxSize = "must have at most {max} items"
+        size = "must have exactly {size} items"
+        sizeBetween = "must have between {min} and {max} items"
+        distinct = "must not contain duplicates"
+        containsElement = "must contain {element}"
+        notContainsElement = "must not contain {element}"
+        containsAll = "must contain all of {elements}"
+        containsAny = "must contain any of {elements}"
+        containsNone = "must not contain any of {elements}"
+        minEntries = "must have at least {min} entries"
+        maxEntries = "must have at most {max} entries"
+        entries = "must have exactly {size} entries"
+        entriesBetween = "must have between {min} and {max} entries"
+        containsKey = "must contain the key {key}"
+        containsKeys = "must contain the keys {keys}"
+        notContainsKey = "must not contain the key {key}"
+        onlyKeys = "must contain only the keys {keys}"
+        containsValue = "must contain the value {other}"
+        email = "must be a valid email"
+        url = "must be a valid URL"
+        hostname = "must be a valid hostname"
+        domain = "must be a valid domain name"
+        port = "must be a valid port number"
+        ipv4 = "must be a valid IPv4 address"
+        ipv6 = "must be a valid IPv6 address"
+        ip = "must be a valid IP address"
+        cidr = "must be a valid CIDR block"
+        macAddress = "must be a valid MAC address"
+        slug = "must be a valid slug"
+        jwt = "must be a valid JWT"
+        dataUri = "must be a valid data URI"
+        mimeType = "must be a valid MIME type"
+        uuid = "must be a valid UUID"
+        ulid = "must be a valid ULID"
+        objectId = "must be a valid ObjectId"
+        semver = "must be a valid semantic version"
+        isbn = "must be a valid ISBN"
+        isbn10 = "must be a valid ISBN-10"
+        isbn13 = "must be a valid ISBN-13"
+        issn = "must be a valid ISSN"
+        ean = "must be a valid EAN"
+        isrc = "must be a valid ISRC"
+        imei = "must be a valid IMEI"
+        luhn = "must have a valid Luhn check digit"
+        hash = "must be a valid {algorithm} hash"
+        base64 = "must be valid Base64"
+        base64Url = "must be valid URL-safe Base64"
+        base32 = "must be valid Base32"
+        base58 = "must be valid Base58"
+        hexadecimal = "must be hexadecimal"
+        json = "must be valid JSON"
+        hexColor = "must be a valid hexadecimal color"
+        rgbColor = "must be a valid RGB color"
+        hslColor = "must be a valid HSL color"
+        creditCard = "must be a valid credit card number"
+        iban = "must be a valid IBAN"
+        bic = "must be a valid BIC"
+        isin = "must be a valid ISIN"
+        currencyCode = "must be a valid ISO 4217 currency code"
+        bitcoinAddress = "must be a valid Bitcoin address"
+        ethereumAddress = "must be a valid Ethereum address"
+        isoCountryCode = "must be a valid ISO 3166-1 alpha-2 country code"
+        isoCountryCodeAlpha3 = "must be a valid ISO 3166-1 alpha-3 country code"
+        languageCode = "must be a valid ISO 639-1 language code"
+        locale = "must be a valid locale"
+        timeZone = "must be a valid time zone"
+        latitude = "must be a valid latitude"
+        longitude = "must be a valid longitude"
+        coordinates = "must be a valid latitude and longitude pair"
+        postalCode = "must be a valid postal code for {country}"
+        numeric = "must be numeric"
+        integer = "must be an integer"
+        boolean = "must be true or false"
+        containsUppercase = "must contain an uppercase letter"
+        containsLowercase = "must contain a lowercase letter"
+        containsDigit = "must contain a digit"
+        containsSymbol = "must contain a symbol"
+        isoDate = "must be an ISO 8601 date"
+        isoTime = "must be an ISO 8601 time"
+        isoDateTime = "must be an ISO 8601 date and time with offset"
+        isoDuration = "must be an ISO 8601 duration"
+        dateFormat = "must match the date format {pattern}"
+        brazil {
+            cpf = "must be a valid CPF"
+            cnpj = "must be a valid CNPJ"
+            cnh = "must be a valid CNH"
+            pis = "must be a valid PIS"
+            cep = "must be a valid CEP"
+            placa = "must be a valid license plate"
+        }
+        bulgaria {
+            egn = "must be a valid EGN"
+        }
+        canada {
+            sin = "must be a valid SIN"
+        }
+        france {
+            spi = "must be a valid SPI"
+        }
+        israel {
+            teudatZehut = "must be a valid teudat zehut"
+        }
+        netherlands {
+            bsn = "must be a valid BSN"
+        }
+        pakistan {
+            cnic = "must be a valid CNIC"
+        }
+        poland {
+            pesel = "must be a valid PESEL"
+            nip = "must be a valid NIP"
+        }
+        russia {
+            innIndividual = "must be a valid individual INN"
+            innLegalEntity = "must be a valid legal entity INN"
+        }
+        slovenia {
+            davcnaStevilka = "must be a valid davčna številka"
+        }
+        spain {
+            dni = "must be a valid DNI"
+            nie = "must be a valid NIE"
+        }
+        thailand {
+            nationalId = "must be a valid national identification number"
+        }
+        ukraine {
+            rnokpp = "must be a valid RNOKPP"
+        }
+        unitedStates {
+            ein = "must be a valid EIN"
+        }
+        phone {
+            phone = "must be a valid phone number"
+            mobilePhone = "must be a valid mobile phone number"
+            countryCode = "must be a valid country calling code"
+            areaCode = "must be a valid area code"
+        }
+    }
+}
+```
