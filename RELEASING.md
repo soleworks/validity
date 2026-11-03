@@ -57,9 +57,10 @@ The script behind the last two commit checks is [.github/scripts/check-commits.s
   `release-candidate` to the pull request runs the
   [Release candidate workflow](.github/workflows/release-candidate.yml): it publishes the next candidate (`1.0.0-RC1`,
   then `1.0.0-RC2`) from `main` to Maven Central, creates it as a GitHub prerelease, turns the status green, comments
-  on the pull request and takes the label off, so adding it again publishes the next one. A candidate commits nothing:
-  the docs, the changelog and `releases/latest` stay on the last stable version, and merging the pull request releases
-  the major version itself.
+  on the pull request and takes the label off. After fixes from the feedback are merged into `main`, adding the label
+  again publishes the next candidate; with no change in `main` since the last one, it publishes nothing and says so
+  on the pull request. A candidate commits nothing: the docs, the changelog and `releases/latest` stay on the last
+  stable version, and merging the pull request releases the major version itself.
 - **A version other than the one proposed**: a commit with the footer `Release-As: x.y.z`, merged before the release.
 
 ## When something fails
