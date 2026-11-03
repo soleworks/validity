@@ -101,5 +101,10 @@ secret `RELEASE_APP_PRIVATE_KEY`.
 `main` has a ruleset: changes come through pull requests, with the `build`, `docs` and `commits` checks passing, and no
 force push or deletion. The App is on its bypass list, since `show-release` pushes the docs straight to `main`.
 
+Pull requests are merged by squash only, with the title of the pull request as the subject of the commit and the
+messages of its commits as the body. release-please reads that subject, and a `BREAKING CHANGE:` footer of any commit
+reaches it through the body. A merge commit would repeat the message of a commit it merges, and the changelog would
+list the change twice.
+
 The history before `0.1.0` is not in the changelog: `bootstrap-sha` in `release-please-config.json` starts it at the
 commit that set up this flow.
