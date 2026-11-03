@@ -40,7 +40,7 @@
     }
   },
   "appearance": {
-    "default": "light"
+    "default": "system"
   },
   "contextual": {
     "options": [
