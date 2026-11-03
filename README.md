@@ -106,20 +106,18 @@ Multiplatform, and Jakarta Validation plugs straight into the frameworks that re
 ## Installation
 
 > [!NOTE]
-> Validity is not on Maven Central yet: the first release, `0.1.0`, is on its way. Until it lands, clone this
-> repository next to your project and add `includeBuild("../validity")` to your `settings.gradle.kts`. Gradle then
-> builds the dependencies below from the clone.
+> Validity is not on Maven Central yet: the first release is on its way. Until it lands, clone this repository next
+> to your project and add `includeBuild("../validity")` to your `settings.gradle.kts`. Gradle then builds the
+> dependencies below from the clone, so they name no version.
 
-<!-- x-release-please-start-version -->
 ```kotlin
 dependencies {
-    implementation("io.github.soleworks:validity-core:0.1.0")
+    implementation("io.github.soleworks:validity-core")
 
     // Optional: phone numbers, with Google's libphonenumber
-    implementation("io.github.soleworks:validity-phone:0.1.0")
+    implementation("io.github.soleworks:validity-phone")
 }
 ```
-<!-- x-release-please-end -->
 
 Validity runs on Java 17 or newer and is built with Kotlin 2.4.
 

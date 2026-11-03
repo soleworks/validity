@@ -52,13 +52,3 @@ jobs:
           curl -sSL "$base/vale_${VALE_VERSION}_checksums.txt" | grep " $archive\$" | sha256sum --check
           tar -xzf "$archive" vale
           cd docs && ../vale --output=line .
-
-  # The commits decide the next version and the changelog, so a pull request cannot get them wrong.
-  commits:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      - run: bash .github/scripts/check-commits.sh "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}"

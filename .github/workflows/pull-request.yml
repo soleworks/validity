@@ -1,0 +1,23 @@
+name: Pull request
+
+# The commits and the title decide the next version and the changelog, so a pull request cannot get them wrong. Apart
+# from CI, since a new title runs these checks again without building.
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - run: bash .github/scripts/check-commits.sh "$BASE" "$HEAD" "$TITLE"
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+          TITLE: ${{ github.event.pull_request.title }}

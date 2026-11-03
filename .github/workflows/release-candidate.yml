@@ -73,14 +73,21 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      # Right after the upload, so the number is taken even if Maven Central is slow: Maven Central never takes the same
+      # version twice, so running the workflow again goes on to the next number.
       - name: Create the prerelease
         if: steps.version.outputs.changed == 'true'
         run: |
           gh release create "v${{ steps.version.outputs.version }}" --target "${{ steps.version.outputs.sha }}" \
             --title "${{ steps.version.outputs.version }}" --prerelease --generate-notes
+      - run: bash .github/scripts/wait-for-maven-central.sh "${{ steps.version.outputs.version }}"
+        if: steps.version.outputs.changed == 'true'
+      - name: Tell the release pull request
+        if: steps.version.outputs.changed == 'true'
+        run: |
           gh api "repos/$GH_REPO/statuses/$HEAD" -f state=success -f context="Release candidate" \
             -f description="${{ steps.version.outputs.version }} is on Maven Central."
-          gh pr comment "$PR" --body "Published \`${{ steps.version.outputs.version }}\` to Maven Central as a prerelease."
+          gh pr comment "$PR" --body "\`${{ steps.version.outputs.version }}\` is on Maven Central, as a prerelease."
       - name: Report a failure on the release pull request
         if: failure() && env.PR != ''
         run: gh pr comment "$PR" --body "A release candidate failed to publish. See ${{ github.server_url }}/$GH_REPO/actions/runs/${{ github.run_id }}."

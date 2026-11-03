@@ -12,18 +12,16 @@ in code blocks, so the Markdown agents read has the values too.
 
 - Each variable is checked against the code: `version` against `.release-please-manifest.json`, `kotlin`
   against the version catalog, `java` against the toolchain, the counts against the sources.
-- `version` is the last stable version released, never the one being built: `gradle.properties` holds the
-  next version (`0.1.0-SNAPSHOT`), which is not on Maven Central, and a release candidate never reaches the
-  docs. release-please sets the manifest and the variable in the same release commit. Before the first
-  release the manifest is `0.0.0`, and nothing shows the version: no page writes `{{version}}`, the
-  dependency snippet names no version, and the navbar has no version link.
-- Once a release is on Maven Central, the navbar links to
-  `https://github.com/soleworks/validity/releases/latest` with the bare version as its label (`0.1.0`, no
-  `v`). Mintlify does not fill variables in `docs.json`, so the label holds the value. The `show-release`
-  job of the Release workflow adds the link at the first release, with the dependency blocks in place of
-  the note that Validity is not on Maven Central yet (`.github/scripts/show-release.mjs`). From then on
-  release-please updates the label through its `jsonpath` in `release-please-config.json`, and the harness
-  compares it with `version`.
+- `version` is the last stable version a reader can download from Maven Central. It follows the release
+  instead of moving with it: release-please sets only the manifest and `gradle.properties`, and the
+  `show-release` job of the Release workflow writes `version`, once Maven Central has it
+  (`.github/scripts/show-release.mjs`). So the harness checks that it is stable and at most the version of
+  the manifest. Before the first release it is `0.0.0`, and nothing shows a version: no page writes
+  `{{version}}`, the dependency snippet names no version, and the navbar has no version link.
+- From the first release on, the navbar links to `https://github.com/soleworks/validity/releases/latest` with
+  the bare version as its label (`0.1.0`, no `v`). Mintlify does not fill variables in `docs.json`, so the
+  label holds the value: the same script writes it, and the harness compares it with `version`, as it does
+  the dependencies and the badge of the README.
 - Mintlify does not fill variables in a frontmatter, in `skill.md` or in a link the link checker reads: a
   frontmatter says the fact without the number, `skill.md` writes the value (and the harness compares it),
   and a link to the site itself is a path from the root, such as `/quickstart`.
@@ -71,8 +69,8 @@ Messages, which also checks that the template of `guides/messages.mdx` gives eve
 Every color is a variable of `docs/tokens.css`; `docs/style.css` uses them with `var()`. Lengths are in `rem`
 or `em`, except a `1px` border. Nothing is placed with a negative margin or an absolute position: the theme
 owns the spacing, so a page that compensates for it breaks when the theme changes. Selectors target only the
-hooks Mintlify documents (`#page-title`, `.card`, `.code-block`, `.code-group`, `[data-component-part="…"]`) and the `v-`
-classes of these pages. Checked by Stylelint.
+hooks Mintlify documents (`#page-title`, `.card`, `.code-block`, `.code-group`, `[data-component-part="…"]`)
+and the `v-` classes of these pages. Checked by Stylelint.
 
 A page uses only `v-` classes that the stylesheets define, never an inline `style` or a color, and every `v-`
 class of the stylesheets is used. Checked by the harness (Styles).

@@ -23,33 +23,37 @@ removed.
    [release-please](https://github.com/googleapis/release-please) rebuilds it on top of `main` (`always-update`, so it
    never lags behind a commit that leaves the changelog as it was) with the next version, worked out from the commits
    since the last release, and the entries of `CHANGELOG.md`: `feat` and `fix` commits, and every breaking change. It
-   also sets the version in `gradle.properties`, in the installation snippet of the README, in the `version` variable
-   of `docs/docs.json`, which every page of the docs site reads as `{{version}}`, and in the label of the version link
-   of the docs navbar. The docs show only a released version: the harness checks that the `version` variable and the
-   navbar label match `.release-please-manifest.json`, not `gradle.properties`.
+   also sets the version in `gradle.properties`, which the build publishes.
 3. **Merging that pull request is the release.** release-please tags the merge commit (`v0.2.0`) and creates the
    GitHub release with its changelog. The same workflow then checks that the build has that version, builds it, and
    publishes `validity-core` and `validity-phone`, signed, to Maven Central.
-4. **The docs follow by themselves.** Once the version is on Maven Central, the `show-release` job runs
-   [.github/scripts/show-release.mjs](.github/scripts/show-release.mjs), which adds what release-please cannot write,
-   since it only replaces a version already written: the version link of the docs navbar and, at the first release,
-   the dependency blocks of the docs and the README in place of the notes that Validity is not on Maven Central yet.
-   It runs the docs checks and pushes to `main`. When there is nothing to add, as from the second release on, it
-   pushes nothing.
+4. **The docs and the README follow by themselves.** The `show-release` job waits until
+   [.github/scripts/wait-for-maven-central.sh](.github/scripts/wait-for-maven-central.sh) can download the version
+   from Maven Central, which takes minutes after the publish, then runs
+   [.github/scripts/show-release.mjs](.github/scripts/show-release.mjs). The script is the only writer of the version a
+   reader sees: the `version` variable of `docs/docs.json`, which every page of the docs site reads as `{{version}}`,
+   the version link of the docs navbar, and the dependencies and the badge of the README. At the first release it also
+   puts the dependency blocks in place of the notes that Validity is not on Maven Central yet. The job runs the docs
+   checks and the harness, then pushes the change to `main` as `docs: show version 0.2.0`.
 
-The merge is the only step a person takes. The docs show only a stable version that is on Maven Central: before the
-first release nothing shows a version, and a release candidate never reaches the docs.
+The merge is the only step a person takes. A reader is never told to add a version that cannot be downloaded: before
+the first release nothing names a version, a release shows up in the docs once Maven Central has it, and a release
+candidate never reaches the docs. The harness holds it: the `version` variable is a stable version, at most the one in
+`.release-please-manifest.json`, and the navbar label and the README name that same version.
 
 ## What CI checks on every pull request
 
-- **Every commit is a Conventional Commit.** A commit release-please cannot read would be left out of the changelog.
+- **Every commit is a Conventional Commit, and so is the title.** A commit release-please cannot read would be left
+  out of the version and the changelog, and a squash merge of several commits makes the title the subject of the
+  commit it reads. The *Pull request* workflow runs this check again when the title changes.
 - **The public API matches its dump.** `api/<module>.api` holds the public API of each published module, and
   `./gradlew check` fails when the code no longer matches it. A pull request that changes the API on purpose runs
   `./gradlew updateKotlinAbi` and commits the new dump, so the review shows the change.
 - **A break is declared.** When the dump loses or changes a line, one of the commits needs the `!` and the
   `BREAKING CHANGE:` footer, so the version cannot go up by less than it should.
 
-The script behind the last two commit checks is [.github/scripts/check-commits.sh](.github/scripts/check-commits.sh).
+The script behind the commit, title and break checks is
+[.github/scripts/check-commits.sh](.github/scripts/check-commits.sh).
 
 ## Other versions
 
@@ -69,10 +73,12 @@ The script behind the last two commit checks is [.github/scripts/check-commits.s
 - **The publish job failed** (a missing secret, Maven Central down): the tag and the GitHub release already exist.
   Fix the cause and run the failed job again from the Actions tab. It publishes the same tagged commit, and the
   `show-release` job runs after it.
-- **The `show-release` job failed**: the version is on Maven Central and the docs do not show it yet. Run the job again;
-  the script changes only what is missing.
+- **The `show-release` job failed**: the docs do not show the version yet. When it waited an hour without seeing the
+  version on Maven Central, look for the deployment on the Central Portal, which may have rejected it. Run the job
+  again once the version is there: the script changes only what is missing.
 - **A release candidate failed**: the workflow comments on the release pull request with the link to the run. Run it
-  again once the cause is fixed: the number of the candidate goes up only when one is published.
+  again once the cause is fixed. A failure before the upload keeps the number; once a candidate is uploaded its tag
+  exists, and the next run takes the next number, since Maven Central never takes the same version twice.
 - **The release pull request does not open**: the repository must allow GitHub Actions to create pull requests
   (*Settings → Actions → General → Workflow permissions*).
 

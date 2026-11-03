@@ -2,14 +2,17 @@
 # Checks the commits of a pull request, since release-please reads the next version and the changelog from them.
 #
 # 1. Every commit is a Conventional Commit, so none is left out of the changelog.
-# 2. When the public API loses or changes a declaration (a removed line in api/*.api), a commit says so with a `!`
+# 2. The title of the pull request is one too: a squash merge of several commits makes it the subject of the commit
+#    release-please reads.
+# 3. When the public API loses or changes a declaration (a removed line in api/*.api), a commit says so with a `!`
 #    and a BREAKING CHANGE: footer, so the version goes up as it should.
 #
-# Usage: check-commits.sh <base> <head>
+# Usage: check-commits.sh <base> <head> <title of the pull request>
 set -euo pipefail
 
 base=$1
 head=$2
+title=$3
 types='feat|fix|perf|refactor|revert|docs|test|build|ci|chore|style'
 failed=0
 
@@ -21,6 +24,11 @@ for sha in $(git rev-list --no-merges "$base..$head"); do
         failed=1
     fi
 done
+
+if ! grep -Eq "^($types)(\([a-z0-9-]+\))?!?: .+" <<< "$title"; then
+    echo "::error::The title \"$title\" is not a Conventional Commit, such as \"feat(core): ...\" or \"fix: ...\"."
+    failed=1
+fi
 
 if git diff "$base...$head" -- '*.api' | grep -Eq '^-[^-]'; then
     messages=$(git log --no-merges --format=%B "$base..$head")

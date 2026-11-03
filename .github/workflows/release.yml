@@ -34,7 +34,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          pr=$(gh pr list --label "autorelease: pending" --json headRefOid --jq '.[0].headRefOid')
+          pr=$(gh pr list --label "autorelease: pending" --json headRefOid --jq '.[0].headRefOid // empty')
           [ -n "$pr" ] || exit 0
           next=$(gh api "repos/$GH_REPO/contents/.release-please-manifest.json?ref=$pr" --jq .content | base64 -d | jq -r '."."')
           case "$next" in
@@ -80,9 +80,9 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
 
-  # Once the version is on Maven Central, adds to the docs and the README what release-please cannot write: the version
-  # link of the navbar and, at the first release, the dependency blocks in place of the notes. A push of the workflow's
-  # token runs no workflow, so the job runs the docs checks itself before it pushes.
+  # Once the version can be downloaded from Maven Central, shows it in the docs and the README: before that, a reader
+  # would be told to add a version that does not exist yet. A push of the workflow's token runs no workflow, so the job
+  # runs the docs checks itself before it pushes.
   show-release:
     needs: [release-please, publish]
     runs-on: ubuntu-latest
@@ -92,6 +92,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: main
+          fetch-depth: 0
+      - run: bash .github/scripts/wait-for-maven-central.sh "${{ needs.release-please.outputs.version }}"
       - run: node .github/scripts/show-release.mjs "${{ needs.release-please.outputs.version }}"
       - name: Look for changes
         id: changes
