@@ -1,9 +1,11 @@
 name: Release candidate
 
 # Run from the Actions tab (Release candidate → Run workflow): publishes the next release candidate of the version the
-# open release pull request proposes (1.0.0-RC1, then 1.0.0-RC2...) from main. A candidate is a GitHub prerelease, so
-# releases/latest and the docs keep showing the last stable version, and it commits nothing: the release pull request
-# stays as it is, and merging it releases the stable version. Only a user with write access can run it.
+# open release pull request proposes (1.0.0-RC1, then 1.0.0-RC2...), from the commit of main it was cut from. The
+# version is not an input: a candidate is always of the version that merging the release pull request would release.
+# A candidate is a GitHub prerelease, so releases/latest and the docs keep showing the last stable version, and it
+# commits nothing: the release pull request stays as it is, and merging it releases the stable version. Only a user
+# with write access can run it.
 on:
   workflow_dispatch:
 
@@ -32,11 +34,15 @@ jobs:
             echo "No release pull request is open, so there is no next version to publish a candidate of."
             exit 1
           fi
+          head=$(jq -r .headRefOid <<< "$pr")
           echo "PR=$(jq -r .number <<< "$pr")" >> "$GITHUB_ENV"
-          echo "HEAD=$(jq -r .headRefOid <<< "$pr")" >> "$GITHUB_ENV"
+          echo "HEAD=$head" >> "$GITHUB_ENV"
+          echo "BASE=$(gh api "repos/$GH_REPO/commits/$head" --jq '.parents[0].sha')" >> "$GITHUB_ENV"
+      # The candidate is the commit of main the release pull request was cut from, so its code is the code that merging
+      # the pull request releases, even while the pull request is still catching up with a push to main.
       - uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ env.BASE }}
           fetch-depth: 0
       - name: Work out the version
         id: version
