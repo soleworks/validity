@@ -1,0 +1,113 @@
+---
+title: "Validity"
+sidebarTitle: "Overview"
+description: "Validation for Kotlin, written in plain Kotlin: what it is, the problem it solves and how it compares."
+icon: "house"
+---
+
+<div className="v-banner">
+  <div className="v-badges">
+    <span>Kotlin {{kotlin}}</span>
+    <span>Java {{java}}+</span>
+    <span>Apache 2.0</span>
+  </div>
+  <p className="v-banner-links">
+    <a href="https://github.com/soleworks/validity">GitHub</a> · <a href="/quickstart">Quick start</a> · <a href="/constraints/overview">Constraints</a> · <a href="/ai-agents">For AI agents</a>
+  </p>
+</div>
+
+Validity checks that your data follows its rules, and tells you, in one pass, every rule it breaks. You write the rules
+in Kotlin, next to the data, with the words of the requirement:
+
+```kotlin
+::email required { email() }
+::age ifPresent { min(18) }
+```
+
+Each broken rule becomes a `Violation` with three things:
+
+<CardGroup cols={3}>
+  <Card title="A path" icon="map-pin">
+    Where the value is: `email`, `shipping.zipCode`, `items[1].quantity`, `prices[USD]`.
+  </Card>
+  <Card title="A message" icon="message-square-text">
+    For people: `must be a valid email`. Configurable, and translatable.
+  </Card>
+  <Card title="A code" icon="code">
+    For programs: `email`. Stable across versions and languages.
+  </Card>
+</CardGroup>
+
+## The problem it solves
+
+Most validation code starts as a few `if`s in a controller. Then the rules multiply: a field required only for
+companies, a total that must match its items, a coupon that must exist in the database, a message in Portuguese for
+some users. The `if`s spread, they stop at the first error, and nobody can tell which rules a request really follows.
+
+Validity gives those rules one place and one vocabulary:
+
+- **Rules read like the requirements.** `::email required { email() }` is the sentence from the ticket.
+- **Conditions are plain Kotlin.** "Required if", "only for companies" and "after the check-in" are an `if`, a `when`
+  and a field of the object. No validation groups, no annotations on the class.
+- **`null` is decided once.** `required`, `ifPresent` and `forbidden` settle what `null` means, and every constraint
+  after them works on the non-null type.
+- **Every error at once.** A form shows all its errors in one round trip, and an API returns all of them in one
+  response.
+
+## Features
+
+- Plain Kotlin: no annotations, no code generation, no reflection
+- Paths into nested objects, lists and maps
+- Rules across fields, and rules that depend on the caller
+- Rules can call `suspend` functions, such as a database lookup
+- {{constraints}} built-in constraints, with documents of {{documentCountries}} countries and postal codes of {{postalCountries}}
+- Messages you can translate, and codes that never change
+- Depends only on the Kotlin standard library and kotlinx.coroutines
+
+## How it compares
+
+| | Validity | Konform | Valiktor | Akkurate | Jakarta Validation |
+|---|---|---|---|---|---|
+| Rules are | Kotlin DSL | Kotlin DSL | Kotlin DSL | Kotlin DSL | annotations |
+| They live | in the class, or beside it | in a `Validation<T>` | usually in `init` | in a `Validator<T>` | on fields and classes |
+| A rule on another field | `if`, `when` | `dynamic { }` | code in the block | code in the block | class-level constraint, groups |
+| Code generation | none | none | none | KSP plugin | none |
+| Platforms | JVM {{java}}+ | Multiplatform | JVM | Multiplatform | JVM |
+
+Each of them is a solid choice, and some go where Validity does not yet: Konform and Akkurate run on Kotlin
+Multiplatform, and Jakarta Validation plugs straight into the frameworks that read its annotations.
+
+## The ideas behind these docs
+
+<Steps>
+  <Step title="A validation is a list of rules about one object">
+    You declare it in the class with [`Validatable`](/guides/in-the-class), or beside it with
+    [`validation<T> { }`](/guides/beside-the-class). Both run the same engine and accept the same constraints.
+  </Step>
+  <Step title="A property starts with what null means">
+    [`required`, `ifPresent` or `forbidden`](/guides/null-values) come first. Inside their block, the value is never
+    `null`.
+  </Step>
+  <Step title="Constraints are functions on the value">
+    `email()`, `minLength(3)`, `cpf()`: there are [{{constraints}} of them](/constraints/overview), and
+    [your own](/guides/custom-constraints) look exactly the same.
+  </Step>
+  <Step title="Validating returns every violation">
+    [`validate()`](/guides/results) gives you a list. [`validateOrThrow()`](/guides/exceptions) throws it, for the
+    edge of your system.
+  </Step>
+</Steps>
+
+## Next
+
+<CardGroup cols={3}>
+  <Card title="Quick start" icon="rocket" href="/quickstart">
+    Add the dependency and validate your first class.
+  </Card>
+  <Card title="Modules" icon="boxes" href="/modules">
+    What `validity-core` and `validity-phone` hold.
+  </Card>
+  <Card title="Constraints" icon="list-checks" href="/constraints/overview">
+    All {{constraints}}, by type of value.
+  </Card>
+</CardGroup>

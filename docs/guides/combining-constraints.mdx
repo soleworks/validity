@@ -1,0 +1,110 @@
+---
+title: "Combining constraints"
+description: "The or, and, not combinators build one rule out of several constraints, with a message that explains the combination."
+icon: "combine"
+---
+
+Constraints in a block are all checked, and each reports its own violation. Sometimes the rule is a combination
+instead: a document that is a CPF *or* a CNPJ, a code that starts with `ST-` *and* has 8 characters, a password that
+does *not* contain the username. `or`, `and` and `not` turn several constraints into one rule, with one violation.
+
+```kotlin Seller.kt
+data class Seller(
+    val document: String?,
+    val storeCode: String?,
+    val username: String?,
+    val password: String?
+) : Validatable {
+    override fun validation() = validation {
+        ::document required {
+            or {
+                cpf()
+                cnpj()
+            }
+        }
+        ::storeCode required {
+            and("must be ST- and 5 more characters") {
+                startsWith("ST-")
+                length(8)
+            }
+        }
+        ::password required { not("must not contain the username") { contains(username) } }
+    }
+}
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `document` | must be a valid CPF or must be a valid CNPJ | `or` |
+| `storeCode` | must be ST- and 5 more characters | `and` |
+| `password` | must not contain the username | `not` |
+
+## `or`
+
+`or { }` holds when at least one of its constraints holds. Each call in the block is a branch. When every branch fails,
+the violation has the code `or` and a message that joins the failures of the branches:
+`must be a valid CPF or must be a valid CNPJ`.
+
+Each branch can be a group of constraints, with `and`:
+
+```kotlin Voucher.kt
+data class Voucher(
+    val code: String?
+) : Validatable {
+    override fun validation() = validation {
+        ::code required {
+            or {
+                length(8)
+                and {
+                    startsWith("X")
+                    length(10)
+                }
+            }
+        }
+    }
+}
+```
+
+The message then puts the group in parentheses, so `Voucher(code = "ABC")` reports:
+
+| Path | Message | Code |
+|---|---|---|
+| `code` | must have exactly 8 characters or (must start with X and must have exactly 10 characters) | `or` |
+
+## `and`
+
+`and { }` holds when every constraint in it holds, and reports one violation, with the code `and`, instead of one per
+constraint. Outside an `or`, use it when the constraints together are one requirement that deserves one message.
+
+## `not`
+
+`not { }` holds when none of its constraints holds, and reports `is not allowed`, with the code `not`, by default.
+Give it a message that says what is not allowed:
+
+```kotlin
+::password required { not("must not contain the username") { contains(username) } }
+```
+
+## Messages
+
+`or` and `and` build their message from the messages of the constraints inside, so a translated constraint stays
+translated in the combination. With `brazil { cpf = "CPF inválido" }` [configured](/guides/messages), the document above
+reports `CPF inválido or must be a valid CNPJ`.
+
+The words that join them are messages too, `or` (`{left} or {right}`) and `and` (`{left} and {right}`), so they can be
+translated as well:
+
+```kotlin
+Validity.configure {
+    messages {
+        or = "{left} ou {right}"
+        and = "{left} e {right}"
+    }
+}
+```
+
+All three take a message as their first argument, to replace the joined one: `or("must be a CPF or a CNPJ") { ... }`.
+
+<Note>
+  An empty `or { }` holds, and so does an empty `and { }`: there is nothing that fails.
+</Note>

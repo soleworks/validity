@@ -1,0 +1,78 @@
+---
+title: "Date formats"
+description: "Text that holds an ISO 8601 date, time, date-time or duration, or a date in a pattern of yours."
+icon: "calendar-clock"
+---
+
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Text that holds a date or a time, checked without converting it. To validate the date itself, such as "not in the
+future", [convert it](/guides/converting-values) with `convertToLocalDate { }` instead.
+
+```kotlin ImportRow.kt
+data class ImportRow(
+    val createdOn: String?,
+    val legacyDate: String? = null,
+    val retention: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::createdOn required { isoDate() }
+        ::legacyDate ifPresent { dateFormat("dd/MM/yyyy") }
+        ::retention ifPresent { isoDuration() }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`isoDate`](#isodate) | Is an ISO 8601 date, such as `2024-02-29`, that exists in the calendar. |
+| [`isoTime`](#isotime) | Is an ISO 8601 time, such as `13:45` or `13:45:30.5`, with no offset. |
+| [`isoDateTime`](#isodatetime) | Is an ISO 8601 date and time with an offset, such as `2024-02-29T13:45:30Z` or `2024-02-29T13:45:30+01:00`. |
+| [`isoDuration`](#isoduration) | Is an ISO 8601 duration, such as `P1Y2M`, `P3W` or `PT1H30M`. |
+| [`dateFormat`](#dateformat) | Is a date or time written exactly in `pattern`. |
+
+## ISO 8601
+
+### `isoDate`
+
+`isoDate()` on `String`
+
+Checks that the string is an ISO 8601 date, such as `2024-02-29`, that exists in the calendar.
+
+<ConstraintFacts code="isoDate" message="must be an ISO 8601 date" change='isoDate = "…"' />
+
+### `isoTime`
+
+`isoTime()` on `String`
+
+Checks that the string is an ISO 8601 time, such as `13:45` or `13:45:30.5`, with no offset.
+
+<ConstraintFacts code="isoTime" message="must be an ISO 8601 time" change='isoTime = "…"' />
+
+### `isoDateTime`
+
+`isoDateTime()` on `String`
+
+Checks that the string is an ISO 8601 date and time with an offset, such as `2024-02-29T13:45:30Z` or `2024-02-29T13:45:30+01:00`.
+
+<ConstraintFacts code="isoDateTime" message="must be an ISO 8601 date and time with offset" change='isoDateTime = "…"' />
+
+### `isoDuration`
+
+`isoDuration()` on `String`
+
+Checks that the string is an ISO 8601 duration, such as `P1Y2M`, `P3W` or `PT1H30M`.
+
+<ConstraintFacts code="isoDuration" message="must be an ISO 8601 duration" change='isoDuration = "…"' />
+
+## Patterns
+
+### `dateFormat`
+
+`dateFormat(pattern)` on `String`
+
+Checks that the string is a date or time written exactly in `pattern`.
+
+The string is parsed with `DateTimeFormatter.ofPattern` and must print back the same, so `2024-2-9` does not match `yyyy-MM-dd`.
+
+<ConstraintFacts code="dateFormat" message="must match the date format {pattern}" change='dateFormat = "…"' />

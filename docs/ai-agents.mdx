@@ -1,0 +1,100 @@
+---
+title: "AI agents"
+description: "Connect Claude, Cursor, VS Code or any agent to these docs: an MCP server, a skill, llms.txt and every page as Markdown."
+icon: "bot"
+---
+
+These docs are written for two readers: you, and the agent that writes code next to you. Everything here is also served
+in the forms agents read best, so an agent can write Validity rules from the documentation instead of from what it
+half remembers.
+
+## Connect the MCP server
+
+The docs run a [Model Context Protocol](https://modelcontextprotocol.io) server that lets an agent search them and read
+whole pages as Markdown, while it works:
+
+```text
+{{site}}/mcp
+```
+
+<Tabs>
+  <Tab title="Claude Code">
+```bash
+claude mcp add --transport http validity {{site}}/mcp
+```
+  </Tab>
+  <Tab title="Cursor">
+    Add it to `.cursor/mcp.json` in your project, or to `~/.cursor/mcp.json` for every project:
+
+```json
+{
+  "mcpServers": {
+    "validity": {
+      "url": "{{site}}/mcp"
+    }
+  }
+}
+```
+  </Tab>
+  <Tab title="VS Code">
+    Add it to `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "validity": {
+      "type": "http",
+      "url": "{{site}}/mcp"
+    }
+  }
+}
+```
+  </Tab>
+  <Tab title="Claude">
+    In Claude, add a custom connector and paste the URL above.
+  </Tab>
+</Tabs>
+
+The menu at the top of every page also has **Copy MCP server** and buttons that install it in Cursor and VS Code.
+
+## Install the skill
+
+The [skill](/skill.md) teaches an agent how Validity code is written: the entries, what
+`null` means, the imports, and the mistakes that compile but do the wrong thing. Add it to your agent with:
+
+```bash
+npx skills add {{site}}
+```
+
+## Read the docs as text
+
+| Address | What it is |
+|---|---|
+| `/llms.txt` | The index of every page, with its description |
+| `/llms-full.txt` | Every page in one file, to paste as context |
+| Any page with `.md` | That page as Markdown, such as [`/quickstart.md`](/quickstart.md) |
+
+A request with `Accept: text/markdown` gets the Markdown of a page at its normal address too.
+
+## From any page
+
+The **Copy page** menu at the top of every page copies it as Markdown, opens it as Markdown, or sends it to Claude,
+ChatGPT or Perplexity with a question.
+
+## What to ask
+
+<CardGroup cols={2}>
+  <Card title="Write the rules of a class" icon="pencil">
+    "Using the Validity docs, write the validation of this `SignupRequest`: the email is required, the phone is
+    optional but must be a Brazilian mobile."
+  </Card>
+  <Card title="Translate the messages" icon="languages">
+    "Write a `Validity.configure` block with every default message of Validity in Spanish."
+  </Card>
+  <Card title="Find the constraint" icon="search">
+    "Which Validity constraint checks an IBAN, and what code does its violation have?"
+  </Card>
+  <Card title="Review the rules" icon="scan-search">
+    "Check these Validity rules against the docs: is anything run outside a rule inside `failFast`?"
+  </Card>
+</CardGroup>

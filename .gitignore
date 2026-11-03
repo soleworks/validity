@@ -12,3 +12,13 @@ build
 *.iml
 .DS_Store
 local.properties
+
+# Request runs
+.runs/
+
+# Claude Code, per person
+.claude/worktrees/
+.claude/settings.local.json
+
+# The tools of the docs site, installed with npm ci
+node_modules/

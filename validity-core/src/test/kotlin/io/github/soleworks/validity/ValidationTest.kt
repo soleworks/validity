@@ -2,6 +2,8 @@ package io.github.soleworks.validity
 
 import io.github.soleworks.validity.samples.Directory
 import io.github.soleworks.validity.samples.Warehouse
+import io.github.soleworks.validity.samples.docs.Address
+import io.github.soleworks.validity.samples.docs.addressValidation
 import io.github.soleworks.validity.samples.readme.Destination
 import io.github.soleworks.validity.samples.readme.destinationValidation
 import io.kotest.matchers.shouldBe
@@ -98,6 +100,26 @@ class ValidationTest {
 
             result.violations shouldBe listOf(
                 Violation(path = "street", message = "is closed", code = "closed")
+            )
+        }
+
+        @Test
+        fun `given an address in a country with no known postal code format should report only the other rules`() {
+            val address = Address(street = "", zipCode = "1234", country = "USA")
+
+            val result = addressValidation.validateBlocking(address)
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "street",
+                    message = "must not be blank",
+                    code = "notBlank"
+                ),
+                Violation(
+                    path = "country",
+                    message = "must be a valid ISO 3166-1 alpha-2 country code",
+                    code = "isoCountryCode"
+                )
             )
         }
     }

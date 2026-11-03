@@ -1,0 +1,20 @@
+extends: existence
+message: "Remove '%s': it adds nothing, and can read as condescending."
+level: error
+ignorecase: true
+tokens:
+  - simply
+  - just
+  - easy
+  - easily
+  - obviously
+  - clearly
+  - basically
+  - of course
+  - please
+  - successfully
+  - leverage
+  - seamless
+  - seamlessly
+  - unlock
+  - empower

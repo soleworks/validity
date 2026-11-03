@@ -1,0 +1,6 @@
+extends: spelling
+message: "Did you really mean '%s'? If it is a word of the domain, add it to config/vocabularies/Validity/accept.txt."
+level: error
+# camelCase words are names of the API, such as ifPresent or mobilePhone, even in a frontmatter description.
+filters:
+  - '[a-z]+[A-Z][A-Za-z0-9]*'

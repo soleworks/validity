@@ -1,0 +1,64 @@
+---
+title: "Metadata"
+description: "metadata { } attaches your own entries to every violation of a block, such as an id, a row number or a severity."
+icon: "tags"
+---
+
+A path, a message and a code say what is wrong and where. Sometimes the consumer of the violations needs more: the id
+of the record in a batch, the row of a CSV, whether a rule is an error or a warning. `metadata(...) { }` attaches entries
+to every violation of the rules inside its block:
+
+```kotlin Withdrawal.kt
+data class Withdrawal(
+    val accountId: String,
+    val amount: BigDecimal?,
+    val note: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        metadata("accountId" to accountId) {
+            ::amount required { positive() }
+            ::note ifPresent {
+                metadata("severity" to "warning") { maxLength(140) }
+            }
+        }
+    }
+}
+```
+
+```kotlin
+Withdrawal(accountId = "acc-1", amount = "0".toBigDecimal(), note = "a".repeat(141)).validate().violations
+```
+
+| Path | Message | Code | Metadata |
+|---|---|---|---|
+| `amount` | must be positive | `positive` | `{accountId=acc-1}` |
+| `note` | must have at most 140 characters | `maxLength` | `{accountId=acc-1, severity=warning}` |
+
+## Where it goes
+
+`metadata` works in two places, with the same meaning:
+
+- **In the validation block**, around properties: every violation of those properties gets the entries.
+- **In the block of a property**, around constraints: only the violations of those constraints get them.
+
+Nested calls add to the entries around them, and an inner entry with the same key replaces the outer one. Nested
+objects and elements inherit the entries too, so a `metadata("operationId" to id)` around `::operations required {
+each { valid() } }` reaches the violations of every operation.
+
+## Reading it
+
+`Violation.metadata` is a `Map<String, Any?>`, empty when nothing was attached:
+
+```kotlin
+val warnings = result.violations.filter { it.metadata["severity"] == "warning" }
+val errors = result.violations - warnings.toSet()
+```
+
+## The fields of the presence rules
+
+The [presence rules](/guides/across-fields#presence-rules), such as `exactlyOneOf`, attach a `fields` entry of
+their own, with the properties to fill or to clear:
+
+| Path | Message | Code | Metadata |
+|---|---|---|---|
+| *the object* | iban, bic must be filled together | `allOrNoneOf` | `{fields=[bic]}` |

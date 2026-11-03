@@ -1,0 +1,407 @@
+---
+title: "Strings"
+description: "Length, content, characters and text formats of a String."
+icon: "type"
+---
+
+import NullArguments from "/snippets/null-arguments.mdx";
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+The constraints of a `String` value. Length counts characters as Kotlin does (`String.length`), and the byte rules
+count the bytes of an encoding, UTF-8 by default. The rules that compare with text you give take `ignoreCase`, `false`
+by default.
+
+<NullArguments />
+
+```kotlin MemberProfile.kt
+data class MemberProfile(
+    val handle: String?,
+    val displayName: String?,
+    val password: String?,
+    val bio: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::handle required {
+            lengthBetween(min = 3, max = 30)
+            lowercase()
+            slug()
+        }
+        ::displayName required {
+            notBlank()
+            trimmed()
+        }
+        ::password required {
+            minLength(12)
+            containsUppercase()
+            containsDigit()
+            containsSymbol()
+        }
+        ::bio ifPresent { maxBytes(500) }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`minLength`](#minlength) | Has at least `min` characters. |
+| [`maxLength`](#maxlength) | Has at most `max` characters. |
+| [`length`](#length) | Has exactly `length` characters. |
+| [`lengthBetween`](#lengthbetween) | Has between `min` and `max` characters, both included. |
+| [`minBytes`](#minbytes) | Takes at least `min` bytes when encoded with `charset`. |
+| [`maxBytes`](#maxbytes) | Takes at most `max` bytes when encoded with `charset`. |
+| [`notEmpty`](#notempty) | Has at least one character. |
+| [`empty`](#empty) | Has no characters. |
+| [`notBlank`](#notblank) | Has at least one character that is not whitespace. |
+| [`blank`](#blank) | Is empty or has only whitespace. |
+| [`trimmed`](#trimmed) | Does not start or end with whitespace. |
+| [`equalTo`](#equalto) | Is equal to `other`, ignoring case when `ignoreCase` is `true`. |
+| [`oneOf`](#oneof) | Is one of `values`, ignoring case when `ignoreCase` is `true`. |
+| [`enum`](#enum) | Is the name of an entry of the enum `E`. |
+| [`contains`](#contains) | Contains `text`. |
+| [`notContains`](#notcontains) | Does not contain `text`. |
+| [`startsWith`](#startswith) | Starts with `prefix`. |
+| [`notStartsWith`](#notstartswith) | Does not start with `prefix`. |
+| [`endsWith`](#endswith) | Ends with `suffix`. |
+| [`notEndsWith`](#notendswith) | Does not end with `suffix`. |
+| [`matches`](#matches) | Of the string matches `regex`. |
+| [`notMatches`](#notmatches) | Of the string does not match `regex`. |
+| [`uppercase`](#uppercase) | Has no lowercase letters. |
+| [`lowercase`](#lowercase) | Has no uppercase letters. |
+| [`letters`](#letters) | Is not empty and has only letters, in any script. |
+| [`digits`](#digits) | Is not empty and has only the digits `0` to `9`. |
+| [`lettersOrDigits`](#lettersordigits) | Is not empty and has only letters, in any script, and the digits `0` to `9`. |
+| [`ascii`](#ascii) | Is not empty and has only ASCII characters. |
+| [`containsOnly`](#containsonly) | Is not empty and has only characters from `characters`. |
+| [`containsUppercase`](#containsuppercase) | Has at least one uppercase letter. |
+| [`containsLowercase`](#containslowercase) | Has at least one lowercase letter. |
+| [`containsDigit`](#containsdigit) | Has at least one of the digits `0` to `9`. |
+| [`containsSymbol`](#containssymbol) | Has at least one character that is not a letter, a digit or whitespace. |
+| [`normalized`](#normalized) | Is already in the Unicode normalization `form`. |
+| [`numeric`](#numeric) | Is a decimal number, such as `42`, `-7` or `+3.14`. |
+| [`integer`](#integer) | Is a whole number, such as `42`, `-7` or `+3`. |
+| [`boolean`](#boolean) | Is `true` or `false`, in lowercase. |
+
+## Length and bytes
+
+### `minLength`
+
+`minLength(min)` on `String`
+
+Checks that the string has at least `min` characters.
+
+<ConstraintFacts code="minLength" message="must have at least {min} characters" change='minLength = "…"' />
+
+### `maxLength`
+
+`maxLength(max)` on `String`
+
+Checks that the string has at most `max` characters.
+
+<ConstraintFacts code="maxLength" message="must have at most {max} characters" change='maxLength = "…"' />
+
+### `length`
+
+`length(length)` on `String`
+
+Checks that the string has exactly `length` characters.
+
+<ConstraintFacts code="length" message="must have exactly {length} characters" change='length = "…"' />
+
+### `lengthBetween`
+
+`lengthBetween(min, max)` on `String`
+
+Checks that the string has between `min` and `max` characters, both included.
+
+<ConstraintFacts code="lengthBetween" message="must have between {min} and {max} characters" change='lengthBetween = "…"' />
+
+### `minBytes`
+
+`minBytes(min, charset)` on `String`
+
+Checks that the string takes at least `min` bytes when encoded with `charset`.
+
+<ConstraintFacts code="minBytes" message="must have at least {min} bytes" change='minBytes = "…"' />
+
+### `maxBytes`
+
+`maxBytes(max, charset)` on `String`
+
+Checks that the string takes at most `max` bytes when encoded with `charset`.
+
+Use it for columns and protocols that limit bytes, not characters: `"é"` is one character and two UTF-8 bytes.
+
+<ConstraintFacts code="maxBytes" message="must have at most {max} bytes" change='maxBytes = "…"' />
+
+## Empty and blank
+
+### `notEmpty`
+
+`notEmpty()` on `String`
+
+Checks that the string has at least one character.
+
+A string of spaces passes. Use `notBlank` to refuse it.
+
+<ConstraintFacts code="notEmpty" message="must not be empty" change='notEmpty = "…"' />
+
+### `empty`
+
+`empty()` on `String`
+
+Checks that the string has no characters.
+
+<ConstraintFacts code="empty" message="must be empty" change='empty = "…"' />
+
+### `notBlank`
+
+`notBlank()` on `String`
+
+Checks that the string has at least one character that is not whitespace.
+
+<ConstraintFacts code="notBlank" message="must not be blank" change='notBlank = "…"' />
+
+### `blank`
+
+`blank()` on `String`
+
+Checks that the string is empty or has only whitespace.
+
+<ConstraintFacts code="blank" message="must be blank" change='blank = "…"' />
+
+### `trimmed`
+
+`trimmed()` on `String`
+
+Checks that the string does not start or end with whitespace.
+
+<ConstraintFacts code="trimmed" message="must not start or end with whitespace" change='trimmed = "…"' />
+
+## Comparing with text
+
+### `equalTo`
+
+`equalTo(other, ignoreCase)` on `String`
+
+Checks that the string is equal to `other`, ignoring case when `ignoreCase` is `true`.
+
+<ConstraintFacts code="equalTo" message="must be equal to {other}" change='equalTo = "…"' />
+
+### `oneOf`
+
+`oneOf(values, ignoreCase)` on `String`
+
+Checks that the string is one of `values`, ignoring case when `ignoreCase` is `true`.
+
+<ConstraintFacts code="oneOf" message="must be one of {values}" change='oneOf = "…"' />
+
+### `enum`
+
+`enum<E>(ignoreCase)` on `String`
+
+Checks that the string is the name of an entry of the enum `E`.
+
+<ConstraintFacts code="enum" message="must be one of {values}" change='enum = "…"' />
+
+### `contains`
+
+`contains(text, ignoreCase)` on `String`
+
+Checks that the string contains `text`.
+
+<ConstraintFacts code="contains" message="must contain {text}" change='contains = "…"' />
+
+### `notContains`
+
+`notContains(text, ignoreCase)` on `String`
+
+Checks that the string does not contain `text`.
+
+<ConstraintFacts code="notContains" message="must not contain {text}" change='notContains = "…"' />
+
+### `startsWith`
+
+`startsWith(prefix, ignoreCase)` on `String`
+
+Checks that the string starts with `prefix`.
+
+<ConstraintFacts code="startsWith" message="must start with {prefix}" change='startsWith = "…"' />
+
+### `notStartsWith`
+
+`notStartsWith(prefix, ignoreCase)` on `String`
+
+Checks that the string does not start with `prefix`.
+
+<ConstraintFacts code="notStartsWith" message="must not start with {prefix}" change='notStartsWith = "…"' />
+
+### `endsWith`
+
+`endsWith(suffix, ignoreCase)` on `String`
+
+Checks that the string ends with `suffix`.
+
+<ConstraintFacts code="endsWith" message="must end with {suffix}" change='endsWith = "…"' />
+
+### `notEndsWith`
+
+`notEndsWith(suffix, ignoreCase)` on `String`
+
+Checks that the string does not end with `suffix`.
+
+<ConstraintFacts code="notEndsWith" message="must not end with {suffix}" change='notEndsWith = "…"' />
+
+### `matches`
+
+`matches(regex)` on `String`
+
+Checks that the whole of the string matches `regex`.
+
+<ConstraintFacts code="matches" message="must match {regex}" change='matches = "…"' />
+
+### `notMatches`
+
+`notMatches(regex)` on `String`
+
+Checks that the whole of the string does not match `regex`.
+
+A string that only contains a match passes, since the whole string is what is matched.
+
+<ConstraintFacts code="notMatches" message="must not match {regex}" change='notMatches = "…"' />
+
+## Characters
+
+### `uppercase`
+
+`uppercase()` on `String`
+
+Checks that the string has no lowercase letters.
+
+Digits, symbols and the empty string pass.
+
+<ConstraintFacts code="uppercase" message="must be uppercase" change='uppercase = "…"' />
+
+### `lowercase`
+
+`lowercase()` on `String`
+
+Checks that the string has no uppercase letters.
+
+As with `uppercase`, digits, symbols and the empty string pass.
+
+<ConstraintFacts code="lowercase" message="must be lowercase" change='lowercase = "…"' />
+
+### `letters`
+
+`letters()` on `String`
+
+Checks that the string is not empty and has only letters, in any script.
+
+<ConstraintFacts code="letters" message="must contain only letters" change='letters = "…"' />
+
+### `digits`
+
+`digits()` on `String`
+
+Checks that the string is not empty and has only the digits `0` to `9`.
+
+<ConstraintFacts code="digits" message="must contain only digits" change='digits = "…"' />
+
+### `lettersOrDigits`
+
+`lettersOrDigits()` on `String`
+
+Checks that the string is not empty and has only letters, in any script, and the digits `0` to `9`.
+
+<ConstraintFacts code="lettersOrDigits" message="must contain only letters or digits" change='lettersOrDigits = "…"' />
+
+### `ascii`
+
+`ascii()` on `String`
+
+Checks that the string is not empty and has only ASCII characters.
+
+<ConstraintFacts code="ascii" message="must contain only ASCII characters" change='ascii = "…"' />
+
+### `containsOnly`
+
+`containsOnly(characters)` on `String`
+
+Checks that the string is not empty and has only characters from `characters`.
+
+<ConstraintFacts code="containsOnly" message="must contain only the characters {characters}" change='containsOnly = "…"' />
+
+### `containsUppercase`
+
+`containsUppercase()` on `String`
+
+Checks that the string has at least one uppercase letter.
+
+<ConstraintFacts code="containsUppercase" message="must contain an uppercase letter" change='containsUppercase = "…"' />
+
+### `containsLowercase`
+
+`containsLowercase()` on `String`
+
+Checks that the string has at least one lowercase letter.
+
+<ConstraintFacts code="containsLowercase" message="must contain a lowercase letter" change='containsLowercase = "…"' />
+
+### `containsDigit`
+
+`containsDigit()` on `String`
+
+Checks that the string has at least one of the digits `0` to `9`.
+
+<ConstraintFacts code="containsDigit" message="must contain a digit" change='containsDigit = "…"' />
+
+### `containsSymbol`
+
+`containsSymbol()` on `String`
+
+Checks that the string has at least one character that is not a letter, a digit or whitespace.
+
+<ConstraintFacts code="containsSymbol" message="must contain a symbol" change='containsSymbol = "…"' />
+
+### `normalized`
+
+`normalized(form)` on `String`
+
+Checks that the string is already in the Unicode normalization `form`.
+
+<ConstraintFacts code="normalized" message="must be in Unicode {form} form" change='normalized = "…"' />
+
+## Text that carries a value
+
+### `numeric`
+
+`numeric()` on `String`
+
+Checks that the string is a decimal number, such as `42`, `-7` or `+3.14`.
+
+There is no exponent and no thousands separator.
+
+<ConstraintFacts code="numeric" message="must be numeric" change='numeric = "…"' />
+
+### `integer`
+
+`integer()` on `String`
+
+Checks that the string is a whole number, such as `42`, `-7` or `+3`.
+
+<ConstraintFacts code="integer" message="must be an integer" change='integer = "…"' />
+
+### `boolean`
+
+`boolean()` on `String`
+
+Checks that the string is `true` or `false`, in lowercase.
+
+<ConstraintFacts code="boolean" message="must be true or false" change='boolean = "…"' />
+
+<Tip>
+  More string formats have pages of their own: [internet](/constraints/internet) (`email`, `url`, `ipv4`),
+  [identifiers](/constraints/identifiers) (`uuid`, `isbn`), [encodings](/constraints/encodings) (`base64`, `json`),
+  [finance](/constraints/finance) (`iban`, `creditCard`), [dates](/constraints/date-formats) and
+  [countries](/constraints/countries).
+</Tip>

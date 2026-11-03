@@ -1,0 +1,89 @@
+---
+title: "Nested objects"
+description: "valid() checks the rules of a property's own type, and nests their paths under the property."
+icon: "network"
+---
+
+An order has a shipping address, and the address has rules of its own. `valid()` checks them, and every violation they
+report is nested under the property, so the path says exactly where it is: `shipping.zipCode`, not `zipCode`.
+
+```kotlin ShippingAddress.kt
+data class ShippingAddress(
+    val street: String?,
+    val zipCode: String?,
+    val country: String? = "US"
+) : Validatable {
+    override fun validation() = validation {
+        ::street required { notBlank() }
+        ::zipCode required { postalCode(country) }
+    }
+}
+```
+
+```kotlin Order.kt
+data class Order(
+    val id: String?,
+    val shipping: ShippingAddress?,
+    val billing: ShippingAddress? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::id required { notBlank() }
+        ::shipping required { valid() }
+        ::billing ifPresent { valid() }
+    }
+}
+```
+
+```kotlin
+Order(id = "", shipping = ShippingAddress(street = "", zipCode = "ABC")).validate().violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `id` | must not be blank | `notBlank` |
+| `shipping.street` | must not be blank | `notBlank` |
+| `shipping.zipCode` | must be a valid postal code for US | `postalCode` |
+
+Nesting goes as deep as the data does: an address inside a store inside a company reports `company.store.address.street`.
+
+## Which rules valid() checks
+
+`valid` has a form for each way of declaring rules:
+
+| Call | Checks | When the type |
+|---|---|---|
+| `valid()` | the rules the value declares | implements `Validatable` |
+| `valid(context)` | the rules the value declares for `context` | implements [`ContextualValidatable<C>`](/guides/context) |
+| `valid(rules)` | the rules of a `Validation<T>` | has its rules [beside it](/guides/beside-the-class) |
+| `valid(Address::validation)` | the rules a function returns | has them in an extension |
+
+```kotlin
+::shipping required { valid() }                           // ShippingAddress is Validatable
+::lines required { each { valid(context) } }              // PurchaseLine is ContextualValidatable<Shopper>
+::address required { valid(addressValidation) }           // a Validation<Address>
+::contact required { valid(Contact::validation) }         // fun Contact.validation() = validation { ... }
+```
+
+## Optional and repeated objects
+
+`valid()` goes inside the block of `required` or `ifPresent`, like any constraint, so `null` is decided first. An
+optional billing address is checked only when it is there:
+
+```kotlin
+::billing ifPresent { valid() }
+```
+
+For a list of objects, `each` runs `valid()` on every element, and the index joins the path:
+[`items[1].quantity`](/guides/collections-and-maps).
+
+## The order of the violations
+
+Violations come in the order the rules are declared, with one refinement: inside one property, its own constraints come
+before the violations of its nested objects and elements. In
+`::items required { each { valid() }; notEmpty() }`, a `notEmpty` violation is reported before the violations of the
+items, whatever the order of the two lines.
+
+<Note>
+  `valid()` counts as one rule. Inside [`failFast`](/guides/fail-fast) it is one step, with all the violations of the
+  nested object.
+</Note>

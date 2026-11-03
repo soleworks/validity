@@ -1,9 +1,9 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="docs/assets/logo-light.svg">
-  <img alt="Validity logo" src="docs/assets/logo-light.svg" width="160">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/logo/dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="docs/logo/light.svg">
+  <img alt="Validity logo" src="docs/logo/light.svg" width="160">
 </picture>
 
 <h1>Validity</h1>
@@ -85,9 +85,8 @@ Violation(path=iban, message=is required, code=required)
   `shipping.zipCode`, `items[1].quantity`, `prices[USD]`.
 - **Every error at once, for two audiences.** A `message` for people, configurable and translatable, and a stable
   `code` for programs, plus the `metadata` you attach, and `failFast { }` where a rule only makes sense after another.
-- **Batteries included.** More than 200 constraints, postal codes of 72 countries, tax and national documents of 36
-  (each on its own or through `taxId`, with a `TaxIdType` or a country and a type as text), and phone numbers in
-  their own module.
+- **Batteries included.** 212 constraints, postal codes of 72 countries, national documents of 36, and phone
+  numbers in their own module.
 - **Nothing hidden.** No annotations, no code generation, no `kotlin-reflect`. `validity-core` depends on nothing but
   the Kotlin standard library and kotlinx.coroutines.
 
@@ -341,22 +340,45 @@ clock and messages.
 
 ## Documentation
 
-A documentation site is on its way, with every concept, the full list of constraints, messages and configuration.
+**[validity-kt.dev](https://validity-kt.dev)** has every concept, the full list of constraints, the
+messages and the configuration.
+
+It is written for AI agents too: every page is also Markdown (add `.md` to its address), the whole site is in
+[`/llms.txt`](https://validity-kt.dev/llms.txt), and an MCP server lets Claude, Cursor or VS Code search it:
+
+```bash
+claude mcp add --transport http validity https://validity-kt.dev/mcp
+```
 
 ## Development
 
-`./gradlew build` compiles, tests and checks every module. Two tools keep the code in one style:
+`./gradlew build` compiles, tests and checks every module. Three tools keep the code in one style:
 
-- **Detekt** runs every rule it has, the ktlint and libraries rule sets included. [config/detekt/detekt.yml](config/detekt/detekt.yml) lists the few rules this project tunes, each with its reason. `./gradlew detektMain detektTest -PautoCorrect=true` fixes the formatting it can.
-- **Konsist**, in the internal `harness` module, checks the conventions Detekt cannot see: how a constraint is declared, how values are named, and that every test is a Given, a When and a Then, ordered by what it checks.
+- **ktlint** formats every Kotlin file with the rules in [.editorconfig](.editorconfig). `./gradlew ktlintFormat` fixes what it can and lists the rest.
+- **Detekt** runs every rule it has, the libraries rule set included. [config/detekt/detekt.yml](config/detekt/detekt.yml) lists the few rules this project tunes, each with its reason.
+- **Konsist**, in the internal `harness` module, checks the conventions Detekt cannot see: how a constraint is declared, how values are named, what a production file may import, and that every test is a Given, a When and a Then, ordered by what it checks.
 
-**Kover** measures what the tests cover in `validity-core` and `validity-phone`. `./gradlew :koverHtmlReport` writes the report to `build/reports/kover/html`, and CI uploads it to [Codecov](https://codecov.io/gh/soleworks/validity).
+**Kover** measures what the tests cover in `validity-core` and `validity-phone`, and the build fails below 99% of the lines or 93% of the branches. `./gradlew :koverHtmlReport` writes the report to `build/reports/kover/html`, and CI uploads it to [Codecov](https://codecov.io/gh/soleworks/validity), which asks every line a pull request changes to be covered ([codecov.yml](codecov.yml)).
 
 None of these tools, nor Kotest, is a dependency of a published module.
 
 The examples in this README are samples in
 [validity-core/src/test/.../samples/readme](validity-core/src/test/kotlin/io/github/soleworks/validity/samples/readme),
 and a test checks the output shown next to them. When you change an example, change its sample too.
+
+The docs site lives in [docs](docs), built by [Mintlify](https://www.mintlify.com) from `docs.json` and its `.mdx`
+pages, and published on every push to `main`. After `npm ci`, `npm run docs:dev` serves it at `localhost:3000`. Each fact
+has one home: the version and the counts are variables of `docs.json`, a block shown twice is a snippet, and a code block
+titled with a file name, such as `Account.kt`, is a sample in
+[samples/docs](validity-core/src/test/kotlin/io/github/soleworks/validity/samples/docs). Four tools hold that:
+
+- **The harness** checks the samples, the facts against the code, the facts of each constraint against its messages,
+  and that no sentence or code block is written twice.
+- **The Mintlify CLI** checks the MDX, the navigation, the links and their anchors, and accessibility.
+- **Stylelint** keeps colors in `tokens.css` and the layout free of pixel offsets and of Mintlify's internal classes.
+- **[Vale](https://vale.sh)** checks spelling and the voice of the prose.
+
+`./gradlew build` runs the harness, `npm run docs:check` the Mintlify CLI and Stylelint, and `vale .` in `docs` the prose.
 
 The public API of each published module is kept in `api/<module>.api`, and `./gradlew check` fails when it changes
 without `./gradlew updateKotlinAbi`. [RELEASING.md](RELEASING.md) describes how a version is born and published.

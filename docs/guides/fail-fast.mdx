@@ -1,0 +1,71 @@
+---
+title: "Fail fast"
+description: "failFast { } runs its rules in order and stops at the first that fails, for a rule that only makes sense after another."
+icon: "octagon-x"
+---
+
+Every rule runs by default, so one request reports every error. Some rules, though, only make sense after another: a
+database lookup is wasted on an email that is not even an email, and its answer would only add noise. Put both in
+`failFast { }`: its rules run in order, and the ones after the first failure are not evaluated.
+
+```kotlin Newsletter.kt
+data class Newsletter(
+    val email: String?
+) : Validatable {
+    override fun validation() = validation {
+        ::email required {
+            failFast {
+                email()
+                constraint("is already subscribed", code = "subscribed") { !Subscribers.contains(it) }
+            }
+        }
+    }
+}
+```
+
+```kotlin
+Newsletter(email = "ana@").validate().violations           // Subscribers.contains is never called
+Newsletter(email = "ana@mail.com").validate().violations   // when it is already subscribed
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `email` | must be a valid email | `email` |
+| `email` | is already subscribed | `subscribed` |
+
+The rules after the block, and the other properties, run as usual: `failFast` only shortens its own block.
+
+## What counts as one step
+
+Each call in the block is one step. An `each { }` or a `valid()` counts once, with all its elements: when any element
+fails, the steps after it are skipped, and every violation of that step is reported.
+
+```kotlin
+::items required {
+    failFast {
+        notEmpty()
+        each { valid() }                    // one step, however many items fail
+        constraint("is out of stock") { stock.hasAll(it) }
+    }
+}
+```
+
+`failFast` also works inside a branch of [`or`](/guides/combining-constraints), where it makes the branch report only
+its first failure.
+
+## It skips rules, not code
+
+<Warning>
+  The rules are declared first and checked later. Work written in the block but outside a rule runs every time, even
+  when the rules before it fail:
+
+```kotlin
+failFast {
+    email()
+    val taken = Subscribers.contains(email)          // runs even for "ana@"
+    constraint("is already subscribed") { !taken }
+}
+```
+
+  Put the work inside `constraint { }`, after the rule it depends on.
+</Warning>

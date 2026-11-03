@@ -1,0 +1,73 @@
+---
+title: "Modules"
+description: "What validity-core and validity-phone hold, how to add them, the imports they need and how their versions move."
+icon: "boxes"
+---
+
+import Dependency from "/snippets/dependency.mdx";
+import MavenCentralNote from "/snippets/maven-central-note.mdx";
+
+Validity is two modules on Maven Central, under the group `io.github.soleworks`, released together and always at the
+same version, so a project that uses both never mixes versions:
+
+| Module | What it adds | Depends on |
+|---|---|---|
+| `validity-core` | The DSL, the four entries and every constraint but the phone ones | The Kotlin standard library and kotlinx.coroutines |
+| `validity-phone` | `phone`, `mobilePhone`, `countryCode` and `areaCode`, and their messages | `validity-core` and Google's libphonenumber |
+
+Most projects need only `validity-core`.
+
+## Add the dependency
+
+<Dependency artifact="validity-core" />
+
+For phone numbers, add `validity-phone` too, at the same version:
+
+<Dependency artifact="validity-phone" />
+
+<MavenCentralNote />
+
+## Requirements
+
+<CardGroup cols={3}>
+  <Card title="Java {{java}}+" icon="coffee">
+    The JVM the artifacts are compiled for.
+  </Card>
+  <Card title="Kotlin {{kotlin}}" icon="code">
+    The version Validity is built with. It uses context parameters for its DSL.
+  </Card>
+  <Card title="Coroutines" icon="zap">
+    kotlinx.coroutines comes with `validity-core`. You do not need to add it.
+  </Card>
+</CardGroup>
+
+## Packages and imports
+
+| Package | Module | Holds |
+|---|---|---|
+| `io.github.soleworks.validity` | core | `Validatable`, `ContextualValidatable`, `validation`, `validatable`, `required`, `ifPresent`, `forbidden`, the presence rules, `each`, `valid`, `convert`, `metadata`, `Validity`, `ValidationResult`, `Violation`, `ValidationException`, `Messages` |
+| `io.github.soleworks.validity.constraints` | core | The general constraints, `or`, `and`, `not`, `HashAlgorithm` |
+| `io.github.soleworks.validity.constraints.<country>` | core | The constraints of one country: `brazil`, `bulgaria`, `canada`, `france`, `israel`, `netherlands`, `pakistan`, `poland`, `russia`, `slovenia`, `spain`, `thailand`, `ukraine`, `unitedstates` |
+| `io.github.soleworks.validity.phone` | phone | The phone constraints, `PhoneFormat`, `PhoneMessages` and `Messages.phone` |
+
+```kotlin
+import io.github.soleworks.validity.*                        // Validatable, validation, required, each, ...
+import io.github.soleworks.validity.constraints.*            // email, minLength, positive, ...
+import io.github.soleworks.validity.constraints.brazil.*     // cpf, cnpj, cep, ...
+import io.github.soleworks.validity.phone.*                  // phone, mobilePhone, ... (validity-phone)
+```
+
+Your IDE adds them for you when you complete a constraint.
+
+## Why phone numbers are apart
+
+libphonenumber is large and holds the numbering plans of every country. Keeping it out of `validity-core` means a
+project that never validates a phone number does not ship it. A module adds its messages to the configuration without
+the core knowing it, through `MessagesKey`, the same way [your own constraints](/guides/messages#messages-of-your-own-constraints)
+can.
+
+## Versions
+
+Validity follows [Semantic Versioning](https://semver.org). While the version is `0.x`, a breaking change raises the
+minor version, so moving to the next minor version may ask you to change your code. The
+[changelog](https://github.com/soleworks/validity/blob/main/CHANGELOG.md) says what to change.

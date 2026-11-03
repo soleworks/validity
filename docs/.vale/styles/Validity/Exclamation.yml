@@ -1,0 +1,6 @@
+extends: existence
+message: "Write without exclamation marks."
+level: error
+nonword: true
+tokens:
+  - '\w!(?=\s|$)'

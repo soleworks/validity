@@ -1,0 +1,128 @@
+---
+title: "Constraints"
+description: "Every constraint, by the type of value it checks, and the conventions they all follow."
+icon: "list-checks"
+---
+
+A constraint is a rule a value must pass, called inside the block of a property: `email()`, `minLength(3)`, `cpf()`.
+Each one is an extension of `ValidationNode<V>`, so it is offered only where the value has the type it checks: `email()`
+on a `String`, `positive()` on a number, `past()` on a date.
+
+```kotlin
+::email required { email() }                       // String
+::amount required { positive() }                    // BigDecimal
+::items required { notEmpty() }                     // List<Item>
+::birthDate required { minAge(18) }                 // LocalDate
+```
+
+## By type
+
+<CardGroup cols={3}>
+  <Card title="Any value" icon="equal" href="/constraints/any">
+    `equalTo`, `oneOf`, `noneOf`, `notNull`
+  </Card>
+  <Card title="Booleans" icon="toggle-right" href="/constraints/booleans">
+    `isTrue`, `isFalse`
+  </Card>
+  <Card title="Strings" icon="type" href="/constraints/strings">
+    Length, blank, characters, `matches`
+  </Card>
+  <Card title="Numbers" icon="hash" href="/constraints/numbers">
+    Range, sign, digits, decimal places, unsigned
+  </Card>
+  <Card title="Collections" icon="list" href="/constraints/collections">
+    Size, content, duplicates
+  </Card>
+  <Card title="Maps" icon="braces" href="/constraints/maps">
+    Size, keys, values
+  </Card>
+  <Card title="Dates and times" icon="calendar" href="/constraints/dates-and-times">
+    `past`, `future`, `after`, `between`
+  </Card>
+  <Card title="Calendar" icon="calendar-days" href="/constraints/calendar">
+    `minAge`, `today`, `withinNext`, `weekday`
+  </Card>
+  <Card title="Durations" icon="timer" href="/constraints/durations">
+    `kotlin.time.Duration` ranges
+  </Card>
+</CardGroup>
+
+## By format of a String
+
+<CardGroup cols={3}>
+  <Card title="Internet" icon="globe" href="/constraints/internet">
+    `email`, `url`, `ipv4`, `cidr`, `jwt`
+  </Card>
+  <Card title="Identifiers" icon="fingerprint" href="/constraints/identifiers">
+    `uuid`, `isbn`, `ean`, `imei`, `hash`
+  </Card>
+  <Card title="Encodings" icon="file-code" href="/constraints/encodings">
+    `base64`, `hexadecimal`, `json`
+  </Card>
+  <Card title="Finance" icon="landmark" href="/constraints/finance">
+    `creditCard`, `iban`, `bic`, `currencyCode`
+  </Card>
+  <Card title="Location" icon="map-pin" href="/constraints/location">
+    Countries, locales, `postalCode` of {{postalCountries}} countries
+  </Card>
+  <Card title="Colors" icon="palette" href="/constraints/colors">
+    `hexColor`, `rgbColor`, `hslColor`
+  </Card>
+  <Card title="Date formats" icon="calendar-clock" href="/constraints/date-formats">
+    `isoDate`, `isoDateTime`, `dateFormat`
+  </Card>
+  <Card title="Countries" icon="flag" href="/constraints/countries">
+    Documents of {{documentCountries}} countries: `cpf`, `dni`, `ein`...
+  </Card>
+  <Card title="Phone numbers" icon="phone" href="/constraints/phone">
+    `phone`, `mobilePhone`, in `validity-phone`
+  </Card>
+</CardGroup>
+
+## What every constraint has in common
+
+<AccordionGroup>
+  <Accordion title="A code, which is its name" icon="code">
+    The violation of `minLength` has the code `minLength`, in every language and every version. Programs branch on the
+    code; people read the message.
+  </Accordion>
+  <Accordion title="A default message you can change" icon="message-square-text">
+    Every constraint takes a `message`, which replaces the default for that call: `minLength(3, message = "too
+    short")`. The default itself is changed once, in [the messages](/guides/messages). Each section of these pages says
+    which message to change.
+  </Accordion>
+  <Accordion title="A message built from the value" icon="wand-sparkles">
+    A constraint that takes an argument has a second form whose message is a function of the value and the argument:
+    `minLength(3, message = { min -> "has $length characters, needs $min" })`.
+  </Accordion>
+  <Accordion title="Null arguments check nothing" icon="circle-slash">
+    `max(customer.creditLimit)`, `equalTo(password)` or `postalCode(country)` with a `null` argument skip the check. The
+    missing value is reported once, by `required` on its own property, instead of breaking every rule that reads it.
+  </Accordion>
+  <Accordion title="Placeholders in the message" icon="braces">
+    Messages fill `{path}`, `{value}` and the arguments of the constraint by name: `must have at least {min}
+    characters`.
+  </Accordion>
+</AccordionGroup>
+
+## Reading a section
+
+Each constraint on these pages has the same parts:
+
+```text
+minLength(min) on String                              the call, and the types it works on
+Checks that the string has at least min characters.   what it checks
+Code minLength · Message must have at least {min} characters · Change it minLength = "…"
+```
+
+**Change it** is the line to write inside `messages { }` to change its default message, for the whole application or
+for one call. See [Messages](/guides/messages).
+
+## Imports
+
+The package of each constraint, and the import it needs, is in [Modules](/modules#packages-and-imports).
+
+<Tip>
+  Missing one? A constraint of your own is a few lines and looks exactly like these. See
+  [Custom constraints](/guides/custom-constraints).
+</Tip>

@@ -1,0 +1,117 @@
+---
+title: "Across fields"
+description: "Presence rules such as exactlyOneOf and allOrNoneOf, and constraint { } for any rule about the whole object."
+icon: "git-merge"
+---
+
+Some rules are not about one field but about how fields relate: pay by pix key or by IBAN, never both; an IBAN needs
+its BIC; the total is the amount plus the fee. Validity has a word for the common ones, and `constraint { }` for the rest.
+
+```kotlin Transfer.kt
+data class Transfer(
+    val pixKey: String? = null,
+    val iban: String? = null,
+    val bic: String? = null,
+    val amount: BigDecimal,
+    val fee: BigDecimal,
+    val total: BigDecimal
+) : Validatable {
+    override fun validation() = validation {
+        exactlyOneOf(::pixKey, ::iban)
+        allOrNoneOf(::iban, ::bic)
+        constraint(::total, message = "must be the amount plus the fee", code = "total") {
+            total.compareTo(amount + fee) == 0
+        }
+    }
+}
+```
+
+A transfer by IBAN with no BIC and a wrong total breaks two rules:
+
+| Path | Message | Code | Metadata |
+|---|---|---|---|
+| *the object* | iban, bic must be filled together | `allOrNoneOf` | `{fields=[bic]}` |
+| `total` | must be the amount plus the fee | `total` |  |
+
+And one that has both a pix key and an IBAN breaks `exactlyOneOf`:
+
+| Path | Message | Code | Metadata |
+|---|---|---|---|
+| *the object* | exactly one of pixKey, iban must be filled | `exactlyOneOf` | `{fields=[pixKey, iban]}` |
+
+## Presence rules
+
+These rules count how many of the properties are filled, that is, not `null`:
+
+| Rule | Holds when | Its `fields` metadata lists | Message |
+|---|---|---|---|
+| `atLeastOneOf(::a, ::b)` | one or more are filled | the properties to fill | `at least one of {fields} is required` |
+| `atMostOneOf(::a, ::b)` | zero or one is filled | the properties to clear | `at most one of {fields} can be filled` |
+| `exactlyOneOf(::a, ::b)` | exactly one is filled | the properties to fill or to clear | `exactly one of {fields} must be filled` |
+| `allOrNoneOf(::a, ::b)` | all or none are filled | the properties to fill | `{fields} must be filled together` |
+| `atLeastOf(2, ::a, ::b, ::c)` | 2 or more are filled | the properties to fill | `at least {count} of {fields} must be filled` |
+| `atMostOf(2, ::a, ::b, ::c)` | 2 or fewer are filled | the properties to clear | `at most {count} of {fields} can be filled` |
+| `exactlyOf(2, ::a, ::b, ::c)` | exactly 2 are filled | the properties to fill or to clear | `exactly {count} of {fields} must be filled` |
+
+Each violation has the code of its rule, a message that lists the properties in `{fields}`, and a `fields` entry in its
+[metadata](/guides/metadata) with the properties to act on. A form can highlight exactly those fields.
+
+The violation is about the object, so its path is empty. Give it a path to put it on a section of a form:
+
+```kotlin
+exactlyOneOf(::pixKey, ::bankAccount, ::boleto, path = "payment")
+atLeastOneOf(::email, ::phone, message = "tell us how to reach you")
+```
+
+<Note>
+  A property given twice counts once. A count below zero, or above the number of properties, throws
+  `IllegalArgumentException` when the rules run, since it is a mistake in the rules, not in the data.
+</Note>
+
+## `constraint`, for any rule
+
+`constraint { }` in the validation block checks any condition about the object. It reports its violation on a property:
+
+```kotlin
+constraint(::total, message = "must be the amount plus the fee", code = "total") {
+    total.compareTo(amount + fee) == 0
+}
+```
+
+The path is the name of the property, and `{value}` in the message is its value. When the rule is about no property in
+particular, give it a path, or leave the path empty for the object itself:
+
+```kotlin Stay.kt
+data class Stay(
+    val checkIn: LocalDate,
+    val checkOut: LocalDate
+) : Validatable {
+    override fun validation() = validation {
+        constraint(path = "checkOut", message = "must be after the check-in", code = "stay") {
+            checkOut.isAfter(checkIn)
+        }
+    }
+}
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `checkOut` | must be after the check-in | `stay` |
+
+<Tip>
+  The code is empty unless you give one. Give every rule of your own a code: it is what programs, such as a front end
+  that translates messages, rely on.
+</Tip>
+
+## A rule that depends on another field
+
+A constraint inside a property's block can read the other fields too, since they are in scope. The violation is then on
+that property:
+
+```kotlin
+::confirmation required { equalTo(password) }
+::endsOn required { after(startsOn) }
+```
+
+When the other field is `null`, `equalTo` and `after` check nothing, so the rule does not fail twice for one missing
+value: `required` on that field reports it.

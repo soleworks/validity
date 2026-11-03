@@ -1,0 +1,284 @@
+---
+title: "Countries"
+description: "National documents, tax numbers and license plates, country by country."
+icon: "flag"
+---
+
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Documents and numbers of {{documentCountries}} countries, with their check digits. The constraints of each country live in a package of
+their own, `io.github.soleworks.validity.constraints.<country>`, and their messages in a block of their own:
+`messages { brazil { cpf = "CPF inválido" } }`.
+
+```kotlin Supplier.kt
+data class Supplier(
+    val country: String?,
+    val taxId: String?,
+    val zipCode: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        when (country) {
+            "BR" -> {
+                ::taxId required { cnpj() }
+                ::zipCode ifPresent { cep() }
+            }
+
+            "ES" -> {
+                ::taxId required { nie() }
+            }
+
+            "US" -> {
+                ::taxId required { ein() }
+            }
+        }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`cpf`](#cpf) | Is a Brazilian CPF with valid check digits, as 11 digits or as `000.000.000-00`. |
+| [`cnpj`](#cnpj) | Is a Brazilian CNPJ with valid check digits, as 14 characters or as `00.000.000/0000-00`. |
+| [`cnh`](#cnh) | Is a Brazilian CNH (driver's license number): 11 digits with valid check digits. |
+| [`pis`](#pis) | Is a Brazilian PIS/PASEP/NIT with a valid check digit, as 11 digits or as `000.00000.00-0`. |
+| [`cep`](#cep) | Is a Brazilian CEP: 8 digits, with or without the dash, such as `01310-100`. |
+| [`placa`](#placa) | Is a Brazilian license plate, in the old (`ABC-1234`) or the Mercosul (`ABC1D23`) layout. |
+| [`egn`](#egn) | Is a Bulgarian EGN: 10 digits that start with a real birth date, and a valid check digit. |
+| [`sin`](#sin) | Is a Canadian SIN: 9 digits with a valid Luhn check digit, with no spaces. |
+| [`spi`](#spi) | Is a French tax number (SPI): 13 digits with a valid check, as one block or as `00 00 000 000 000`. |
+| [`teudatZehut`](#teudatzehut) | Is an Israeli Teudat Zehut number: 9 digits with a valid check digit. |
+| [`bsn`](#bsn) | Is a Dutch BSN: 9 digits that pass the eleven test. |
+| [`cnic`](#cnic) | Is a Pakistani CNIC written as `00000-0000000-0`. |
+| [`pesel`](#pesel) | Is a Polish PESEL: 11 digits that start with a real birth date, and a valid check digit. |
+| [`nip`](#nip) | Is a Polish NIP (tax number): 10 digits with a valid check digit, with no dashes. |
+| [`innIndividual`](#innindividual) | Is the INN of a Russian individual: 12 digits with two valid check digits. |
+| [`innLegalEntity`](#innlegalentity) | Is the INN of a Russian legal entity: 10 digits with a valid check digit. |
+| [`davcnaStevilka`](#davcnastevilka) | Is a Slovenian tax number (davčna številka): 8 digits, not starting with 0, with a valid check digit. |
+| [`dni`](#dni) | Is a Spanish DNI: 8 digits and the matching control letter, such as `12345678Z`. |
+| [`nie`](#nie) | Is a Spanish NIE: `X`, `Y` or `Z`, 7 digits and the matching control letter, such as `X1234567L`. |
+| [`nationalId`](#nationalid) | Is a Thai national ID number: 13 digits with a valid check digit, with no dashes. |
+| [`rnokpp`](#rnokpp) | Is a Ukrainian RNOKPP (tax number): 10 digits with a valid check digit. |
+| [`ein`](#ein) | Is a US EIN with a prefix the IRS assigns, such as `12-3456789`. |
+
+## Brazil · `constraints.brazil`
+
+For `cpf`, `cnh` and `pis`, a number with all its digits the same, such as `111.111.111-11`, fails.
+
+### `cpf`
+
+`cpf()` on `String`
+
+Checks that the string is a Brazilian CPF with valid check digits, as 11 digits or as `000.000.000-00`.
+
+<ConstraintFacts code="cpf" message="must be a valid CPF" change='brazil { cpf = "…" }' />
+
+### `cnpj`
+
+`cnpj()` on `String`
+
+Checks that the string is a Brazilian CNPJ with valid check digits, as 14 characters or as `00.000.000/0000-00`.
+
+The first 12 characters can be uppercase letters, as in the alphanumeric CNPJ.
+
+<ConstraintFacts code="cnpj" message="must be a valid CNPJ" change='brazil { cnpj = "…" }' />
+
+### `cnh`
+
+`cnh()` on `String`
+
+Checks that the string is a Brazilian CNH (driver's license number): 11 digits with valid check digits.
+
+<ConstraintFacts code="cnh" message="must be a valid CNH" change='brazil { cnh = "…" }' />
+
+### `pis`
+
+`pis()` on `String`
+
+Checks that the string is a Brazilian PIS/PASEP/NIT with a valid check digit, as 11 digits or as `000.00000.00-0`.
+
+<ConstraintFacts code="pis" message="must be a valid PIS" change='brazil { pis = "…" }' />
+
+### `cep`
+
+`cep()` on `String`
+
+Checks that the string is a Brazilian CEP: 8 digits, with or without the dash, such as `01310-100`.
+
+<ConstraintFacts code="cep" message="must be a valid CEP" change='brazil { cep = "…" }' />
+
+### `placa`
+
+`placa()` on `String`
+
+Checks that the string is a Brazilian license plate, in the old (`ABC-1234`) or the Mercosul (`ABC1D23`) layout.
+
+Letters are uppercase, and the separator can be a dash, a space or nothing.
+
+<ConstraintFacts code="placa" message="must be a valid license plate" change='brazil { placa = "…" }' />
+
+## Bulgaria · `constraints.bulgaria`
+
+### `egn`
+
+`egn()` on `String`
+
+Checks that the string is a Bulgarian EGN: 10 digits that start with a real birth date, and a valid check digit.
+
+<ConstraintFacts code="egn" message="must be a valid EGN" change='bulgaria { egn = "…" }' />
+
+## Canada · `constraints.canada`
+
+### `sin`
+
+`sin()` on `String`
+
+Checks that the string is a Canadian SIN: 9 digits with a valid Luhn check digit, with no spaces.
+
+<ConstraintFacts code="sin" message="must be a valid SIN" change='canada { sin = "…" }' />
+
+## France · `constraints.france`
+
+### `spi`
+
+`spi()` on `String`
+
+Checks that the string is a French tax number (SPI): 13 digits with a valid check, as one block or as `00 00 000 000 000`.
+
+<ConstraintFacts code="spi" message="must be a valid SPI" change='france { spi = "…" }' />
+
+## Israel · `constraints.israel`
+
+### `teudatZehut`
+
+`teudatZehut()` on `String`
+
+Checks that the string is an Israeli Teudat Zehut number: 9 digits with a valid check digit.
+
+Shorter numbers need their leading zeros, and the whitespace around them is ignored.
+
+<ConstraintFacts code="teudatZehut" message="must be a valid teudat zehut" change='israel { teudatZehut = "…" }' />
+
+## Netherlands · `constraints.netherlands`
+
+### `bsn`
+
+`bsn()` on `String`
+
+Checks that the string is a Dutch BSN: 9 digits that pass the eleven test.
+
+<ConstraintFacts code="bsn" message="must be a valid BSN" change='netherlands { bsn = "…" }' />
+
+## Pakistan · `constraints.pakistan`
+
+### `cnic`
+
+`cnic()` on `String`
+
+Checks that the string is a Pakistani CNIC written as `00000-0000000-0`.
+
+Whitespace around the number is ignored.
+
+<ConstraintFacts code="cnic" message="must be a valid CNIC" change='pakistan { cnic = "…" }' />
+
+## Poland · `constraints.poland`
+
+### `pesel`
+
+`pesel()` on `String`
+
+Checks that the string is a Polish PESEL: 11 digits that start with a real birth date, and a valid check digit.
+
+<ConstraintFacts code="pesel" message="must be a valid PESEL" change='poland { pesel = "…" }' />
+
+### `nip`
+
+`nip()` on `String`
+
+Checks that the string is a Polish NIP (tax number): 10 digits with a valid check digit, with no dashes.
+
+<ConstraintFacts code="nip" message="must be a valid NIP" change='poland { nip = "…" }' />
+
+## Russia · `constraints.russia`
+
+### `innIndividual`
+
+`innIndividual()` on `String`
+
+Checks that the string is the INN of a Russian individual: 12 digits with two valid check digits.
+
+<ConstraintFacts code="innIndividual" message="must be a valid individual INN" change='russia { innIndividual = "…" }' />
+
+### `innLegalEntity`
+
+`innLegalEntity()` on `String`
+
+Checks that the string is the INN of a Russian legal entity: 10 digits with a valid check digit.
+
+<ConstraintFacts code="innLegalEntity" message="must be a valid legal entity INN" change='russia { innLegalEntity = "…" }' />
+
+## Slovenia · `constraints.slovenia`
+
+### `davcnaStevilka`
+
+`davcnaStevilka()` on `String`
+
+Checks that the string is a Slovenian tax number (davčna številka): 8 digits, not starting with 0, with a valid check digit.
+
+<ConstraintFacts code="davcnaStevilka" message="must be a valid davčna številka" change='slovenia { davcnaStevilka = "…" }' />
+
+## Spain · `constraints.spain`
+
+Both ignore case, and the whitespace around the number.
+
+### `dni`
+
+`dni()` on `String`
+
+Checks that the string is a Spanish DNI: 8 digits and the matching control letter, such as `12345678Z`.
+
+<ConstraintFacts code="dni" message="must be a valid DNI" change='spain { dni = "…" }' />
+
+### `nie`
+
+`nie()` on `String`
+
+Checks that the string is a Spanish NIE: `X`, `Y` or `Z`, 7 digits and the matching control letter, such as `X1234567L`.
+
+<ConstraintFacts code="nie" message="must be a valid NIE" change='spain { nie = "…" }' />
+
+## Thailand · `constraints.thailand`
+
+### `nationalId`
+
+`nationalId()` on `String`
+
+Checks that the string is a Thai national ID number: 13 digits with a valid check digit, with no dashes.
+
+<ConstraintFacts code="nationalId" message="must be a valid national identification number" change='thailand { nationalId = "…" }' />
+
+## Ukraine · `constraints.ukraine`
+
+### `rnokpp`
+
+`rnokpp()` on `String`
+
+Checks that the string is a Ukrainian RNOKPP (tax number): 10 digits with a valid check digit.
+
+<ConstraintFacts code="rnokpp" message="must be a valid RNOKPP" change='ukraine { rnokpp = "…" }' />
+
+## United States · `constraints.unitedstates`
+
+### `ein`
+
+`ein()` on `String`
+
+Checks that the string is a US EIN with a prefix the IRS assigns, such as `12-3456789`.
+
+The separator can be a dash, a space or nothing.
+
+<ConstraintFacts code="ein" message="must be a valid EIN" change='unitedStates { ein = "…" }' />
+
+<Tip>
+  A document that can be of two kinds, such as a CPF or a CNPJ, is one rule with [`or`](/guides/combining-constraints):
+  `or { cpf(); cnpj() }`.
+</Tip>

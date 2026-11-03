@@ -13,7 +13,7 @@ private const val CONSTRAINTS_PACKAGE = "io.github.soleworks.validity.constraint
 private val NESTED_NAME_FORMAT = Regex("""@DisplayName\("When (\w+) is called"\)""")
 private val TEST_NAME_FORMAT = Regex("""given .+ should .+""")
 private val WHEN_FORMAT = Regex("""val (violations|result|error) = .+|\w+\.validate\(\)""")
-private val ACTION_ASSERTION_FORMAT = Regex("""should(Throw<\w+>|NotThrowAny) \{.*""")
+private val ACTION_ASSERTION_FORMAT = Regex("""should(ThrowExactly<\w+>|NotThrowAny) \{.*""")
 private val POSITIONAL_ARGUMENTS_FORMAT = Regex("""\b(Violation|ValidationNode(<[^>]+>)?)\("""")
 private val TEST_ANNOTATIONS = listOf("Test", "ParameterizedTest")
 private val CATEGORY_FORMATS = listOf(

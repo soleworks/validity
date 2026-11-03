@@ -14,7 +14,6 @@ dependencies {
     testImplementation(libs.findLibrary("kotest-assertions-core").get())
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    detektPlugins(libs.findLibrary("detekt-rules-ktlint-wrapper").get())
     detektPlugins(libs.findLibrary("detekt-rules-libraries").get())
 }
 

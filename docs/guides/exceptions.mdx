@@ -1,0 +1,59 @@
+---
+title: "Exceptions"
+description: "validateOrThrow throws a ValidationException with every violation, so one handler can answer every invalid request."
+icon: "triangle-alert"
+---
+
+At the edge of your system, a request is either valid or rejected. `validateOrThrow()` returns nothing when every rule
+holds, and throws a `ValidationException` that carries the violations when any is broken:
+
+```kotlin
+suspend fun register(account: Account) {
+    account.validateOrThrow()       // throws when a rule is broken
+    accounts.save(account)          // only runs for a valid account
+}
+```
+
+## `ValidationException`
+
+`ValidationException` is a `RuntimeException`, so it needs no `throws` declaration and passes through any layer. It has:
+
+- `violations`, the same list `validate()` returns, in the same order;
+- a `message` that lists each violation as `path: message`, joined by commas.
+
+```text wrap
+io.github.soleworks.validity.ValidationException: username: must have between 3 and 20 characters, username: must contain only letters or digits, password: must have at least 8 characters, password: must contain a digit
+```
+
+## One handler for every request
+
+Because every invalid object throws the same exception with the same data, one error handler turns all of them into
+the same response. With Ktor's StatusPages, for example:
+
+```kotlin
+install(StatusPages) {
+    exception<ValidationException> { call, error ->
+        call.respond(
+            HttpStatusCode.UnprocessableEntity,
+            error.violations.map { mapOf("path" to it.path, "code" to it.code, "message" to it.message) }
+        )
+    }
+}
+```
+
+A Spring `@ExceptionHandler(ValidationException::class)` does the same.
+
+## Every way to throw
+
+| Entry | Suspending | Blocking |
+|---|---|---|
+| `Validatable` | `validateOrThrow()` | `validateOrThrowBlocking()` |
+| `ContextualValidatable<C>` | `validateOrThrow(context)` | `validateOrThrowBlocking(context)` |
+| A `ValidationResult` you already have | `result.orThrow()` | |
+
+`validateOrThrow()` is exactly `validate().orThrow()`: the same rules, the same violations.
+
+<Note>
+  `Validation<T>`, the rules [beside a class](/guides/beside-the-class), returns a result: call
+  `rules.validate(value).orThrow()` to throw from it.
+</Note>

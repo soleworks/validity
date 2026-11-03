@@ -1,0 +1,120 @@
+---
+title: "Dates and times"
+description: "Past, future and comparisons for LocalDate, Instant, ZonedDateTime, YearMonth, java.util.Date and the other java.time types."
+icon: "calendar"
+---
+
+import NullArguments from "/snippets/null-arguments.mdx";
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+The constraints of `java.time` values, and of `java.util.Date`. `past`, `future` and their `OrPresent` forms read the
+[clock of the configuration](/guides/time). The comparisons take a value of the same type.
+
+<NullArguments />
+
+```kotlin Event.kt
+data class Event(
+    val startsAt: OffsetDateTime?,
+    val endsAt: OffsetDateTime?,
+    val announcedOn: LocalDate? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::startsAt required { future() }
+        ::endsAt required { after(startsAt) }
+        ::announcedOn ifPresent { pastOrPresent() }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`past`](#past) | Is before now. |
+| [`future`](#future) | Is after now. |
+| [`pastOrPresent`](#pastorpresent) | Is now or before. |
+| [`futureOrPresent`](#futureorpresent) | Is now or after. |
+| [`after`](#after) | Is after `other`. |
+| [`before`](#before) | Is before `other`. |
+| [`afterOrEqual`](#afterorequal) | Is `other` or after. |
+| [`beforeOrEqual`](#beforeorequal) | Is `other` or before. |
+| [`between`](#between) | Is between `start` and `end`, both included. |
+
+## Relative to now
+
+### `past`
+
+`past()` on `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`, `YearMonth`, `Year`, `Date`
+
+Checks that the date is before now.
+
+<ConstraintFacts code="past" message="must be in the past" change='past = "…"' />
+
+### `future`
+
+`future()` on `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`, `YearMonth`, `Year`, `Date`
+
+Checks that the date is after now.
+
+<ConstraintFacts code="future" message="must be in the future" change='future = "…"' />
+
+### `pastOrPresent`
+
+`pastOrPresent()` on `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`, `YearMonth`, `Year`, `Date`
+
+Checks that the date is now or before.
+
+<ConstraintFacts code="pastOrPresent" message="must be in the past or present" change='pastOrPresent = "…"' />
+
+### `futureOrPresent`
+
+`futureOrPresent()` on `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`, `YearMonth`, `Year`, `Date`
+
+Checks that the date is now or after.
+
+<ConstraintFacts code="futureOrPresent" message="must be in the future or present" change='futureOrPresent = "…"' />
+
+## Comparisons
+
+### `after`
+
+`after(other)` on `LocalDate`, `LocalDateTime`, `LocalTime`, `OffsetTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`, `YearMonth`, `Year`, `Date`
+
+Checks that the date is after `other`.
+
+<ConstraintFacts code="after" message="must be after {other}" change='after = "…"' />
+
+### `before`
+
+`before(other)` on `LocalDate`, `LocalDateTime`, `LocalTime`, `OffsetTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`, `YearMonth`, `Year`, `Date`
+
+Checks that the date is before `other`.
+
+<ConstraintFacts code="before" message="must be before {other}" change='before = "…"' />
+
+### `afterOrEqual`
+
+`afterOrEqual(other)` on `LocalDate`, `LocalDateTime`, `LocalTime`, `OffsetTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`, `YearMonth`, `Year`, `Date`
+
+Checks that the date is `other` or after.
+
+<ConstraintFacts code="afterOrEqual" message="must be after or equal to {other}" change='afterOrEqual = "…"' />
+
+### `beforeOrEqual`
+
+`beforeOrEqual(other)` on `LocalDate`, `LocalDateTime`, `LocalTime`, `OffsetTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`, `YearMonth`, `Year`, `Date`
+
+Checks that the date is `other` or before.
+
+<ConstraintFacts code="beforeOrEqual" message="must be before or equal to {other}" change='beforeOrEqual = "…"' />
+
+### `between`
+
+`between(start, end)` on `LocalDate`, `LocalDateTime`, `LocalTime`, `OffsetTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`, `YearMonth`, `Year`, `Date`
+
+Checks that the date is between `start` and `end`, both included.
+
+<ConstraintFacts code="between" message="must be between {start} and {end}" change='betweenDates = "…"' />
+
+<Note>
+  `between` on dates and times is inclusive and uses the message `betweenDates`. Lengths of time, both
+  `kotlin.time.Duration` and `java.time.Duration`, have their rules on [Durations](/constraints/durations).
+</Note>

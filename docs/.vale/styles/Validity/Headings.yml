@@ -1,0 +1,33 @@
+extends: capitalization
+message: "Write '%s' in sentence case."
+level: error
+scope: heading
+match: $sentence
+exceptions:
+  - Validity
+  - Kotlin
+  - Java
+  - Maven
+  - Gradle
+  - MCP
+  - AI
+  - ISO
+  - IBAN
+  - JSON
+  - URL
+  - API
+  - HTTP
+  - Brazil
+  - Bulgaria
+  - Canada
+  - France
+  - Israel
+  - Netherlands
+  - Pakistan
+  - Poland
+  - Russia
+  - Slovenia
+  - Spain
+  - Thailand
+  - Ukraine
+  - United States

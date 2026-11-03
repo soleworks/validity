@@ -1,0 +1,12 @@
+# Codecov reads the Kover report that CI uploads (build/reports/kover/report.xml).
+coverage:
+  status:
+    # The whole library never loses coverage.
+    project:
+      default:
+        target: auto
+        threshold: 0.1%
+    # Every line a pull request adds or changes is covered by a test.
+    patch:
+      default:
+        target: 100%

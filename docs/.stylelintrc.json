@@ -1,0 +1,51 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "unit-disallowed-list": [
+      ["px"],
+      {
+        "ignoreProperties": { "px": ["border", "/^border-(top|right|bottom|left)$/", "/^border(-\\w+)?-width$/"] },
+        "message": "Use rem or em, which follow the reader's font size. Only a 1px border may be written in px."
+      }
+    ],
+    "declaration-property-value-disallowed-list": [
+      {
+        "/^margin/": ["/(^|\\s)-/"],
+        "/^(top|right|bottom|left|inset)$/": ["/(^|\\s)-/"],
+        "position": ["absolute", "fixed"]
+      },
+      {
+        "message": "Lay out with the flow of the page. A negative offset or an absolute position compensates for spacing the theme owns, and breaks when it changes."
+      }
+    ],
+    "selector-class-pattern": [
+      "^(v-[a-z0-9-]+|card|code-block|code-group|dark)$",
+      {
+        "message": "Style only the v- classes of these pages and the hooks Mintlify documents (.card, .code-block, .code-group, .dark), never the utility classes it renders."
+      }
+    ],
+    "selector-id-pattern": [
+      "^(page-title|header|navbar|content|content-area|footer|sidebar|table-of-contents)$",
+      { "message": "Style only the ids Mintlify documents." }
+    ],
+    "selector-attribute-name-disallowed-list": [
+      ["class", "style"],
+      { "message": "Match a documented hook, not the class or style attributes Mintlify renders." }
+    ],
+    "color-no-hex": [true, { "message": "Write colors in tokens.css and use them with var()." }],
+    "color-named": ["never", { "message": "Write colors in tokens.css and use them with var()." }],
+    "function-disallowed-list": [
+      ["rgb", "rgba", "hsl", "hsla"],
+      { "message": "Write colors in tokens.css and use them with var()." }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["tokens.css"],
+      "rules": {
+        "color-no-hex": null,
+        "function-disallowed-list": null
+      }
+    }
+  ]
+}

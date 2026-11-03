@@ -1,0 +1,87 @@
+---
+title: "Converting values"
+description: "convert and the convertTo shortcuts check text that carries a number, a date or an enum, then validate the converted value."
+icon: "arrow-right-left"
+---
+
+Query strings, form fields and CSV columns carry numbers, dates and enums as text. A `convertTo` call checks that the
+text converts, and runs its block on the converted value, with the constraints of that type:
+
+```kotlin SortOrder.kt
+enum class SortOrder { NEWEST, CHEAPEST, BEST_RATED }
+```
+
+```kotlin SearchQuery.kt
+data class SearchQuery(
+    val page: String? = null,
+    val size: String? = null,
+    val since: String? = null,
+    val sort: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::page ifPresent { convertToInt { min(1) } }
+        ::size ifPresent { convertToInt { between(min = 1, max = 100) } }
+        ::since ifPresent { convertToLocalDate { pastOrPresent() } }
+        ::sort ifPresent { convertToEnum<SortOrder>(ignoreCase = true) {} }
+    }
+}
+```
+
+```kotlin
+SearchQuery(page = "0", size = "ten", since = "2999-01-01", sort = "price").validate().violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `page` | must be at least 1 | `min` |
+| `size` | must be a valid integer | `convertToInt` |
+| `since` | must be in the past or present | `pastOrPresent` |
+| `sort` | must be one of NEWEST, CHEAPEST, BEST_RATED | `convertToEnum` |
+
+When the text does not convert, there is one violation with the code of the conversion, and the block does not run. When
+it converts, the block checks the value, and its violations keep the path of the text.
+
+## The shortcuts
+
+| Call | Converts to | Accepts | Message |
+|---|---|---|---|
+| `convertToInt { }` | `Int` | a whole number that fits in an `Int` | `must be a valid integer` |
+| `convertToLong { }` | `Long` | a whole number that fits in a `Long` | `must be a valid integer` |
+| `convertToBigInteger { }` | `BigInteger` | any whole number | `must be a valid integer` |
+| `convertToBigDecimal { }` | `BigDecimal` | a decimal number, such as `-12.5` or `1e3` | `must be a valid number` |
+| `convertToDouble { }` | `Double` | what `String.toDouble()` reads, such as `3.14` | `must be a valid number` |
+| `convertToBoolean { }` | `Boolean` | `true` or `false`, in lowercase | `must be true or false` |
+| `convertToUuid { }` | `UUID` | the 36-character form, in either case | `must be a valid UUID` |
+| `convertToEnum<E>(ignoreCase) { }` | the entry of `E` | the name of an entry | `must be one of {values}` |
+| `convertToLocalDate { }` | `LocalDate` | `2024-02-29` | `must be a valid ISO 8601 date` |
+| `convertToLocalDateTime { }` | `LocalDateTime` | `2024-02-29T13:45` | `must be a valid ISO 8601 date and time` |
+| `convertToLocalTime { }` | `LocalTime` | `13:45` | `must be a valid ISO 8601 time` |
+| `convertToOffsetDateTime { }` | `OffsetDateTime` | `2024-02-29T13:45Z` | `must be a valid ISO 8601 date and time with offset` |
+| `convertToInstant { }` | `Instant` | `2024-02-29T13:45:00Z` | `must be a valid ISO 8601 instant` |
+| `convertToYearMonth { }` | `YearMonth` | `2024-02` | `must be a valid ISO 8601 year and month` |
+| `convertToDuration { }` | `java.time.Duration` | `PT1H30M` | `must be a valid ISO 8601 duration` |
+
+The dates and times are ISO 8601. The message of each shortcut can be changed for one call
+(`convertToInt("must be a page number") { }`) or for all of them, in [the messages](/guides/messages), under the name of
+the shortcut: `convertToInt = "…"`.
+
+<Tip>
+  A block can be empty: `convertToEnum<SortOrder>(ignoreCase = true) {}` only checks that the text names an entry.
+</Tip>
+
+## Your own conversion
+
+`convert` takes any function that returns the converted value, or `null` when it cannot convert:
+
+```kotlin
+::color required { convert({ Color.fromHex(it) }) { notEqualTo(Color.BLACK) } }
+```
+
+It reports `has an invalid format`, with the code `convert`, when the function returns `null`. Exceptions it throws are
+not caught: return `null` instead.
+
+## Convert or check?
+
+When you only need to know that the text has a shape, without validating the value, a format constraint is enough:
+[`numeric()`, `integer()` or `boolean()`](/constraints/strings#numeric) on a string, or
+[`isoDate()`](/constraints/date-formats). Convert when the value has rules of its own, such as a page that starts at 1.

@@ -30,6 +30,29 @@ jobs:
           disable_search: true
           use_oidc: true
 
+  # The docs site: the Mintlify checks (MDX, navigation, links and anchors, accessibility), Stylelint and Vale. The
+  # docs checks of the harness run in the build job, with ./gradlew build.
+  docs:
+    runs-on: ubuntu-latest
+    env:
+      VALE_VERSION: 3.26.0
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run docs:check
+      - name: Vale
+        run: |
+          base="https://github.com/vale-cli/vale/releases/download/v${VALE_VERSION}"
+          archive="vale_${VALE_VERSION}_Linux_64-bit.tar.gz"
+          curl -sSLO "$base/$archive"
+          curl -sSL "$base/vale_${VALE_VERSION}_checksums.txt" | grep " $archive\$" | sha256sum --check
+          tar -xzf "$archive" vale
+          cd docs && ../vale --output=line .
+
   # The commits decide the next version and the changelog, so a pull request cannot get them wrong.
   commits:
     if: github.event_name == 'pull_request'

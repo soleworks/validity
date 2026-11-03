@@ -1,0 +1,90 @@
+---
+title: "Quick start"
+description: "Add the dependency, declare the rules of a class, validate it and read every broken rule, in five minutes."
+icon: "rocket"
+---
+
+import Dependency from "/snippets/dependency.mdx";
+
+<Steps>
+  <Step title="Add the dependency">
+    <Dependency artifact="validity-core" />
+
+    Phone numbers, the imports and the versions are in [Modules](/modules).
+  </Step>
+
+  <Step title="Implement Validatable and declare the rules">
+    A class that knows its own rules implements `Validatable` and returns them from `validation()`. Each line starts
+    with a property, says what `null` means for it, and lists its constraints:
+
+```kotlin User.kt
+data class User(
+    val name: String?,
+    val email: String?,
+    val age: Int?
+) : Validatable {
+    override fun validation() = validation {
+        ::name required { minLength(2) }
+        ::email required { email() }
+        ::age ifPresent { min(18) }
+    }
+}
+```
+
+    `::name required { minLength(2) }` reads as the requirement: the name is required, and has at least 2
+    characters. `::age ifPresent { min(18) }` says the age may be missing, but when it is there, it is at least 18.
+  </Step>
+
+  <Step title="Validate">
+    `validate()` runs every rule and returns a `ValidationResult`:
+
+```kotlin
+val result = User(name = "A", email = "ana@", age = 16).validate()
+
+result.isValid      // false
+result.violations   // every broken rule, in the order the rules are declared
+```
+
+    `validate()` is a `suspend` function, so a rule can query a database or an API. Outside a coroutine, call
+    `validateBlocking()` instead. It runs the same rules and blocks the thread until they finish.
+  </Step>
+
+  <Step title="Read the violations">
+    The three rules are broken at once, and each violation has a path, a message and a code:
+
+| Path | Message | Code |
+|---|---|---|
+| `name` | must have at least 2 characters | `minLength` |
+| `email` | must be a valid email | `email` |
+| `age` | must be at least 18 | `min` |
+
+    Show the `message` to people and branch on the `code` in programs: codes never change with the language of the
+    messages.
+  </Step>
+
+  <Step title="Or throw at the edge of your system">
+    In a controller or a handler, `validateOrThrow()` throws a `ValidationException` that carries the same list, so
+    one error handler can turn every invalid request into a response:
+
+```kotlin
+user.validateOrThrow()   // or validateOrThrowBlocking()
+```
+  </Step>
+</Steps>
+
+## What to read next
+
+<CardGroup cols={2}>
+  <Card title="What null means" icon="circle-slash" href="/guides/null-values">
+    `required`, `ifPresent` and `forbidden`, the start of every rule.
+  </Card>
+  <Card title="Nested objects" icon="network" href="/guides/nested-objects">
+    `valid()` follows the data, and the path follows it too.
+  </Card>
+  <Card title="Across fields" icon="git-merge" href="/guides/across-fields">
+    One of two fields, a total that matches its items.
+  </Card>
+  <Card title="Every constraint" icon="list-checks" href="/constraints/overview">
+    {{constraints}} of them, by the type of value they check.
+  </Card>
+</CardGroup>
