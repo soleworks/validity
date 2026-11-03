@@ -1,6 +1,7 @@
 package io.github.soleworks.validity.harness
 
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldMatch
 import java.io.File
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -26,6 +27,7 @@ private val VARIABLE_USE_FORMAT = Regex("""\{\{(\w+)}}""")
 private val SNIPPET_IMPORT_FORMAT = Regex("""^import \w+ from "/snippets/([\w-]+\.mdx)";""", RegexOption.MULTILINE)
 private val NAVIGATION_PAGES_FORMAT = Regex(""""pages":\s*\[(.*?)]""", RegexOption.DOT_MATCHES_ALL)
 private val QUOTED_FORMAT = Regex(""""([^"]+)"""")
+private val STABLE_VERSION_FORMAT = Regex("""\d+\.\d+\.\d+""")
 private val RELEASED_VERSION_FORMAT = Regex(""""\.":\s*"([^"]+)"""")
 private val VERSION_LINK_FORMAT = Regex("""\{[^{}]*"href":\s*"[^"]*/releases/latest"[^{}]*}""")
 private val LABEL_FORMAT = Regex(""""label":\s*"([^"]*)"""")
@@ -76,6 +78,11 @@ class DocsConventionsTest {
         @Test
         fun `the version variable should be the version last released, which the release-please manifest holds`() {
             docsVariables["version"] shouldBe released
+        }
+
+        @Test
+        fun `the version variable should be a stable version, since a release candidate never reaches the docs`() {
+            docsVariables["version"].orEmpty() shouldMatch STABLE_VERSION_FORMAT
         }
 
         @Test

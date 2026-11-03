@@ -12,15 +12,18 @@ in code blocks, so the Markdown agents read has the values too.
 
 - Each variable is checked against the code: `version` against `.release-please-manifest.json`, `kotlin`
   against the version catalog, `java` against the toolchain, the counts against the sources.
-- `version` is the version last released, never the one being built: `gradle.properties` holds the next
-  version (`0.1.0-SNAPSHOT`), which is not on Maven Central. release-please sets the manifest and the
-  variable in the same release commit. Before the first release the manifest is `0.0.0`, and nothing shows
-  the version: no page writes `{{version}}`, the dependency snippet names no version, and the navbar has no
-  version link.
-- Once a release exists, the navbar links to `https://github.com/soleworks/validity/releases/latest` with the
-  bare version as its label (`0.1.0`, no `v`). Mintlify does not fill variables in `docs.json`, so the label
-  holds the value, release-please updates it through its `jsonpath` in `release-please-config.json`, and the
-  harness compares it with `version`.
+- `version` is the last stable version released, never the one being built: `gradle.properties` holds the
+  next version (`0.1.0-SNAPSHOT`), which is not on Maven Central, and a release candidate never reaches the
+  docs. release-please sets the manifest and the variable in the same release commit. Before the first
+  release the manifest is `0.0.0`, and nothing shows the version: no page writes `{{version}}`, the
+  dependency snippet names no version, and the navbar has no version link.
+- Once a release is on Maven Central, the navbar links to
+  `https://github.com/soleworks/validity/releases/latest` with the bare version as its label (`0.1.0`, no
+  `v`). Mintlify does not fill variables in `docs.json`, so the label holds the value. The `show-release`
+  job of the Release workflow adds the link at the first release, with the dependency blocks in place of
+  the note that Validity is not on Maven Central yet (`.github/scripts/show-release.mjs`). From then on
+  release-please updates the label through its `jsonpath` in `release-please-config.json`, and the harness
+  compares it with `version`.
 - Mintlify does not fill variables in a frontmatter, in `skill.md` or in a link the link checker reads: a
   frontmatter says the fact without the number, `skill.md` writes the value (and the harness compares it),
   and a link to the site itself is a path from the root, such as `/quickstart`.

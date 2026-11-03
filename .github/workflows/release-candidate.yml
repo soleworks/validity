@@ -1,0 +1,73 @@
+name: Release candidate
+
+# Adding the label "release-candidate" to the release pull request publishes the next release candidate of the version
+# it proposes (1.0.0-RC1, then 1.0.0-RC2...) from main. A candidate is a GitHub prerelease, so releases/latest and the
+# docs keep showing the last stable version, and it commits nothing: the release pull request stays as it is, and
+# merging it releases the stable version.
+on:
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: github.event.label.name == 'release-candidate' && startsWith(github.event.pull_request.head.ref, 'release-please--')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: maven-central
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      pull-requests: write
+      statuses: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      PR: ${{ github.event.pull_request.number }}
+      HEAD: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - name: Check that a maintainer added the label
+        run: |
+          permission=$(gh api "repos/$GH_REPO/collaborators/${{ github.event.sender.login }}/permission" --jq .permission)
+          case "$permission" in
+            admin|maintain|write) ;;
+            *) echo "Only a maintainer publishes a release candidate."; exit 1 ;;
+          esac
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Work out the version
+        id: version
+        run: |
+          next=$(gh api "repos/$GH_REPO/contents/.release-please-manifest.json?ref=$HEAD" --jq .content | base64 -d | jq -r '."."')
+          last=$(git tag --list "v$next-RC*" | sed "s/^v$next-RC//" | sort --numeric-sort | tail -n 1)
+          echo "version=$next-RC$(( ${last:-0} + 1 ))" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v6
+      - run: ./gradlew build -Pversion=${{ steps.version.outputs.version }}
+      - run: ./gradlew publishToMavenCentral --no-configuration-cache -Pversion=${{ steps.version.outputs.version }}
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      - name: Create the prerelease
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" --target "${{ steps.version.outputs.sha }}" \
+            --title "${{ steps.version.outputs.version }}" --prerelease --generate-notes
+          gh api "repos/$GH_REPO/statuses/$HEAD" -f state=success -f context="Release candidate" \
+            -f description="${{ steps.version.outputs.version }} is on Maven Central."
+          gh pr comment "$PR" --body "Published \`${{ steps.version.outputs.version }}\` to Maven Central as a prerelease."
+      - name: Report a failure
+        if: failure()
+        run: gh pr comment "$PR" --body "The release candidate failed to publish. See ${{ github.server_url }}/$GH_REPO/actions/runs/${{ github.run_id }}."
+      - name: Take the label off, so adding it again publishes the next candidate
+        if: always()
+        run: gh pr edit "$PR" --remove-label "release-candidate"

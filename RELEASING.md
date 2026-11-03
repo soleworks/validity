@@ -29,6 +29,15 @@ removed.
 3. **Merging that pull request is the release.** release-please tags the merge commit (`v0.2.0`) and creates the
    GitHub release with its changelog. The same workflow then checks that the build has that version, builds it, and
    publishes `validity-core` and `validity-phone`, signed, to Maven Central.
+4. **The docs follow by themselves.** Once the version is on Maven Central, the `show-release` job runs
+   [.github/scripts/show-release.mjs](.github/scripts/show-release.mjs), which adds what release-please cannot write,
+   since it only replaces a version already written: the version link of the docs navbar and, at the first release,
+   the dependency blocks of the docs and the README in place of the notes that Validity is not on Maven Central yet.
+   It runs the docs checks and pushes to `main`. When there is nothing to add, as from the second release on, it
+   pushes nothing.
+
+The merge is the only step a person takes. The docs show only a stable version that is on Maven Central: before the
+first release nothing shows a version, and a release candidate never reaches the docs.
 
 ## What CI checks on every pull request
 
@@ -43,26 +52,25 @@ The script behind the last two commit checks is [.github/scripts/check-commits.s
 
 ## Other versions
 
-- **A release candidate**, such as before `1.0.0`: a commit with the footer `Release-As: 1.0.0-RC1` makes the next
-  release pull request propose that version. The release after it goes back to the version the commits give.
-- **A version other than the one proposed**: the same `Release-As: x.y.z` footer, in any commit merged before the
-  release.
-
-## After the first release
-
-Before the first release the manifest is at `0.0.0`, and the docs show no version, since none exists: the dependency
-snippet of the docs names no version, for a build from a clone, and the navbar has no version link. Once `0.1.0` is on
-Maven Central, one pull request turns them on, and release-please keeps them up to date from then on:
-
-- `docs/snippets/dependency.mdx` writes `:{{version}}` after the artifact, and gets back its Maven block.
-- `docs/snippets/maven-central-note.mdx` goes, with its imports.
-- `navbar.links` in `docs/docs.json` gets
-  `{ "label": "0.1.0", "icon": "tag", "href": "https://github.com/soleworks/validity/releases/latest" }`.
+- **A release candidate**, which a new major version (`1.0.0`, `2.0.0`) goes through first. When the release pull
+  request proposes one, the Release workflow sets a red *Release candidate* status on it. Adding the label
+  `release-candidate` to the pull request runs the
+  [Release candidate workflow](.github/workflows/release-candidate.yml): it publishes the next candidate (`1.0.0-RC1`,
+  then `1.0.0-RC2`) from `main` to Maven Central, creates it as a GitHub prerelease, turns the status green, comments
+  on the pull request and takes the label off, so adding it again publishes the next one. A candidate commits nothing:
+  the docs, the changelog and `releases/latest` stay on the last stable version, and merging the pull request releases
+  the major version itself.
+- **A version other than the one proposed**: a commit with the footer `Release-As: x.y.z`, merged before the release.
 
 ## When something fails
 
 - **The publish job failed** (a missing secret, Maven Central down): the tag and the GitHub release already exist.
-  Fix the cause and run the failed job again from the Actions tab. It publishes the same tagged commit.
+  Fix the cause and run the failed job again from the Actions tab. It publishes the same tagged commit, and the
+  `show-release` job runs after it.
+- **The `show-release` job failed**: the version is on Maven Central and the docs do not show it yet. Run the job again;
+  the script changes only what is missing.
+- **A release candidate failed**: the workflow comments on the release pull request with the link to the run. Add the
+  label again once the cause is fixed: the number of the candidate goes up only when one is published.
 - **The release pull request does not open**: the repository must allow GitHub Actions to create pull requests
   (*Settings → Actions → General → Workflow permissions*).
 
