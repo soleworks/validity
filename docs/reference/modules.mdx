@@ -1,0 +1,46 @@
+---
+title: "Modules"
+description: "What validity-core and validity-phone hold, what they depend on, and how their versions move together."
+icon: "boxes"
+---
+
+Validity is published as two modules, under the group `io.github.soleworks`. They are released together, always at the
+same version, so a project that uses both never mixes versions.
+
+<CardGroup cols={2}>
+  <Card title="validity-core" icon="box">
+    The DSL, the four entries and every constraint but the phone ones. Depends on the Kotlin standard library and
+    kotlinx.coroutines.
+  </Card>
+  <Card title="validity-phone" icon="phone" href="/constraints/phone">
+    `phone`, `mobilePhone`, `countryCode` and `areaCode`, and their messages. Depends on `validity-core` and Google's
+    libphonenumber.
+  </Card>
+</CardGroup>
+
+## What each package holds
+
+| Package | Module | Holds |
+|---|---|---|
+| `io.github.soleworks.validity` | core | `Validatable`, `ContextualValidatable`, `validation`, `validatable`, `required`, `ifPresent`, `forbidden`, the presence rules, `each`, `valid`, `convert`, `metadata`, `Validity`, `ValidationResult`, `Violation`, `ValidationException`, `Messages` |
+| `io.github.soleworks.validity.constraints` | core | The general constraints, `or`, `and`, `not`, `HashAlgorithm` |
+| `io.github.soleworks.validity.constraints.<country>` | core | The constraints of one country: `brazil`, `bulgaria`, `canada`, `france`, `israel`, `netherlands`, `pakistan`, `poland`, `russia`, `slovenia`, `spain`, `thailand`, `ukraine`, `unitedstates` |
+| `io.github.soleworks.validity.phone` | phone | The phone constraints, `PhoneFormat`, `PhoneMessages` and `Messages.phone` |
+
+## Why phone numbers are apart
+
+libphonenumber is large and holds the numbering plans of every country. Keeping it out of `validity-core` means a
+project that never validates a phone number does not ship it. A module adds its messages to the configuration without
+the core knowing it, through `MessagesKey`, the same way [your own constraints](/guides/messages#messages-of-your-own-constraints)
+can.
+
+## Nothing hidden
+
+No module uses annotations, code generation or `kotlin-reflect`. The rules are plain Kotlin calls, compiled with your
+code, so what runs is what you read.
+
+## The public API
+
+The public API of each module is kept in a dump, checked on every change, so nothing public changes by accident.
+Validity follows [Semantic Versioning](https://semver.org): while the version is `0.x`, a breaking change raises the
+minor version, and the [changelog](https://github.com/soleworks/validity/blob/main/CHANGELOG.md) says what to change.

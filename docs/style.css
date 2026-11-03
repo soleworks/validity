@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+/*
+ * The styles of the site, on top of the Aspen theme of Mintlify. Colors come from tokens.css. Selectors target only
+ * the hooks Mintlify documents (ids such as #page-title, the .card and .code-block classes, data-component-part
+ * attributes) and the v- classes of these pages, never the utility classes Mintlify renders, which change without
+ * notice. Stylelint holds these rules (.stylelintrc.json).
+ */
+
+/* ---------- Code ---------- */
+
+code,
+pre,
+kbd {
+  font-family: "JetBrains Mono", ui-monospace, sfmono-regular, menlo, monospace;
+  font-feature-settings: "calt" 1, "liga" 1;
+}
+
+.code-block {
+  --mint-foreground: var(--mint-color-text);
+
+  background-color: var(--v-code) !important;
+  border: 1px solid var(--v-lavender-border) !important;
+  box-shadow: none !important;
+}
+
+[data-component-part="code-block-header-filename"] {
+  color: var(--v-faint) !important;
+  font-weight: 500;
+}
+
+/* Inline code reads as a small lavender chip. */
+:not(pre) > code {
+  border: 1px solid var(--v-lavender-border);
+  background: var(--v-lavender);
+  color: var(--v-violet-strong);
+  border-radius: 0.375rem;
+  padding: 0.1em 0.35em;
+  font-size: 0.86em;
+}
+
+/* In a narrow card or a table cell, a path such as `items[1].quantity` moves to the next line whole. */
+td > code,
+.card :not(pre) > code {
+  white-space: nowrap;
+}
+
+/* ---------- Pages ---------- */
+
+#page-title {
+  letter-spacing: -0.02em;
+}
+
+.card {
+  transition: border-color 160ms ease;
+}
+
+.card:hover {
+  border-color: var(--v-violet) !important;
+}
+
+/* ---------- Home page ---------- */
+
+/* The badges and links under the title of the home page. */
+.v-banner {
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--v-border);
+}
+
+.v-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.v-badges span {
+  padding: 0.15rem 0.6rem;
+  border-radius: 0.375rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.v-badges span:nth-child(1) {
+  background: var(--v-lavender);
+  color: var(--v-violet-strong);
+}
+
+.v-badges span:nth-child(2) {
+  background: var(--v-magenta-soft);
+  color: var(--v-magenta-strong);
+}
+
+.v-badges span:nth-child(3) {
+  background: var(--v-coral-soft);
+  color: var(--v-coral-strong);
+}
+
+.v-banner-links {
+  margin: 0.9rem 0 0 !important;
+  font-size: 0.92rem;
+  color: var(--v-faint);
+}
+
+.v-banner-links a {
+  font-weight: 600;
+  color: var(--v-violet) !important;
+  border-bottom: none !important;
+}

@@ -1,0 +1,91 @@
+---
+title: "Context"
+description: "ContextualValidatable hands the rules data the caller passes, such as the logged-in customer, typed by the compiler."
+icon: "user-round-check"
+---
+
+Some rules depend on who is asking: the credit limit of the logged-in customer, the catalog of a tenant, a repository to
+look things up in. That data is not part of the object, so the object cannot reach it on its own. Implement
+`ContextualValidatable<C>`, and `validation(context)` receives it:
+
+```kotlin Shopper.kt
+data class Shopper(
+    val creditLimit: BigDecimal,
+    val catalog: Set<String>
+)
+```
+
+```kotlin PurchaseLine.kt
+data class PurchaseLine(
+    val sku: String?
+) : ContextualValidatable<Shopper> {
+    override fun validation(
+        context: Shopper
+    ) = validation {
+        ::sku required { constraint("is not sold in your region", code = "catalog") { it in context.catalog } }
+    }
+}
+```
+
+```kotlin Purchase.kt
+data class Purchase(
+    val total: BigDecimal?,
+    val lines: List<PurchaseLine>?
+) : ContextualValidatable<Shopper> {
+    override fun validation(
+        context: Shopper
+    ) = validation {
+        ::total required { max(context.creditLimit) }
+        ::lines required { each { valid(context) } }
+    }
+}
+```
+
+The caller passes the context to `validate`:
+
+```kotlin
+val shopper = Shopper(creditLimit = "100".toBigDecimal(), catalog = setOf("BOOK-1"))
+
+Purchase(
+    total = "150".toBigDecimal(),
+    lines = listOf(PurchaseLine(sku = "BOOK-1"), PurchaseLine(sku = "TV-9"))
+).validate(shopper).violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `total` | must be at most 100 | `max` |
+| `lines[1].sku` | is not sold in your region | `catalog` |
+
+The type of the context is checked by the compiler: a `Purchase` cannot be validated without a `Shopper`, and there is
+no map of attributes to read and cast.
+
+## Passing the context down
+
+Nested objects receive the context explicitly, with `valid(context)`. That keeps the flow visible, and lets a child
+take only a part of it:
+
+```kotlin
+::lines required { each { valid(context) } }          // the whole shopper
+::store required { valid(context.tenant) }            // only the part the store needs
+```
+
+A child that needs no context is a plain `Validatable`, checked with `valid()`, even inside a contextual parent.
+
+## The four ways to run
+
+`ContextualValidatable` has the same four functions as `Validatable`, with the context first:
+
+```kotlin
+purchase.validate(shopper)
+purchase.validateBlocking(shopper)
+purchase.validateOrThrow(shopper)
+purchase.validateOrThrowBlocking(shopper)
+```
+
+Each also takes a [`Validity`](/guides/configuration) after the context, for other messages or another clock.
+
+<Tip>
+  The context can be anything: a data class, a repository, a client. When it is a repository with `suspend`
+  functions, the rules can call them directly. See [Coroutines](/guides/coroutines).
+</Tip>

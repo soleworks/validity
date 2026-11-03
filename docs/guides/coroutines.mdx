@@ -1,0 +1,80 @@
+---
+title: "Coroutines"
+description: "Every lambda you hand to Validity can call suspend functions, under the same names, and validate() suspends while they run."
+icon: "zap"
+---
+
+Validation often needs I/O: is this email already registered, does this coupon exist, is this SKU in stock. In
+Validity, every piece of code you hand over can call a `suspend` function, with no separate API for it:
+
+- the condition of a `constraint`, and a message built from the value,
+- a converter of `convert`,
+- the blocks of `validation`, `required`, `ifPresent`, `each`, `or` and the others.
+
+A lookup is then one more rule:
+
+```kotlin Members.kt
+interface Members {
+    suspend fun exists(
+        email: String
+    ): Boolean
+}
+```
+
+```kotlin Invite.kt
+data class Invite(
+    val email: String?
+) : ContextualValidatable<Members> {
+    override fun validation(
+        context: Members
+    ) = validation {
+        ::email required {
+            failFast {
+                email()
+                constraint("is already a member", code = "member") { !context.exists(it) }
+            }
+        }
+    }
+}
+```
+
+```kotlin
+invite.validate(members)           // inside a coroutine: Ktor, Spring WebFlux, a suspend main
+invite.validateBlocking(members)   // anywhere else: blocks the thread until the lookup returns
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `email` | is already a member | `member` |
+
+[`failFast`](/guides/fail-fast) keeps the lookup from running on an email that is not even an email.
+
+## `validate` and `validateBlocking`
+
+`validate()` is a `suspend` function: in a coroutine, it suspends while the rules wait, and the thread serves other work.
+`validateBlocking()` runs the same rules inside `runBlocking`, for code that cannot suspend, such as a servlet or a test
+without coroutines. Both return the same result.
+
+| | Suspending | Blocking |
+|---|---|---|
+| Returns the result | `validate()` | `validateBlocking()` |
+| Throws | `validateOrThrow()` | `validateOrThrowBlocking()` |
+
+## The configuration follows the coroutine
+
+The configuration in use, its messages and its clock, travels with the coroutine. A rule that resumes on another thread,
+after a `withContext(Dispatchers.IO)` for instance, still reads the configured messages and the configured clock, and
+so does `now { }`:
+
+```kotlin
+::date required {
+    constraint("must not be in the past") { date ->
+        withContext(Dispatchers.IO) { !date.isBefore(now(LocalDate::now)) }
+    }
+}
+```
+
+<Note>
+  The rules of one object run one after the other, in the order they are declared, so the order of the violations does
+  not depend on how long each lookup takes.
+</Note>

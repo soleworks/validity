@@ -1,0 +1,135 @@
+---
+title: "Messages"
+description: "Change the default message of any constraint, for the whole application or one call, with placeholders filled in."
+icon: "languages"
+---
+
+Every constraint reports a message for people, in English by default, such as `must have at least 2 characters`.
+Change it in three places, from the broadest to the narrowest.
+
+## For the whole application
+
+`messages { }` in the [configuration](/guides/configuration) changes the default message of a constraint everywhere.
+Each message is a property named after the constraint:
+
+```kotlin
+Validity.configure {
+    messages {
+        required = "é obrigatório"
+        minLength = "deve ter pelo menos {min} caracteres"
+        email = "deve ser um e-mail válido"
+    }
+}
+```
+
+The others keep their default. The [messages reference](/reference/messages) lists all of them, with their defaults and
+placeholders.
+
+## For one call
+
+The same block inside `Validity { }` changes them for one validation only, which is how a server answers each request
+in its own language:
+
+```kotlin
+user.validate(Validity { messages { email = "deve ser um e-mail válido" } })
+```
+
+## For one rule
+
+Every constraint takes a `message`, which replaces the default for that call:
+
+```kotlin
+::name required { minLength(2, message = "please type your full name") }
+::email.required("we need an email to send the receipt") { email() }
+```
+
+Constraints that take an argument also accept a message built from the value, for a message that depends on it:
+
+```kotlin
+::name required { minLength(3, message = { min -> "has $length characters, needs $min" }) }
+```
+
+## Placeholders
+
+A message can use placeholders in braces, filled in when the violation is built:
+
+| Placeholder | Filled with | Available in |
+|---|---|---|
+| `{path}` | the path of the value, such as `shipping.zipCode` | every message |
+| `{value}` | the value being checked | every message |
+| `{min}`, `{max}`, `{other}`, `{pattern}`, ... | the arguments of the constraint, by name | the messages of constraints that take them |
+| `{fields}` | the properties of a presence rule | `atLeastOneOf` and the other presence rules |
+
+```kotlin
+messages { max = "{path} is {value}, more than the maximum of {max}" }
+```
+
+A placeholder the message has no value for is left as it is, so a typo shows up in the message instead of failing.
+
+## The message of a constraint is not always its name
+
+Most messages are named after their constraint, but a few constraints share a name across types and need different
+words. The size rules of a map count entries, not items, and the Boolean rules cannot be named `isTrue`:
+
+| Constraint | Message to change |
+|---|---|
+| `minSize`, `maxSize`, `size`, `sizeBetween` on a map | `minEntries`, `maxEntries`, `entries`, `entriesBetween` |
+| `contains`, `notContains` on a collection | `containsElement`, `notContainsElement` |
+| `distinctBy` | `distinct` |
+| `between` on dates and times | `betweenDates` |
+| `isTrue`, `isFalse` | `mustBeTrue`, `mustBeFalse` |
+| `notNull` | `required` |
+
+The [constraints reference](/constraints/overview) gives the message of every constraint. The code of the violation is
+always the name of the constraint.
+
+## Messages of a country
+
+The constraints of each country have their messages in a block of their own:
+
+```kotlin
+messages {
+    brazil {
+        cpf = "CPF inválido"
+        cnpj = "CNPJ inválido"
+    }
+    spain { dni = "DNI no válido" }
+}
+```
+
+The blocks are `brazil`, `bulgaria`, `canada`, `france`, `israel`, `netherlands`, `pakistan`, `poland`, `russia`,
+`slovenia`, `spain`, `thailand`, `ukraine` and `unitedStates`.
+
+## Messages of a module
+
+A module such as [`validity-phone`](/constraints/phone) adds its own block to `messages`:
+
+```kotlin
+messages { phone { mobilePhone = "celular inválido" } }
+```
+
+## Messages of your own constraints
+
+Your [custom constraints](/guides/custom-constraints) can have configurable messages too. Hold them in a class, declare a
+`MessagesKey` for it, and read the current messages from the key:
+
+```kotlin
+class ShopMessages {
+    var sku: String = "must be a SKU such as ABC-1234"
+}
+
+val SHOP_MESSAGES = MessagesKey(::ShopMessages)
+
+fun ValidationNode<String>.sku(
+    message: String = SHOP_MESSAGES.current.sku
+): Unit = constraint(message = message, code = "sku") { SKU_FORMAT.matches(it) }
+```
+
+Users then change them in the same configuration, with `module`:
+
+```kotlin
+Validity.configure { messages { module(SHOP_MESSAGES).sku = "SKU inválido" } }
+```
+
+`MessagesKey.current` reads the messages of the configuration that is validating, so `Validity { }` for one call works
+for them too.

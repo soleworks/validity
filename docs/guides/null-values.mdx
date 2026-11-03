@@ -1,0 +1,119 @@
+---
+title: "Null values"
+description: "required, ifPresent and forbidden decide what null means for a property, once, before its constraints."
+icon: "circle-slash"
+---
+
+Every rule about a property starts by deciding what `null` means for it. There are three answers:
+
+<CardGroup cols={3}>
+  <Card title="required" icon="asterisk">
+    `null` is a violation. Otherwise its block runs on the value.
+  </Card>
+  <Card title="ifPresent" icon="circle-dashed">
+    `null` is valid. A value is checked by its block.
+  </Card>
+  <Card title="forbidden" icon="ban">
+    Anything but `null` is a violation.
+  </Card>
+</CardGroup>
+
+After `required` or `ifPresent`, the value inside the block has the non-null type: `String`, not `String?`. Every
+constraint works on that type, so your IDE offers only the constraints that fit it, and none of them has to think about
+`null`.
+
+```kotlin Client.kt
+data class Client(
+    val type: String?,
+    val name: String?,
+    val companyName: String? = null,
+    val nickname: String? = null,
+    val email: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::type required { oneOf(listOf("PERSON", "COMPANY")) }
+        ::name required { notBlank() }
+        ::nickname ifPresent { minLength(3) }
+        ::email.required("we need an email to send the receipt") { email() }
+
+        when (type) {
+            "PERSON" -> ::companyName.forbidden()
+            "COMPANY" -> ::companyName required { notBlank() }
+        }
+    }
+}
+```
+
+A company with no company name and no email breaks four rules:
+
+| Path | Message | Code |
+|---|---|---|
+| `name` | must not be blank | `notBlank` |
+| `nickname` | must have at least 3 characters | `minLength` |
+| `email` | we need an email to send the receipt | `required` |
+| `companyName` | is required | `required` |
+
+And a person who sends a company name breaks `forbidden`:
+
+| Path | Message | Code |
+|---|---|---|
+| `companyName` | must be null | `forbidden` |
+
+## `required`
+
+`::email required { email() }` reports `is required`, with the code `required`, when the property is `null`, and the
+block does not run, so there is never a second violation about a missing value. When the value is there, the block runs
+on it.
+
+To change the message of one property, call it as a function, with the message first:
+
+```kotlin
+::email.required("we need an email to send the receipt") { email() }
+```
+
+To change it for every property, change [`messages.required`](/guides/messages).
+
+<Note>
+  A block can be empty: `::street required {}` only checks that the street is there.
+</Note>
+
+## `ifPresent`
+
+`::nickname ifPresent { minLength(3) }` accepts `null`, and checks the value when there is one. Use it for optional
+fields that still have a shape when they are filled in.
+
+## `forbidden`
+
+`::companyName.forbidden()` reports `must be null`, with the code `forbidden`, when the property has a value. It is
+usually inside a condition, for a field that one kind of object must not have:
+
+```kotlin
+if (type == "PERSON") ::companyName.forbidden()
+```
+
+It takes a message too: `::password.forbidden("a guest has no password")`.
+
+## Values that are not properties
+
+`required` and `ifPresent` also take a path and a value, for something that is not a property, such as a value computed
+from others or read from a map:
+
+```kotlin
+required(path = "headers.Authorization", value = headers["Authorization"]) { startsWith("Bearer ") }
+ifPresent(path = "total", value = items?.sumOf { it.price }) { positive() }
+```
+
+The path is the path of the violations, so they point at the right place.
+
+## `notNull`, for elements
+
+Inside an `each` over a collection of nullable values, the element can still be `null`, and there is no property to
+call `required` on. `notNull()` checks it, with the message of `required` (`is required`) and the code `notNull`:
+
+```kotlin
+::tags required { each { notNull() } }   // List<String?>
+```
+
+<Tip>
+  On a property, prefer `required` to `notNull()`: only `required` gives its block the non-null type.
+</Tip>

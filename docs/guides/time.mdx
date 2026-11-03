@@ -1,0 +1,96 @@
+---
+title: "Time"
+description: "Rules about now and today read the clock of the configuration, so tests and users in other zones get the right answer."
+icon: "clock"
+---
+
+"Must be in the future", "at least 18 years old" and "within the next 30 days" all depend on what *now* is. Validity
+never reads the system clock directly: every rule about the present reads the `clock` of the
+[configuration](/guides/configuration). By default it is the system clock in the default time zone.
+
+```kotlin Trial.kt
+data class Trial(
+    val birthDate: LocalDate?,
+    val startsOn: LocalDate?
+) : Validatable {
+    override fun validation() = validation {
+        ::birthDate required { minAge(18) }
+        ::startsOn required {
+            futureOrPresent()
+            withinNext(30.days)
+            constraint("must start this year", code = "thisYear") { it.year == now(LocalDate::now).year }
+        }
+    }
+}
+```
+
+With the clock fixed on 2 November 2026, a trial for someone born in 2010 that starts in January breaks three rules:
+
+```kotlin
+val validity = Validity { clock = Clock.fixed(Instant.parse("2026-11-02T12:00:00Z"), ZoneOffset.UTC) }
+
+Trial(birthDate = LocalDate.of(2010, 1, 1), startsOn = LocalDate.of(2027, 1, 10)).validate(validity).violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `birthDate` | must be at least 18 years old | `minAge` |
+| `startsOn` | must be within the next 30d | `withinNext` |
+| `startsOn` | must start this year | `thisYear` |
+
+## The rules that read the clock
+
+| Rules | On |
+|---|---|
+| [`past`, `future`, `pastOrPresent`, `futureOrPresent`](/constraints/dates-and-times#past) | dates, times, instants, months, years |
+| [`minAge`, `maxAge`](/constraints/calendar#minage) | a birth date |
+| [`withinNext`, `withinLast`](/constraints/calendar#withinnext) | dates, times and instants |
+| [`today`](/constraints/calendar#today) | dates and times |
+| your own, with `now { }` | anything |
+
+The rules that compare two values, such as `after(other)` or `weekday()`, do not read the clock.
+
+## `now`, in your own rules
+
+`now(of)` reads the current time from the clock of the validation in progress, so a custom rule follows a fixed clock
+the same way the built-in ones do:
+
+```kotlin
+constraint("must start this year", code = "thisYear") { it.year == now(LocalDate::now).year }
+constraint("expires too soon") { it.isAfter(now(Instant::now).plusSeconds(3600)) }
+```
+
+`of` is any function that takes a `Clock`, such as `LocalDate::now`, `Instant::now` or `ZonedDateTime::now`.
+
+## Fixing the clock
+
+<Tabs>
+  <Tab title="In tests">
+    Pass a `Validity` with a fixed clock to the call under test. The default configuration does not change, so tests
+    that run in parallel do not see each other's clocks:
+
+```kotlin
+val validity = Validity { clock = Clock.fixed(Instant.parse("2026-11-02T12:00:00Z"), ZoneOffset.UTC) }
+
+trial.validate(validity)
+```
+  </Tab>
+  <Tab title="For the application">
+    Set the zone your business runs in, once, at startup:
+
+```kotlin
+Validity.configure { clock = Clock.system(ZoneId.of("America/Sao_Paulo")) }
+```
+  </Tab>
+  <Tab title="For one user">
+    "Today" in Tokyo is not "today" in São Paulo. Validate with the clock of the user's zone:
+
+```kotlin
+booking.validate(Validity { clock = Clock.system(user.zone) })
+```
+  </Tab>
+</Tabs>
+
+<Note>
+  A zoned or offset date and time is moved to the zone of the clock before `today` compares its date.
+</Note>

@@ -1,0 +1,73 @@
+---
+title: "Durations"
+description: "Range constraints for kotlin.time.Duration and java.time.Duration."
+icon: "timer"
+---
+
+import NullArguments from "/snippets/null-arguments.mdx";
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+The range constraints of lengths of time, for both `kotlin.time.Duration`, with arguments such as `15.minutes`,
+and `java.time.Duration`, with arguments such as `Duration.ofDays(1)`.
+
+<NullArguments />
+
+```kotlin Meeting.kt
+data class Meeting(
+    val length: Duration?,
+    val reminderBefore: java.time.Duration?
+) : Validatable {
+    override fun validation() = validation {
+        ::length required { between(min = 15.minutes, max = 4.hours) }
+        ::reminderBefore required { max(java.time.Duration.ofDays(1)) }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`min`](#min) | Is at least `min`. |
+| [`max`](#max) | Is at most `max`. |
+| [`greaterThan`](#greaterthan) | Is greater than `other`. |
+| [`lessThan`](#lessthan) | Is less than `other`. |
+| [`between`](#between) | Is between `min` and `max`, both included. |
+
+### `min`
+
+`min(min)` on `kotlin.time.Duration`, `java.time.Duration`
+
+Checks that the duration is at least `min`.
+
+<ConstraintFacts code="min" message="must be at least {min}" change='min = "…"' />
+
+### `max`
+
+`max(max)` on `kotlin.time.Duration`, `java.time.Duration`
+
+Checks that the duration is at most `max`.
+
+<ConstraintFacts code="max" message="must be at most {max}" change='max = "…"' />
+
+### `greaterThan`
+
+`greaterThan(other)` on `kotlin.time.Duration`, `java.time.Duration`
+
+Checks that the duration is greater than `other`.
+
+<ConstraintFacts code="greaterThan" message="must be greater than {other}" change='greaterThan = "…"' />
+
+### `lessThan`
+
+`lessThan(other)` on `kotlin.time.Duration`, `java.time.Duration`
+
+Checks that the duration is less than `other`.
+
+<ConstraintFacts code="lessThan" message="must be less than {other}" change='lessThan = "…"' />
+
+### `between`
+
+`between(min, max)` on `kotlin.time.Duration`, `java.time.Duration`
+
+Checks that the duration is between `min` and `max`, both included.
+
+<ConstraintFacts code="between" message="must be between {min} and {max}" change='between = "…"' />

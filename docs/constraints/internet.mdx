@@ -1,0 +1,171 @@
+---
+title: "Internet"
+description: "Emails, URLs, hosts, IP addresses, ports, slugs, JWTs and MIME types."
+icon: "globe"
+---
+
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Formats of the internet, checked on strings. They check the shape of the value, without network access: `email()` does
+not send an email, and `jwt()` does not verify a signature.
+
+```kotlin Webhook.kt
+data class Webhook(
+    val endpoint: String?,
+    val contact: String?,
+    val allowedNetworks: List<String>? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::endpoint required { url(schemes = setOf("https")) }
+        ::contact required { email() }
+        ::allowedNetworks ifPresent { each { cidr() } }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`email`](#email) | Is an email address: a local part, `@` and a domain with at least one dot. |
+| [`url`](#url) | Is an absolute URL with one of `schemes` and a host. |
+| [`hostname`](#hostname) | Is a hostname: labels of letters, digits and dashes, separated by dots, at most 253 characters. |
+| [`domain`](#domain) | Is a domain name with at least two labels and a top-level domain of letters or punycode, such as `example.com`. |
+| [`port`](#port) | Is a port number, from 0 to 65535. |
+| [`ip`](#ip) | Is an IPv4 or an IPv6 address. |
+| [`ipv4`](#ipv4) | Is an IPv4 address in dotted decimal, such as `192.168.0.1`, with no leading zeros. |
+| [`ipv6`](#ipv6) | Is an IPv6 address, such as `2001:db8::1`, with `::` compression and an embedded IPv4 address accepted. |
+| [`cidr`](#cidr) | Is a CIDR block: an IPv4 or IPv6 address, `/` and a prefix length that fits it, such as `10.0.0.0/8`. |
+| [`macAddress`](#macaddress) | Is a MAC address: six pairs of hexadecimal digits, separated all by `:` or all by `-`. |
+| [`slug`](#slug) | Is a slug: lowercase letters and digits in groups joined by single dashes, such as `hello-world-2`. |
+| [`jwt`](#jwt) | Has the format of a JWT: three Base64URL parts separated by dots, the last of which can be empty. |
+| [`dataUri`](#datauri) | Is a `data:` URI, such as `data:image/png;base64,iVBORw0KGgo=`. |
+| [`mimeType`](#mimetype) | Is a MIME type of a registered top-level type, such as `application/json` or `image/svg+xml`. |
+
+## Addresses
+
+### `email`
+
+`email()` on `String`
+
+Checks that the string is an email address: a local part, `@` and a domain with at least one dot.
+
+Quoted local parts and IP address domains are not accepted.
+
+<ConstraintFacts code="email" message="must be a valid email" change='email = "…"' />
+
+### `url`
+
+`url(schemes)` on `String`
+
+Checks that the string is an absolute URL with one of `schemes` and a host.
+
+<ConstraintFacts code="url" message="must be a valid URL" change='url = "…"' />
+
+### `hostname`
+
+`hostname()` on `String`
+
+Checks that the string is a hostname: labels of letters, digits and dashes, separated by dots, at most 253 characters.
+
+A single label, such as `localhost`, passes.
+
+<ConstraintFacts code="hostname" message="must be a valid hostname" change='hostname = "…"' />
+
+### `domain`
+
+`domain()` on `String`
+
+Checks that the string is a domain name with at least two labels and a top-level domain of letters or punycode, such as `example.com`.
+
+<ConstraintFacts code="domain" message="must be a valid domain name" change='domain = "…"' />
+
+### `port`
+
+`port()` on `Int`, `String`
+
+Checks that the number is a port number, from 0 to 65535.
+
+<ConstraintFacts code="port" message="must be a valid port number" change='port = "…"' />
+
+## Networks
+
+### `ip`
+
+`ip()` on `String`
+
+Checks that the string is an IPv4 or an IPv6 address.
+
+See `ipv4` and `ipv6` for what each accepts.
+
+<ConstraintFacts code="ip" message="must be a valid IP address" change='ip = "…"' />
+
+### `ipv4`
+
+`ipv4()` on `String`
+
+Checks that the string is an IPv4 address in dotted decimal, such as `192.168.0.1`, with no leading zeros.
+
+<ConstraintFacts code="ipv4" message="must be a valid IPv4 address" change='ipv4 = "…"' />
+
+### `ipv6`
+
+`ipv6()` on `String`
+
+Checks that the string is an IPv6 address, such as `2001:db8::1`, with `::` compression and an embedded IPv4 address accepted.
+
+A zone, such as `%eth0`, is not accepted.
+
+<ConstraintFacts code="ipv6" message="must be a valid IPv6 address" change='ipv6 = "…"' />
+
+### `cidr`
+
+`cidr()` on `String`
+
+Checks that the string is a CIDR block: an IPv4 or IPv6 address, `/` and a prefix length that fits it, such as `10.0.0.0/8`.
+
+<ConstraintFacts code="cidr" message="must be a valid CIDR block" change='cidr = "…"' />
+
+### `macAddress`
+
+`macAddress()` on `String`
+
+Checks that the string is a MAC address: six pairs of hexadecimal digits, separated all by `:` or all by `-`.
+
+<ConstraintFacts code="macAddress" message="must be a valid MAC address" change='macAddress = "…"' />
+
+## Web formats
+
+### `slug`
+
+`slug()` on `String`
+
+Checks that the string is a slug: lowercase letters and digits in groups joined by single dashes, such as `hello-world-2`.
+
+<ConstraintFacts code="slug" message="must be a valid slug" change='slug = "…"' />
+
+### `jwt`
+
+`jwt()` on `String`
+
+Checks that the string has the format of a JWT: three Base64URL parts separated by dots, the last of which can be empty.
+
+Only the format is checked. The signature is not verified.
+
+<ConstraintFacts code="jwt" message="must be a valid JWT" change='jwt = "…"' />
+
+### `dataUri`
+
+`dataUri()` on `String`
+
+Checks that the string is a `data:` URI, such as `data:image/png;base64,iVBORw0KGgo=`.
+
+<ConstraintFacts code="dataUri" message="must be a valid data URI" change='dataUri = "…"' />
+
+### `mimeType`
+
+`mimeType()` on `String`
+
+Checks that the string is a MIME type of a registered top-level type, such as `application/json` or `image/svg+xml`.
+
+Parameters, such as `; charset=utf-8`, are not accepted.
+
+<ConstraintFacts code="mimeType" message="must be a valid MIME type" change='mimeType = "…"' />

@@ -1,0 +1,103 @@
+---
+title: "Calendar"
+description: "Age, today, weekdays and windows of time around now."
+icon: "calendar-days"
+---
+
+import NullArguments from "/snippets/null-arguments.mdx";
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Rules about the calendar. `minAge`, `maxAge`, `today`, `withinNext` and `withinLast` read the
+[clock of the configuration](/guides/time), so tests can fix it. The windows take a `kotlin.time.Duration`, such as
+`30.days`.
+
+<NullArguments />
+
+```kotlin Appointment.kt
+data class Appointment(
+    val date: LocalDate?,
+    val patientBirthDate: LocalDate?
+) : Validatable {
+    override fun validation() = validation {
+        ::date required {
+            weekday()
+            withinNext(60.days)
+        }
+        ::patientBirthDate required { maxAge(120) }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`minAge`](#minage) | Someone born on the date is at least `min` years old today. |
+| [`maxAge`](#maxage) | Someone born on the date is at most `max` years old today. |
+| [`today`](#today) | Falls on today. |
+| [`withinNext`](#withinnext) | Is between today and `duration` from today, both included. |
+| [`withinLast`](#withinlast) | Is between `duration` before today and today, both included. |
+| [`weekday`](#weekday) | Falls from Monday to Friday. |
+| [`weekend`](#weekend) | Falls on a Saturday or a Sunday. |
+
+## Age
+
+### `minAge`
+
+`minAge(min)` on `LocalDate`
+
+Checks that someone born on the date is at least `min` years old today.
+
+<ConstraintFacts code="minAge" message="must be at least {min} years old" change='minAge = "…"' />
+
+### `maxAge`
+
+`maxAge(max)` on `LocalDate`
+
+Checks that someone born on the date is at most `max` years old today.
+
+<ConstraintFacts code="maxAge" message="must be at most {max} years old" change='maxAge = "…"' />
+
+## Around now
+
+### `today`
+
+`today()` on `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `OffsetDateTime`
+
+Checks that the date falls on today.
+
+ It is moved to the zone of the clock before its date is compared.
+
+<ConstraintFacts code="today" message="must be today" change='today = "…"' />
+
+### `withinNext`
+
+`withinNext(duration)` on `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`
+
+Checks that the date is between today and `duration` from today, both included.
+
+<ConstraintFacts code="withinNext" message="must be within the next {duration}" change='withinNext = "…"' />
+
+### `withinLast`
+
+`withinLast(duration)` on `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `OffsetDateTime`, `Instant`
+
+Checks that the date is between `duration` before today and today, both included.
+
+<ConstraintFacts code="withinLast" message="must be within the last {duration}" change='withinLast = "…"' />
+
+## Days of the week
+
+### `weekday`
+
+`weekday()` on `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `OffsetDateTime`
+
+Checks that the date falls from Monday to Friday.
+
+<ConstraintFacts code="weekday" message="must be a weekday" change='weekday = "…"' />
+
+### `weekend`
+
+`weekend()` on `LocalDate`, `LocalDateTime`, `ZonedDateTime`, `OffsetDateTime`
+
+Checks that the date falls on a Saturday or a Sunday.
+
+<ConstraintFacts code="weekend" message="must be on a weekend" change='weekend = "…"' />

@@ -1,0 +1,250 @@
+---
+title: "Numbers"
+description: "Range, sign, multiples, digits and decimal places of every number type, unsigned included."
+icon: "hash"
+---
+
+import NullArguments from "/snippets/null-arguments.mdx";
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+The constraints of numbers. The range and sign rules work on every number type, `Int`, `Long`, `Short`, `Byte`,
+`Double`, `Float`, `BigInteger` and `BigDecimal`, with an argument of the same type.
+
+<NullArguments />
+
+```kotlin PriceTag.kt
+data class PriceTag(
+    val price: BigDecimal?,
+    val discountPercent: Int?,
+    val packSize: Int?,
+    val stock: Long?
+) : Validatable {
+    override fun validation() = validation {
+        ::price required {
+            positive()
+            maxDecimalPlaces(2)
+        }
+        ::discountPercent required { between(min = 0, max = 90) }
+        ::packSize required { multipleOf(6) }
+        ::stock required { positiveOrZero() }
+    }
+}
+```
+
+Kotlin's unsigned types, `UInt`, `ULong`, `UShort` and `UByte`, have the range constraints too, with arguments written
+with the `u` suffix. They cannot be negative, so they have no sign rules:
+
+```kotlin Packet.kt
+data class Packet(
+    val ttl: UByte?,
+    val port: UShort?,
+    val sequence: ULong?
+) : Validatable {
+    override fun validation() = validation {
+        ::ttl required { between(min = 1u, max = 64u) }
+        ::port required { min(1024u) }
+        ::sequence required { min(1uL) }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`min`](#min) | Is at least `min`. |
+| [`max`](#max) | Is at most `max`. |
+| [`greaterThan`](#greaterthan) | Is greater than `other`. |
+| [`lessThan`](#lessthan) | Is less than `other`. |
+| [`between`](#between) | Is between `min` and `max`, both included. |
+| [`positive`](#positive) | Is greater than zero. |
+| [`negative`](#negative) | Is less than zero. |
+| [`positiveOrZero`](#positiveorzero) | Is zero or greater. |
+| [`negativeOrZero`](#negativeorzero) | Is zero or less. |
+| [`integer`](#integer) | Has no fractional part. |
+| [`multipleOf`](#multipleof) | Is a multiple of `factor`. |
+| [`finite`](#finite) | Is neither infinite nor `NaN`. |
+| [`minDigits`](#mindigits) | Has at least `min` digits, not counting the sign. |
+| [`maxDigits`](#maxdigits) | Has at most `max` digits, not counting the sign. |
+| [`digitCount`](#digitcount) | Has exactly `count` digits, not counting the sign. |
+| [`maxIntegerDigits`](#maxintegerdigits) | Has at most `max` digits before the decimal point. |
+| [`maxDecimalPlaces`](#maxdecimalplaces) | Has at most `max` digits after the decimal point. |
+| [`decimalPlaces`](#decimalplaces) | Has exactly `count` digits after the decimal point. |
+| [`minDecimalPlaces`](#mindecimalplaces) | Has at least `min` digits after the decimal point. |
+
+## Range
+
+### `min`
+
+`min(min)` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`, and the unsigned `UInt`, `ULong`, `UShort`, `UByte`
+
+Checks that the number is at least `min`.
+
+<ConstraintFacts code="min" message="must be at least {min}" change='min = "…"' />
+
+### `max`
+
+`max(max)` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`, and the unsigned `UInt`, `ULong`, `UShort`, `UByte`
+
+Checks that the number is at most `max`.
+
+<ConstraintFacts code="max" message="must be at most {max}" change='max = "…"' />
+
+### `greaterThan`
+
+`greaterThan(other)` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`, and the unsigned `UInt`, `ULong`, `UShort`, `UByte`
+
+Checks that the number is greater than `other`.
+
+<ConstraintFacts code="greaterThan" message="must be greater than {other}" change='greaterThan = "…"' />
+
+### `lessThan`
+
+`lessThan(other)` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`, and the unsigned `UInt`, `ULong`, `UShort`, `UByte`
+
+Checks that the number is less than `other`.
+
+<ConstraintFacts code="lessThan" message="must be less than {other}" change='lessThan = "…"' />
+
+### `between`
+
+`between(min, max)` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`, and the unsigned `UInt`, `ULong`, `UShort`, `UByte`
+
+Checks that the number is between `min` and `max`, both included.
+
+<ConstraintFacts code="between" message="must be between {min} and {max}" change='between = "…"' />
+
+## Sign
+
+### `positive`
+
+`positive()` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
+
+Checks that the number is greater than zero.
+
+<ConstraintFacts code="positive" message="must be positive" change='positive = "…"' />
+
+### `negative`
+
+`negative()` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
+
+Checks that the number is less than zero.
+
+<ConstraintFacts code="negative" message="must be negative" change='negative = "…"' />
+
+### `positiveOrZero`
+
+`positiveOrZero()` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
+
+Checks that the number is zero or greater.
+
+<ConstraintFacts code="positiveOrZero" message="must be positive or zero" change='positiveOrZero = "…"' />
+
+### `negativeOrZero`
+
+`negativeOrZero()` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
+
+Checks that the number is zero or less.
+
+<ConstraintFacts code="negativeOrZero" message="must be negative or zero" change='negativeOrZero = "…"' />
+
+## Whole numbers and multiples
+
+### `integer`
+
+`integer()` on `Double`, `Float`, `BigDecimal`
+
+Checks that the number has no fractional part.
+
+Infinity and `NaN` fail.
+
+Trailing zeros do not count, so `2.00` passes.
+
+<ConstraintFacts code="integer" message="must be an integer" change='integer = "…"' />
+
+### `multipleOf`
+
+`multipleOf(factor)` on every number type: `Int`, `Long`, `Short`, `Byte`, `BigInteger`, `BigDecimal`, `Double`, `Float`
+
+Checks that the number is a multiple of `factor`.
+
+The remainder is computed in decimal, so `0.3` is a multiple of `0.1`. Infinity and `NaN` fail.
+
+<ConstraintFacts code="multipleOf" message="must be a multiple of {factor}" change='multipleOf = "…"' />
+
+### `finite`
+
+`finite()` on `Double`, `Float`
+
+Checks that the number is neither infinite nor `NaN`.
+
+<ConstraintFacts code="finite" message="must be finite" change='finite = "…"' />
+
+## Digits
+
+### `minDigits`
+
+`minDigits(min)` on `Int`, `Long`, `Short`, `Byte`, `BigInteger`
+
+Checks that the number has at least `min` digits, not counting the sign.
+
+<ConstraintFacts code="minDigits" message="must have at least {min} digits" change='minDigits = "…"' />
+
+### `maxDigits`
+
+`maxDigits(max)` on `Int`, `Long`, `Short`, `Byte`, `BigInteger`
+
+Checks that the number has at most `max` digits, not counting the sign.
+
+<ConstraintFacts code="maxDigits" message="must have at most {max} digits" change='maxDigits = "…"' />
+
+### `digitCount`
+
+`digitCount(count)` on `Int`, `Long`, `Short`, `Byte`, `BigInteger`
+
+Checks that the number has exactly `count` digits, not counting the sign.
+
+<ConstraintFacts code="digitCount" message="must have exactly {count} digits" change='digitCount = "…"' />
+
+### `maxIntegerDigits`
+
+`maxIntegerDigits(max)` on `BigDecimal`
+
+Checks that the number has at most `max` digits before the decimal point.
+
+<ConstraintFacts code="maxIntegerDigits" message="must have at most {max} integer digits" change='maxIntegerDigits = "…"' />
+
+## Decimal places
+
+### `maxDecimalPlaces`
+
+`maxDecimalPlaces(max)` on `BigDecimal`, `Double`, `Float`
+
+Checks that the number has at most `max` digits after the decimal point.
+
+Trailing zeros do not count, so `1.50` has one decimal place. On `Double` and `Float`, the number is read in decimal, the way it prints. Infinity and `NaN` fail.
+
+<ConstraintFacts code="maxDecimalPlaces" message="must have at most {max} decimal places" change='maxDecimalPlaces = "…"' />
+
+### `decimalPlaces`
+
+`decimalPlaces(count)` on `BigDecimal`
+
+Checks that the number has exactly `count` digits after the decimal point.
+
+Trailing zeros count, so `1.50` has two decimal places, and a whole number has none.
+
+<ConstraintFacts code="decimalPlaces" message="must have exactly {count} decimal places" change='decimalPlaces = "…"' />
+
+### `minDecimalPlaces`
+
+`minDecimalPlaces(min)` on `BigDecimal`
+
+Checks that the number has at least `min` digits after the decimal point.
+
+Trailing zeros count, so `1.50` has two decimal places.
+
+<ConstraintFacts code="minDecimalPlaces" message="must have at least {min} decimal places" change='minDecimalPlaces = "…"' />
+
+<Note>
+  `Double` and `Float` are binary, so `0.1 + 0.2` is `0.30000000000000004`. `multipleOf` and `maxDecimalPlaces` on them
+  read the number in decimal, the way it prints, so `0.3` is a multiple of `0.1`. For money, prefer `BigDecimal`.
+</Note>

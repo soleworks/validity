@@ -1,0 +1,116 @@
+---
+title: "Collections and maps"
+description: "each, eachKey and eachValue run rules on every element, key or value, with the index or the key in the path."
+icon: "layers"
+---
+
+A collection has two kinds of rules: rules about the collection itself, such as its size, and rules about each of its
+elements. Both go in the block of the property:
+
+```kotlin CartItem.kt
+private val SKU_FORMAT = Regex("""[A-Z]{3}-\d{4}""")
+
+data class CartItem(
+    val sku: String?,
+    val quantity: Int?
+) : Validatable {
+    override fun validation() = validation {
+        ::sku required { matches(SKU_FORMAT) }
+        ::quantity required { between(min = 1, max = 99) }
+    }
+}
+```
+
+```kotlin Cart.kt
+data class Cart(
+    val items: List<CartItem>?,
+    val coupons: List<String>? = null,
+    val prices: Map<String, BigDecimal>? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::items required {
+            notEmpty()
+            maxSize(50)
+            each { valid() }
+        }
+        ::coupons ifPresent {
+            distinct()
+            each { length(8) }
+        }
+        ::prices ifPresent {
+            eachKey { currencyCode() }
+            eachValue { positive() }
+        }
+    }
+}
+```
+
+```kotlin
+Cart(
+    items = listOf(CartItem(sku = "abc-1", quantity = 0), CartItem(sku = "XYZ-1234", quantity = 3)),
+    coupons = listOf("SUMMER24", "SUMMER24", "OFF"),
+    prices = mapOf("USD" to "10.00".toBigDecimal(), "EURO" to "-1".toBigDecimal())
+).validate().violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `items[0].sku` | must match [A-Z]\{3\}-\d\{4\} | `matches` |
+| `items[0].quantity` | must be between 1 and 99 | `between` |
+| `coupons` | must not contain duplicates | `distinct` |
+| `coupons[2]` | must have exactly 8 characters | `length` |
+| `prices[EURO]` | must be a valid ISO 4217 currency code | `currencyCode` |
+| `prices[EURO]` | must be positive | `positive` |
+
+## `each`
+
+`each { }` runs its block on every element, and the path of an element is the path of the collection and its index:
+`items[0]`, `coupons[2]`. It works on any `Iterable`, such as a `List` or a `Set`, and on arrays. The block is a normal
+block of constraints, so it can hold `valid()` for objects, or another `each` for a list of lists:
+
+```kotlin
+::boxes required { each { each { minLength(5) } } }   // boxes[0][1]
+```
+
+## Maps
+
+On a map, `each` runs on every entry, as a `Map.Entry`. Most rules are about only the keys or only the values, and two
+shortcuts give the block the right type:
+
+| Call | The block runs on | The path |
+|---|---|---|
+| `each { }` | every `Map.Entry<K, V>` | `prices[USD]` |
+| `eachKey { }` | every key `K` | `prices[USD]` |
+| `eachValue { }` | every value `V` | `prices[USD]` |
+
+Every path uses the key, so a violation about a key and one about its value point at the same entry.
+
+## Rules about the collection
+
+The constraints of the collection itself sit next to `each`:
+
+<CardGroup cols={2}>
+  <Card title="Size" icon="ruler" href="/constraints/collections#minsize">
+    `minSize`, `maxSize`, `size`, `sizeBetween`, `notEmpty`, `empty`
+  </Card>
+  <Card title="Content" icon="search" href="/constraints/collections#contains">
+    `contains`, `containsAll`, `containsAny`, `containsNone`, `distinct`, `distinctBy`
+  </Card>
+</CardGroup>
+
+Maps have their own: [`containsKey`, `onlyKeys`, `containsValue`](/constraints/maps) and the size rules, which count
+entries.
+
+## The order of the violations
+
+Inside one property, the rules of the collection come first, then the violations of its elements, in the order of the
+elements. That is why `distinct` comes before `coupons[2]` above.
+
+## Elements that can be null
+
+In a `List<String?>`, an element can be `null`, and the block of `each` receives a `String?`, which the string
+constraints do not accept. Check it with `notNull()`:
+
+```kotlin
+::nicknames required { each { notNull() } }
+```

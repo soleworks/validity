@@ -22,7 +22,8 @@ removed.
 2. **The Release workflow keeps a release pull request open.** On every push to `main`,
    [release-please](https://github.com/googleapis/release-please) updates it with the next version, worked out from the
    commits, and the entries of `CHANGELOG.md`: `feat` and `fix` commits, and every breaking change. It also sets the
-   version in `gradle.properties` and in the installation snippet of the README.
+   version in `gradle.properties`, in the installation snippet of the README, and in the `version` variable of
+   `docs/docs.json`, which every page of the docs site reads as `{{version}}`.
 3. **Merging that pull request is the release.** release-please tags the merge commit (`v0.2.0`) and creates the
    GitHub release with its changelog. The same workflow then checks that the build has that version, builds it, and
    publishes `validity-core` and `validity-phone`, signed, to Maven Central.

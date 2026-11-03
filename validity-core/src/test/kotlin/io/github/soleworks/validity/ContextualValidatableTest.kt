@@ -6,6 +6,11 @@ import io.github.soleworks.validity.samples.CartItem
 import io.github.soleworks.validity.samples.Directory
 import io.github.soleworks.validity.samples.Enrollment
 import io.github.soleworks.validity.samples.KnownUsers
+import io.github.soleworks.validity.samples.docs.Invite
+import io.github.soleworks.validity.samples.docs.KnownMembers
+import io.github.soleworks.validity.samples.docs.Purchase
+import io.github.soleworks.validity.samples.docs.PurchaseLine
+import io.github.soleworks.validity.samples.docs.Shopper
 import io.github.soleworks.validity.samples.readme.Checkout
 import io.github.soleworks.validity.samples.readme.Customer
 import io.github.soleworks.validity.samples.readme.Invitation
@@ -130,6 +135,33 @@ class ContextualValidatableTest {
 
             result.violations shouldBe listOf(
                 Violation(path = "total", message = "deve ser no máximo 100", code = "max")
+            )
+        }
+
+        @Test
+        fun `given a purchase over the limit with a line out of the catalog should report both for the shopper`() {
+            val shopper = Shopper(creditLimit = "100".toBigDecimal(), catalog = setOf("BOOK-1"))
+            val purchase = Purchase(
+                total = "150".toBigDecimal(),
+                lines = listOf(PurchaseLine(sku = "BOOK-1"), PurchaseLine(sku = "TV-9"))
+            )
+
+            val result = purchase.validateBlocking(shopper)
+
+            result.violations shouldBe listOf(
+                Violation(path = "total", message = "must be at most 100", code = "max"),
+                Violation(path = "lines[1].sku", message = "is not sold in your region", code = "catalog")
+            )
+        }
+
+        @Test
+        fun `given an invite for a member should report the lookup that suspends`() {
+            val invite = Invite(email = "ana@mail.com")
+
+            val result = invite.validateBlocking(KnownMembers("ana@mail.com"))
+
+            result.violations shouldBe listOf(
+                Violation(path = "email", message = "is already a member", code = "member")
             )
         }
     }

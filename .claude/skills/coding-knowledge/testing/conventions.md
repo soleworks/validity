@@ -45,11 +45,16 @@ A constraint test builds a `ValidationNode` with the constraint and validates it
 validates a sample class: that tests the entry, not the constraint. Each constraint has at least a
 test that accepts and one that reports with the default message, which also covers that message.
 
-## Samples and the README
+## Samples, the README and the docs
 
 Tests of an entry validate the classes in `samples/`, written the way a user writes them. Each code
 example of the README is a file in `samples/readme/`, so the README only shows code that compiles and
 whose result a test checks. A change to the README's examples changes those files first.
+
+The docs site (`docs/`) does the same with `samples/docs/`: a code block titled with a file name, such
+as `` ```kotlin Account.kt ``, holds that sample without its package and imports, and the violations
+shown after it are the ones a test of the entry checks. Change the sample first, then the block.
+Checked by the harness (`DocsConventionsTest`).
 
 ## Running the checks
 

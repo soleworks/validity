@@ -1,0 +1,93 @@
+---
+title: "Configuration"
+description: "Validity.configure sets the messages and the clock once, at startup, and Validity { } varies them for one call."
+icon: "settings"
+---
+
+A configuration of Validity has two things: the [messages](/guides/messages) of the violations, and the
+[clock](/guides/time) that says what "now" is. Every validation uses one.
+
+## Once, at startup
+
+`Validity.configure { }` replaces the default configuration, the one every validation uses unless it is given another:
+
+```kotlin
+fun main() {
+    Validity.configure {
+        messages {
+            required = "é obrigatório"
+            minLength = "deve ter pelo menos {min} caracteres"
+            brazil { cpf = "CPF inválido" }
+        }
+        clock = Clock.system(ZoneId.of("America/Sao_Paulo"))
+    }
+
+    // ... start the application
+}
+```
+
+Each call starts from the built-in defaults, so a second call undoes the first. Call it once, before the first
+validation.
+
+## For one call
+
+`Validity { }` creates a configuration that starts from the default one and changes only what its block says. Pass it
+to `validate`: the default configuration does not change, so other requests keep theirs.
+
+```kotlin
+val portuguese = Validity {
+    messages {
+        minLength = "deve ter pelo menos {min} caracteres"
+        email = "deve ser um e-mail válido"
+    }
+}
+
+User(name = "A", email = "ana@", age = null).validate(portuguese).violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `name` | deve ter pelo menos 2 caracteres | `minLength` |
+| `email` | deve ser um e-mail válido | `email` |
+
+The codes stay the same in every language, which is what lets programs ignore the messages.
+
+Every entry takes one: `validate(validity)`, `validateBlocking(validity)`, the `OrThrow` versions, and, for a
+[`ContextualValidatable`](/guides/context), `validate(context, validity)`. The configuration reaches the nested objects
+and elements too.
+
+## Common uses
+
+<AccordionGroup>
+  <Accordion title="One language per request" icon="languages">
+    Build one `Validity` per language at startup, and pick it from the `Accept-Language` of the request:
+
+```kotlin
+val byLanguage = mapOf("pt" to portuguese, "es" to spanish)
+
+order.validate(byLanguage[language] ?: Validity { })
+```
+  </Accordion>
+  <Accordion title="A fixed clock in tests" icon="clock">
+    Rules about time read the clock of the configuration, so a test can fix "now" for one call without touching the
+    default:
+
+```kotlin
+val validity = Validity { clock = Clock.fixed(Instant.parse("2026-11-02T12:00:00Z"), ZoneOffset.UTC) }
+
+subscription.validate(validity)
+```
+  </Accordion>
+  <Accordion title="The time zone of a user" icon="globe">
+    "Today" depends on the zone. Give the call the clock of the user's zone:
+
+```kotlin
+booking.validate(Validity { clock = Clock.system(user.zone) })
+```
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  `Validity { }` builds its configuration when it is created, on top of the default of that moment. Create the ones you
+  reuse, such as one per language, after `Validity.configure`, and keep them in a value.
+</Note>

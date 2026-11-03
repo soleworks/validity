@@ -1,0 +1,108 @@
+---
+title: "Custom constraints"
+description: "constraint { } for a rule of your own, and a reusable constraint that looks exactly like a built-in one."
+icon: "wand-sparkles"
+---
+
+The built-in constraints cover the common shapes of data. Your domain has its own: a SKU, a box size, a code your
+partners send. There are two ways to write them, depending on whether the rule is used once or everywhere.
+
+## Once: constraint { }
+
+Inside the block of a property, `constraint` takes a message, an optional code, and a predicate that receives the value
+and returns `true` when it is valid:
+
+```kotlin
+::stock required {
+    constraint("must be a multiple of the box size", code = "box") { it % 12 == 0 }
+}
+```
+
+The value has the type of the block, `Int` here, so the predicate needs no casts and no `null` checks. In the message,
+`{path}` and `{value}` are filled in.
+
+## Everywhere: an extension on ValidationNode
+
+A constraint you use in several classes is a function. Every built-in constraint is an extension of
+`ValidationNode<V>` that calls `constraint`, and yours can be too:
+
+```kotlin SkuConstraints.kt
+private val SKU_FORMAT = Regex("""[A-Z]{3}-\d{4}""")
+
+fun ValidationNode<String>.sku(
+    message: String = "must be a SKU such as ABC-1234"
+) {
+    constraint(message = message, code = "sku") { SKU_FORMAT.matches(it) }
+}
+```
+
+It is then called like any other, and autocomplete offers it only where the value is a `String`:
+
+```kotlin Product.kt
+data class Product(
+    val sku: String?,
+    val name: String?,
+    val stock: Int?
+) : Validatable {
+    override fun validation() = validation {
+        ::sku required { sku() }
+        ::name required { minLength(3, message = { min -> "has $length characters, needs $min" }) }
+        ::stock required {
+            constraint("must be a multiple of the box size", code = "box") { it % 12 == 0 }
+        }
+    }
+}
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `sku` | must be a SKU such as ABC-1234 | `sku` |
+| `name` | has 2 characters, needs 3 | `minLength` |
+| `stock` | must be a multiple of the box size | `box` |
+
+Follow the conventions of the built-in constraints and yours will read the same:
+
+- **The code is the name of the function**, so a program can tell `sku` from `minLength`.
+- **The message is a parameter with a default**, so one call can change it.
+- **The message completes a sentence about the value**, in lower case: `must be a SKU such as ABC-1234`.
+- **`null` arguments skip the rule**, as `min(null)` does, so a rule fed by optional data never fails on its own.
+
+<Tip>
+  To let users change the default message of your constraints once, for the whole application, give them a messages
+  class of your own. See [messages of a module](/guides/messages#messages-of-your-own-constraints).
+</Tip>
+
+## A message built from the value
+
+Every built-in constraint that takes an argument has a second form whose message is a function. It receives the value
+as `this` and the argument as its parameter, so the message can say what is wrong with this value:
+
+```kotlin
+::name required { minLength(3, message = { min -> "has $length characters, needs $min" }) }
+```
+
+`constraint` has the same form: `constraint(message = { "$it is not in stock" }) { it in stock }`.
+
+## Rules that suspend
+
+The predicate and the message are `suspend` lambdas, so a constraint can call a repository or a client directly:
+
+```kotlin
+::coupon ifPresent {
+    constraint("has expired", code = "expired") { coupons.find(it)?.isValid() == true }
+}
+```
+
+See [Coroutines](/guides/coroutines) for how that runs, and [Fail fast](/guides/fail-fast) to run a lookup only after
+the format is right.
+
+## Rules about time
+
+A rule about "now" should read the clock of the [configuration](/guides/time), not the system clock, so tests can fix
+it. `now { }` gives you the current time from that clock:
+
+```kotlin
+::startsOn required {
+    constraint("must start this year", code = "thisYear") { it.year == now(LocalDate::now).year }
+}
+```

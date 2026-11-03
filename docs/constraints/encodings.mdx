@@ -1,0 +1,86 @@
+---
+title: "Encodings"
+description: "Base64, Base32, Base58, hexadecimal and JSON."
+icon: "file-code"
+---
+
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Text that encodes something else, checked on strings. They check that the text decodes, not what it decodes to.
+
+```kotlin Attachment.kt
+data class Attachment(
+    val content: String?,
+    val checksum: String?,
+    val attributes: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::content required { base64() }
+        ::checksum required { hash(HashAlgorithm.SHA256) }
+        ::attributes ifPresent { json() }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`base64`](#base64) | Is Base64 with the standard alphabet and its `=` padding. |
+| [`base64Url`](#base64url) | Is Base64 with the URL-safe alphabet (`-` and `_`) and no padding. |
+| [`base32`](#base32) | Is Base32 (RFC 4648) in uppercase, with its `=` padding. |
+| [`base58`](#base58) | Is not empty and is Base58, the Bitcoin alphabet without `0`, `O`, `I` and `l`. |
+| [`hexadecimal`](#hexadecimal) | Is not empty and has only hexadecimal digits, in either case. |
+| [`json`](#json) | Is one valid JSON value: an object, an array, a string, a number, `true`, `false` or `null`. |
+
+### `base64`
+
+`base64()` on `String`
+
+Checks that the string is Base64 with the standard alphabet and its `=` padding.
+
+The empty string passes.
+
+<ConstraintFacts code="base64" message="must be valid Base64" change='base64 = "…"' />
+
+### `base64Url`
+
+`base64Url()` on `String`
+
+Checks that the string is Base64 with the URL-safe alphabet (`-` and `_`) and no padding.
+
+The empty string passes.
+
+<ConstraintFacts code="base64Url" message="must be valid URL-safe Base64" change='base64Url = "…"' />
+
+### `base32`
+
+`base32()` on `String`
+
+Checks that the string is Base32 (RFC 4648) in uppercase, with its `=` padding.
+
+The empty string passes.
+
+<ConstraintFacts code="base32" message="must be valid Base32" change='base32 = "…"' />
+
+### `base58`
+
+`base58()` on `String`
+
+Checks that the string is not empty and is Base58, the Bitcoin alphabet without `0`, `O`, `I` and `l`.
+
+<ConstraintFacts code="base58" message="must be valid Base58" change='base58 = "…"' />
+
+### `hexadecimal`
+
+`hexadecimal()` on `String`
+
+Checks that the string is not empty and has only hexadecimal digits, in either case.
+
+<ConstraintFacts code="hexadecimal" message="must be hexadecimal" change='hexadecimal = "…"' />
+
+### `json`
+
+`json()` on `String`
+
+Checks that the string is one valid JSON value: an object, an array, a string, a number, `true`, `false` or `null`.
+
+<ConstraintFacts code="json" message="must be valid JSON" change='json = "…"' />

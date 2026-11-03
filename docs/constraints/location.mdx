@@ -1,0 +1,127 @@
+---
+title: "Location"
+description: "Countries, languages, locales, time zones, coordinates and postal codes."
+icon: "map-pin"
+---
+
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Where something is, or which language it speaks. `postalCode(country)` knows the formats of {{postalCountries}} countries, by their
+ISO 3166-1 alpha-2 code, and checks nothing when the country is `null` or unknown, so the rule can follow a country
+field that may be missing.
+
+```kotlin Store.kt
+data class Store(
+    val country: String?,
+    val zipCode: String?,
+    val position: String?,
+    val timeZone: String?,
+    val locale: String?
+) : Validatable {
+    override fun validation() = validation {
+        ::country required { isoCountryCode() }
+        ::zipCode required { postalCode(country) }
+        ::position required { coordinates() }
+        ::timeZone required { timeZone() }
+        ::locale required { locale() }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`isoCountryCode`](#isocountrycode) | Is an ISO 3166-1 alpha-2 country code, such as `BR`, in uppercase. |
+| [`isoCountryCodeAlpha3`](#isocountrycodealpha3) | Is an ISO 3166-1 alpha-3 country code, such as `BRA`, in uppercase. |
+| [`languageCode`](#languagecode) | Is an ISO 639-1 language code, such as `pt`, in lowercase. |
+| [`locale`](#locale) | Is a well-formed IETF BCP 47 language tag, such as `pt-BR` or `zh-Hant-TW`. |
+| [`timeZone`](#timezone) | Is a time zone id the JVM knows, such as `America/Sao_Paulo` or `UTC`. |
+| [`latitude`](#latitude) | Is a latitude, from -90 to 90. |
+| [`longitude`](#longitude) | Is a longitude, from -180 to 180. |
+| [`coordinates`](#coordinates) | Is a latitude from -90 to 90 and a longitude from -180 to 180, separated by a comma, such as `-23.5505, -46.6333`. |
+| [`postalCode`](#postalcode) | Is a postal code of `country`. |
+
+## Countries and languages
+
+### `isoCountryCode`
+
+`isoCountryCode()` on `String`
+
+Checks that the string is an ISO 3166-1 alpha-2 country code, such as `BR`, in uppercase.
+
+<ConstraintFacts code="isoCountryCode" message="must be a valid ISO 3166-1 alpha-2 country code" change='isoCountryCode = "…"' />
+
+### `isoCountryCodeAlpha3`
+
+`isoCountryCodeAlpha3()` on `String`
+
+Checks that the string is an ISO 3166-1 alpha-3 country code, such as `BRA`, in uppercase.
+
+<ConstraintFacts code="isoCountryCodeAlpha3" message="must be a valid ISO 3166-1 alpha-3 country code" change='isoCountryCodeAlpha3 = "…"' />
+
+### `languageCode`
+
+`languageCode()` on `String`
+
+Checks that the string is an ISO 639-1 language code, such as `pt`, in lowercase.
+
+The withdrawn codes `in`, `iw`, `ji` and `mo` fail.
+
+<ConstraintFacts code="languageCode" message="must be a valid ISO 639-1 language code" change='languageCode = "…"' />
+
+### `locale`
+
+`locale()` on `String`
+
+Checks that the string is a well-formed IETF BCP 47 language tag, such as `pt-BR` or `zh-Hant-TW`.
+
+<ConstraintFacts code="locale" message="must be a valid locale" change='locale = "…"' />
+
+### `timeZone`
+
+`timeZone()` on `String`
+
+Checks that the string is a time zone id the JVM knows, such as `America/Sao_Paulo` or `UTC`.
+
+<ConstraintFacts code="timeZone" message="must be a valid time zone" change='timeZone = "…"' />
+
+## Latitude and longitude
+
+### `latitude`
+
+`latitude()` on `Double`, `Float`, `BigDecimal`, `String`
+
+Checks that the number is a latitude, from -90 to 90.
+
+<ConstraintFacts code="latitude" message="must be a valid latitude" change='latitude = "…"' />
+
+### `longitude`
+
+`longitude()` on `Double`, `Float`, `BigDecimal`, `String`
+
+Checks that the number is a longitude, from -180 to 180.
+
+<ConstraintFacts code="longitude" message="must be a valid longitude" change='longitude = "…"' />
+
+### `coordinates`
+
+`coordinates()` on `String`
+
+Checks that the string is a latitude from -90 to 90 and a longitude from -180 to 180, separated by a comma, such as `-23.5505, -46.6333`.
+
+<ConstraintFacts code="coordinates" message="must be a valid latitude and longitude pair" change='coordinates = "…"' />
+
+## Postal codes
+
+### `postalCode`
+
+`postalCode(country)` on `String`
+
+Checks that the string is a postal code of `country`.
+
+When `country` is `null` or has no known format, nothing is checked. Codes are known for {{postalCountries}} countries.
+
+<ConstraintFacts code="postalCode" message="must be a valid postal code for {country}" change='postalCode = "…"' />
+
+The countries `postalCode` knows: AD, AR, AT, AU, AZ, BA, BD, BE, BG, BR, BY, CA, CH, CN, CO, CZ, DE, DK, DO, DZ, EE,
+ES, FI, FR, GB, GR, HR, HT, HU, ID, IE, IL, IN, IR, IS, IT, JO, JP, KE, KR, LI, LK, LT, LU, LV, MC, MG, MT, MX, MY, NL,
+NO, NP, NZ, PK, PL, PR, PT, RO, RU, SA, SE, SG, SI, SK, TH, TN, TW, UA, US, ZA and ZM.

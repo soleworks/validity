@@ -1,0 +1,138 @@
+---
+title: "Maps"
+description: "Size, keys and values of a Map."
+icon: "braces"
+---
+
+import NullArguments from "/snippets/null-arguments.mdx";
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+The constraints of a `Map` as a whole. Their size messages count entries, not items, so they have messages of their
+own (`minEntries`, `maxEntries`, `entries`, `entriesBetween`). To check every key or value, use
+[`eachKey` and `eachValue`](/guides/collections-and-maps#maps).
+
+<NullArguments />
+
+```kotlin Translations.kt
+private val LANGUAGES = setOf("en", "pt", "es")
+
+data class Translations(
+    val titles: Map<String, String>?
+) : Validatable {
+    override fun validation() = validation {
+        ::titles required {
+            containsKey("en")
+            onlyKeys(LANGUAGES)
+            eachValue { maxLength(80) }
+        }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`minSize`](#minsize) | Has at least `min` entries. |
+| [`maxSize`](#maxsize) | Has at most `max` entries. |
+| [`size`](#size) | Has exactly `size` entries. |
+| [`sizeBetween`](#sizebetween) | Has between `min` and `max` entries, both included. |
+| [`notEmpty`](#notempty) | Has at least one entry. |
+| [`empty`](#empty) | Has no entries. |
+| [`containsKey`](#containskey) | Has the key `key`. |
+| [`containsKeys`](#containskeys) | Has every one of `keys`. |
+| [`notContainsKey`](#notcontainskey) | Does not have the key `key`. |
+| [`onlyKeys`](#onlykeys) | Every key of the map is one of `keys`. |
+| [`containsValue`](#containsvalue) | Has `value` as the value of some entry. |
+
+## How many
+
+### `minSize`
+
+`minSize(min)` on `Map`
+
+Checks that the map has at least `min` entries.
+
+<ConstraintFacts code="minSize" message="must have at least {min} entries" change='minEntries = "…"' />
+
+### `maxSize`
+
+`maxSize(max)` on `Map`
+
+Checks that the map has at most `max` entries.
+
+<ConstraintFacts code="maxSize" message="must have at most {max} entries" change='maxEntries = "…"' />
+
+### `size`
+
+`size(size)` on `Map`
+
+Checks that the map has exactly `size` entries.
+
+<ConstraintFacts code="size" message="must have exactly {size} entries" change='entries = "…"' />
+
+### `sizeBetween`
+
+`sizeBetween(min, max)` on `Map`
+
+Checks that the map has between `min` and `max` entries, both included.
+
+<ConstraintFacts code="sizeBetween" message="must have between {min} and {max} entries" change='entriesBetween = "…"' />
+
+### `notEmpty`
+
+`notEmpty()` on `Map`
+
+Checks that the map has at least one entry.
+
+<ConstraintFacts code="notEmpty" message="must not be empty" change='notEmpty = "…"' />
+
+### `empty`
+
+`empty()` on `Map`
+
+Checks that the map has no entries.
+
+<ConstraintFacts code="empty" message="must be empty" change='empty = "…"' />
+
+## Keys and values
+
+### `containsKey`
+
+`containsKey(key)` on `Map`
+
+Checks that the map has the key `key`.
+
+<ConstraintFacts code="containsKey" message="must contain the key {key}" change='containsKey = "…"' />
+
+### `containsKeys`
+
+`containsKeys(keys)` on `Map`
+
+Checks that the map has every one of `keys`.
+
+<ConstraintFacts code="containsKeys" message="must contain the keys {keys}" change='containsKeys = "…"' />
+
+### `notContainsKey`
+
+`notContainsKey(key)` on `Map`
+
+Checks that the map does not have the key `key`.
+
+<ConstraintFacts code="notContainsKey" message="must not contain the key {key}" change='notContainsKey = "…"' />
+
+### `onlyKeys`
+
+`onlyKeys(keys)` on `Map`
+
+Checks that every key of the map is one of `keys`.
+
+Not every key of `keys` has to be there. Combine it with `containsKeys` for that.
+
+<ConstraintFacts code="onlyKeys" message="must contain only the keys {keys}" change='onlyKeys = "…"' />
+
+### `containsValue`
+
+`containsValue(value)` on `Map`
+
+Checks that the map has `value` as the value of some entry.
+
+<ConstraintFacts code="containsValue" message="must contain the value {other}" change='containsValue = "…"' />

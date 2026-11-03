@@ -1,0 +1,43 @@
+---
+title: "Booleans"
+description: "isTrue and isFalse, for consents, confirmations and flags."
+icon: "toggle-right"
+---
+
+import ConstraintFacts from "/snippets/constraint-facts.mdx";
+
+Two constraints for `Boolean` values, such as the checkbox that accepts the terms. Their messages are `mustBeTrue` and
+`mustBeFalse`, since a message property cannot be named `isTrue`.
+
+```kotlin Consent.kt
+data class Consent(
+    val hasAcceptedTerms: Boolean?,
+    val isMinor: Boolean?
+) : Validatable {
+    override fun validation() = validation {
+        ::hasAcceptedTerms required { isTrue() }
+        ::isMinor required { isFalse() }
+    }
+}
+```
+
+| Constraint | Checks |
+|---|---|
+| [`isTrue`](#istrue) | Is `true`. |
+| [`isFalse`](#isfalse) | Is `false`. |
+
+### `isTrue`
+
+`isTrue()` on `Boolean`
+
+Checks that the value is `true`.
+
+<ConstraintFacts code="isTrue" message="must be true" change='mustBeTrue = "…"' />
+
+### `isFalse`
+
+`isFalse()` on `Boolean`
+
+Checks that the value is `false`.
+
+<ConstraintFacts code="isFalse" message="must be false" change='mustBeFalse = "…"' />

@@ -1,0 +1,71 @@
+---
+title: "Results and violations"
+description: "ValidationResult holds every broken rule, and each Violation has a path, a message, a code and metadata."
+icon: "list"
+---
+
+`validate()` returns a `ValidationResult`. It holds every violation, in the order the rules are declared, and says
+whether there is any:
+
+```kotlin
+val result = user.validate()
+
+result.isValid       // true when every rule holds
+result.isInvalid     // true when at least one is broken
+result.violations    // List<Violation>, empty when the object is valid
+result.orThrow()     // throws a ValidationException when it is invalid
+```
+
+## The parts of a violation
+
+| Path | Message | Code |
+|---|---|---|
+| `items[1].quantity` | must be at least 1 | `min` |
+
+<ResponseField name="path" type="String">
+  Where the value is. A property (`email`), a nested one (`shipping.zipCode`), an element (`items[1]`) or an entry
+  of a map (`prices[USD]`). It is empty for a rule about the whole object, such as `exactlyOneOf` without a `path`.
+</ResponseField>
+
+<ResponseField name="message" type="String">
+  The message for people, with its placeholders filled in: `must be at least 1`, not `must be at least {min}`. It
+  follows the [configured messages](/guides/messages), so it can be in your users' language.
+</ResponseField>
+
+<ResponseField name="code" type="String">
+  The stable name of the rule, for programs. A built-in constraint uses its own name (`min`, `email`, `cpf`), and a
+  custom one the code you give it, or an empty code when you give none. Codes do not change with the messages.
+</ResponseField>
+
+<ResponseField name="metadata" type="Map<String, Any?>">
+  The entries attached with [`metadata`](/guides/metadata), and the `fields` of the presence rules. Empty when there
+  are none.
+</ResponseField>
+
+`Violation` has value equality, so two violations with the same four parts are equal, which keeps tests short.
+
+## Turning violations into a response
+
+A violation is plain data, so mapping it to what your API returns is ordinary Kotlin. Grouped by path, the messages
+are ready for a form:
+
+```kotlin
+val errors: Map<String, List<String>> = result.violations.groupBy(
+    keySelector = { it.path },
+    valueTransform = { it.message }
+)
+// {name=[must have at least 2 characters], email=[must be a valid email], age=[must be at least 18]}
+```
+
+And with the codes, a front end can pick its own text, translated on the client:
+
+```kotlin
+data class FieldError(val field: String, val code: String, val message: String)
+
+val body = result.violations.map { FieldError(field = it.path, code = it.code, message = it.message) }
+```
+
+<Tip>
+  Use the `code`, not the `message`, to decide anything in code: messages change with translations and wording,
+  codes do not.
+</Tip>

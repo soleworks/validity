@@ -1,0 +1,57 @@
+/*
+ * The colors of the site, the only place a color is written. Violet for links and actions, magenta and coral as small
+ * accents, soft lavender surfaces, and coral where something is wrong, as in a violation. style.css uses them through
+ * var(), and Stylelint fails a color written anywhere else.
+ */
+:root {
+  --v-violet: #7f52ff;
+  --v-violet-strong: #4b2bb8;
+  --v-lavender: #f3effe;
+  --v-lavender-border: #ebe5fd;
+  --v-magenta-soft: #fbe6fb;
+  --v-magenta-strong: #8a1080;
+  --v-coral-soft: #fdf1f2;
+  --v-coral-strong: #a3243a;
+  --v-faint: #8a86a0;
+  --v-border: #ece9f3;
+  --v-code: #faf8ff;
+
+  /* Syntax colors for the css-variables code theme: violet keywords, magenta functions, coral strings. */
+  --mint-color-text: #1c1830;
+  --mint-color-background: var(--v-code);
+  --mint-token-keyword: #5a35d6;
+  --mint-token-function: #b5179e;
+  --mint-token-string: #c2333f;
+  --mint-token-string-expression: #c2333f;
+  --mint-token-constant: #137487;
+  --mint-token-parameter: #1c1830;
+  --mint-token-comment: #8a86a0;
+  --mint-token-punctuation: #6e6a80;
+  --mint-token-link: #5a35d6;
+}
+
+.dark {
+  --v-violet: #b49bff;
+  --v-violet-strong: #d6c9ff;
+  --v-lavender: rgb(127 82 255 / 14%);
+  --v-lavender-border: rgb(169 139 255 / 22%);
+  --v-magenta-soft: rgb(199 17 225 / 16%);
+  --v-magenta-strong: #f3a6f8;
+  --v-coral-soft: rgb(228 72 87 / 10%);
+  --v-coral-strong: #ff9aa5;
+  --v-faint: #8f8aa6;
+  --v-border: rgb(169 139 255 / 14%);
+  --v-code: #130f1e;
+
+  /* Syntax colors on the dark background of the code. */
+  --mint-color-text: #ece8f8;
+  --mint-token-keyword: #b49bff;
+  --mint-token-function: #ef86f9;
+  --mint-token-string: #ff9a8f;
+  --mint-token-string-expression: #ff9a8f;
+  --mint-token-constant: #7fd6e3;
+  --mint-token-parameter: #ece8f8;
+  --mint-token-comment: #8079a0;
+  --mint-token-punctuation: #a9a1c4;
+  --mint-token-link: #b49bff;
+}
