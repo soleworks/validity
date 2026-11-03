@@ -22,8 +22,10 @@ removed.
 2. **The Release workflow keeps a release pull request open.** On every push to `main`,
    [release-please](https://github.com/googleapis/release-please) updates it with the next version, worked out from the
    commits, and the entries of `CHANGELOG.md`: `feat` and `fix` commits, and every breaking change. It also sets the
-   version in `gradle.properties`, in the installation snippet of the README, and in the `version` variable of
-   `docs/docs.json`, which every page of the docs site reads as `{{version}}`.
+   version in `gradle.properties`, in the installation snippet of the README, in the `version` variable of
+   `docs/docs.json`, which every page of the docs site reads as `{{version}}`, and in the label of the version link
+   of the docs navbar. The docs show only a released version: the harness checks that the `version` variable and the
+   navbar label match `.release-please-manifest.json`, not `gradle.properties`.
 3. **Merging that pull request is the release.** release-please tags the merge commit (`v0.2.0`) and creates the
    GitHub release with its changelog. The same workflow then checks that the build has that version, builds it, and
    publishes `validity-core` and `validity-phone`, signed, to Maven Central.
@@ -45,6 +47,17 @@ The script behind the last two commit checks is [.github/scripts/check-commits.s
   release pull request propose that version. The release after it goes back to the version the commits give.
 - **A version other than the one proposed**: the same `Release-As: x.y.z` footer, in any commit merged before the
   release.
+
+## After the first release
+
+Before the first release the manifest is at `0.0.0`, and the docs show no version, since none exists: the dependency
+snippet of the docs names no version, for a build from a clone, and the navbar has no version link. Once `0.1.0` is on
+Maven Central, one pull request turns them on, and release-please keeps them up to date from then on:
+
+- `docs/snippets/dependency.mdx` writes `:{{version}}` after the artifact, and gets back its Maven block.
+- `docs/snippets/maven-central-note.mdx` goes, with its imports.
+- `navbar.links` in `docs/docs.json` gets
+  `{ "label": "0.1.0", "icon": "tag", "href": "https://github.com/soleworks/validity/releases/latest" }`.
 
 ## When something fails
 

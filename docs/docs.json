@@ -188,7 +188,7 @@
     ]
   },
   "variables": {
-    "version": "0.1.0",
+    "version": "0.0.0",
     "kotlin": "2.4",
     "java": "17",
     "site": "https://validity-kt.dev",
