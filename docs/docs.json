@@ -40,7 +40,7 @@
     }
   },
   "appearance": {
-    "default": "system"
+    "default": "light"
   },
   "contextual": {
     "options": [
@@ -74,40 +74,43 @@
         "icon": "book-open",
         "groups": [
           {
-            "group": "Get started",
+            "group": "Introduction",
             "pages": [
               "index",
-              "introduction",
-              "installation",
-              "reference/modules",
-              "quickstart"
+              "quickstart",
+              "modules"
             ]
           },
           {
-            "group": "Writing rules",
+            "group": "Declaring a validation",
             "pages": [
-              "guides/rules-in-the-class",
-              "guides/rules-beside-the-class",
+              "guides/in-the-class",
+              "guides/beside-the-class",
+              "guides/context"
+            ]
+          },
+          {
+            "group": "Inside a validation",
+            "pages": [
               "guides/null-values",
               "guides/nested-objects",
               "guides/collections-and-maps",
-              "guides/rules-across-fields",
-              "guides/custom-constraints",
-              "guides/combining-constraints",
-              "guides/fail-fast",
+              "guides/across-fields",
               "guides/converting-values"
             ]
           },
           {
-            "group": "Beyond the object",
+            "group": "Your own constraints",
             "pages": [
-              "guides/context",
-              "guides/coroutines"
+              "guides/custom-constraints",
+              "guides/combining-constraints",
+              "guides/fail-fast"
             ]
           },
           {
-            "group": "Reading the result",
+            "group": "Running a validation",
             "pages": [
+              "guides/coroutines",
               "guides/results",
               "guides/exceptions",
               "guides/metadata"
@@ -140,26 +143,21 @@
             ]
           },
           {
-            "group": "Values",
+            "group": "By type",
             "pages": [
               "constraints/any",
               "constraints/booleans",
               "constraints/strings",
               "constraints/numbers",
               "constraints/collections",
-              "constraints/maps"
-            ]
-          },
-          {
-            "group": "Time",
-            "pages": [
+              "constraints/maps",
               "constraints/dates-and-times",
               "constraints/calendar",
               "constraints/durations"
             ]
           },
           {
-            "group": "Formats",
+            "group": "By format of a String",
             "pages": [
               "constraints/internet",
               "constraints/identifiers",
@@ -167,26 +165,45 @@
               "constraints/finance",
               "constraints/location",
               "constraints/colors",
-              "constraints/date-formats"
-            ]
-          },
-          {
-            "group": "Countries and phones",
-            "pages": [
+              "constraints/date-formats",
               "constraints/countries",
               "constraints/phone"
-            ]
-          },
-          {
-            "group": "Messages",
-            "pages": [
-              "reference/messages"
             ]
           }
         ]
       }
     ]
   },
+  "redirects": [
+    {
+      "source": "/introduction",
+      "destination": "/"
+    },
+    {
+      "source": "/installation",
+      "destination": "/modules"
+    },
+    {
+      "source": "/reference/modules",
+      "destination": "/modules"
+    },
+    {
+      "source": "/reference/messages",
+      "destination": "/guides/messages"
+    },
+    {
+      "source": "/guides/rules-in-the-class",
+      "destination": "/guides/in-the-class"
+    },
+    {
+      "source": "/guides/rules-beside-the-class",
+      "destination": "/guides/beside-the-class"
+    },
+    {
+      "source": "/guides/rules-across-fields",
+      "destination": "/guides/across-fields"
+    }
+  ],
   "variables": {
     "version": "0.1.0",
     "kotlin": "2.4",

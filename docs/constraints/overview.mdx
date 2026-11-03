@@ -15,7 +15,7 @@ on a `String`, `positive()` on a number, `past()` on a date.
 ::birthDate required { minAge(18) }                 // LocalDate
 ```
 
-## By type of value
+## By type
 
 <CardGroup cols={3}>
   <Card title="Any value" icon="equal" href="/constraints/any">
@@ -47,7 +47,7 @@ on a `String`, `positive()` on a number, `past()` on a date.
   </Card>
 </CardGroup>
 
-## By format of text
+## By format of a String
 
 <CardGroup cols={3}>
   <Card title="Internet" icon="globe" href="/constraints/internet">
@@ -120,9 +120,7 @@ for one call. See [Messages](/guides/messages).
 
 ## Imports
 
-The general constraints are in `io.github.soleworks.validity.constraints`, the constraints of a country in a package of
-their own, such as `io.github.soleworks.validity.constraints.brazil`, and the phone constraints in
-`io.github.soleworks.validity.phone`.
+The package of each constraint, and the import it needs, is in [Modules](/modules#packages-and-imports).
 
 <Tip>
   Missing one? A constraint of your own is a few lines and looks exactly like these. See

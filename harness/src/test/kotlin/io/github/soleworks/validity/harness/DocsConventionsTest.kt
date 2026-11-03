@@ -210,11 +210,11 @@ class DocsConventionsTest {
     @DisplayName("Messages")
     inner class Messages {
         @Test
-        fun `the messages page should list every message with its default`() {
-            val page = docs.resolve("reference/messages.mdx").readText()
+        fun `the template of the messages guide should give every message with its default`() {
+            val page = docs.resolve("guides/messages.mdx").readText()
 
             defaultMessages()
-                .filterNot { (place, text) -> "`${place.second}` | `$text`" in page }
+                .filterNot { (place, text) -> """${place.second} = "$text"""" in page }
                 .map { (place, text) -> "${place.first.ifEmpty { "messages" }}.${place.second}: $text" }
                 .shouldListNothing()
         }

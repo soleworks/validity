@@ -1,5 +1,5 @@
 ---
-title: "Rules across fields"
+title: "Across fields"
 description: "Presence rules such as exactlyOneOf and allOrNoneOf, and constraint { } for any rule about the whole object."
 icon: "git-merge"
 ---
@@ -43,15 +43,15 @@ And one that has both a pix key and an IBAN breaks `exactlyOneOf`:
 
 These rules count how many of the properties are filled, that is, not `null`:
 
-| Rule | Holds when | Its `fields` metadata lists |
-|---|---|---|
-| `atLeastOneOf(::a, ::b)` | one or more are filled | the properties to fill |
-| `atMostOneOf(::a, ::b)` | zero or one is filled | the properties to clear |
-| `exactlyOneOf(::a, ::b)` | exactly one is filled | the properties to fill or to clear |
-| `allOrNoneOf(::a, ::b)` | all or none are filled | the properties to fill |
-| `atLeastOf(2, ::a, ::b, ::c)` | 2 or more are filled | the properties to fill |
-| `atMostOf(2, ::a, ::b, ::c)` | 2 or fewer are filled | the properties to clear |
-| `exactlyOf(2, ::a, ::b, ::c)` | exactly 2 are filled | the properties to fill or to clear |
+| Rule | Holds when | Its `fields` metadata lists | Message |
+|---|---|---|---|
+| `atLeastOneOf(::a, ::b)` | one or more are filled | the properties to fill | `at least one of {fields} is required` |
+| `atMostOneOf(::a, ::b)` | zero or one is filled | the properties to clear | `at most one of {fields} can be filled` |
+| `exactlyOneOf(::a, ::b)` | exactly one is filled | the properties to fill or to clear | `exactly one of {fields} must be filled` |
+| `allOrNoneOf(::a, ::b)` | all or none are filled | the properties to fill | `{fields} must be filled together` |
+| `atLeastOf(2, ::a, ::b, ::c)` | 2 or more are filled | the properties to fill | `at least {count} of {fields} must be filled` |
+| `atMostOf(2, ::a, ::b, ::c)` | 2 or fewer are filled | the properties to clear | `at most {count} of {fields} can be filled` |
+| `exactlyOf(2, ::a, ::b, ::c)` | exactly 2 are filled | the properties to fill or to clear | `exactly {count} of {fields} must be filled` |
 
 Each violation has the code of its rule, a message that lists the properties in `{fields}`, and a `fields` entry in its
 [metadata](/guides/metadata) with the properties to act on. A form can highlight exactly those fields.
