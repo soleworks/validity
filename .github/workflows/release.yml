@@ -27,8 +27,8 @@ jobs:
         id: release
         with:
           token: ${{ steps.app.outputs.token }}
-          config-file: release-please-config.json
-          manifest-file: .release-please-manifest.json
+          config-file: .github/release-please-config.json
+          manifest-file: .github/.release-please-manifest.json
 
       # A new major version goes out as a release candidate first. The status stays red on the release pull request
       # until the Release candidate workflow has published one.
@@ -40,7 +40,7 @@ jobs:
         run: |
           pr=$(gh pr list --label "autorelease: pending" --json headRefOid --jq '.[0].headRefOid // empty')
           [ -n "$pr" ] || exit 0
-          next=$(gh api "repos/$GH_REPO/contents/.release-please-manifest.json?ref=$pr" --jq .content | base64 -d | jq -r '."."')
+          next=$(gh api "repos/$GH_REPO/contents/.github/.release-please-manifest.json?ref=$pr" --jq .content | base64 -d | jq -r '."."')
           case "$next" in
             0.*|*.*.[1-9]*|*.[1-9]*.*) exit 0 ;;
           esac

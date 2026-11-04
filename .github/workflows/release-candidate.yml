@@ -47,7 +47,7 @@ jobs:
       - name: Work out the version
         id: version
         run: |
-          next=$(gh api "repos/$GH_REPO/contents/.release-please-manifest.json?ref=$HEAD" --jq .content | base64 -d | jq -r '."."')
+          next=$(gh api "repos/$GH_REPO/contents/.github/.release-please-manifest.json?ref=$HEAD" --jq .content | base64 -d | jq -r '."."')
           last=$(git tag --list "v$next-RC*" | sed "s/^v$next-RC//" | sort --numeric-sort | tail -n 1)
           echo "version=$next-RC$(( ${last:-0} + 1 ))" >> "$GITHUB_OUTPUT"
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"

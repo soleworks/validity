@@ -61,7 +61,7 @@ tasks.register("ktlintClasspath") {
 }
 
 // The build fails when coverage drops below these floors, set just under what the tests reach today.
-// Codecov reads the same report in CI (codecov.yml).
+// Codecov reads the same report in CI (.github/codecov.yml).
 kover {
     reports {
         verify {

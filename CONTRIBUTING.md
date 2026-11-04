@@ -6,7 +6,7 @@
 - **Detekt** runs every rule it has, the libraries rule set included. [config/detekt/detekt.yml](config/detekt/detekt.yml) lists the few rules this project tunes, each with its reason.
 - **Konsist**, in the internal `harness` module, checks the conventions Detekt cannot see: how a constraint is declared, how values are named, what a production file may import, and that every test is a Given, a When and a Then, ordered by what it checks.
 
-**Kover** measures what the tests cover in `validity-core` and `validity-phone`, and the build fails below 99% of the lines or 93% of the branches. `./gradlew :koverHtmlReport` writes the report to `build/reports/kover/html`, and CI uploads it to [Codecov](https://codecov.io/gh/soleworks/validity), which asks every line a pull request changes to be covered ([codecov.yml](codecov.yml)).
+**Kover** measures what the tests cover in `validity-core` and `validity-phone`, and the build fails below 99% of the lines or 93% of the branches. `./gradlew :koverHtmlReport` writes the report to `build/reports/kover/html`, and CI uploads it to [Codecov](https://codecov.io/gh/soleworks/validity), which asks every line a pull request changes to be covered ([codecov.yml](.github/codecov.yml)).
 
 None of these tools, nor Kotest, is a dependency of a published module.
 

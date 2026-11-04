@@ -74,7 +74,7 @@ class DocsConventionsTest {
     @DisplayName("Facts")
     inner class Facts {
         private val released = RELEASED_VERSION_FORMAT
-            .find(repository.resolve(".release-please-manifest.json").readText())
+            .find(repository.resolve(".github/.release-please-manifest.json").readText())
             ?.run { groupValues[1] }
             .orEmpty()
         private val versionLink = VERSION_LINK_FORMAT.find(docs.resolve("docs.json").readText())?.value

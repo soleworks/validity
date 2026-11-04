@@ -10,7 +10,7 @@ count (constraints, countries of postal codes, countries of documents), is a var
 page writes `{{version}}`, never `0.1.0`. Mintlify fills variables in when it builds the site, in prose and
 in code blocks, so the Markdown agents read has the values too.
 
-- Each variable is checked against the code: `version` against `.release-please-manifest.json`, `kotlin`
+- Each variable is checked against the code: `version` against `.github/.release-please-manifest.json`, `kotlin`
   against the version catalog, `java` against the toolchain, the counts against the sources.
 - `version` is the last stable version on Maven Central. Never change it by hand:
   `.github/scripts/show-release.mjs` writes it after a release (see `RELEASING.md`). Before the first release it is `0.0.0`, and nothing shows a version: no page writes

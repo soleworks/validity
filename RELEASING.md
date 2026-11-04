@@ -39,7 +39,7 @@ removed.
 The merge is the only step a person takes. A reader is never told to add a version that cannot be downloaded: before
 the first release nothing names a version, a release shows up in the docs once Maven Central has it, and a release
 candidate never reaches the docs. The harness holds it: the `version` variable is a stable version, at most the one in
-`.release-please-manifest.json`, and the navbar label and the README name that same version.
+`.github/.release-please-manifest.json`, and the navbar label and the README name that same version.
 
 ## What CI checks on every pull request
 
@@ -106,5 +106,5 @@ messages of its commits as the body. release-please reads that subject, and a `B
 reaches it through the body. A merge commit would repeat the message of a commit it merges, and the changelog would
 list the change twice.
 
-The history before `0.1.0` is not in the changelog: `bootstrap-sha` in `release-please-config.json` starts it at the
+The history before `0.1.0` is not in the changelog: `bootstrap-sha` in `.github/release-please-config.json` starts it at the
 commit that set up this flow.
