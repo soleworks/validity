@@ -244,6 +244,14 @@ class DocsConventionsTest {
                 .shouldListNothing()
         }
 
+        @Test
+        fun `every constraint page should say what the KDoc of its constraints says, as updateConstraintDocs does`() {
+            constraintPageFiles
+                .filter { page -> page.readText().lines() != constraintPage(page).lines() }
+                .map { page -> "${page.docsPath}: run ./gradlew updateConstraintDocs" }
+                .shouldListNothing()
+        }
+
         private fun constraintSections(): List<ConstraintSection> = constraintPages.flatMap { page ->
             CONSTRAINT_SECTION_FORMAT
                 .findAll(page.content)

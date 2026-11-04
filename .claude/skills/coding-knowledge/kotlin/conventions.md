@@ -12,8 +12,9 @@ Why: copying a neighbor spreads a divergence; listing it lets the maintainer dec
 Production code carries no `//` or block comments. Every public declaration has KDoc, written as the
 **kdoc** skill says: invoke it before adding or changing one.
 
-Why: the name says what the code does, and the KDoc is what the user reads in the IDE and on the docs
-site. Detekt fails `./gradlew check` on a public declaration without KDoc, or with `@param` tags that no
+Why: the name says what the code does, and the KDoc is what the user reads in the IDE; the first paragraph
+of a constraint's KDoc is also its sentence on the docs site. Code that is not public needs no KDoc: a
+comment there would only repeat the name. Detekt fails `./gradlew check` on a public declaration without KDoc, or with `@param` tags that no
 longer match the signature.
 
 ## Visibility
@@ -50,8 +51,9 @@ Why: the name says what the value holds without reading it. Checked by the harne
 
 ## A lambda the user writes
 
-Every lambda the user passes (a predicate, a message, a block of rules) is a `suspend` lambda, so a
-rule can call a repository or a client directly. The same function serves suspending and plain
+Every predicate and message the user passes, and the block of `validation`, is a `suspend` lambda, so a
+rule can call a repository or a client directly. A block of rules (`required`, `failFast`, `or`, ...) is the
+lambda of an `inline` function instead, so it can call `suspend` functions too. The same function serves suspending and plain
 lambdas: there is no separate suspend-only name. A blocking variant of an entry is named
 `…Blocking`.
 

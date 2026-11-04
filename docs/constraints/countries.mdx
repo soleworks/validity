@@ -37,7 +37,7 @@ data class Supplier(
 
 | Constraint | Checks |
 |---|---|
-| [`taxId`](#taxid) | Is a document of a `TaxIdType`, or of a country and a type given as text. |
+| [`taxId`](#taxid) | Is a tax or identity number of `type` in `country`, with the same rules as the constraint of that document in the package of the country. |
 | [`cuit`](#cuit) | Is an Argentine CUIT with a valid check digit, as 11 digits or as `20-30824628-1`. |
 | [`cuil`](#cuil) | Is an Argentine CUIL with a valid check digit, as 11 digits or as `20-30824628-1`. |
 | [`abn`](#abn) | Is an Australian ABN: 11 digits with valid check digits, as `51824753556` or `51 824 753 556`. |
@@ -79,7 +79,7 @@ data class Supplier(
 | [`ruc`](#ruc) | Is a Paraguayan RUC with a valid check digit, as 6 to 9 digits or as `80028061-0`. |
 | [`ci`](#ci) | Is a Paraguayan CI (cédula de identidad): 5 to 10 digits. |
 | [`ruc`](#ruc-2) | Is a Peruvian RUC: 11 digits with a valid check digit, such as `20131312955`. |
-| [`dni`](#dni) | Is a Spanish DNI: 8 digits and the matching control letter, such as `12345678Z`. |
+| [`dni`](#dni) | Is a Peruvian DNI: 8 digits, optionally followed by its check character, such as `10117410` or `10117410-2`. |
 | [`pesel`](#pesel) | Is a Polish PESEL: 11 digits that start with a real birth date, and a valid check digit. |
 | [`nip`](#nip) | Is a Polish NIP (tax number): 10 digits with a valid check digit, with no dashes. |
 | [`nif`](#nif) | Is the NIF of a person in Portugal: 9 digits with a valid check digit, such as `123456789`. |
@@ -116,7 +116,8 @@ data class Supplier(
 
 `taxId(type)` or `taxId(country, type)` on `String`
 
-Checks that the string is a document of `type`, with the same rules as the constraint of that document on this page.
+Checks that the string is a tax or identity number of `type` in `country`, with the same rules as the constraint of that document in the package of the country.
+
 `type` is a `TaxIdType`, one entry per document named after its country and its type, such as `TaxIdType.AR_CUIT`.
 When the country and the type come as text, such as from a request, `country` is an ISO 3166-1 alpha-2 code and
 `type` the name of the constraint in upper snake case, such as `CUIT` or `PARTITA_IVA`, both in any case.

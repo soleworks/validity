@@ -12,11 +12,8 @@ in code blocks, so the Markdown agents read has the values too.
 
 - Each variable is checked against the code: `version` against `.release-please-manifest.json`, `kotlin`
   against the version catalog, `java` against the toolchain, the counts against the sources.
-- `version` is the last stable version a reader can download from Maven Central. It follows the release
-  instead of moving with it: release-please sets only the manifest and `gradle.properties`, and the
-  `show-release` job of the Release workflow writes `version`, once Maven Central has it
-  (`.github/scripts/show-release.mjs`). So the harness checks that it is stable and at most the version of
-  the manifest. Before the first release it is `0.0.0`, and nothing shows a version: no page writes
+- `version` is the last stable version on Maven Central. Never change it by hand:
+  `.github/scripts/show-release.mjs` writes it after a release (see `RELEASING.md`). Before the first release it is `0.0.0`, and nothing shows a version: no page writes
   `{{version}}`, the dependency snippet names no version, and the navbar has no version link.
 - From the first release on, the navbar links to `https://github.com/soleworks/validity/releases/latest` with
   the bare version as its label (`0.1.0`, no `v`). Mintlify does not fill variables in `docs.json`, so the
@@ -30,25 +27,24 @@ Checked by the harness (Facts).
 
 ## Repeated content is a snippet
 
-A block that two pages show, such as the dependency to add or the note that Validity is not on Maven
-Central yet, is an `.mdx` snippet in `docs/snippets/`, imported where it is shown. A snippet takes props for
+A block that two pages show, such as the dependency to add, is an `.mdx` snippet in `docs/snippets/`, imported where it is shown. A snippet takes props for
 what changes between uses (`<Dependency artifact="validity-phone" />`), and a prop is read as `{artifact}` in
 text and in code blocks, or as `<code>{artifact}</code>` for inline code, since backticks do not fill props.
 
 - No sentence of six words or more, and no code block of three lines or more, is written twice.
 - Every snippet is imported by a page.
 - Content is an `.mdx` snippet, not a `.jsx` component: the Markdown of a page leaves out what a component
-  renders, so agents would not see it.
+  renders, so agents would not see it. No check holds this one.
 
-Checked by the harness (Repetition, Snippets).
+The first two are checked by the harness (Repetition, Snippets).
 
 ## Code is a sample
 
 A code block titled with a file name, such as `` ```kotlin Account.kt ``, is the code of the sample of that
-name in `samples/` (`samples/docs/` for the docs), without its package and imports, and the violations shown
-after it are the ones a test of the entry checks. The sample keeps the code in one place, so the same sample
-may be shown on more than one page. Change the sample and its test first, then the block. Checked by the
-harness (Samples).
+name in `samples/` (`samples/docs/` for the docs), without its package and imports. The sample keeps the code
+in one place, so the same sample may be shown on more than one page. Change the sample and its test first,
+then the block. Checked by the harness (Samples). The violations shown after a block are copied by hand from
+the sample's test, which no check compares, so change them together.
 
 ## A constraint section
 
@@ -63,6 +59,13 @@ heading, the call and the types it works on, what it checks, and its facts throu
 line that changes it in `messages { }`, with its block for a country or a module (`brazil { cpf = "…" }`). A
 constraint with no default message, such as `or`, gives only its code. Checked by the harness (Constraints,
 Messages, which also checks that the template of `guides/messages.mdx` gives every message with its default).
+
+What it checks comes from its KDoc, never written by hand: the paragraph right after the call is the first
+paragraph of the KDoc, and its row in the table at the top of the page is that sentence without "Checks that
+the <value>". `./gradlew updateConstraintDocs` writes both (`harness/src/main/.../ConstraintPages.kt`), the hook
+that formats a `*Constraints.kt` file runs it, and the harness fails on a page that says something else
+(Constraints). To change that sentence, change the KDoc. A paragraph after it, such as a note on the arguments,
+is written by hand.
 
 ## Styles
 
@@ -93,5 +96,6 @@ Every page has a `title` and a `description` of at most 160 characters, and is i
 - `vale .`, in `docs/`, checks the prose.
 - `npm run docs:dev` serves the site at `localhost:3000`.
 
-After every edit of a page or a stylesheet, the `check-docs.sh` hook runs these on the file and returns what
-they found. CI runs all of them in the `docs` job.
+After every edit of a page or a stylesheet, the `check-docs.sh` hook runs Vale, `mint validate`, Stylelint and
+the docs checks of the harness on it, and returns what they found. CI runs `npm run docs:check` and Vale in the
+`docs` job, and the harness in the `build` job.

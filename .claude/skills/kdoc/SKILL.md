@@ -1,12 +1,14 @@
 ---
 name: kdoc
-description: KDoc conventions for the public API of validity-core and validity-phone. Use whenever you add, rename or change a public function, class, property or constraint in validity-*/src/main (a new constraint, a new overload, a new message, a new country module), and when Detekt reports UndocumentedPublicClass, UndocumentedPublicFunction, UndocumentedPublicProperty or OutdatedDocumentation.
+description: KDoc conventions for the public API of validity-core and validity-phone. Use whenever you add, rename or change a public function, class, property or constraint in validity-*/src/main (a new constraint, a new overload, a new message, a new country), and when Detekt reports UndocumentedPublicClass, UndocumentedPublicFunction, UndocumentedPublicProperty or OutdatedDocumentation.
 ---
 
 # KDoc on the public API
 
-Every public declaration in `validity-*/src/main` has KDoc. The IDE shows it while people type a rule, and the docs
-site is generated from it with Dokka. Detekt enforces it: `UndocumentedPublicClass`, `UndocumentedPublicFunction` and
+Every public declaration in `validity-*/src/main` has KDoc. The IDE shows it while people type a rule, and the first
+paragraph of a constraint's KDoc is also the sentence of its section and its row in `docs/constraints/`:
+`./gradlew updateConstraintDocs` writes it there, the hook that formats a `*Constraints.kt` file runs it, and the
+harness fails when a page says something else. Detekt enforces the KDoc: `UndocumentedPublicClass`, `UndocumentedPublicFunction` and
 `UndocumentedPublicProperty` fail `./gradlew check`, and `OutdatedDocumentation` fails when the `@param` tags stop
 matching the signature.
 
@@ -14,7 +16,9 @@ Write the KDoc in the same change as the declaration, never as a follow-up.
 
 ## What a constraint's KDoc says
 
-1. **One sentence on what passes**, starting with "Checks that". Name the parameters as links: `[min]`.
+1. **One sentence on what passes**, starting with "Checks that the <value>" (`string`, `number`, `date`, ...): the
+   row of the docs table is this sentence without those words. Name the parameters as links: `[min]`. It is a
+   paragraph of its own, since the docs take the first paragraph whole.
 2. **What it accepts**, when the name alone does not say it: the formats, separators, check digits, whether case or
    whitespace matters. Read the predicate and the regex, and describe what they do, not what the standard says.
 3. **When nothing is checked**, if a nullable argument is `null` (`if (min == null) return`): "When [min] is `null`,
@@ -44,16 +48,16 @@ The overload that takes a message builder says what the builder receives, and do
 
 ```kotlin
 /**
- * Checks that the string has at least [min] characters, with a message built from the value.
+ * Checks that the string has at least [min] characters.
  *
- * Fails with code `minLength`.
+ * Fails with code `minLength` and the message that [message] builds.
  *
  * @param min the fewest characters accepted.
  * @param message builds the message from the value (the receiver) and [min].
  */
 public fun ValidationNode<String>.minLength(
     min: Int,
-    message: String.(Int) -> String
+    message: suspend String.(Int) -> String
 ): Unit = ...
 ```
 
