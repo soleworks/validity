@@ -10,8 +10,9 @@ several entries into it:
 - `validation<T> { }`: a function that builds the rules of a type from outside it, for a class the
   user cannot change.
 
-Each entry offers `validate()` (returns a `ValidationResult`), `validateOrThrow()` (throws
-`ValidationException`), and a `…Blocking` variant of each for code that is not suspending.
+`Validatable` and `ContextualValidatable` offer `validate()` (returns a `ValidationResult`),
+`validateOrThrow()` (throws `ValidationException`), and a `…Blocking` variant of each for code that is not
+suspending. `Validation<T>` offers `validate(value)` and `validateBlocking(value)`.
 
 ## Concepts
 

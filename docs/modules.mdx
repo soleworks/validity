@@ -11,7 +11,7 @@ same version, so a project that uses both never mixes versions:
 
 | Module | What it adds | Depends on |
 |---|---|---|
-| `validity-core` | The DSL, the four entries and every constraint but the phone ones | The Kotlin standard library and kotlinx.coroutines |
+| `validity-core` | The DSL, the ways to declare rules (`Validatable`, `ContextualValidatable`, `validation`, `validatable`) and every constraint but the phone ones | The Kotlin standard library and kotlinx.coroutines |
 | `validity-phone` | `phone`, `mobilePhone`, `countryCode` and `areaCode`, and their messages | `validity-core` and Google's libphonenumber |
 
 Most projects need only `validity-core`.
