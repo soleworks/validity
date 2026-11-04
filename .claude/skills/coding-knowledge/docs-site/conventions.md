@@ -91,11 +91,11 @@ Every page has a `title` and a `description` of at most 160 characters, and is i
 ## Running the checks
 
 - `./gradlew build` runs the docs checks of the harness, with the rest of the build.
-- `npm run docs:check` runs `mint validate` (failing on its warnings too), the link check with anchors,
+- `npm run check`, in `docs/`, runs `mint validate` (failing on its warnings too), the link check with anchors,
   snippets and redirects, the accessibility check and Stylelint. `npm ci` installs them once.
 - `vale .`, in `docs/`, checks the prose.
-- `npm run docs:dev` serves the site at `localhost:3000`.
+- `npm run dev`, in `docs/`, serves the site at `localhost:3000`.
 
 After every edit of a page or a stylesheet, the `check-docs.sh` hook runs Vale, `mint validate`, Stylelint and
-the docs checks of the harness on it, and returns what they found. CI runs `npm run docs:check` and Vale in the
+the docs checks of the harness on it, and returns what they found. CI runs `npm run check` and Vale in the
 `docs` job, and the harness in the `build` job.
