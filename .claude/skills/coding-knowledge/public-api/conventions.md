@@ -24,6 +24,6 @@ old one can stay.
 
 ## Commits
 
-Every commit is a Conventional Commit, with the module as scope: `feat(core)`, `fix(phone)`. Only
-`feat` and `fix` reach the changelog; `docs`, `test`, `refactor`, `build`, `ci` and `chore` change
+Every commit is a Conventional Commit, with the module as scope: `feat(core)`, `fix(phone)`. `feat`,
+`fix`, `perf` and `revert` reach the changelog (the defaults of release-please); `docs`, `test`, `refactor`, `build`, `ci` and `chore` change
 nothing a user sees. CI checks every commit of a pull request.

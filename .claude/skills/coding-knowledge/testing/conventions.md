@@ -1,7 +1,7 @@
 # Testing conventions
 
-Each rule here is checked by the harness (`TestConventionsTest`): a test that breaks one fails
-`./gradlew build`.
+Most rules here are checked by the harness (`TestConventionsTest`): a test that breaks one fails
+`./gradlew build`. A rule that no check holds says so.
 
 ## Where a test lives and its name
 
@@ -15,7 +15,7 @@ one top-level class.
   `@DisplayName("When {function} is called")`.
 - In a nested class, tests go in this order of outcome: accepts, reports, skips, builds, throws.
 - The name is `` `given {situation} should {outcome}` ``, with a real situation (`given declined terms`),
-  not a value (`given false`).
+  not a value (`given false`). The check holds the shape `given … should …`, not the kind of situation.
 - The body is a Given, one When and one Then, separated by blank lines. The When is
   `val violations = …`, `val result = …`, `val error = …` or `….validate()`; the Then is one assertion
   with Kotest (`shouldBe`). A test of an exception is `shouldThrowExactly<X> { }` alone (Detekt forbids `shouldThrow`, which
@@ -43,18 +43,20 @@ inner class IsTrue {
 
 A constraint test builds a `ValidationNode` with the constraint and validates it, as above. It never
 validates a sample class: that tests the entry, not the constraint. Each constraint has at least a
-test that accepts and one that reports with the default message, which also covers that message.
+test that accepts and one that reports with the default message, which also covers that message. No
+check holds this.
 
 ## Samples, the README and the docs
 
 Tests of an entry validate the classes in `samples/`, written the way a user writes them. Each code
-example of the README is a file in `samples/readme/`, so the README only shows code that compiles and
-whose result a test checks. A change to the README's examples changes those files first.
+example of the README is a file in `samples/readme/`, so its code compiles and its result is tested. No
+check compares the README with those files: a change to the README's examples changes them first, and the
+README by hand.
 
 The docs site (`docs/`) does the same with `samples/docs/`: a code block titled with a file name, such
-as `` ```kotlin Account.kt ``, holds that sample without its package and imports, and the violations
-shown after it are the ones a test of the entry checks. Change the sample first, then the block.
-Checked by the harness (`DocsConventionsTest`).
+as `` ```kotlin Account.kt ``, holds that sample without its package and imports. The harness
+(`DocsConventionsTest`) checks that the block is the code of the sample; the violations shown after it are
+copied by hand from the sample's test, so change them together. Change the sample first, then the block.
 
 ## Running the checks
 

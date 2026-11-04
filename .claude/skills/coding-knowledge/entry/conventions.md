@@ -10,8 +10,8 @@ Why: a constraint written once works in every entry, and the user learns one set
 
 ## The four ways to run
 
-An entry offers `validate()`, `validateOrThrow()`, `validateBlocking()` and
-`validateOrThrowBlocking()`. The suspending ones are the main path; the blocking ones run the same
+`Validatable` and `ContextualValidatable` offer `validate()`, `validateOrThrow()`, `validateBlocking()` and
+`validateOrThrowBlocking()`; `Validation<T>` offers `validate(value)` and `validateBlocking(value)`. The suspending ones are the main path; the blocking ones run the same
 rules for a caller that cannot suspend. `validateOrThrow` is `validate().orThrow()`, never a second
 path.
 
