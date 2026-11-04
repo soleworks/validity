@@ -111,6 +111,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: docs/package-lock.json
       - uses: actions/setup-java@v6
         if: steps.changes.outputs.changed == 'true'
         with:
@@ -121,8 +122,8 @@ jobs:
       - name: Check the docs
         if: steps.changes.outputs.changed == 'true'
         run: |
-          npm ci
-          npm run docs:check
+          npm ci --prefix docs
+          npm run check --prefix docs
           ./gradlew :harness:test
       - name: Push the docs
         if: steps.changes.outputs.changed == 'true'

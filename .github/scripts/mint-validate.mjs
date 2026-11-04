@@ -1,10 +1,11 @@
-// Runs `mint validate` in docs/ and fails on its warnings too. Mintlify reports some mistakes, such as a component
-// that does not exist or an H1 that repeats the title, as warnings that do not fail the run.
-// Usage: node .github/scripts/mint-validate.mjs [mint validate flags, such as --files guides/fail-fast.mdx --no-build]
+// Runs `mint validate` in the current folder, which npm sets to docs/, and fails on its warnings too. Mintlify
+// reports some mistakes, such as a component that does not exist or an H1 that repeats the title, as warnings that
+// do not fail the run.
+// Usage, from docs/: node ../.github/scripts/mint-validate.mjs [mint validate flags, such as --files
+// guides/fail-fast.mdx --no-build]
 import { spawnSync } from "node:child_process";
 
 const run = spawnSync("npx", ["--no-install", "mint", "validate", "--format", "json", ...process.argv.slice(2)], {
-  cwd: "docs",
   encoding: "utf8",
   shell: process.platform === "win32",
 });

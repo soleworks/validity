@@ -9,7 +9,7 @@ RELATIVE=$(python -c 'import os, sys; print(os.path.relpath(sys.argv[1]).replace
 [[ "$RELATIVE" == docs/* ]] || exit 0
 [[ "$RELATIVE" == *.mdx || "$RELATIVE" == *.md || "$RELATIVE" == *.css || "$RELATIVE" == docs/docs.json ]] || exit 0
 
-[[ -d node_modules ]] || npm ci --no-audit --no-fund >&2 || { echo "npm ci failed; the docs were not checked." >&2; exit 1; }
+[[ -d docs/node_modules ]] || (cd docs && npm ci --no-audit --no-fund >&2) || { echo "npm ci failed; the docs were not checked." >&2; exit 1; }
 # Vale from the PATH, or where winget installs it on Windows for a shell started before the install.
 VALE=$(command -v vale || ls "$(cygpath -u "${LOCALAPPDATA:-}" 2>/dev/null)"/Microsoft/WinGet/Packages/errata-ai.Vale_*/vale.exe 2>/dev/null | head -1)
 FAILED=0
@@ -28,12 +28,12 @@ case "$RELATIVE" in
             echo "Vale is not installed, so the prose of $RELATIVE was not checked." >&2
         fi
         if [[ "$RELATIVE" == *.mdx ]]; then
-            OUT=$(node .github/scripts/mint-validate.mjs --files "$PAGE" --no-build 2>&1) ||
+            OUT=$(cd docs && node ../.github/scripts/mint-validate.mjs --files "$PAGE" --no-build 2>&1) ||
                 report "mint validate found these in $RELATIVE:" "$OUT"
         fi
         ;;
     *.css)
-        OUT=$(npx --no-install stylelint "$RELATIVE" 2>&1) || report "Stylelint found these in $RELATIVE:" "$OUT"
+        OUT=$(cd docs && npx --no-install stylelint "${RELATIVE#docs/}" 2>&1) || report "Stylelint found these in $RELATIVE:" "$OUT"
         ;;
 esac
 

@@ -15,7 +15,7 @@ The examples in the README are samples in
 and a test checks the output shown next to them. When you change an example, change its sample too.
 
 The docs site lives in [docs](docs), built by [Mintlify](https://www.mintlify.com) from `docs.json` and its `.mdx`
-pages, and published on every push to `main`. After `npm ci`, `npm run docs:dev` serves it at `localhost:3000`. Each fact
+pages, and published on every push to `main`. After `npm ci` in `docs`, `npm run dev` serves it at `localhost:3000`. Each fact
 has one home: the version and the counts are variables of `docs.json`, a block shown twice is a snippet, and a code block
 titled with a file name, such as `Account.kt`, is a sample in
 [samples/docs](validity-core/src/test/kotlin/io/github/soleworks/validity/samples/docs). Four tools hold that:
@@ -26,7 +26,7 @@ titled with a file name, such as `Account.kt`, is a sample in
 - **Stylelint** keeps colors in `tokens.css` and the layout free of pixel offsets and of Mintlify's internal classes.
 - **[Vale](https://vale.sh)** checks spelling and the voice of the prose.
 
-`./gradlew build` runs the harness, `npm run docs:check` the Mintlify CLI and Stylelint, and `vale .` in `docs` the prose.
+`./gradlew build` runs the harness, and in `docs`, `npm run check` runs the Mintlify CLI and Stylelint and `vale .` the prose.
 
 The public API of each published module is kept in `api/<module>.api`, and `./gradlew check` fails when it changes
 without `./gradlew updateKotlinAbi`. [RELEASING.md](RELEASING.md) describes how a version is born and published.

@@ -1,0 +1,18 @@
+{
+  "name": "validity-docs-tools",
+  "private": true,
+  "description": "The tools that check this docs site: the Mintlify CLI and Stylelint. Vale and the harness run apart.",
+  "scripts": {
+    "dev": "mint dev",
+    "validate": "node ../.github/scripts/mint-validate.mjs",
+    "links": "mint broken-links --check-anchors --check-snippets --check-redirects",
+    "a11y": "mint a11y",
+    "css": "stylelint \"**/*.css\"",
+    "check": "npm run validate && npm run links && npm run a11y && npm run css"
+  },
+  "devDependencies": {
+    "mint": "4.2.1187",
+    "stylelint": "17.16.0",
+    "stylelint-config-standard": "40.0.0"
+  }
+}
