@@ -12,7 +12,17 @@ if [[ ! "$CLASSPATH" -nt gradle/libs.versions.toml ]]; then
 fi
 
 OUT=$(java --add-opens=java.base/java.lang=ALL-UNNAMED -cp "$(cat "$CLASSPATH")" \
-    com.pinterest.ktlint.Main -F "$FILE" 2>&1) && exit 0
+    com.pinterest.ktlint.Main -F "$FILE" 2>&1) && FORMATTED=1
+
+# The pages of the constraints say what the KDoc of each constraint says, so they follow a change of it, in the
+# checkout that holds the file (a worktree has its own docs).
+if [[ "${FORMATTED:-0}" == 1 && "${FILE//\\//}" =~ validity-[a-z]+/src/main/.*Constraints\.kt$ ]]; then
+    ROOT=$(git -C "$(dirname "$FILE")" rev-parse --show-toplevel)
+    (cd "$ROOT" && ./gradlew -q updateConstraintDocs >&2) ||
+        { echo "updateConstraintDocs failed; run it to see why." >&2; exit 2; }
+fi
+[[ "${FORMATTED:-0}" == 1 ]] && exit 0
+
 echo "ktlint could not fix these in $FILE; fix them by hand following .editorconfig:" >&2
 FOUND=$(echo "$OUT" | grep "(standard:" | sort -u)
 echo "${FOUND:-$OUT}" >&2

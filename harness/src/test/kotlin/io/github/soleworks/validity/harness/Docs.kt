@@ -17,12 +17,6 @@ private val VARIABLES_FORMAT = Regex(""""variables":\s*\{(.*?)}""", RegexOption.
 private val JSON_PAIR_FORMAT = Regex(""""(\w+)":\s*"([^"]*)"""")
 private val NOT_PROSE_FORMAT = Regex("""^\s*(```|\||<|import |#|\{/\*|---)""")
 
-/** The root of the repository, which the harness build passes in. */
-val repository: File = File(System.getProperty("validity.root"))
-
-/** The content directory of the docs site, where `docs.json` is. */
-val docs: File = repository.resolve("docs")
-
 /** Every page of the site, without the snippets. */
 val docsPages: List<File> = docs
     .walkTopDown()

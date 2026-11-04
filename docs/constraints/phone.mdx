@@ -29,17 +29,19 @@ data class Courier(
 
 | Constraint | Checks |
 |---|---|
-| [`phone`](#phone) | A valid phone number, of any kind |
-| [`mobilePhone`](#mobilephone) | A valid mobile phone number |
-| [`countryCode`](#countrycode) | A country calling code, such as `55` or `+1` |
-| [`areaCode`](#areacode) | An area code used in a country, such as `11` in Brazil |
+| [`phone`](#phone) | Is a valid phone number, by the metadata of libphonenumber. |
+| [`mobilePhone`](#mobilephone) | Is a valid mobile phone number, by the metadata of libphonenumber. |
+| [`countryCode`](#countrycode) | Is a country calling code, such as `55` or `+1`, with or without the `+`. |
+| [`areaCode`](#areacode) | Is an area code used in `countryCode`, such as `11` in Brazil. |
 
 ### `phone`
 
 `phone(countryCode, areaCode, format)` on `String`
 
-Checks that the string is a valid phone number, by the metadata of libphonenumber. Every argument is optional and
-narrows what passes: a number from another country, with another area code or written in another format fails.
+Checks that the string is a valid phone number, by the metadata of libphonenumber.
+
+Every argument is optional and narrows what passes: a number from another country, with another area code or written
+in another format fails.
 
 - `countryCode`: the country calling code the number must have, such as `55` or `+55`. With `null`, any country.
 - `areaCode`: the area code the number must have, such as `11`. With `null`, any area code.
@@ -51,8 +53,9 @@ narrows what passes: a number from another country, with another area code or wr
 
 `mobilePhone(countryCode, areaCode, format)` on `String`
 
-Checks that the string is a valid mobile phone number, with the same arguments as `phone`. Numbers that can be mobile
-or fixed line, as in the United States, pass.
+Checks that the string is a valid mobile phone number, by the metadata of libphonenumber.
+
+It takes the same arguments as `phone`. Numbers that can be mobile or fixed line, as in the United States, pass.
 
 <ConstraintFacts code="mobilePhone" message="must be a valid mobile phone number" change='phone { mobilePhone = "…" }' />
 
@@ -68,8 +71,9 @@ Checks that the string is a country calling code, such as `55` or `+1`, with or 
 
 `areaCode(countryCode)` on `String`
 
-Checks that the string is an area code used in `countryCode`, such as `11` in Brazil. Where the area codes of a country
-have different lengths, any 1 to 5 digits pass.
+Checks that the string is an area code used in `countryCode`, such as `11` in Brazil.
+
+Where the area codes of a country have different lengths, any 1 to 5 digits pass.
 
 <ConstraintFacts code="areaCode" message="must be a valid area code" change='phone { areaCode = "…" }' />
 
