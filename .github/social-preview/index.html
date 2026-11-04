@@ -1,0 +1,109 @@
+<!doctype html>
+<!--
+  The image a link to Validity shows in Slack, WhatsApp, X and others: docs/images/social-preview.png for the docs
+  site (og:image in docs/docs.json), github.png for the Social preview of the repository on GitHub.
+  Everything sits in the middle square, because some apps show only a square cut from the center. The code is the
+  first line of the home page (docs/index.mdx), and the colors are those of docs/tokens.css: change them together.
+  Regenerate both images with node .github/scripts/social-preview.mjs
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Validity social preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;650&family=JetBrains+Mono:wght@400&display=block" rel="stylesheet">
+<style>
+  :root {
+    --violet: #7f52ff;
+    --lavender: #f3effe;
+    --lavender-border: #ebe5fd;
+    --text: #16121f;
+    --muted: #5d5872;
+    --code: #faf8ff;
+    --function: #b5179e;
+    --punctuation: #6e6a80;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: Inter, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(70vh 50vh at 50% 0%, var(--lavender) 0%, transparent 100%),
+      #fff;
+  }
+
+  .brand { display: flex; align-items: center; gap: 3.6vh; }
+  .brand svg { width: 15vh; height: auto; }
+  .brand span { font-size: 15vh; font-weight: 650; letter-spacing: -0.03em; line-height: 1; }
+
+  .tagline {
+    margin-top: 5vh;
+    font-size: 5.4vh;
+    line-height: 1.3;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--muted);
+  }
+  .tagline em { font-style: normal; color: var(--violet); }
+
+  code {
+    margin-top: 6.5vh;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 4.2vh;
+    color: var(--text);
+    background: var(--code);
+    border: 1px solid var(--lavender-border);
+    border-radius: 1.6vh;
+    padding: 1.8vh 3.2vh;
+  }
+  .f { color: var(--function); }
+  .p { color: var(--punctuation); }
+</style>
+</head>
+<body>
+  <div class="brand">
+    <svg viewBox="28 46 212 168" role="img" aria-label="Validity logo">
+      <defs>
+        <linearGradient id="back" gradientUnits="userSpaceOnUse" x1="40" y1="112" x2="150" y2="208">
+          <stop offset="0" stop-color="#9D7BFF"/>
+          <stop offset="1" stop-color="#7F52FF"/>
+        </linearGradient>
+        <linearGradient id="front" gradientUnits="userSpaceOnUse" x1="120" y1="208" x2="210" y2="40">
+          <stop offset="0" stop-color="#C711E1"/>
+          <stop offset="1" stop-color="#E44857"/>
+        </linearGradient>
+        <clipPath id="backRibbon">
+          <polygon points="40,112 96,112 150,208 94,208"/>
+        </clipPath>
+        <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="6"/>
+        </filter>
+      </defs>
+      <g transform="translate(-8 6)" stroke-linejoin="round" stroke-width="10">
+        <polygon points="40,112 96,112 150,208 94,208" fill="url(#back)" stroke="url(#back)"/>
+        <g clip-path="url(#backRibbon)">
+          <polygon points="168,40 224,40 142,208 86,208" fill="#1A0B3D" fill-opacity="0.45" filter="url(#soft)"/>
+        </g>
+        <polygon points="176,40 232,40 150,208 94,208" fill="url(#front)" stroke="url(#front)"/>
+      </g>
+    </svg>
+    <span>Validity</span>
+  </div>
+  <p class="tagline">Validation for Kotlin,<br>written in <em>plain Kotlin</em>.</p>
+  <code>::email <span class="f">required</span> <span class="p">{</span> <span class="f">email</span><span class="p">()</span> <span class="p">}</span></code>
+</body>
+</html>
