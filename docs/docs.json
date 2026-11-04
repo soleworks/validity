@@ -17,6 +17,14 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "seo": {
+    "metatags": {
+      "og:image": "https://validity-kt.dev/images/social-preview.png",
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "twitter:image": "https://validity-kt.dev/images/social-preview.png"
+    }
+  },
   "fonts": {
     "family": "Inter",
     "heading": {
