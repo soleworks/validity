@@ -1,0 +1,48 @@
+# Dependabot opens a pull request a week per ecosystem with every update it found, so the dependencies never fall
+# behind and no one has to look for new versions.
+#
+# Its commits and titles are Conventional Commits (`build(deps): ...`, `ci(deps): ...`), which the Pull request
+# workflow asks of every pull request. A dependency update changes nothing a user writes, so it adds no line to the
+# changelog and starts no release on its own: the next release ships it.
+version: 2
+
+updates:
+  # The version catalog, the plugins of buildSrc and settings.gradle.kts, and the Gradle wrapper.
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+      include: scope
+    groups:
+      gradle:
+        patterns: ['*']
+    ignore:
+      # The docs and the README say which Kotlin the library is built with (`2.4`), and the harness fails when the
+      # catalog says another minor, so a new minor or major of Kotlin is a change of its own, made with them.
+      - dependency-name: 'org.jetbrains.kotlin*'
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+
+  # The tools of the docs site: Mintlify, Vale, Stylelint and the checks.
+  - package-ecosystem: npm
+    directory: /docs
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+      include: scope
+    groups:
+      docs:
+        patterns: ['*']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+      include: scope
+    groups:
+      actions:
+        patterns: ['*']
