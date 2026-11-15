@@ -23,6 +23,7 @@ import io.github.soleworks.validity.samples.docs.Transfer
 import io.github.soleworks.validity.samples.docs.Trial
 import io.github.soleworks.validity.samples.docs.Voucher
 import io.github.soleworks.validity.samples.docs.Withdrawal
+import io.github.soleworks.validity.samples.readme.Credentials
 import io.github.soleworks.validity.samples.readme.Destination
 import io.github.soleworks.validity.samples.readme.Payment
 import io.github.soleworks.validity.samples.readme.Registration
@@ -111,6 +112,17 @@ class ValidatableTest {
                 Violation(path = "name", message = "must have at least 2 characters", code = "minLength"),
                 Violation(path = "email", message = "must be a valid email", code = "email"),
                 Violation(path = "age", message = "must be at least 18", code = "min")
+            )
+        }
+
+        @Test
+        fun `given a short password should report it with the message built from its length`() {
+            val credentials = Credentials(password = "s3cr3t!!")
+
+            val violations = credentials.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "password", message = "has 8 characters, needs at least 12", code = "minLength")
             )
         }
 
