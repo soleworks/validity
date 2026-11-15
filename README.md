@@ -135,6 +135,30 @@ Violation(path=age, message=must be at least 18, code=min)
 At the edge of your system, `user.validateOrThrow()` (or `validateOrThrowBlocking()`) throws a `ValidationException`
 that carries the same list, so one error handler can turn every invalid request into a response.
 
+Every message can be changed, for the whole application, for one call or for one rule. The message of a rule can be
+built from the value and the arguments of its constraint, while the `code` stays the same for programs:
+
+```kotlin
+data class Credentials(
+    val password: String?
+) : Validatable {
+    override fun validation() = validation {
+        ::password required {
+            minLength(12, message = { min -> "has $length characters, needs at least $min" })
+        }
+    }
+}
+
+Credentials(password = "s3cr3t!!").validateBlocking().violations
+```
+
+```text
+Violation(path=password, message=has 8 characters, needs at least 12, code=minLength)
+```
+
+[Messages](https://validity-kt.dev/guides/messages) shows how to translate them all at once, with placeholders such as
+`{min}`.
+
 Going further:
 
 - [Rules beside the class](https://validity-kt.dev/guides/beside-the-class), for a type that is not yours.
