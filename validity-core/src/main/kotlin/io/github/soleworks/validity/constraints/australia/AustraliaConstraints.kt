@@ -23,7 +23,7 @@ internal val AUSTRALIA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * `51 824 753 556`.
  *
  * Fails with code `abn` and, by default, the message `must be a valid ABN`
- * ([AustraliaMessages.abn][io.github.soleworks.validity.AustraliaMessages.abn]).
+ * ([AustraliaMessages.abn]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -40,7 +40,7 @@ public fun ValidationNode<String>.abn(
  * `123456782` or `123 456 782`.
  *
  * Fails with code `tfn` and, by default, the message `must be a valid TFN`
- * ([AustraliaMessages.tfn][io.github.soleworks.validity.AustraliaMessages.tfn]).
+ * ([AustraliaMessages.tfn]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

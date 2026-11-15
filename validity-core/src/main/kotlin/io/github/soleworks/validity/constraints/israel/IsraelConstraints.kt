@@ -18,7 +18,7 @@ internal val ISRAEL_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Whitespace around the number is ignored. Shorter numbers need their leading zeros.
  *
  * Fails with code `teudatZehut` and, by default, the message `must be a valid teudat zehut`
- * ([IsraelMessages.teudatZehut][io.github.soleworks.validity.IsraelMessages.teudatZehut]).
+ * ([IsraelMessages.teudatZehut]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -35,7 +35,7 @@ public fun ValidationNode<String>.teudatZehut(
  * valid Luhn check digit, such as `516179157`.
  *
  * Fails with code `companyNumber` and, by default, the message `must be a valid company number`
- * ([IsraelMessages.companyNumber][io.github.soleworks.validity.IsraelMessages.companyNumber]).
+ * ([IsraelMessages.companyNumber]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

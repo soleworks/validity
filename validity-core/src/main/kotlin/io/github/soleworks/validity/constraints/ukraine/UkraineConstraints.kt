@@ -19,7 +19,7 @@ internal val UKRAINE_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Checks that the string is a Ukrainian RNOKPP (tax number): 10 digits with a valid check digit.
  *
  * Fails with code `rnokpp` and, by default, the message `must be a valid RNOKPP`
- * ([UkraineMessages.rnokpp][io.github.soleworks.validity.UkraineMessages.rnokpp]).
+ * ([UkraineMessages.rnokpp]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

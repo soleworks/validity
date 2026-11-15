@@ -29,7 +29,7 @@ internal val PERU_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The first two digits must be `10`, `15`, `17` or `20`.
  *
  * Fails with code `ruc` and, by default, the message `must be a valid RUC`
- * ([PeruMessages.ruc][io.github.soleworks.validity.PeruMessages.ruc]).
+ * ([PeruMessages.ruc]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -48,7 +48,7 @@ public fun ValidationNode<String>.ruc(
  * The check character is a digit or a letter from `A` to `K`, and it must match the 8 digits when it is there.
  *
  * Fails with code `dni` and, by default, the message `must be a valid DNI`
- * ([PeruMessages.dni][io.github.soleworks.validity.PeruMessages.dni]).
+ * ([PeruMessages.dni]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

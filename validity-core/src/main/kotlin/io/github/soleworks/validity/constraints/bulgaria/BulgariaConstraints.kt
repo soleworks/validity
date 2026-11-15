@@ -26,7 +26,7 @@ internal val BULGARIA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Checks that the string is a Bulgarian EGN: 10 digits that start with a real birth date, and a valid check digit.
  *
  * Fails with code `egn` and, by default, the message `must be a valid EGN`
- * ([BulgariaMessages.egn][io.github.soleworks.validity.BulgariaMessages.egn]).
+ * ([BulgariaMessages.egn]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

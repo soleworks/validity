@@ -20,7 +20,7 @@ internal val NETHERLANDS_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Checks that the string is a Dutch BSN: 9 digits that pass the eleven test.
  *
  * Fails with code `bsn` and, by default, the message `must be a valid BSN`
- * ([NetherlandsMessages.bsn][io.github.soleworks.validity.NetherlandsMessages.bsn]).
+ * ([NetherlandsMessages.bsn]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -38,7 +38,7 @@ public fun ValidationNode<String>.bsn(
  * The KvK number has had no check digit since 2016, so only the format is checked.
  *
  * Fails with code `kvk` and, by default, the message `must be a valid KvK number`
- * ([NetherlandsMessages.kvk][io.github.soleworks.validity.NetherlandsMessages.kvk]).
+ * ([NetherlandsMessages.kvk]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

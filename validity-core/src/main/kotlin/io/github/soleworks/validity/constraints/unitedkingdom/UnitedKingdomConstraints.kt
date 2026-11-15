@@ -31,7 +31,7 @@ internal val UNITED_KINGDOM_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Numbers for government departments and health authorities (`GD` and `HA`) are not accepted.
  *
  * Fails with code `vat` and, by default, the message `must be a valid VAT number`
- * ([UnitedKingdomMessages.vat][io.github.soleworks.validity.UnitedKingdomMessages.vat]).
+ * ([UnitedKingdomMessages.vat]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -51,7 +51,7 @@ public fun ValidationNode<String>.vat(
  * `O` is never the second letter, and `BG`, `GB`, `NK`, `KN`, `TN`, `NT` and `ZZ` are not assigned.
  *
  * Fails with code `nino` and, by default, the message `must be a valid National Insurance number`
- * ([UnitedKingdomMessages.nino][io.github.soleworks.validity.UnitedKingdomMessages.nino]).
+ * ([UnitedKingdomMessages.nino]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

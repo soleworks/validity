@@ -25,7 +25,7 @@ internal val PORTUGAL_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The first digit must be `1`, `2` or `3`, or the first two `45` (a person who does not live in Portugal).
  *
  * Fails with code `nif` and, by default, the message `must be a valid NIF`
- * ([PortugalMessages.nif][io.github.soleworks.validity.PortugalMessages.nif]).
+ * ([PortugalMessages.nif]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -44,7 +44,7 @@ public fun ValidationNode<String>.nif(
  * The first digit must be `5`, `6`, `7`, `8` or `9`.
  *
  * Fails with code `nipc` and, by default, the message `must be a valid NIPC`
- * ([PortugalMessages.nipc][io.github.soleworks.validity.PortugalMessages.nipc]).
+ * ([PortugalMessages.nipc]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

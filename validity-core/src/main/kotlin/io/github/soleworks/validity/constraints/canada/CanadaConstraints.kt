@@ -18,7 +18,7 @@ internal val CANADA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Checks that the string is a Canadian SIN: 9 digits with a valid Luhn check digit, with no spaces.
  *
  * Fails with code `sin` and, by default, the message `must be a valid SIN`
- * ([CanadaMessages.sin][io.github.soleworks.validity.CanadaMessages.sin]).
+ * ([CanadaMessages.sin]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -37,7 +37,7 @@ public fun ValidationNode<String>.sin(
  * A program account adds the program (`RC`, `RM`, `RP` or `RT`, in uppercase) and 4 digits to the root.
  *
  * Fails with code `bn` and, by default, the message `must be a valid business number`
- * ([CanadaMessages.bn][io.github.soleworks.validity.CanadaMessages.bn]).
+ * ([CanadaMessages.bn]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

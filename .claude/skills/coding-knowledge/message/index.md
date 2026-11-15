@@ -9,8 +9,8 @@ changes it once, for the whole application:
 Validity.configure { messages { required = "obrigatório"; brazil { cpf = "CPF inválido" } } }
 ```
 
-`Messages` holds the general texts and one class per country (`BrazilMessages`). A module beside the
-core adds its own class through a `MessagesKey` (`PhoneMessages`).
+`Messages` holds the general texts and one class per country (`BrazilMessages`, in the package of its
+constraints). A module beside the core adds its own class through a `MessagesKey` (`PhoneMessages`).
 
 ## Concepts
 

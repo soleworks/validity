@@ -21,7 +21,7 @@ internal val MEXICO_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * checked against the name, since it is assigned by the SAT.
  *
  * Fails with code `rfc` and, by default, the message `must be a valid RFC`
- * ([MexicoMessages.rfc][io.github.soleworks.validity.MexicoMessages.rfc]).
+ * ([MexicoMessages.rfc]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

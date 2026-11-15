@@ -431,18 +431,12 @@ private fun publicConstraints() = production
     .functions()
     .filter { function -> function.hasPublicModifier && function.path.endsWith("Constraints.kt") }
 
-private fun defaultMessages(): Map<Pair<String, String>, String> {
-    val files = repository
-        .resolve(CORE_SOURCES)
-        .listFiles { file -> file.name.endsWith("Messages.kt") }
-        .orEmpty()
-        .toList() + repository.resolve("$PHONE_SOURCES/PhoneMessages.kt")
-
-    return files
-        .asSequence()
-        .flatMap { file -> file.messageDefaults() }
-        .toMap()
-}
+private fun defaultMessages(): Map<Pair<String, String>, String> = listOf(CORE_SOURCES, PHONE_SOURCES)
+    .asSequence()
+    .flatMap { sources -> repository.resolve(sources).walk() }
+    .filter { file -> file.name.endsWith("Messages.kt") }
+    .flatMap { file -> file.messageDefaults() }
+    .toMap()
 
 private fun MatchResult.toConstraintSection(
     page: File

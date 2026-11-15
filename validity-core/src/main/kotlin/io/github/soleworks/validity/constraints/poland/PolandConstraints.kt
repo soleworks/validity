@@ -26,7 +26,7 @@ internal val POLAND_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Checks that the string is a Polish PESEL: 11 digits that start with a real birth date, and a valid check digit.
  *
  * Fails with code `pesel` and, by default, the message `must be a valid PESEL`
- * ([PolandMessages.pesel][io.github.soleworks.validity.PolandMessages.pesel]).
+ * ([PolandMessages.pesel]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -42,7 +42,7 @@ public fun ValidationNode<String>.pesel(
  * Checks that the string is a Polish NIP (tax number): 10 digits with a valid check digit, with no dashes.
  *
  * Fails with code `nip` and, by default, the message `must be a valid NIP`
- * ([PolandMessages.nip][io.github.soleworks.validity.PolandMessages.nip]).
+ * ([PolandMessages.nip]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

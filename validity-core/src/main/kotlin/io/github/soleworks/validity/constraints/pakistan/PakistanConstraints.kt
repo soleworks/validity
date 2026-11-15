@@ -15,7 +15,7 @@ internal val PAKISTAN_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Whitespace around the number is ignored.
  *
  * Fails with code `cnic` and, by default, the message `must be a valid CNIC`
- * ([PakistanMessages.cnic][io.github.soleworks.validity.PakistanMessages.cnic]).
+ * ([PakistanMessages.cnic]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

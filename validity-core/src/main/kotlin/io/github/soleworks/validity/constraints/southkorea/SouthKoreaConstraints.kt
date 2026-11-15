@@ -45,7 +45,7 @@ internal val SOUTH_KOREA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * (the serial) are all zeros.
  *
  * Fails with code `brn` and, by default, the message `must be a valid business registration number`
- * ([SouthKoreaMessages.brn][io.github.soleworks.validity.SouthKoreaMessages.brn]).
+ * ([SouthKoreaMessages.brn]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -65,7 +65,7 @@ public fun ValidationNode<String>.brn(
  * (digits 8 and 9) is at most `96`.
  *
  * Fails with code `rrn` and, by default, the message `must be a valid resident registration number`
- * ([SouthKoreaMessages.rrn][io.github.soleworks.validity.SouthKoreaMessages.rrn]).
+ * ([SouthKoreaMessages.rrn]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

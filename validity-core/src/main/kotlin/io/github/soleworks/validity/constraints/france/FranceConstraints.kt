@@ -27,7 +27,7 @@ internal val FRANCE_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * 000`.
  *
  * Fails with code `spi` and, by default, the message `must be a valid SPI`
- * ([FranceMessages.spi][io.github.soleworks.validity.FranceMessages.spi]).
+ * ([FranceMessages.spi]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -44,7 +44,7 @@ public fun ValidationNode<String>.spi(
  * `732829320` or `732 829 320`.
  *
  * Fails with code `siren` and, by default, the message `must be a valid SIREN`
- * ([FranceMessages.siren][io.github.soleworks.validity.FranceMessages.siren]).
+ * ([FranceMessages.siren]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -64,7 +64,7 @@ public fun ValidationNode<String>.siren(
  * (SIREN `356000000`) are checked by La Poste's rule instead: the sum of their digits is a multiple of 5.
  *
  * Fails with code `siret` and, by default, the message `must be a valid SIRET`
- * ([FranceMessages.siret][io.github.soleworks.validity.FranceMessages.siret]).
+ * ([FranceMessages.siret]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

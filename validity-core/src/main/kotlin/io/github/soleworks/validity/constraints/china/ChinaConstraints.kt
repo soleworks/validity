@@ -20,7 +20,7 @@ internal val CHINA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * and `Z`.
  *
  * Fails with code `uscc` and, by default, the message `must be a valid unified social credit code`
- * ([ChinaMessages.uscc][io.github.soleworks.validity.ChinaMessages.uscc]).
+ * ([ChinaMessages.uscc]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

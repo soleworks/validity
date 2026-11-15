@@ -23,7 +23,7 @@ internal val COLOMBIA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The check digit is the last one, and the dash before it is optional when there are no dots.
  *
  * Fails with code `nit` and, by default, the message `must be a valid NIT`
- * ([ColombiaMessages.nit][io.github.soleworks.validity.ColombiaMessages.nit]).
+ * ([ColombiaMessages.nit]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -41,7 +41,7 @@ public fun ValidationNode<String>.nit(
  * The CC has no check digit, so only the format is checked.
  *
  * Fails with code `cc` and, by default, the message `must be a valid CC`
- * ([ColombiaMessages.cc][io.github.soleworks.validity.ColombiaMessages.cc]).
+ * ([ColombiaMessages.cc]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

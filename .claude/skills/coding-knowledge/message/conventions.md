@@ -18,6 +18,14 @@ public class BrazilMessages internal constructor() {
 Why: the configuration is the only door to the messages. Checked by the harness
 (`ProductionConventionsTest`, Layout).
 
+A messages class lives in the package of the constraints it holds the texts of: `Messages` in
+`io.github.soleworks.validity`, `BrazilMessages` in `constraints.brazil` beside `BrazilConstraints.kt`,
+`PhoneMessages` in `phone` beside `PhoneConstraints.kt`.
+
+Why: a country or a module is found in one place, and the root package holds only the DSL. Checked by the
+harness (`ProductionConventionsTest`, Constraints): a file of a country package is its constraints or its
+messages.
+
 ## The text
 
 The text is in English, lower case, and completes a sentence about the value: `must be a valid CPF`,
@@ -26,7 +34,7 @@ always, and the constraint's own parameters by name (`{min}`, `{fields}`, `{patt
 
 ## The messages of a country
 
-Each country has a class `<Country>Messages`, held by `Messages` as `internal val <country>` and
+Each country has a class `<Country>Messages` in `constraints.<country>`, held by `Messages` as `internal val <country>` and
 opened with `public fun <country>(block: <Country>Messages.() -> Unit)`. Its constraints default to
 `messages.<country>.<key>`.
 

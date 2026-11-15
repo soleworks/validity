@@ -24,7 +24,7 @@ internal val BELGIUM_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The first digit is `0` or `1`, and the last two digits are 97 minus the first eight modulo 97.
  *
  * Fails with code `bce` and, by default, the message `must be a valid enterprise number`
- * ([BelgiumMessages.bce][io.github.soleworks.validity.BelgiumMessages.bce]).
+ * ([BelgiumMessages.bce]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -43,7 +43,7 @@ public fun ValidationNode<String>.bce(
  * The month of birth is from `00` to `12`, and the check digits must match for a birth in the 1900s or the 2000s.
  *
  * Fails with code `nationalNumber` and, by default, the message `must be a valid national number`
- * ([BelgiumMessages.nationalNumber][io.github.soleworks.validity.BelgiumMessages.nationalNumber]).
+ * ([BelgiumMessages.nationalNumber]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

@@ -27,7 +27,7 @@ internal val URUGUAY_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The first two digits are a region from `01` to `22`, the next six are not all zeros, and digits 9 to 11 are `001`.
  *
  * Fails with code `rut` and, by default, the message `must be a valid RUT`
- * ([UruguayMessages.rut][io.github.soleworks.validity.UruguayMessages.rut]).
+ * ([UruguayMessages.rut]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -44,7 +44,7 @@ public fun ValidationNode<String>.rut(
  * `1.234.567-2`.
  *
  * Fails with code `ci` and, by default, the message `must be a valid CI`
- * ([UruguayMessages.ci][io.github.soleworks.validity.UruguayMessages.ci]).
+ * ([UruguayMessages.ci]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

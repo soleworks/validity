@@ -25,7 +25,7 @@ internal val ARGENTINA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The first two digits must be a prefix AFIP assigns: `20`, `23`, `24`, `27`, `30`, `33`, `34`, `50`, `51` or `55`.
  *
  * Fails with code `cuit` and, by default, the message `must be a valid CUIT`
- * ([ArgentinaMessages.cuit][io.github.soleworks.validity.ArgentinaMessages.cuit]).
+ * ([ArgentinaMessages.cuit]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -43,7 +43,7 @@ public fun ValidationNode<String>.cuit(
  * The CUIL is the CUIT of a person, so the first two digits must be `20`, `23`, `24` or `27`.
  *
  * Fails with code `cuil` and, by default, the message `must be a valid CUIL`
- * ([ArgentinaMessages.cuil][io.github.soleworks.validity.ArgentinaMessages.cuil]).
+ * ([ArgentinaMessages.cuil]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

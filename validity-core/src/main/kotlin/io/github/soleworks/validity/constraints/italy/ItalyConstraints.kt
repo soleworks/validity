@@ -59,7 +59,7 @@ internal val ITALY_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * `888` or `999`.
  *
  * Fails with code `partitaIva` and, by default, the message `must be a valid partita IVA`
- * ([ItalyMessages.partitaIva][io.github.soleworks.validity.ItalyMessages.partitaIva]).
+ * ([ItalyMessages.partitaIva]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -79,7 +79,7 @@ public fun ValidationNode<String>.partitaIva(
  * codes that repeat (omocodia), and the day of birth must be from 1 to 31, plus 40 for women.
  *
  * Fails with code `codiceFiscale` and, by default, the message `must be a valid codice fiscale`
- * ([ItalyMessages.codiceFiscale][io.github.soleworks.validity.ItalyMessages.codiceFiscale]).
+ * ([ItalyMessages.codiceFiscale]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

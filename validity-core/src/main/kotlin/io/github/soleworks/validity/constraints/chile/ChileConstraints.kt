@@ -22,7 +22,7 @@ internal val CHILE_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The check character is a digit or an uppercase `K`, and the dash before it is optional when there are no dots.
  *
  * Fails with code `rut` and, by default, the message `must be a valid RUT`
- * ([ChileMessages.rut][io.github.soleworks.validity.ChileMessages.rut]).
+ * ([ChileMessages.rut]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

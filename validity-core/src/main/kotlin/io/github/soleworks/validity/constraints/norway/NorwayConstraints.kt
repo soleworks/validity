@@ -24,7 +24,7 @@ internal val NORWAY_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * `988 077 917`.
  *
  * Fails with code `organisasjonsnummer` and, by default, the message `must be a valid organisasjonsnummer`
- * ([NorwayMessages.organisasjonsnummer][io.github.soleworks.validity.NorwayMessages.organisasjonsnummer]).
+ * ([NorwayMessages.organisasjonsnummer]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -41,7 +41,7 @@ public fun ValidationNode<String>.organisasjonsnummer(
  * `15108695088` or `151086 95088`.
  *
  * Fails with code `fodselsnummer` and, by default, the message `must be a valid fødselsnummer`
- * ([NorwayMessages.fodselsnummer][io.github.soleworks.validity.NorwayMessages.fodselsnummer]).
+ * ([NorwayMessages.fodselsnummer]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

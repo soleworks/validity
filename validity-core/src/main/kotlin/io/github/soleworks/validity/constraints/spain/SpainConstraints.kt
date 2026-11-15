@@ -25,7 +25,7 @@ internal val SPAIN_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Case and whitespace around it are ignored.
  *
  * Fails with code `dni` and, by default, the message `must be a valid DNI`
- * ([SpainMessages.dni][io.github.soleworks.validity.SpainMessages.dni]).
+ * ([SpainMessages.dni]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -44,7 +44,7 @@ public fun ValidationNode<String>.dni(
  * Case and whitespace around it are ignored.
  *
  * Fails with code `nie` and, by default, the message `must be a valid NIE`
- * ([SpainMessages.nie][io.github.soleworks.validity.SpainMessages.nie]).
+ * ([SpainMessages.nie]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -65,7 +65,7 @@ public fun ValidationNode<String>.nie(
  * uppercase.
  *
  * Fails with code `cif` and, by default, the message `must be a valid CIF`
- * ([SpainMessages.cif][io.github.soleworks.validity.SpainMessages.cif]).
+ * ([SpainMessages.cif]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
