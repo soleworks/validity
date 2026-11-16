@@ -20,7 +20,7 @@ internal val SLOVENIA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * digit.
  *
  * Fails with code `davcnaStevilka` and, by default, the message `must be a valid davčna številka`
- * ([SloveniaMessages.davcnaStevilka][io.github.soleworks.validity.SloveniaMessages.davcnaStevilka]).
+ * ([SloveniaMessages.davcnaStevilka]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

@@ -25,7 +25,7 @@ internal val INDIA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * `K`), and the digits are not all zeros.
  *
  * Fails with code `pan` and, by default, the message `must be a valid PAN`
- * ([IndiaMessages.pan][io.github.soleworks.validity.IndiaMessages.pan]).
+ * ([IndiaMessages.pan]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -44,7 +44,7 @@ public fun ValidationNode<String>.pan(
  * a valid PAN, the 13th is not `0` and the 14th is `Z`.
  *
  * Fails with code `gstin` and, by default, the message `must be a valid GSTIN`
- * ([IndiaMessages.gstin][io.github.soleworks.validity.IndiaMessages.gstin]).
+ * ([IndiaMessages.gstin]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

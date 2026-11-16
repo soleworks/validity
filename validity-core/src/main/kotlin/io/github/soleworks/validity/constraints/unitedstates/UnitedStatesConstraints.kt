@@ -112,7 +112,7 @@ internal val UNITED_STATES_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The separator can be a dash, a space or nothing.
  *
  * Fails with code `ein` and, by default, the message `must be a valid EIN`
- * ([UnitedStatesMessages.ein][io.github.soleworks.validity.UnitedStatesMessages.ein]).
+ * ([UnitedStatesMessages.ein]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -131,7 +131,7 @@ public fun ValidationNode<String>.ein(
  * (last 4) is not `0000`. Numbers the SSA has published as examples, such as `078-05-1120`, fail too.
  *
  * Fails with code `ssn` and, by default, the message `must be a valid SSN`
- * ([UnitedStatesMessages.ssn][io.github.soleworks.validity.UnitedStatesMessages.ssn]).
+ * ([UnitedStatesMessages.ssn]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -149,7 +149,7 @@ public fun ValidationNode<String>.ssn(
  * The first digit is `9`, and the group (digits 4 and 5) is from `70` to `99`, except `89` and `93`.
  *
  * Fails with code `itin` and, by default, the message `must be a valid ITIN`
- * ([UnitedStatesMessages.itin][io.github.soleworks.validity.UnitedStatesMessages.itin]).
+ * ([UnitedStatesMessages.itin]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

@@ -13,6 +13,7 @@ private const val COUNTRY_PACKAGE_PREFIX = "io.github.soleworks.validity.constra
 private val UPPER_SNAKE_CASE_FORMAT = Regex("""[A-Z][A-Z0-9_]*""")
 private val MESSAGE_DEFAULT_FORMAT = Regex("""(messages|phoneMessages)\..+""")
 private val TRAILING_LAMBDAS = setOf("block", "selector")
+private val COUNTRY_FILE_KINDS = listOf("constraints", "messages")
 private val ALLOWED_IMPORTS = listOf(
     "io.github.soleworks.validity.",
     "kotlin.",
@@ -95,14 +96,13 @@ class ProductionConventionsTest {
         }
 
         @Test
-        fun `every constraint file in a country package should be named after the country`() {
+        fun `every file in a country package should be the constraints or the messages of the country`() {
             production.files
                 .filter { file -> file.packageName.startsWith(COUNTRY_PACKAGE_PREFIX) }
                 .assertTrue { file ->
-                    file.name.lowercase() == file.packageName.substringAfterLast(
-                        '.'
-                    ) +
-                        "constraints"
+                    val country = file.packageName.substringAfterLast('.')
+
+                    file.name.lowercase() in COUNTRY_FILE_KINDS.map { kind -> country + kind }
                 }
         }
     }

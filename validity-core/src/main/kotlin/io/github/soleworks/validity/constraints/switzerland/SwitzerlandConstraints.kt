@@ -22,7 +22,7 @@ internal val SWITZERLAND_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * `CHE-116.281.710`, `CHE116281710` or the 9 digits alone.
  *
  * Fails with code `uid` and, by default, the message `must be a valid UID`
- * ([SwitzerlandMessages.uid][io.github.soleworks.validity.SwitzerlandMessages.uid]).
+ * ([SwitzerlandMessages.uid]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -39,7 +39,7 @@ public fun ValidationNode<String>.uid(
  * end with a valid EAN-13 check digit, as `7569217076985` or `756.9217.0769.85`.
  *
  * Fails with code `ahv` and, by default, the message `must be a valid AHV number`
- * ([SwitzerlandMessages.ahv][io.github.soleworks.validity.SwitzerlandMessages.ahv]).
+ * ([SwitzerlandMessages.ahv]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

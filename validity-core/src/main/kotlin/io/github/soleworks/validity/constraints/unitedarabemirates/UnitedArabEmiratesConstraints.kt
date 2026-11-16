@@ -19,7 +19,7 @@ internal val UNITED_ARAB_EMIRATES_TAX_IDS: Map<String, (String) -> Boolean> = ma
  * Each emirate issues its own numbers and none has a check digit, so only the format is checked.
  *
  * Fails with code `tradeLicense` and, by default, the message `must be a valid trade license number`
- * ([UnitedArabEmiratesMessages.tradeLicense][io.github.soleworks.validity.UnitedArabEmiratesMessages.tradeLicense]).
+ * ([UnitedArabEmiratesMessages.tradeLicense]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -36,7 +36,7 @@ public fun ValidationNode<String>.tradeLicense(
  * `784196865703050` or `784-1968-6570305-0`.
  *
  * Fails with code `emiratesId` and, by default, the message `must be a valid Emirates ID`
- * ([UnitedArabEmiratesMessages.emiratesId][io.github.soleworks.validity.UnitedArabEmiratesMessages.emiratesId]).
+ * ([UnitedArabEmiratesMessages.emiratesId]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

@@ -1,0 +1,20 @@
+package io.github.soleworks.validity.constraints.spain
+
+import io.github.soleworks.validity.ValidityDsl
+
+/**
+ * The default messages of the constraints of Spain.
+ *
+ * Change them with [Messages.spain][io.github.soleworks.validity.Messages.spain].
+ */
+@ValidityDsl
+public class SpainMessages internal constructor() {
+    /** Default message of `dni`. */
+    public var dni: String = "must be a valid DNI"
+
+    /** Default message of `nie`. */
+    public var nie: String = "must be a valid NIE"
+
+    /** Default message of `cif`. */
+    public var cif: String = "must be a valid CIF"
+}

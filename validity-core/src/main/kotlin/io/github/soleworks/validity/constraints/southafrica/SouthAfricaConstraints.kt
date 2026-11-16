@@ -23,7 +23,7 @@ internal val SOUTH_AFRICA_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The number has no check digit, so only the format is checked.
  *
  * Fails with code `cipc` and, by default, the message `must be a valid company registration number`
- * ([SouthAfricaMessages.cipc][io.github.soleworks.validity.SouthAfricaMessages.cipc]).
+ * ([SouthAfricaMessages.cipc]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -43,7 +43,7 @@ public fun ValidationNode<String>.cipc(
  * permanent resident).
  *
  * Fails with code `idNumber` and, by default, the message `must be a valid ID number`
- * ([SouthAfricaMessages.idNumber][io.github.soleworks.validity.SouthAfricaMessages.idNumber]).
+ * ([SouthAfricaMessages.idNumber]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

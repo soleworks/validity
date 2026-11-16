@@ -26,7 +26,7 @@ internal val GERMANY_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * The first digit is not `0`, and the check digit is the ISO 7064 MOD 11,10 of the others.
  *
  * Fails with code `ustIdNr` and, by default, the message `must be a valid USt-IdNr.`
- * ([GermanyMessages.ustIdNr][io.github.soleworks.validity.GermanyMessages.ustIdNr]).
+ * ([GermanyMessages.ustIdNr]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -46,7 +46,7 @@ public fun ValidationNode<String>.ustIdNr(
  * is the ISO 7064 MOD 11,10 of the others.
  *
  * Fails with code `steuerId` and, by default, the message `must be a valid Steuer-ID`
- * ([GermanyMessages.steuerId][io.github.soleworks.validity.GermanyMessages.steuerId]).
+ * ([GermanyMessages.steuerId]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

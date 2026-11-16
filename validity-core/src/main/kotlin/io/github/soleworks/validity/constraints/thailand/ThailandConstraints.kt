@@ -19,7 +19,7 @@ internal val THAILAND_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Checks that the string is a Thai national ID number: 13 digits with a valid check digit, with no dashes.
  *
  * Fails with code `nationalId` and, by default, the message `must be a valid national identification number`
- * ([ThailandMessages.nationalId][io.github.soleworks.validity.ThailandMessages.nationalId]).
+ * ([ThailandMessages.nationalId]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

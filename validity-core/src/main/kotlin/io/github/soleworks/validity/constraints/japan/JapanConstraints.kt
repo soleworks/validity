@@ -24,7 +24,7 @@ internal val JAPAN_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * such as `5835678256246`.
  *
  * Fails with code `corporateNumber` and, by default, the message `must be a valid corporate number`
- * ([JapanMessages.corporateNumber][io.github.soleworks.validity.JapanMessages.corporateNumber]).
+ * ([JapanMessages.corporateNumber]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -41,7 +41,7 @@ public fun ValidationNode<String>.corporateNumber(
  * `1234 5678 9018`.
  *
  * Fails with code `myNumber` and, by default, the message `must be a valid My Number`
- * ([JapanMessages.myNumber][io.github.soleworks.validity.JapanMessages.myNumber]).
+ * ([JapanMessages.myNumber]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

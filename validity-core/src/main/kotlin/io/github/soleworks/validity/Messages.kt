@@ -1,5 +1,41 @@
 package io.github.soleworks.validity
 
+import io.github.soleworks.validity.constraints.argentina.ArgentinaMessages
+import io.github.soleworks.validity.constraints.australia.AustraliaMessages
+import io.github.soleworks.validity.constraints.belgium.BelgiumMessages
+import io.github.soleworks.validity.constraints.brazil.BrazilMessages
+import io.github.soleworks.validity.constraints.bulgaria.BulgariaMessages
+import io.github.soleworks.validity.constraints.canada.CanadaMessages
+import io.github.soleworks.validity.constraints.chile.ChileMessages
+import io.github.soleworks.validity.constraints.china.ChinaMessages
+import io.github.soleworks.validity.constraints.colombia.ColombiaMessages
+import io.github.soleworks.validity.constraints.france.FranceMessages
+import io.github.soleworks.validity.constraints.germany.GermanyMessages
+import io.github.soleworks.validity.constraints.india.IndiaMessages
+import io.github.soleworks.validity.constraints.israel.IsraelMessages
+import io.github.soleworks.validity.constraints.italy.ItalyMessages
+import io.github.soleworks.validity.constraints.japan.JapanMessages
+import io.github.soleworks.validity.constraints.mexico.MexicoMessages
+import io.github.soleworks.validity.constraints.netherlands.NetherlandsMessages
+import io.github.soleworks.validity.constraints.norway.NorwayMessages
+import io.github.soleworks.validity.constraints.pakistan.PakistanMessages
+import io.github.soleworks.validity.constraints.paraguay.ParaguayMessages
+import io.github.soleworks.validity.constraints.peru.PeruMessages
+import io.github.soleworks.validity.constraints.poland.PolandMessages
+import io.github.soleworks.validity.constraints.portugal.PortugalMessages
+import io.github.soleworks.validity.constraints.russia.RussiaMessages
+import io.github.soleworks.validity.constraints.slovenia.SloveniaMessages
+import io.github.soleworks.validity.constraints.southafrica.SouthAfricaMessages
+import io.github.soleworks.validity.constraints.southkorea.SouthKoreaMessages
+import io.github.soleworks.validity.constraints.spain.SpainMessages
+import io.github.soleworks.validity.constraints.sweden.SwedenMessages
+import io.github.soleworks.validity.constraints.switzerland.SwitzerlandMessages
+import io.github.soleworks.validity.constraints.thailand.ThailandMessages
+import io.github.soleworks.validity.constraints.ukraine.UkraineMessages
+import io.github.soleworks.validity.constraints.unitedarabemirates.UnitedArabEmiratesMessages
+import io.github.soleworks.validity.constraints.unitedkingdom.UnitedKingdomMessages
+import io.github.soleworks.validity.constraints.unitedstates.UnitedStatesMessages
+import io.github.soleworks.validity.constraints.uruguay.UruguayMessages
 import java.util.concurrent.ConcurrentHashMap
 
 /**

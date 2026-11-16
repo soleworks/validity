@@ -22,7 +22,7 @@ internal val SWEDEN_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * or `556036-0793`.
  *
  * Fails with code `organisationsnummer` and, by default, the message `must be a valid organisationsnummer`
- * ([SwedenMessages.organisationsnummer][io.github.soleworks.validity.SwedenMessages.organisationsnummer]).
+ * ([SwedenMessages.organisationsnummer]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -42,7 +42,7 @@ public fun ValidationNode<String>.organisationsnummer(
  * from 61 to 91 for a samordningsnummer.
  *
  * Fails with code `personnummer` and, by default, the message `must be a valid personnummer`
- * ([SwedenMessages.personnummer][io.github.soleworks.validity.SwedenMessages.personnummer]).
+ * ([SwedenMessages.personnummer]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

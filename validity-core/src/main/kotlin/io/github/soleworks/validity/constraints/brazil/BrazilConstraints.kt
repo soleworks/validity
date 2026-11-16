@@ -32,7 +32,7 @@ internal val BRAZIL_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * A number with all digits the same fails.
  *
  * Fails with code `cpf` and, by default, the message `must be a valid CPF`
- * ([BrazilMessages.cpf][io.github.soleworks.validity.BrazilMessages.cpf]).
+ * ([BrazilMessages.cpf]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -50,7 +50,7 @@ public fun ValidationNode<String>.cpf(
  * The first 12 characters can be uppercase letters, as in the alphanumeric CNPJ.
  *
  * Fails with code `cnpj` and, by default, the message `must be a valid CNPJ`
- * ([BrazilMessages.cnpj][io.github.soleworks.validity.BrazilMessages.cnpj]).
+ * ([BrazilMessages.cnpj]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -68,7 +68,7 @@ public fun ValidationNode<String>.cnpj(
  * A number with all digits the same fails.
  *
  * Fails with code `cnh` and, by default, the message `must be a valid CNH`
- * ([BrazilMessages.cnh][io.github.soleworks.validity.BrazilMessages.cnh]).
+ * ([BrazilMessages.cnh]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -86,7 +86,7 @@ public fun ValidationNode<String>.cnh(
  * A number with all digits the same fails.
  *
  * Fails with code `pis` and, by default, the message `must be a valid PIS`
- * ([BrazilMessages.pis][io.github.soleworks.validity.BrazilMessages.pis]).
+ * ([BrazilMessages.pis]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -102,7 +102,7 @@ public fun ValidationNode<String>.pis(
  * Checks that the string is a Brazilian CEP: 8 digits, with or without the dash, such as `01310-100`.
  *
  * Fails with code `cep` and, by default, the message `must be a valid CEP`
- * ([BrazilMessages.cep][io.github.soleworks.validity.BrazilMessages.cep]).
+ * ([BrazilMessages.cep]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -120,7 +120,7 @@ public fun ValidationNode<String>.cep(
  * Letters are uppercase, and the separator can be a dash, a space or nothing.
  *
  * Fails with code `placa` and, by default, the message `must be a valid license plate`
- * ([BrazilMessages.placa][io.github.soleworks.validity.BrazilMessages.placa]).
+ * ([BrazilMessages.placa]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */

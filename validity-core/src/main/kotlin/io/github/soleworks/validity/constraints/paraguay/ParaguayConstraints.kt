@@ -20,7 +20,7 @@ internal val PARAGUAY_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
  * Checks that the string is a Paraguayan RUC with a valid check digit, as 6 to 9 digits or as `80028061-0`.
  *
  * Fails with code `ruc` and, by default, the message `must be a valid RUC`
- * ([ParaguayMessages.ruc][io.github.soleworks.validity.ParaguayMessages.ruc]).
+ * ([ParaguayMessages.ruc]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
@@ -38,7 +38,7 @@ public fun ValidationNode<String>.ruc(
  * The CI has no check digit, so only the format is checked.
  *
  * Fails with code `ci` and, by default, the message `must be a valid CI`
- * ([ParaguayMessages.ci][io.github.soleworks.validity.ParaguayMessages.ci]).
+ * ([ParaguayMessages.ci]).
  *
  * @param message the message of the violation. `{path}` and `{value}` are filled in.
  */
