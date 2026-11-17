@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0](https://github.com/soleworks/validity/compare/v0.1.0...v0.2.0) (2026-11-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** the <Country>Messages classes moved from io.github.soleworks.validity to io.github.soleworks.validity.constraints.<country>, beside their constraints. Code that names one, such as an extension on BrazilMessages, imports it from the new package; messages { brazil { ... } } is unchanged.
+
+### Code Refactoring
+
+* **core:** move country messages next to constraints ([#64](https://github.com/soleworks/validity/issues/64)) ([9e422a8](https://github.com/soleworks/validity/commit/9e422a80539a8db66e3436a3f7d7483dc69724c6))
+
 ## 0.1.0 (2026-11-03)
 
 
