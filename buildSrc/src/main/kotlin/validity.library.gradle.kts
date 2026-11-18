@@ -1,3 +1,4 @@
+import com.vanniktech.maven.publish.DeploymentValidation
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinJvm
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
@@ -20,10 +21,14 @@ kotlin {
 
 // Published to Maven Central by the Release workflow. The credentials and the signing key come from the
 // ORG_GRADLE_PROJECT_mavenCentralUsername, ..._mavenCentralPassword, ..._signingInMemoryKey and
-// ..._signingInMemoryKeyPassword environment variables.
+// ..._signingInMemoryKeyPassword environment variables. The publish ends only when the Central Portal says the
+// deployment is on Maven Central, and fails when the Portal rejects it, so a workflow step after it can tell a reader
+// the version exists. Asking repo1.maven.org instead is wrong: its CDN caches the 404 of a version asked for before it
+// is there, and keeps answering it after the version arrives. SONATYPE_CLOSE_TIMEOUT_SECONDS in gradle.properties
+// bounds the wait.
 mavenPublishing {
     configure(KotlinJvm(javadocJar = JavadocJar.Empty(), sourcesJar = true))
-    publishToMavenCentral(automaticRelease = true)
+    publishToMavenCentral(automaticRelease = true, validateDeployment = DeploymentValidation.PUBLISHED)
     signAllPublications()
 
     pom {

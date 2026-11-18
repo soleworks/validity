@@ -1,6 +1,6 @@
 // Shows a version in the docs site and the README once it is on Maven Central. The Release workflow runs it after the
-// publish job, when wait-for-maven-central.sh has seen the version there, so a reader is never told to add a version
-// that cannot be downloaded yet. It is the only writer of the version a reader sees: the `version` variable and the
+// publish job, which ends once the Central Portal says the version is on Maven Central, so a reader is never told to add
+// a version that cannot be downloaded yet. It is the only writer of the version a reader sees: the `version` variable and the
 // navbar link of docs/docs.json, and the dependencies and the badge of the README. release-please writes the version
 // only in gradle.properties, which the build needs before it publishes. At the first release, it also puts the
 // dependency blocks in place of the notes that Validity is not on Maven Central yet. It changes nothing when the docs

@@ -26,10 +26,12 @@ removed.
    also sets the version in `gradle.properties`, which the build publishes.
 3. **Merging that pull request is the release.** release-please tags the merge commit (`v0.2.0`) and creates the
    GitHub release with its changelog. The same workflow then checks that the build has that version, builds it, and
-   publishes `validity-core` and `validity-phone`, signed, to Maven Central.
-4. **The docs and the README follow by themselves.** The `show-release` job waits until
-   [.github/scripts/wait-for-maven-central.sh](.github/scripts/wait-for-maven-central.sh) can download the version
-   from Maven Central, which takes minutes after the publish, then runs
+   publishes `validity-core` and `validity-phone`, signed, to Maven Central. The publish ends only when the Central
+   Portal says the deployment is on Maven Central, which takes minutes, and fails when the Portal rejects it. It waits
+   at most an hour, set by `SONATYPE_CLOSE_TIMEOUT_SECONDS` in `gradle.properties`. Nothing asks `repo1.maven.org`
+   whether the version is there: its CDN caches the 404 of a version asked for too early, and keeps answering it after
+   the version arrives.
+4. **The docs and the README follow by themselves.** Once the publish job has ended, the `show-release` job runs
    [.github/scripts/show-release.mjs](.github/scripts/show-release.mjs). The script is the only writer of the version a
    reader sees: the `version` variable of `docs/docs.json`, which every page of the docs site reads as `{{version}}`,
    the version link of the docs navbar, and the dependencies and the badge of the README. At the first release it also
@@ -70,15 +72,24 @@ The script behind the commit, title and break checks is
 
 ## When something fails
 
-- **The publish job failed** (a missing secret, Maven Central down): the tag and the GitHub release already exist.
-  Fix the cause and run the failed job again from the Actions tab. It publishes the same tagged commit, and the
-  `show-release` job runs after it.
-- **The `show-release` job failed**: the docs do not show the version yet. When it waited an hour without seeing the
-  version on Maven Central, look for the deployment on the Central Portal, which may have rejected it. Run the job
-  again once the version is there: the script changes only what is missing.
+- **The publish job failed** (a missing secret, a deployment the Central Portal rejected): the tag and the GitHub
+  release already exist. The log says why, with the Portal's errors for a rejected deployment. Fix the cause and run
+  the failed job again from the Actions tab. It publishes the same tagged commit, and the `show-release` job runs after
+  it.
+- **The publish job waited an hour**: the log ends on a state such as *Deployment is being published to Maven
+  Central*, and the deployment goes on by itself. Running the job again would upload the version a second time, which
+  the Portal refuses. Watch the deployment on the [Central Portal](https://central.sonatype.com/publishing/deployments);
+  once it is published, run `node .github/scripts/show-release.mjs <version>` on a branch and open a pull request
+  with what it changes.
+- **The `show-release` job failed** (the docs checks, the push): the docs do not show the version yet. Run the job
+  again once the cause is fixed: the script changes only what is missing.
 - **A release candidate failed**: the workflow comments on the release pull request with the link to the run. Run it
-  again once the cause is fixed. A failure before the upload keeps the number; once a candidate is uploaded its tag
-  exists, and the next run takes the next number, since Maven Central never takes the same version twice.
+  again once the cause is fixed. The tag of a candidate exists only once Maven Central has it, so a failed run keeps the
+  number, and the next run takes the next number after a published candidate, since Maven Central never takes the same
+  version twice. When the publish step waited an hour, the candidate may still reach Maven Central: once the Portal
+  shows it published, create its prerelease with
+  `gh release create v<version> --target <commit> --title <version> --prerelease --generate-notes` before running the
+  workflow again, so the next run does not take its number.
 - **The release pull request does not open, or the docs are not pushed**: the `validity-release` GitHub App must be
   installed on the repository, and its client ID and private key set as below. A new private key replaces a lost one.
 

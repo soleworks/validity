@@ -84,9 +84,10 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
 
-  # Once the version can be downloaded from Maven Central, shows it in the docs and the README: before that, a reader
-  # would be told to add a version that does not exist yet. It pushes to main as the validity-release GitHub App, which
-  # the ruleset of main lets through, and runs the docs checks itself before it pushes.
+  # Shows the version in the docs and the README. It runs only after the publish job, which ends once the Central Portal
+  # says the version is on Maven Central: before that, a reader would be told to add a version that does not exist yet.
+  # It pushes to main as the validity-release GitHub App, which the ruleset of main lets through, and runs the docs
+  # checks itself before it pushes.
   show-release:
     needs: [release-please, publish]
     runs-on: ubuntu-latest
@@ -101,7 +102,6 @@ jobs:
           ref: main
           fetch-depth: 0
           token: ${{ steps.app.outputs.token }}
-      - run: bash .github/scripts/wait-for-maven-central.sh "${{ needs.release-please.outputs.version }}"
       - run: node .github/scripts/show-release.mjs "${{ needs.release-please.outputs.version }}"
       - name: Look for changes
         id: changes
