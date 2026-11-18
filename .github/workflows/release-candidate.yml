@@ -73,15 +73,14 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
-      # Right after the upload, so the number is taken even if Maven Central is slow: Maven Central never takes the same
-      # version twice, so running the workflow again goes on to the next number.
+      # The publish step ends once the Central Portal says the candidate is on Maven Central, so its tag names a version
+      # a reader can download. Maven Central never takes the same version twice, so the tag also takes the number: the
+      # next run goes on to the next one.
       - name: Create the prerelease
         if: steps.version.outputs.changed == 'true'
         run: |
           gh release create "v${{ steps.version.outputs.version }}" --target "${{ steps.version.outputs.sha }}" \
             --title "${{ steps.version.outputs.version }}" --prerelease --generate-notes
-      - run: bash .github/scripts/wait-for-maven-central.sh "${{ steps.version.outputs.version }}"
-        if: steps.version.outputs.changed == 'true'
       - name: Tell the release pull request
         if: steps.version.outputs.changed == 'true'
         run: |
