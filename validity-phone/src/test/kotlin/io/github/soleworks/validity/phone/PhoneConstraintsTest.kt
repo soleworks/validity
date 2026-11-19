@@ -34,9 +34,7 @@ class PhoneConstraintsTest {
 
         @Test
         fun `given a local number alone with no area code should accept it by its length only`() {
-            val node = ValidationNode(path = "phone", value = "0000").apply { phone() }
-
-            val violations = node.validate()
+            val violations = violationsOf(path = "phone", value = "0000") { phone() }
 
             violations shouldBe emptyList()
         }
