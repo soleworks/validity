@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://github.com/soleworks/validity/compare/v0.2.0...v0.3.0) (2026-11-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** add(node) and the ValidationNode constructor are internal. Put the rules of a value that is not a property with required(path, value) { }.
+
+### Bug Fixes
+
+* **build:** ktlint checks the files of a worktree ([#68](https://github.com/soleworks/validity/issues/68)) ([6c3a478](https://github.com/soleworks/validity/commit/6c3a4784566d80f61fc178970ab3f48186729871))
+
+
+### Code Refactoring
+
+* **core:** hide building a ValidationNode by hand ([#71](https://github.com/soleworks/validity/issues/71)) ([d3b0774](https://github.com/soleworks/validity/commit/d3b07744cb6457d3856298c4c62433d383202db6))
+
 ## [0.2.0](https://github.com/soleworks/validity/compare/v0.1.0...v0.2.0) (2026-11-16)
 
 
