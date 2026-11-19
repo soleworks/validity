@@ -10,9 +10,9 @@ internal val PAKISTAN_TAX_IDS: Map<String, (String) -> Boolean> = mapOf(
 )
 
 /**
- * Checks that the string is a Pakistani CNIC written as `00000-0000000-0`.
+ * Checks that the string is a Pakistani CNIC written as `NNNNN-NNNNNNN-N`, such as `35202-1234567-1`.
  *
- * Whitespace around the number is ignored.
+ * The first digit is 1 to 7 and the last 1 to 9. Whitespace around the number is ignored.
  *
  * Fails with code `cnic` and, by default, the message `must be a valid CNIC`
  * ([PakistanMessages.cnic]).

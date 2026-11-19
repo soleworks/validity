@@ -3,7 +3,8 @@ package io.github.soleworks.validity
 /**
  * What [validate][io.github.soleworks.validity.validate] or [Validation.validate] found.
  *
- * @property violations every broken rule, in the order the rules are declared.
+ * @property violations every broken rule, in the order the rules are declared, with the constraints of a property
+ *     before the violations of its nested objects and elements.
  */
 public class ValidationResult(
     public val violations: List<Violation>

@@ -116,6 +116,8 @@ Your [custom constraints](/guides/custom-constraints) can have configurable mess
 `MessagesKey` for it, and read the current messages from the key:
 
 ```kotlin
+private val SKU_FORMAT = Regex("""[A-Z]{3}-\d{4}""")
+
 class ShopMessages {
     var sku: String = "must be a SKU such as ABC-1234"
 }

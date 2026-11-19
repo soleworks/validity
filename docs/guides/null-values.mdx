@@ -44,7 +44,11 @@ data class Client(
 }
 ```
 
-A company with no company name and no email breaks four rules:
+A company with a blank name, a short nickname, and neither a company name nor an email breaks four rules:
+
+```kotlin
+Client(type = "COMPANY", name = "", nickname = "Al").validate().violations
+```
 
 | Path | Message | Code |
 |---|---|---|
@@ -54,6 +58,10 @@ A company with no company name and no email breaks four rules:
 | `companyName` | is required | `required` |
 
 And a person who sends a company name breaks `forbidden`:
+
+```kotlin
+Client(type = "PERSON", name = "Ana", companyName = "Acme", email = "ana@mail.com").validate().violations
+```
 
 | Path | Message | Code |
 |---|---|---|

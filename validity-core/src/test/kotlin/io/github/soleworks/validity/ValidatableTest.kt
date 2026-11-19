@@ -8,20 +8,39 @@ import io.github.soleworks.validity.samples.Subscription
 import io.github.soleworks.validity.samples.Threads
 import io.github.soleworks.validity.samples.docs.Account
 import io.github.soleworks.validity.samples.docs.Address
+import io.github.soleworks.validity.samples.docs.Appointment
+import io.github.soleworks.validity.samples.docs.Attachment
+import io.github.soleworks.validity.samples.docs.BankDetails
+import io.github.soleworks.validity.samples.docs.Book
 import io.github.soleworks.validity.samples.docs.Cart
 import io.github.soleworks.validity.samples.docs.CartItem
 import io.github.soleworks.validity.samples.docs.Client
+import io.github.soleworks.validity.samples.docs.Consent
 import io.github.soleworks.validity.samples.docs.Delivery
+import io.github.soleworks.validity.samples.docs.Event
+import io.github.soleworks.validity.samples.docs.ImportRow
+import io.github.soleworks.validity.samples.docs.Meeting
+import io.github.soleworks.validity.samples.docs.MemberProfile
 import io.github.soleworks.validity.samples.docs.Newsletter
 import io.github.soleworks.validity.samples.docs.Order
+import io.github.soleworks.validity.samples.docs.Packet
+import io.github.soleworks.validity.samples.docs.Playlist
+import io.github.soleworks.validity.samples.docs.Preferences
+import io.github.soleworks.validity.samples.docs.PriceTag
 import io.github.soleworks.validity.samples.docs.Product
 import io.github.soleworks.validity.samples.docs.SearchQuery
 import io.github.soleworks.validity.samples.docs.Seller
 import io.github.soleworks.validity.samples.docs.ShippingAddress
 import io.github.soleworks.validity.samples.docs.Stay
+import io.github.soleworks.validity.samples.docs.Store
+import io.github.soleworks.validity.samples.docs.Supplier
+import io.github.soleworks.validity.samples.docs.Theme
+import io.github.soleworks.validity.samples.docs.Track
 import io.github.soleworks.validity.samples.docs.Transfer
+import io.github.soleworks.validity.samples.docs.Translations
 import io.github.soleworks.validity.samples.docs.Trial
 import io.github.soleworks.validity.samples.docs.Voucher
+import io.github.soleworks.validity.samples.docs.Webhook
 import io.github.soleworks.validity.samples.docs.Withdrawal
 import io.github.soleworks.validity.samples.readme.Credentials
 import io.github.soleworks.validity.samples.readme.Destination
@@ -32,9 +51,12 @@ import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import java.time.Clock
+import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
+import java.time.OffsetDateTime
 import java.time.ZoneOffset.UTC
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -496,6 +518,269 @@ class ValidatableTest {
 
             violations shouldBe listOf(
                 Violation(path = "document", message = "CPF inválido or must be a valid CNPJ", code = "or")
+            )
+        }
+
+        @Test
+        fun `given a weekend appointment out of the window for a patient too old should report the calendar rules`() {
+            val validity = Validity { clock = Clock.fixed(Instant.parse("2026-11-02T12:00:00Z"), UTC) }
+            val appointment = Appointment(date = LocalDate.of(2027, 1, 2), patientBirthDate = LocalDate.of(1900, 1, 1))
+
+            val violations = appointment.validateBlocking(validity).violations
+
+            violations shouldBe listOf(
+                Violation(path = "date", message = "must be a weekday", code = "weekday"),
+                Violation(path = "date", message = "must be within the next 60d", code = "withinNext"),
+                Violation(path = "patientBirthDate", message = "must be at most 120 years old", code = "maxAge")
+            )
+        }
+
+        @Test
+        fun `given an attachment with broken encodings should report the encoding rules`() {
+            val attachment = Attachment(content = "not base64!", checksum = "abc", attributes = "{")
+
+            val violations = attachment.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "content", message = "must be valid Base64", code = "base64"),
+                Violation(path = "checksum", message = "must be a valid SHA256 hash", code = "hash"),
+                Violation(path = "attributes", message = "must be valid JSON", code = "json")
+            )
+        }
+
+        @Test
+        fun `given a short iban and bic and a made-up currency should report the finance rules`() {
+            val bankDetails = BankDetails(iban = "DE00", bic = "X", currency = "EURO")
+
+            val violations = bankDetails.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "iban", message = "must be a valid IBAN", code = "iban"),
+                Violation(path = "bic", message = "must be a valid BIC", code = "bic"),
+                Violation(path = "currency", message = "must be a valid ISO 4217 currency code", code = "currencyCode")
+            )
+        }
+
+        @Test
+        fun `given a version 1 id, a short isbn and a two-part version should report the identifier rules`() {
+            val book = Book(id = "123e4567-e89b-12d3-a456-426614174000", isbn = "123", schemaVersion = "1.0")
+
+            val violations = book.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "id", message = "must be a valid UUID", code = "uuid"),
+                Violation(path = "isbn", message = "must be a valid ISBN-13", code = "isbn13"),
+                Violation(path = "schemaVersion", message = "must be a valid semantic version", code = "semver")
+            )
+        }
+
+        @Test
+        fun `given declined terms from a minor should report both boolean rules`() {
+            val consent = Consent(hasAcceptedTerms = false, isMinor = true)
+
+            val violations = consent.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "hasAcceptedTerms", message = "must be true", code = "isTrue"),
+                Violation(path = "isMinor", message = "must be false", code = "isFalse")
+            )
+        }
+
+        @Test
+        fun `given an event that started, ends before it starts and is announced later should report the date rules`() {
+            val validity = Validity { clock = Clock.fixed(Instant.parse("2026-11-02T12:00:00Z"), UTC) }
+            val event = Event(
+                startsAt = OffsetDateTime.parse("2026-10-01T10:00:00Z"),
+                endsAt = OffsetDateTime.parse("2026-09-30T10:00:00Z"),
+                announcedOn = LocalDate.of(2026, 12, 1)
+            )
+
+            val violations = event.validateBlocking(validity).violations
+
+            violations shouldBe listOf(
+                Violation(path = "startsAt", message = "must be in the future", code = "future"),
+                Violation(path = "endsAt", message = "must be after 2026-10-01T10:00Z", code = "after"),
+                Violation(path = "announcedOn", message = "must be in the past or present", code = "pastOrPresent")
+            )
+        }
+
+        @Test
+        fun `given a month 13, an ISO legacy date and a spelled-out retention should report the formats`() {
+            val row = ImportRow(createdOn = "2024-13-01", legacyDate = "2024-01-31", retention = "30 days")
+
+            val violations = row.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "createdOn", message = "must be an ISO 8601 date", code = "isoDate"),
+                Violation(path = "legacyDate", message = "must match the date format dd/MM/yyyy", code = "dateFormat"),
+                Violation(path = "retention", message = "must be an ISO 8601 duration", code = "isoDuration")
+            )
+        }
+
+        @Test
+        fun `given a meeting too short with a reminder two days before should report the duration rules`() {
+            val meeting = Meeting(length = 5.minutes, reminderBefore = Duration.ofDays(2))
+
+            val violations = meeting.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "length", message = "must be between 15m and 4h", code = "between"),
+                Violation(path = "reminderBefore", message = "must be at most PT24H", code = "max")
+            )
+        }
+
+        @Test
+        fun `given a member profile that breaks every string rule should report each of them`() {
+            val profile = MemberProfile(handle = "AB", displayName = " ", password = "abc", bio = "a".repeat(501))
+
+            val violations = profile.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "handle", message = "must have between 3 and 30 characters", code = "lengthBetween"),
+                Violation(path = "handle", message = "must be lowercase", code = "lowercase"),
+                Violation(path = "handle", message = "must be a valid slug", code = "slug"),
+                Violation(path = "displayName", message = "must not be blank", code = "notBlank"),
+                Violation(path = "displayName", message = "must not start or end with whitespace", code = "trimmed"),
+                Violation(path = "password", message = "must have at least 12 characters", code = "minLength"),
+                Violation(path = "password", message = "must contain an uppercase letter", code = "containsUppercase"),
+                Violation(path = "password", message = "must contain a digit", code = "containsDigit"),
+                Violation(path = "password", message = "must contain a symbol", code = "containsSymbol"),
+                Violation(path = "bio", message = "must have at most 500 bytes", code = "maxBytes")
+            )
+        }
+
+        @Test
+        fun `given a packet with no hops, a system port and sequence zero should report the unsigned ranges`() {
+            val packet = Packet(ttl = 0u, port = 80u, sequence = 0uL)
+
+            val violations = packet.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "ttl", message = "must be between 1 and 64", code = "between"),
+                Violation(path = "port", message = "must be at least 1024", code = "min"),
+                Violation(path = "sequence", message = "must be at least 1", code = "min")
+            )
+        }
+
+        @Test
+        fun `given a playlist with a repeated track and banned or blank tags should report the collection rules`() {
+            val playlist = Playlist(
+                tracks = listOf(Track(id = "1", title = "Intro"), Track(id = "1", title = "Intro again")),
+                tags = setOf("spam", " ")
+            )
+
+            val violations = playlist.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "tracks", message = "must not contain duplicates", code = "distinctBy"),
+                Violation(path = "tags", message = "must not contain any of spam, nsfw", code = "containsNone"),
+                Violation(path = "tags[1]", message = "must not be blank", code = "notBlank")
+            )
+        }
+
+        @Test
+        fun `given preferences with an unknown theme, a reserved name and another confirmation should report them`() {
+            val preferences = Preferences(theme = "blue", username = "admin", password = "s3cret!!", confirmation = "x")
+
+            val violations = preferences.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "theme", message = "must be one of light, dark, system", code = "oneOf"),
+                Violation(path = "username", message = "must not be one of admin, root, support", code = "noneOf"),
+                Violation(path = "confirmation", message = "must be equal to s3cret!!", code = "equalTo")
+            )
+        }
+
+        @Test
+        fun `given a price tag that breaks every number rule should report each of them`() {
+            val priceTag = PriceTag(price = "-1.234".toBigDecimal(), discountPercent = 95, packSize = 7, stock = -1)
+
+            val violations = priceTag.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "price", message = "must be positive", code = "positive"),
+                Violation(path = "price", message = "must have at most 2 decimal places", code = "maxDecimalPlaces"),
+                Violation(path = "discountPercent", message = "must be between 0 and 90", code = "between"),
+                Violation(path = "packSize", message = "must be a multiple of 6", code = "multipleOf"),
+                Violation(path = "stock", message = "must be positive or zero", code = "positiveOrZero")
+            )
+        }
+
+        @Test
+        fun `given a store with a bad zip code, position, time zone and locale should report the location rules`() {
+            val store = Store(
+                country = "US",
+                zipCode = "ABC",
+                position = "x",
+                timeZone = "Mars/Base",
+                locale = "no locale"
+            )
+
+            val violations = store.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "zipCode", message = "must be a valid postal code for US", code = "postalCode"),
+                Violation(
+                    path = "position",
+                    message = "must be a valid latitude and longitude pair",
+                    code = "coordinates"
+                ),
+                Violation(path = "timeZone", message = "must be a valid time zone", code = "timeZone"),
+                Violation(path = "locale", message = "must be a valid locale", code = "locale")
+            )
+        }
+
+        @Test
+        fun `given a Brazilian supplier with a short CNPJ and CEP should report the rules of Brazil`() {
+            val supplier = Supplier(country = "BR", taxId = "123", zipCode = "1")
+
+            val violations = supplier.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "taxId", message = "must be a valid CNPJ", code = "cnpj"),
+                Violation(path = "zipCode", message = "must be a valid CEP", code = "cep")
+            )
+        }
+
+        @Test
+        fun `given a theme with a named accent and a space-separated overlay should report the color rules`() {
+            val theme = Theme(accent = "red", overlay = "rgb(255 0 0)")
+
+            val violations = theme.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "accent", message = "must be a valid hexadecimal color", code = "hexColor"),
+                Violation(path = "overlay", message = "must be a valid RGB color", code = "rgbColor")
+            )
+        }
+
+        @Test
+        fun `given translations without English, in an unknown language and too long should report the map rules`() {
+            val translations = Translations(titles = mapOf("pt" to "a".repeat(81), "fr" to "Titre"))
+
+            val violations = translations.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "titles", message = "must contain the key en", code = "containsKey"),
+                Violation(path = "titles", message = "must contain only the keys en, pt, es", code = "onlyKeys"),
+                Violation(path = "titles[pt]", message = "must have at most 80 characters", code = "maxLength")
+            )
+        }
+
+        @Test
+        fun `given a webhook over http with a broken contact and network should report the internet rules`() {
+            val webhook = Webhook(
+                endpoint = "http://example.com",
+                contact = "ana@",
+                allowedNetworks = listOf("10.0.0.0/33")
+            )
+
+            val violations = webhook.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "endpoint", message = "must be a valid URL", code = "url"),
+                Violation(path = "contact", message = "must be a valid email", code = "email"),
+                Violation(path = "allowedNetworks[0]", message = "must be a valid CIDR block", code = "cidr")
             )
         }
     }

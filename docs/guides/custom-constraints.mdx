@@ -54,6 +54,10 @@ data class Product(
 }
 ```
 
+```kotlin
+Product(sku = "abc", name = "TV", stock = 13).validate().violations
+```
+
 | Path | Message | Code |
 |---|---|---|
 | `sku` | must be a SKU such as ABC-1234 | `sku` |
@@ -66,6 +70,9 @@ Follow the conventions of the built-in constraints and yours will read the same:
 - **The message is a parameter with a default**, so one call can change it.
 - **The message completes a sentence about the value**, in lower case: `must be a SKU such as ABC-1234`.
 - **`null` arguments skip the rule**, as `min(null)` does, so a rule fed by optional data never fails on its own.
+
+`constraint` fills only `{path}` and `{value}` in its message. Put an argument in the message with a string template,
+and skip a `null` argument with an early `return` before calling `constraint`.
 
 <Tip>
   To let users change the default message of your constraints once, for the whole application, give them a messages
@@ -81,7 +88,8 @@ as `this` and the argument as its parameter, so the message can say what is wron
 ::name required { minLength(3, message = { min -> "has $length characters, needs $min" }) }
 ```
 
-`constraint` has the same form: `constraint(message = { "$it is not in stock" }) { it in stock }`.
+`constraint` takes a message built from the value too, and receives the value as `it`:
+`constraint(message = { "$it is not in stock" }) { it in stock }`.
 
 ## Rules that suspend
 

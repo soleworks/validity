@@ -5,7 +5,8 @@ package io.github.soleworks.validity
  *
  * Its message lists each violation as `path: message`.
  *
- * @property violations every broken rule, in the order the rules are declared.
+ * @property violations every broken rule, in the order the rules are declared, with the constraints of a property
+ *     before the violations of its nested objects and elements.
  */
 public class ValidationException(
     public val violations: List<Violation>

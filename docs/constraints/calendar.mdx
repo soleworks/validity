@@ -9,7 +9,7 @@ import ConstraintFacts from "/snippets/constraint-facts.mdx";
 
 Rules about the calendar. `minAge`, `maxAge`, `today`, `withinNext` and `withinLast` read the
 [clock of the configuration](/guides/time), so tests can fix it. The windows take a `kotlin.time.Duration`, such as
-`30.days`.
+`30.days`; on a `LocalDate` it counts in whole days, rounded down, so `36.hours` is one day.
 
 <NullArguments />
 
@@ -64,7 +64,7 @@ Checks that someone born on the date is at most `max` years old today.
 
 Checks that the date falls on today.
 
- It is moved to the zone of the clock before its date is compared.
+A `ZonedDateTime` or an `OffsetDateTime` is moved to the zone of the clock before its date is compared.
 
 <ConstraintFacts code="today" message="must be today" change='today = "…"' />
 

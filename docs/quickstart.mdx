@@ -36,17 +36,17 @@ data class User(
   </Step>
 
   <Step title="Validate">
-    `validate()` runs every rule and returns a `ValidationResult`:
+    `validate()` runs every rule and returns a `ValidationResult`. It is a `suspend` function, so a rule can query a
+    database or an API. Outside a coroutine, such as in a plain `main` or test, call `validateBlocking()` instead. It
+    runs the same rules and blocks the thread until they finish.
 
 ```kotlin
-val result = User(name = "A", email = "ana@", age = 16).validate()
+val user = User(name = "A", email = "ana@", age = 16)
+val result = user.validate()   // or user.validateBlocking()
 
 result.isValid      // false
 result.violations   // every broken rule, in the order the rules are declared
 ```
-
-    `validate()` is a `suspend` function, so a rule can query a database or an API. Outside a coroutine, call
-    `validateBlocking()` instead. It runs the same rules and blocks the thread until they finish.
   </Step>
 
   <Step title="Read the violations">

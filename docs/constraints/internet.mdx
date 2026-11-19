@@ -58,6 +58,8 @@ Quoted local parts and IP address domains are not accepted.
 
 Checks that the string is an absolute URL with one of `schemes` and a host.
 
+`schemes` is `http` and `https` by default, in any case, so `url()` fails on `ftp://example.com`.
+
 <ConstraintFacts code="url" message="must be a valid URL" change='url = "…"' />
 
 ### `hostname`

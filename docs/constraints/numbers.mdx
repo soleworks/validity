@@ -7,7 +7,7 @@ icon: "hash"
 import NullArguments from "/snippets/null-arguments.mdx";
 import ConstraintFacts from "/snippets/constraint-facts.mdx";
 
-The constraints of numbers. The range and sign rules work on every number type, `Int`, `Long`, `Short`, `Byte`,
+The constraints of numbers. The range and sign rules work on every signed number type, `Int`, `Long`, `Short`, `Byte`,
 `Double`, `Float`, `BigInteger` and `BigDecimal`, with an argument of the same type.
 
 <NullArguments />
@@ -116,7 +116,7 @@ Checks that the number is between `min` and `max`, both included.
 
 ### `positive`
 
-`positive()` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
+`positive()` on every signed number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
 
 Checks that the number is greater than zero.
 
@@ -124,7 +124,7 @@ Checks that the number is greater than zero.
 
 ### `negative`
 
-`negative()` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
+`negative()` on every signed number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
 
 Checks that the number is less than zero.
 
@@ -132,7 +132,7 @@ Checks that the number is less than zero.
 
 ### `positiveOrZero`
 
-`positiveOrZero()` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
+`positiveOrZero()` on every signed number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
 
 Checks that the number is zero or greater.
 
@@ -140,7 +140,7 @@ Checks that the number is zero or greater.
 
 ### `negativeOrZero`
 
-`negativeOrZero()` on every number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
+`negativeOrZero()` on every signed number type: `Int`, `Long`, `Short`, `Byte`, `Double`, `Float`, `BigInteger`, `BigDecimal`
 
 Checks that the number is zero or less.
 
@@ -162,11 +162,12 @@ Trailing zeros do not count, so `2.00` passes.
 
 ### `multipleOf`
 
-`multipleOf(factor)` on every number type: `Int`, `Long`, `Short`, `Byte`, `BigInteger`, `BigDecimal`, `Double`, `Float`
+`multipleOf(factor)` on every signed number type: `Int`, `Long`, `Short`, `Byte`, `BigInteger`, `BigDecimal`, `Double`, `Float`
 
 Checks that the number is a multiple of `factor`.
 
-The remainder is computed in decimal, so `0.3` is a multiple of `0.1`. Infinity and `NaN` fail.
+The remainder is computed in decimal, so `0.3` is a multiple of `0.1`. Infinity and `NaN` fail. A `factor` of zero,
+or on `Double` and `Float` one that is not finite, throws `IllegalArgumentException`.
 
 <ConstraintFacts code="multipleOf" message="must be a multiple of {factor}" change='multipleOf = "…"' />
 

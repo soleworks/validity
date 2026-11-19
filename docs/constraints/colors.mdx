@@ -1,12 +1,13 @@
 ---
 title: "Colors"
-description: "Hexadecimal, RGB and HSL colors, as CSS writes them."
+description: "Hexadecimal, RGB and HSL colors, in the comma syntax of CSS."
 icon: "palette"
 ---
 
 import ConstraintFacts from "/snippets/constraint-facts.mdx";
 
-Colors written as CSS writes them, checked on strings.
+Colors in the comma syntax of CSS, checked on strings. The space syntax of CSS Color 4, such as `rgb(255 0 0 / 50%)`,
+percentages in `rgb()`, units such as `deg` and named colors such as `red` fail.
 
 ```kotlin Theme.kt
 data class Theme(

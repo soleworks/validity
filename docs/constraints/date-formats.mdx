@@ -75,4 +75,7 @@ Checks that the string is a date or time written exactly in `pattern`.
 
 The string is parsed with `DateTimeFormatter.ofPattern` and must print back the same, so `2024-2-9` does not match `yyyy-MM-dd`.
 
+A `pattern` that `DateTimeFormatter.ofPattern` rejects throws `IllegalArgumentException` when the value is checked,
+instead of reporting a violation.
+
 <ConstraintFacts code="dateFormat" message="must match the date format {pattern}" change='dateFormat = "…"' />

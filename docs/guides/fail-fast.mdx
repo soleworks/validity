@@ -23,14 +23,24 @@ data class Newsletter(
 }
 ```
 
+An email that is not an email fails the first rule, and `Subscribers.contains` is never called:
+
 ```kotlin
-Newsletter(email = "ana@").validate().violations           // Subscribers.contains is never called
-Newsletter(email = "ana@mail.com").validate().violations   // when it is already subscribed
+Newsletter(email = "ana@").validate().violations
 ```
 
 | Path | Message | Code |
 |---|---|---|
 | `email` | must be a valid email | `email` |
+
+A valid email that is already subscribed passes the first and fails the second:
+
+```kotlin
+Newsletter(email = "ana@mail.com").validate().violations
+```
+
+| Path | Message | Code |
+|---|---|---|
 | `email` | is already subscribed | `subscribed` |
 
 The rules after the block, and the other properties, run as usual: `failFast` only shortens its own block.
@@ -62,7 +72,7 @@ its first failure.
 ```kotlin
 failFast {
     email()
-    val taken = Subscribers.contains(email)          // runs even for "ana@"
+    val taken = Subscribers.contains(email.orEmpty())   // runs even for "ana@"
     constraint("is already subscribed") { !taken }
 }
 ```
