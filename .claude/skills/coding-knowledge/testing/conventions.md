@@ -42,7 +42,12 @@ inner class IsTrue {
 ## Testing a constraint
 
 A constraint test builds a `ValidationNode` with the constraint and validates it, as above. It never
-validates a sample class: that tests the entry, not the constraint. Each constraint has at least a
+validates a sample class: that tests the entry, not the constraint.
+
+A module beside `validity-core`, such as `validity-phone`, cannot build a `ValidationNode`: its
+constructor is internal to the core, as it is for a user. Its tests call
+`violationsOf(path = "phone", value = "1") { phone() }`, a helper in the module's tests that puts the
+rules on the value with the public `required(path, value)`, the way a user tests a constraint of their own. Each constraint has at least a
 test that accepts and one that reports with the default message, which also covers that message. No
 check holds this.
 
