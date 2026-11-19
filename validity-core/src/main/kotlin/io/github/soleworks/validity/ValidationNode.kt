@@ -22,7 +22,7 @@ package io.github.soleworks.validity
  * @property value the value the rules check.
  */
 @ValidityDsl
-public class ValidationNode<V>(
+public class ValidationNode<V> internal constructor(
     @PublishedApi
     internal val path: String,
     @PublishedApi

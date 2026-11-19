@@ -63,13 +63,8 @@ public fun validation(
     block: suspend SelfValidation.() -> Unit
 ): SelfValidation = SelfValidation(block)
 
-/**
- * Adds the rules of a [ValidationNode] made by hand, for a value that is not a property.
- *
- * @param node the rules to add, with the path of their violations.
- */
 context(validation: SelfValidation)
-public fun add(
+internal fun add(
     node: ValidationNode<*>
 ) {
     validation.nodes += node

@@ -1,6 +1,5 @@
 package io.github.soleworks.validity.phone
 
-import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Validity
 import io.github.soleworks.validity.Violation
 import io.github.soleworks.validity.phone.samples.Contact
@@ -27,9 +26,7 @@ class PhoneMessagesTest {
     inner class Phone {
         @Test
         fun `given no configuration should report the default message in English`() {
-            val node = ValidationNode(path = "phone", value = "1").apply { phone() }
-
-            val violations = node.validate()
+            val violations = violationsOf(path = "phone", value = "1") { phone() }
 
             violations shouldBe listOf(
                 Violation(path = "phone", message = "must be a valid phone number", code = "phone")
@@ -58,12 +55,11 @@ class PhoneMessagesTest {
                     }
                 }
             }
-            val node = ValidationNode(path = "phone", value = "1").apply {
+
+            val violations = violationsOf(path = "phone", value = "1") {
                 phone()
                 mobilePhone()
             }
-
-            val violations = node.validate()
 
             violations shouldBe listOf(
                 Violation(path = "phone", message = "telefone inválido", code = "phone"),
@@ -87,9 +83,8 @@ class PhoneMessagesTest {
                     }
                 }
             }
-            val node = ValidationNode(path = "phone", value = "1").apply { phone() }
 
-            val violations = node.validate()
+            val violations = violationsOf(path = "phone", value = "1") { phone() }
 
             violations shouldBe listOf(
                 Violation(path = "phone", message = "must be a valid phone number", code = "phone")
