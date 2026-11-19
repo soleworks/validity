@@ -1,11 +1,11 @@
 ---
 title: "Results and violations"
 description: "ValidationResult holds every broken rule, and each Violation has a path, a message, a code and metadata."
-icon: "list"
+icon: "clipboard-list"
 ---
 
-`validate()` returns a `ValidationResult`. It holds every violation, in the order the rules are declared, and says
-whether there is any:
+`validate()` returns a `ValidationResult`. It holds every violation, in
+[the order of the rules](/guides/nested-objects#the-order-of-the-violations), and says whether there is any:
 
 ```kotlin
 val result = user.validate()
@@ -15,6 +15,8 @@ result.isInvalid     // true when at least one is broken
 result.violations    // List<Violation>, empty when the object is valid
 result.orThrow()     // throws a ValidationException when it is invalid
 ```
+
+`orThrow()` throws the same [`ValidationException`](/guides/exceptions) as `validateOrThrow()`.
 
 ## The parts of a violation
 

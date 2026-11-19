@@ -7,7 +7,7 @@ icon: "wand-sparkles"
 The built-in constraints cover the common shapes of data. Your domain has its own: a SKU, a box size, a code your
 partners send. There are two ways to write them, depending on whether the rule is used once or everywhere.
 
-## Once: constraint { }
+## Once: `constraint { }`
 
 Inside the block of a property, `constraint` takes a message, an optional code, and a predicate that receives the value
 and returns `true` when it is valid:
@@ -19,12 +19,14 @@ and returns `true` when it is valid:
 ```
 
 The value has the type of the block, `Int` here, so the predicate needs no casts and no `null` checks. In the message,
-`{path}` and `{value}` are filled in.
+`{path}` and `{value}` are filled in. A rule about the whole object, rather than one property, is the other form of
+`constraint`, in the validation block: see [Across fields](/guides/across-fields#constraint-for-any-rule).
 
-## Everywhere: an extension on ValidationNode
+## Everywhere: an extension on `ValidationNode`
 
-A constraint you use in several classes is a function. Every built-in constraint is an extension of
-`ValidationNode<V>` that calls `constraint`, and yours can be too:
+A constraint you use in several classes is a function. `ValidationNode<V>` is the `this` of the block of a property,
+such as `required { }`, holding a value of type `V`. Every built-in constraint is an extension of it that calls
+`constraint`, and yours can be too:
 
 ```kotlin SkuConstraints.kt
 private val SKU_FORMAT = Regex("""[A-Z]{3}-\d{4}""")
@@ -54,6 +56,10 @@ data class Product(
 }
 ```
 
+```kotlin
+Product(sku = "abc", name = "TV", stock = 13).validate().violations
+```
+
 | Path | Message | Code |
 |---|---|---|
 | `sku` | must be a SKU such as ABC-1234 | `sku` |
@@ -65,23 +71,22 @@ Follow the conventions of the built-in constraints and yours will read the same:
 - **The code is the name of the function**, so a program can tell `sku` from `minLength`.
 - **The message is a parameter with a default**, so one call can change it.
 - **The message completes a sentence about the value**, in lower case: `must be a SKU such as ABC-1234`.
-- **`null` arguments skip the rule**, as `min(null)` does, so a rule fed by optional data never fails on its own.
+- **`null` arguments skip the rule**, as [the built-in ones do](/constraints/overview#what-every-constraint-has-in-common),
+  so a rule fed by optional data never fails on its own.
+
+`constraint` fills only `{path}` and `{value}` in its message. Put an argument in the message with a string template,
+and skip a `null` argument with an early `return` before calling `constraint`.
 
 <Tip>
   To let users change the default message of your constraints once, for the whole application, give them a messages
-  class of your own. See [messages of a module](/guides/messages#messages-of-your-own-constraints).
+  class of your own. See [messages of your own constraints](/guides/messages#messages-of-your-own-constraints).
 </Tip>
 
 ## A message built from the value
 
-Every built-in constraint that takes an argument has a second form whose message is a function. It receives the value
-as `this` and the argument as its parameter, so the message can say what is wrong with this value:
-
-```kotlin
-::name required { minLength(3, message = { min -> "has $length characters, needs $min" }) }
-```
-
-`constraint` has the same form: `constraint(message = { "$it is not in stock" }) { it in stock }`.
+Like the built-in constraints, [whose message can be a function](/guides/messages#for-one-rule), `constraint` takes a
+message built from the value, which it receives as `it`:
+`constraint(message = { "$it is not in stock" }) { it in stock }`.
 
 ## Rules that suspend
 
@@ -98,11 +103,5 @@ the format is right.
 
 ## Rules about time
 
-A rule about "now" should read the clock of the [configuration](/guides/time), not the system clock, so tests can fix
-it. `now { }` gives you the current time from that clock:
-
-```kotlin
-::startsOn required {
-    constraint("must start this year", code = "thisYear") { it.year == now(LocalDate::now).year }
-}
-```
+A rule about "now" should read the clock of the configuration, not the system clock, so tests can fix it:
+[`now`](/guides/time#now-in-your-own-rules) gives you the current time from that clock.

@@ -47,7 +47,7 @@ user.validateOrThrow()     // throws ValidationException with every violation
   `constraint(::total, message = "...", code = "...") { total == items.sumOf { it.price } }`.
 - Custom rule once: `constraint("is out of stock", code = "stock") { it in stock }` inside a property block.
   Reusable: `fun ValidationNode<String>.sku(message: String = "...") = constraint(message, code = "sku") { ... }`.
-- Text that carries a value: `::page ifPresent { convertToInt { min(1) } }`, `convertToLocalDate`, `convertToEnum<E>()`.
+- Text that carries a value: `::page ifPresent { convertToInt { min(1) } }`, `convertToLocalDate`, `convertToEnum<E> { }`.
 
 ## Imports
 
@@ -63,7 +63,7 @@ import io.github.soleworks.validity.phone.*               // phone, mobilePhone 
 - **Work outside a rule inside `failFast` always runs.** `failFast` skips rules, not code: put a lookup inside
   `constraint { }`, after the format rule it depends on.
 - **Country constraints are not in `constraints.*`.** `cpf()` is `io.github.soleworks.validity.constraints.brazil.cpf`.
-- **A message key is not always the constraint name.** Map sizes use `minEntries`/`maxEntries`/`entries`/
+- **The message property is not always named after the constraint.** Map sizes use `minEntries`/`maxEntries`/`entries`/
   `entriesBetween`, collection `contains` uses `containsElement`, date `between` uses `betweenDates`, `isTrue` uses
   `mustBeTrue`. The code of the violation is always the constraint name.
 - **`null` arguments skip a rule.** `min(null)`, `equalTo(null)` and `postalCode(null)` check nothing.

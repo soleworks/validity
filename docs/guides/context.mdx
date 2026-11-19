@@ -62,7 +62,7 @@ no map of attributes to read and cast.
 
 ## Passing the context down
 
-Nested objects receive the context explicitly, with `valid(context)`. That keeps the flow visible, and lets a child
+[Nested objects](/guides/nested-objects) receive the context explicitly, with `valid(context)`. That keeps the flow visible, and lets a child
 take only a part of it:
 
 ```kotlin
@@ -74,7 +74,8 @@ A child that needs no context is a plain `Validatable`, checked with `valid()`, 
 
 ## The four ways to run
 
-`ContextualValidatable` has the same four functions as `Validatable`, with the context first:
+`ContextualValidatable` has the same [four functions](/guides/in-the-class#checking-the-rules) as `Validatable`, with
+the context first:
 
 ```kotlin
 purchase.validate(shopper)

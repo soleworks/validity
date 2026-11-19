@@ -1,6 +1,6 @@
 ---
 title: "Dates and times"
-description: "Past, future and comparisons for LocalDate, Instant, ZonedDateTime, YearMonth, java.util.Date and the other java.time types."
+description: "Past, future and comparisons for LocalDate, LocalDateTime, LocalTime, OffsetTime, ZonedDateTime, OffsetDateTime, Instant, YearMonth, Year and Date."
 icon: "calendar"
 ---
 
@@ -115,6 +115,6 @@ Checks that the date is between `start` and `end`, both included.
 <ConstraintFacts code="between" message="must be between {start} and {end}" change='betweenDates = "…"' />
 
 <Note>
-  `between` on dates and times is inclusive and uses the message `betweenDates`. Lengths of time, both
-  `kotlin.time.Duration` and `java.time.Duration`, have their rules on [Durations](/constraints/durations).
+  Lengths of time, both `kotlin.time.Duration` and `java.time.Duration`, have their rules on
+  [Durations](/constraints/durations).
 </Note>

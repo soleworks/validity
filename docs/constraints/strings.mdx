@@ -9,7 +9,7 @@ import ConstraintFacts from "/snippets/constraint-facts.mdx";
 
 The constraints of a `String` value. Length counts characters as Kotlin does (`String.length`), and the byte rules
 count the bytes of an encoding, UTF-8 by default. The rules that compare with text you give take `ignoreCase`, `false`
-by default.
+by default; `equalTo` and `oneOf` compare exactly unless you pass it.
 
 <NullArguments />
 
@@ -369,9 +369,14 @@ Checks that the string has at least one character that is not a letter, a digit 
 
 Checks that the string is already in the Unicode normalization `form`.
 
+`form` is NFC by default, so `normalized()` checks NFC.
+
 <ConstraintFacts code="normalized" message="must be in Unicode {form} form" change='normalized = "…"' />
 
 ## Text that carries a value
+
+These check that the text can be read as a value. To validate the value itself, [convert it](/guides/converting-values)
+with `convertToInt { }` or its siblings instead.
 
 ### `numeric`
 

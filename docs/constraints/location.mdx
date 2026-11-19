@@ -6,9 +6,8 @@ icon: "map-pin"
 
 import ConstraintFacts from "/snippets/constraint-facts.mdx";
 
-Where something is, or which language it speaks. `postalCode(country)` knows the formats of {{postalCountries}} countries, by their
-ISO 3166-1 alpha-2 code, and checks nothing when the country is `null` or unknown, so the rule can follow a country
-field that may be missing.
+Where something is, or which language it speaks: countries, languages, locales, time zones, coordinates, and
+[postal codes](#postalcode) by the country they belong to.
 
 ```kotlin Store.kt
 data class Store(
@@ -118,10 +117,9 @@ Checks that the string is a latitude from -90 to 90 and a longitude from -180 to
 
 Checks that the string is a postal code of `country`.
 
-When `country` is `null` or has no known format, nothing is checked. Codes are known for {{postalCountries}} countries.
-
-<ConstraintFacts code="postalCode" message="must be a valid postal code for {country}" change='postalCode = "…"' />
-
-The countries `postalCode` knows: AD, AR, AT, AU, AZ, BA, BD, BE, BG, BR, BY, CA, CH, CN, CO, CZ, DE, DK, DO, DZ, EE,
+When `country` is `null` or has no known format, nothing is checked, so the rule can follow a country field that may be
+missing. Codes are known for {{postalCountries}} countries, by their ISO 3166-1 alpha-2 code: AD, AR, AT, AU, AZ, BA, BD, BE, BG, BR, BY, CA, CH, CN, CO, CZ, DE, DK, DO, DZ, EE,
 ES, FI, FR, GB, GR, HR, HT, HU, ID, IE, IL, IN, IR, IS, IT, JO, JP, KE, KR, LI, LK, LT, LU, LV, MC, MG, MT, MX, MY, NL,
 NO, NP, NZ, PK, PL, PR, PT, RO, RU, SA, SE, SG, SI, SK, TH, TN, TW, UA, US, ZA and ZM.
+
+<ConstraintFacts code="postalCode" message="must be a valid postal code for {country}" change='postalCode = "…"' />

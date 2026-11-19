@@ -6,9 +6,9 @@ icon: "flag"
 
 import ConstraintFacts from "/snippets/constraint-facts.mdx";
 
-Documents and numbers of {{documentCountries}} countries, with their check digits. The constraints of each country live in a package of
-their own, `io.github.soleworks.validity.constraints.<country>`, and their messages in a block of their own:
-`messages { brazil { cpf = "CPF inválido" } }`.
+Documents and numbers of {{documentCountries}} countries, with their check digits where they have them. The constraints of each country live in a package of
+their own, `io.github.soleworks.validity.constraints.<country>`, and their messages in a class of their own in the same
+package, such as `BrazilMessages`, changed in a block of their own: `messages { brazil { cpf = "CPF inválido" } }`.
 
 ```kotlin Supplier.kt
 data class Supplier(
@@ -75,7 +75,7 @@ data class Supplier(
 | [`kvk`](#kvk) | Is a Dutch KvK number (Kamer van Koophandel): 8 digits, such as `69599084`. |
 | [`organisasjonsnummer`](#organisasjonsnummer) | Is a Norwegian organisasjonsnummer: 9 digits with a valid check digit, as `988077917` or `988 077 917`. |
 | [`fodselsnummer`](#fodselsnummer) | Is a Norwegian fødselsnummer (or D-nummer): 11 digits with two valid check digits, as `15108695088` or `151086 95088`. |
-| [`cnic`](#cnic) | Is a Pakistani CNIC written as `00000-0000000-0`. |
+| [`cnic`](#cnic) | Is a Pakistani CNIC written as `NNNNN-NNNNNNN-N`, such as `35202-1234567-1`. |
 | [`ruc`](#ruc) | Is a Paraguayan RUC with a valid check digit, as 6 to 9 digits or as `80028061-0`. |
 | [`ci`](#ci) | Is a Paraguayan CI (cédula de identidad): 5 to 10 digits. |
 | [`ruc`](#ruc-2) | Is a Peruvian RUC: 11 digits with a valid check digit, such as `20131312955`. |
@@ -122,7 +122,10 @@ Checks that the string is a tax or identity number of `type` in `country`, with 
 When the country and the type come as text, such as from a request, `country` is an ISO 3166-1 alpha-2 code and
 `type` the name of the constraint in upper snake case, such as `CUIT` or `PARTITA_IVA`, both in any case.
 
-When `type` is `null`, or the pair of `country` and `type` is not known, nothing is checked.
+When `type` is `null`, or the pair of `country` and `type` is not known, nothing is checked. A pair is known when it
+names a `TaxIdType`, so a document with no entry there, such as the `pis` of Brazil, cannot be checked through `taxId`:
+`taxId("BR", "PIS")` passes whatever the value. The documents without an entry are the `cnh`, `pis`, `cep` and `placa`
+of Brazil.
 
 <ConstraintFacts code="taxId" message="must be a valid {type} for {country}" change='taxId = "…"' />
 
@@ -508,9 +511,9 @@ Checks that the string is a Norwegian fødselsnummer (or D-nummer): 11 digits wi
 
 `cnic()` on `String`
 
-Checks that the string is a Pakistani CNIC written as `00000-0000000-0`.
+Checks that the string is a Pakistani CNIC written as `NNNNN-NNNNNNN-N`, such as `35202-1234567-1`.
 
-Whitespace around the number is ignored.
+The first digit is 1 to 7 and the last 1 to 9. Whitespace around the number is ignored.
 
 <ConstraintFacts code="cnic" message="must be a valid CNIC" change='pakistan { cnic = "…" }' />
 

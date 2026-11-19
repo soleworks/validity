@@ -125,15 +125,15 @@
               "guides/nested-objects",
               "guides/collections-and-maps",
               "guides/across-fields",
-              "guides/converting-values"
+              "guides/converting-values",
+              "guides/fail-fast"
             ]
           },
           {
             "group": "Your own constraints",
             "pages": [
               "guides/custom-constraints",
-              "guides/combining-constraints",
-              "guides/fail-fast"
+              "guides/combining-constraints"
             ]
           },
           {

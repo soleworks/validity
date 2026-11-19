@@ -10,6 +10,8 @@ public enum class PhoneFormat {
     /** With the area code but not the country calling code, such as `11 91234-5678`. */
     AREA_CODE_AND_NUMBER,
 
-    /** Only the local number, such as `91234-5678`. */
+    /**
+     * Only the local number, such as `91234-5678`. Without an area code to go with it, only its length is checked.
+     */
     NUMBER_ONLY
 }

@@ -46,7 +46,7 @@ Order(id = "", shipping = ShippingAddress(street = "", zipCode = "ABC")).validat
 
 Nesting goes as deep as the data does: an address inside a store inside a company reports `company.store.address.street`.
 
-## Which rules valid() checks
+## Which rules `valid()` checks
 
 `valid` has a form for each way of declaring rules:
 
@@ -80,7 +80,7 @@ For a list of objects, `each` runs `valid()` on every element, and the index joi
 
 Violations come in the order the rules are declared, with one refinement: inside one property, its own constraints come
 before the violations of its nested objects and elements. In
-`::items required { each { valid() }; notEmpty() }`, a `notEmpty` violation is reported before the violations of the
+`::items required { each { valid() }; maxSize(10) }`, a `maxSize` violation is reported before the violations of the
 items, whatever the order of the two lines.
 
 <Note>

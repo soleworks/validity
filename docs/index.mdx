@@ -24,7 +24,8 @@ in Kotlin, next to the data, with the words of the requirement:
 ::age ifPresent { min(18) }
 ```
 
-Each broken rule becomes a `Violation` with three things:
+Each broken rule becomes a `Violation`, and three of its parts say what went wrong (a fourth,
+[`metadata`](/guides/metadata), carries extra data):
 
 <CardGroup cols={3}>
   <Card title="A path" icon="map-pin">
@@ -51,12 +52,12 @@ Validity gives those rules one place and one vocabulary:
   and a field of the object. No validation groups, no annotations on the class.
 - **`null` is decided once.** `required`, `ifPresent` and `forbidden` settle what `null` means, and every constraint
   after them works on the non-null type.
-- **Every error at once.** A form shows all its errors in one round trip, and an API returns all of them in one
+- **Every violation at once.** A form shows all its violations in one round trip, and an API returns all of them in one
   response.
 
 ## Features
 
-- Plain Kotlin: no annotations, no code generation, no reflection
+- Plain Kotlin: no annotations, no code generation, no `kotlin-reflect`
 - Paths into nested objects, lists and maps
 - Rules across fields, and rules that depend on the caller
 - Rules can call `suspend` functions, such as a database lookup
@@ -93,7 +94,7 @@ Multiplatform, and Jakarta Validation plugs straight into the frameworks that re
     [your own](/guides/custom-constraints) look exactly the same.
   </Step>
   <Step title="Validating returns every violation">
-    [`validate()`](/guides/results) gives you a list. [`validateOrThrow()`](/guides/exceptions) throws it, for the
+    [`validate()`](/guides/results) returns them all in a `ValidationResult`. [`validateOrThrow()`](/guides/exceptions) throws them in a `ValidationException`, for the
     edge of your system.
   </Step>
 </Steps>

@@ -41,15 +41,14 @@ install(StatusPages) {
 }
 ```
 
-A Spring `@ExceptionHandler(ValidationException::class)` does the same.
+A Spring `@ExceptionHandler(ValidationException::class)` does the same. A controller that does not suspend, such as a
+plain Spring MVC one, calls `validateOrThrowBlocking()` instead.
 
 ## Every way to throw
 
-| Entry | Suspending | Blocking |
-|---|---|---|
-| `Validatable` | `validateOrThrow()` | `validateOrThrowBlocking()` |
-| `ContextualValidatable<C>` | `validateOrThrow(context)` | `validateOrThrowBlocking(context)` |
-| A `ValidationResult` you already have | `result.orThrow()` | |
+`validateOrThrow()` and `validateOrThrowBlocking()` are the throwing half of
+[the four ways to run](/guides/in-the-class#checking-the-rules), and a [`ContextualValidatable`](/guides/context) has
+them too, with the context first. A `ValidationResult` you already have throws with `result.orThrow()`.
 
 `validateOrThrow()` is exactly `validate().orThrow()`: the same rules, the same violations.
 
