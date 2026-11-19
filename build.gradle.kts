@@ -25,28 +25,42 @@ dependencies {
     }
 }
 
-val kotlinFiles = listOf(
-    "**/src/**/*.kt",
-    "**/*.kts",
-    "!**/build/**",
-    "!.claude/**"
-)
+// Gradle picks the files, with patterns relative to this checkout. ktlint's own globs can't skip .claude/ in a
+// worktree, which lives under .claude/worktrees/: on Windows ktlint prefixes every glob with **/, so !.claude/**
+// matched every file of the worktree and ktlint checked none.
+val kotlinFiles = fileTree(rootDir) {
+    include("**/src/**/*.kt", "**/*.kts")
+    exclude("**/build/**", ".claude/**")
+}
+
+// Runs ktlint with these options on kotlinFiles, which it reads from stdin. --info lists the files.
+fun JavaExec.runKtlint(
+    vararg options: String
+) {
+    classpath = ktlint
+    mainClass = "com.pinterest.ktlint.Main"
+    args(*options, "--patterns-from-stdin")
+    val files = kotlinFiles
+    val root = rootDir
+    doFirst {
+        val paths = files.map { it.relativeTo(root).invariantSeparatorsPath }.sorted()
+        check(paths.isNotEmpty()) { "No Kotlin files found under $root." }
+        logger.info("ktlint checks ${paths.size} files:\n${paths.joinToString("\n")}")
+        (this as JavaExec).standardInput = paths.joinToString("\u0000").byteInputStream()
+    }
+}
 
 val ktlintCheck by tasks.registering(JavaExec::class) {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = "Checks the Kotlin code style with ktlint."
-    classpath = ktlint
-    mainClass = "com.pinterest.ktlint.Main"
-    args(kotlinFiles)
+    runKtlint()
 }
 
 tasks.register<JavaExec>("ktlintFormat") {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = "Formats the Kotlin code with ktlint and lists what it could not fix."
-    classpath = ktlint
-    mainClass = "com.pinterest.ktlint.Main"
     jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
-    args(listOf("-F") + kotlinFiles)
+    runKtlint("-F")
 }
 
 // The format hook runs ktlint on one file without Gradle: this writes the classpath it runs from.
