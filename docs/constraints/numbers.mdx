@@ -166,7 +166,7 @@ Trailing zeros do not count, so `2.00` passes.
 
 Checks that the number is a multiple of `factor`.
 
-The remainder is computed in decimal, so `0.3` is a multiple of `0.1`. Infinity and `NaN` fail. A `factor` of zero,
+The remainder is computed in decimal, as the note at the end of this page explains. Infinity and `NaN` fail. A `factor` of zero,
 or on `Double` and `Float` one that is not finite, throws `IllegalArgumentException`.
 
 <ConstraintFacts code="multipleOf" message="must be a multiple of {factor}" change='multipleOf = "…"' />
@@ -221,7 +221,7 @@ Checks that the number has at most `max` digits before the decimal point.
 
 Checks that the number has at most `max` digits after the decimal point.
 
-Trailing zeros do not count, so `1.50` has one decimal place. On `Double` and `Float`, the number is read in decimal, the way it prints. Infinity and `NaN` fail.
+Trailing zeros do not count, so `1.50` has one decimal place. On `Double` and `Float`, the number is read in decimal, like the remainder of `multipleOf`. Infinity and `NaN` fail.
 
 <ConstraintFacts code="maxDecimalPlaces" message="must have at most {max} decimal places" change='maxDecimalPlaces = "…"' />
 

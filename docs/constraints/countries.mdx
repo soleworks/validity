@@ -7,8 +7,8 @@ icon: "flag"
 import ConstraintFacts from "/snippets/constraint-facts.mdx";
 
 Documents and numbers of {{documentCountries}} countries, with their check digits where they have them. The constraints of each country live in a package of
-their own, `io.github.soleworks.validity.constraints.<country>`, and their messages in a block of their own:
-`messages { brazil { cpf = "CPF inválido" } }`.
+their own, `io.github.soleworks.validity.constraints.<country>`, and their messages in a class of their own in the same
+package, such as `BrazilMessages`, changed in a block of their own: `messages { brazil { cpf = "CPF inválido" } }`.
 
 ```kotlin Supplier.kt
 data class Supplier(

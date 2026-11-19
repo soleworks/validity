@@ -52,7 +52,7 @@ Validity gives those rules one place and one vocabulary:
   and a field of the object. No validation groups, no annotations on the class.
 - **`null` is decided once.** `required`, `ifPresent` and `forbidden` settle what `null` means, and every constraint
   after them works on the non-null type.
-- **Every error at once.** A form shows all its errors in one round trip, and an API returns all of them in one
+- **Every violation at once.** A form shows all its violations in one round trip, and an API returns all of them in one
   response.
 
 ## Features

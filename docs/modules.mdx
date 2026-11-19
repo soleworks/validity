@@ -12,7 +12,7 @@ same version, so a project that uses both never mixes versions:
 | Module | What it adds | Depends on |
 |---|---|---|
 | `validity-core` | The DSL, the ways to declare rules (`Validatable`, `ContextualValidatable`, `validation`, `validatable`) and every constraint but the phone ones | The Kotlin standard library and kotlinx.coroutines |
-| `validity-phone` | `phone`, `mobilePhone`, `countryCode` and `areaCode`, and their messages | `validity-core` and Google's libphonenumber |
+| `validity-phone` | [`phone`, `mobilePhone`, `countryCode` and `areaCode`](/constraints/phone), and their messages | `validity-core` and Google's libphonenumber |
 
 Most projects need only `validity-core`.
 
@@ -34,7 +34,8 @@ For phone numbers, add `validity-phone` too, at the same version:
     The version Validity is built with. It uses context parameters for its DSL.
   </Card>
   <Card title="Coroutines" icon="zap">
-    kotlinx.coroutines comes with `validity-core`. You do not need to add it.
+    `validity-core` brings kotlinx.coroutines at runtime. Code of yours that calls it, such as `runBlocking`, adds it
+    like any other dependency.
   </Card>
 </CardGroup>
 
@@ -42,9 +43,9 @@ For phone numbers, add `validity-phone` too, at the same version:
 
 | Package | Module | Holds |
 |---|---|---|
-| `io.github.soleworks.validity` | core | `Validatable`, `ContextualValidatable`, `validation`, `validatable`, `required`, `ifPresent`, `forbidden`, the presence rules, `each`, `valid`, `convert`, `metadata`, `Validity`, `ValidationResult`, `Violation`, `ValidationException`, `Messages` |
-| `io.github.soleworks.validity.constraints` | core | The general constraints, `or`, `and`, `not`, `HashAlgorithm` |
-| `io.github.soleworks.validity.constraints.<country>` | core | The constraints of one country: `argentina`, `australia`, `belgium`, `brazil`, `bulgaria`, `canada`, `chile`, `china`, `colombia`, `france`, `germany`, `india`, `israel`, `italy`, `japan`, `mexico`, `netherlands`, `norway`, `pakistan`, `paraguay`, `peru`, `poland`, `portugal`, `russia`, `slovenia`, `southafrica`, `southkorea`, `spain`, `sweden`, `switzerland`, `thailand`, `ukraine`, `unitedarabemirates`, `unitedkingdom`, `unitedstates`, `uruguay` |
+| `io.github.soleworks.validity` | core | `Validatable`, `ContextualValidatable`, `validation`, `validatable`, `required`, `ifPresent`, `forbidden`, the presence rules, `each`, `valid`, `convert`, `metadata`, `constraint`, `now`, `Validity`, `Validation`, `ValidationNode`, `SelfValidation`, `ValidationResult`, `Violation`, `ValidationException`, `Messages`, `MessagesKey` |
+| `io.github.soleworks.validity.constraints` | core | The general constraints, `or`, `and`, `not`, `HashAlgorithm`, `TaxIdType` |
+| `io.github.soleworks.validity.constraints.<country>` | core | The constraints of one country and its messages class, such as `cpf` and `BrazilMessages` in `brazil`: one package per country of [Countries](/constraints/countries) |
 | `io.github.soleworks.validity.phone` | phone | The phone constraints, `PhoneFormat`, `PhoneMessages` and `Messages.phone` |
 
 ```kotlin
@@ -68,3 +69,14 @@ can.
 Validity follows [Semantic Versioning](https://semver.org). While the version is `0.x`, a breaking change raises the
 minor version, so moving to the next minor version may ask you to change your code. The
 [changelog](https://github.com/soleworks/validity/blob/main/CHANGELOG.md) says what to change.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="In the class" icon="box" href="/guides/in-the-class">
+    Declare the rules of a class of yours, and the four ways to check them.
+  </Card>
+  <Card title="Constraints" icon="list-checks" href="/constraints/overview">
+    Every constraint, by the type of value it checks.
+  </Card>
+</CardGroup>

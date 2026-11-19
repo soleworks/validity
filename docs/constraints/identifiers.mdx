@@ -165,7 +165,7 @@ Checks that the string is a hexadecimal digest of the length `algorithm` produce
 
 Only the length and the digits are checked: an MD5 and an MD4 hash look the same.
 
-<ConstraintFacts code="hash" message="must be a valid {algorithm} hash" change='hash = "…"' />
+`algorithm` is a `HashAlgorithm`: `MD4`, `MD5`, `SHA1`, `SHA256`, `SHA384`, `SHA512`, `RIPEMD128`, `RIPEMD160`,
+`TIGER128`, `TIGER160`, `TIGER192`, `CRC32` or `CRC32B`.
 
-`hash` takes a `HashAlgorithm`: `MD4`, `MD5`, `SHA1`, `SHA256`, `SHA384`, `SHA512`, `RIPEMD128`, `RIPEMD160`,
-`TIGER128`, `TIGER160`, `TIGER192`, `CRC32` or `CRC32B`. It checks the length of the digest and its hexadecimal digits.
+<ConstraintFacts code="hash" message="must be a valid {algorithm} hash" change='hash = "…"' />

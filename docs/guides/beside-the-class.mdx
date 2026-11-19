@@ -42,9 +42,13 @@ addressValidation.validateBlocking(Address(street = "", zipCode = "1234", countr
 The zip code is not checked here: `postalCode` knows the formats of {{postalCountries}} countries by their alpha-2 code, and `USA` is not
 one of them, so it has nothing to compare against.
 
+`Validation<T>` returns a result and has no `validateOrThrow`: to throw, see
+[every way to throw](/guides/exceptions#every-way-to-throw).
+
 ## Validating a property with these rules
 
-A property of that type is checked with `valid(rules)`, and its violations are nested under the property:
+A property of that type is checked with [`valid(rules)`](/guides/nested-objects#which-rules-valid-checks), and its
+violations are nested under the property:
 
 ```kotlin Delivery.kt
 data class Delivery(

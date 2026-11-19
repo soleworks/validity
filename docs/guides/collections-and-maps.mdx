@@ -67,7 +67,7 @@ Cart(
 `each { }` runs its block on every element, and the path of an element is the path of the collection and its index:
 `items[0]`, `coupons[2]`. It works on any `Iterable`, such as a `List` or a `Set`, and on arrays of objects
 (`Array<T>`), but not on arrays of primitives such as `IntArray`. The block is a normal
-block of constraints, so it can hold `valid()` for objects, or another `each` for a list of lists:
+block of constraints, so it can hold [`valid()`](/guides/nested-objects) for objects, or another `each` for a list of lists:
 
 ```kotlin
 ::boxes required { each { each { minLength(5) } } }   // boxes[0][1]
@@ -104,14 +104,19 @@ entries.
 
 ## The order of the violations
 
-Inside one property, the rules of the collection come first, then the violations of its elements, in the order of the
-elements. That is why `distinct` comes before `coupons[2]` above.
+The rules of the collection come before the violations of its elements, in the order of the elements, as
+[the order of the violations](/guides/nested-objects#the-order-of-the-violations) says. That is why `distinct` comes
+before `coupons[2]` above.
 
 ## Elements that can be null
 
 In a `List<String?>`, an element can be `null`, and the block of `each` receives a `String?`, which the string
-constraints do not accept. Check it with `notNull()`:
+constraints do not accept. `notNull()` reports a `null` element, with the message of `required` (`is required`) and
+the code `notNull`:
 
 ```kotlin
 ::nicknames required { each { notNull() } }
 ```
+
+It reports the `null` only: the block keeps the type `String?`, so the string constraints still cannot run on the
+element.

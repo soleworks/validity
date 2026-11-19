@@ -115,12 +115,10 @@ The path is the path of the violations, so they point at the right place.
 
 ## `notNull`, for elements
 
-Inside an `each` over a collection of nullable values, the element can still be `null`, and there is no property to
-call `required` on. `notNull()` checks it, with the message of `required` (`is required`) and the code `notNull`:
-
-```kotlin
-::tags required { each { notNull() } }   // List<String?>
-```
+An element of a `List<String?>` can be `null`, and there is no property to call `required` on: `notNull()` reports it,
+with the message of `required` and the code `notNull`. See
+[Elements that can be null](/guides/collections-and-maps#elements-that-can-be-null) and
+[`notNull`](/constraints/any#notnull).
 
 <Tip>
   On a property, prefer `required` to `notNull()`: only `required` gives its block the non-null type.
