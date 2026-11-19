@@ -29,14 +29,15 @@ data class Account(
 
 Inside the block, `::username` is the property of the object being validated. Each rule starts from a property, says
 what `null` means for it ([`required`, `ifPresent` or `forbidden`](/guides/null-values)), and lists the constraints of
-its value in the block that follows. Several constraints in one block are all checked, in order.
+its value in the block that follows. Several constraints in one block are all checked, in order. `validation { }`
+returns a `SelfValidation`, the type to write when you declare the return type of `validation()` yourself.
 
 ## Checking the rules
 
 A `Validatable` has four ways to run its rules. They run the same rules and differ only in how they wait and how they
 answer:
 
-| | Returns the violations | Throws when a rule is broken |
+| | [Returns the violations](/guides/results) | [Throws when a rule is broken](/guides/exceptions) |
 |---|---|---|
 | Inside a coroutine | `validate()` | `validateOrThrow()` |
 | Anywhere else | `validateBlocking()` | `validateOrThrowBlocking()` |
@@ -81,18 +82,11 @@ There are no validation groups and no class-level annotations: the condition is 
 
 ## The configuration of one call
 
-Each of the four functions takes an optional `Validity`, a [configuration](/guides/configuration) for that call only:
-other messages, or another clock.
+Each of the four functions takes an optional `Validity`, a [configuration](/guides/configuration#for-one-call) for
+that call only: other messages, or another clock.
 
 ```kotlin
-account.validate(portuguese)
+account.validate(portuguese)   // portuguese = Validity { messages { ... } }
 ```
 
-<CardGroup cols={2}>
-  <Card title="Beside the class" icon="panel-right" href="/guides/beside-the-class">
-    For a class that is not yours, or rules that belong elsewhere.
-  </Card>
-  <Card title="Reading the result" icon="list" href="/guides/results">
-    `ValidationResult`, `Violation` and what each field holds.
-  </Card>
-</CardGroup>
+For a class that is not yours, the same rules go [beside the class](/guides/beside-the-class).

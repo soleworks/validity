@@ -92,8 +92,8 @@ on a `String`, `positive()` on a number, `past()` on a date.
     which message to change.
   </Accordion>
   <Accordion title="A message built from the value" icon="wand-sparkles">
-    A constraint that takes an argument has a second form whose message is a function of the value and the argument:
-    `minLength(3, message = { min -> "has $length characters, needs $min" })`.
+    A constraint that takes an argument has a second form whose message is a function of the value and the argument,
+    as [Messages](/guides/messages#for-one-rule) shows.
   </Accordion>
   <Accordion title="A missing argument checks nothing" icon="circle-slash">
     An argument read from another value, as in `max(customer.creditLimit)`, `equalTo(password)` or
@@ -114,11 +114,11 @@ Each constraint on these pages has the same parts:
 ```text
 minLength(min) on String                              the call, and the types it works on
 Checks that the string has at least min characters.   what it checks
-Code minLength · Message must have at least {min} characters · Change it minLength = "…"
+Code minLength · Message must have at least {min} characters · Change it messages { minLength = "…" }
 ```
 
-**Change it** is the line to write inside `messages { }` to change its default message, for the whole application or
-for one call. See [Messages](/guides/messages).
+**Change it** is the line that changes its default message, in the configuration of the whole application or of one
+call. See [Messages](/guides/messages).
 
 ## Imports
 

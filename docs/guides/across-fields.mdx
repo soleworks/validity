@@ -1,6 +1,6 @@
 ---
 title: "Across fields"
-description: "Presence rules such as exactlyOneOf and allOrNoneOf, and constraint { } for any rule about the whole object."
+description: "exactlyOneOf, allOrNoneOf and the other presence rules, and constraint { } in the validation block, check rules about the whole object."
 icon: "git-merge"
 ---
 
@@ -70,7 +70,9 @@ atLeastOneOf(::email, ::phone, message = "tell us how to reach you")
 
 ## `constraint`, for any rule
 
-`constraint { }` in the validation block checks any condition about the object. It reports its violation on a property:
+`constraint { }` in the validation block checks any condition about the object. (Inside the block of a property, the
+other form checks that property's value: see [Custom constraints](/guides/custom-constraints).) It reports its
+violation on a property:
 
 ```kotlin
 constraint(::total, message = "must be the amount plus the fee", code = "total") {
@@ -98,10 +100,10 @@ data class Stay(
 |---|---|---|
 | `checkOut` | must be after the check-in | `stay` |
 
-<Tip>
+<Note>
   The code is empty unless you give one. Give every rule of your own a code: it is what programs, such as a front end
   that translates messages, rely on.
-</Tip>
+</Note>
 
 ## A rule that depends on another field
 
@@ -113,5 +115,5 @@ that property:
 ::endsOn required { after(startsOn) }
 ```
 
-When the other field is `null`, `equalTo` and `after` check nothing, so the rule does not fail twice for one missing
-value: `required` on that field reports it.
+When the other field is `null`, `equalTo` and `after` [check nothing](/constraints/overview#what-every-constraint-has-in-common),
+so `required` on that field reports the missing value once.

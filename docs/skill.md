@@ -63,7 +63,7 @@ import io.github.soleworks.validity.phone.*               // phone, mobilePhone 
 - **Work outside a rule inside `failFast` always runs.** `failFast` skips rules, not code: put a lookup inside
   `constraint { }`, after the format rule it depends on.
 - **Country constraints are not in `constraints.*`.** `cpf()` is `io.github.soleworks.validity.constraints.brazil.cpf`.
-- **A message key is not always the constraint name.** Map sizes use `minEntries`/`maxEntries`/`entries`/
+- **The message property is not always named after the constraint.** Map sizes use `minEntries`/`maxEntries`/`entries`/
   `entriesBetween`, collection `contains` uses `containsElement`, date `between` uses `betweenDates`, `isTrue` uses
   `mustBeTrue`. The code of the violation is always the constraint name.
 - **`null` arguments skip a rule.** `min(null)`, `equalTo(null)` and `postalCode(null)` check nothing.

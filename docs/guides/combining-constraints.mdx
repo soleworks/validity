@@ -45,7 +45,7 @@ Seller(document = "123", storeCode = "ST-1", username = "ana", password = "ana20
 
 ## `or`
 
-`or { }` holds when at least one of its constraints holds. Each call in the block is a branch. When every branch fails,
+[`or { }`](/constraints/any#or) holds when at least one of its constraints holds. Each call in the block is a branch. When every branch fails,
 the violation has the code `or` and a message that joins the failures of the branches:
 `must be a valid CPF or must be a valid CNPJ`.
 
@@ -77,12 +77,12 @@ The message then puts the group in parentheses, so `Voucher(code = "ABC")` repor
 
 ## `and`
 
-`and { }` holds when every constraint in it holds, and reports one violation, with the code `and`, instead of one per
+[`and { }`](/constraints/any#and) holds when every constraint in it holds, and reports one violation, with the code `and`, instead of one per
 constraint. Outside an `or`, use it when the constraints together are one requirement that deserves one message.
 
 ## `not`
 
-`not { }` holds when none of its constraints holds, and reports `is not allowed`, with the code `not`, by default.
+[`not { }`](/constraints/any#not) holds when none of its constraints holds, and reports `is not allowed`, with the code `not`, by default.
 Give it a message that says what is not allowed:
 
 ```kotlin
@@ -110,5 +110,5 @@ Validity.configure {
 All three take a message as their first argument, to replace the joined one: `or("must be a CPF or a CNPJ") { ... }`.
 
 <Note>
-  An empty `or { }` holds, and so does an empty `and { }`: there is nothing that fails.
+  An empty `or { }` holds, and so do an empty `and { }` and an empty `not { }`: there is nothing that fails.
 </Note>

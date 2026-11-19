@@ -1,6 +1,6 @@
 ---
 title: "Coroutines"
-description: "Every lambda of a rule can call suspend functions, under the same names, and validate() suspends while they run."
+description: "validate() suspends while the rules call suspend functions, which every lambda of a rule can do, under the same names."
 icon: "zap"
 ---
 
@@ -53,12 +53,8 @@ invite.validateBlocking(members)   // anywhere else: blocks the thread until the
 
 `validate()` is a `suspend` function: in a coroutine, it suspends while the rules wait, and the thread serves other work.
 `validateBlocking()` runs the same rules inside `runBlocking`, for code that cannot suspend, such as a servlet or a test
-without coroutines. Both return the same result.
-
-| | Suspending | Blocking |
-|---|---|---|
-| Returns the result | `validate()` | `validateBlocking()` |
-| Throws | `validateOrThrow()` | `validateOrThrowBlocking()` |
+without coroutines. Both return the same result, and the throwing pair works the same way: the four are in
+[Checking the rules](/guides/in-the-class#checking-the-rules).
 
 ## The configuration follows the coroutine
 

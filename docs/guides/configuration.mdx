@@ -26,6 +26,9 @@ fun main() {
 }
 ```
 
+`{min}` is a [placeholder](/guides/messages#placeholders), and `brazil { }` holds the
+[messages of a country](/guides/messages#messages-of-a-country).
+
 Each call starts from the built-in defaults, so a second call undoes the first. Call it once, before the first
 validation.
 
@@ -52,40 +55,22 @@ User(name = "A", email = "ana@", age = null).validate(portuguese).violations
 
 The codes stay the same in every language, which is what lets programs ignore the messages.
 
-Every entry takes one: `validate(validity)`, `validateBlocking(validity)`, the `OrThrow` versions, and, for a
+Every way to run takes one: `validate(validity)`, `validateBlocking(validity)`, the `OrThrow` versions, and, for a
 [`ContextualValidatable`](/guides/context), `validate(context, validity)`. The configuration reaches the nested objects
 and elements too.
 
-## Common uses
+## One language per request
 
-<AccordionGroup>
-  <Accordion title="One language per request" icon="languages">
-    Build one `Validity` per language at startup, and pick it from the `Accept-Language` of the request:
+Build one `Validity` per language at startup, and pick it from the `Accept-Language` of the request:
 
 ```kotlin
 val byLanguage = mapOf("pt" to portuguese, "es" to spanish)
 
 order.validate(byLanguage[language] ?: Validity { })
 ```
-  </Accordion>
-  <Accordion title="A fixed clock in tests" icon="clock">
-    Rules about time read the clock of the configuration, so a test can fix "now" for one call without touching the
-    default:
 
-```kotlin
-val validity = Validity { clock = Clock.fixed(Instant.parse("2026-11-02T12:00:00Z"), ZoneOffset.UTC) }
-
-subscription.validate(validity)
-```
-  </Accordion>
-  <Accordion title="The time zone of a user" icon="globe">
-    "Today" depends on the zone. Give the call the clock of the user's zone:
-
-```kotlin
-booking.validate(Validity { clock = Clock.system(user.zone) })
-```
-  </Accordion>
-</AccordionGroup>
+The clock varies the same way, for a test or for the zone of a user: see
+[Fixing the clock](/guides/time#fixing-the-clock).
 
 <Note>
   `Validity { }` builds its configuration when it is created, on top of the default of that moment. Create the ones you
