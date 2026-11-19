@@ -26,7 +26,8 @@ public class Validation<T> internal constructor(
     private val block: suspend context(SelfValidation) T.() -> Unit
 ) {
     /**
-     * Runs every rule on [value] and returns all the violations, in the order the rules are declared.
+     * Runs every rule on [value] and returns all the violations, in the order the rules are declared, with the
+     * constraints of a property before the violations of its nested objects and elements.
      *
      * @param value the value to check.
      * @param validity the configuration to validate with, the default one unless it is given.

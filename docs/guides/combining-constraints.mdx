@@ -33,6 +33,10 @@ data class Seller(
 }
 ```
 
+```kotlin
+Seller(document = "123", storeCode = "ST-1", username = "ana", password = "ana2024").validate().violations
+```
+
 | Path | Message | Code |
 |---|---|---|
 | `document` | must be a valid CPF or must be a valid CNPJ | `or` |

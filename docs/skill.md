@@ -47,7 +47,7 @@ user.validateOrThrow()     // throws ValidationException with every violation
   `constraint(::total, message = "...", code = "...") { total == items.sumOf { it.price } }`.
 - Custom rule once: `constraint("is out of stock", code = "stock") { it in stock }` inside a property block.
   Reusable: `fun ValidationNode<String>.sku(message: String = "...") = constraint(message, code = "sku") { ... }`.
-- Text that carries a value: `::page ifPresent { convertToInt { min(1) } }`, `convertToLocalDate`, `convertToEnum<E>()`.
+- Text that carries a value: `::page ifPresent { convertToInt { min(1) } }`, `convertToLocalDate`, `convertToEnum<E> { }`.
 
 ## Imports
 

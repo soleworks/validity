@@ -1,11 +1,11 @@
 ---
 title: "Coroutines"
-description: "Every lambda you hand to Validity can call suspend functions, under the same names, and validate() suspends while they run."
+description: "Every lambda of a rule can call suspend functions, under the same names, and validate() suspends while they run."
 icon: "zap"
 ---
 
 Validation often needs I/O: is this email already registered, does this coupon exist, is this SKU in stock. In
-Validity, every piece of code you hand over can call a `suspend` function, with no separate API for it:
+Validity, every piece of a rule you hand over can call a `suspend` function, with no separate API for it:
 
 - the condition of a `constraint`, and a message built from the value,
 - a converter of `convert`,
@@ -75,6 +75,7 @@ so does `now { }`:
 ```
 
 <Note>
-  The rules of one object run one after the other, in the order they are declared, so the order of the violations does
-  not depend on how long each lookup takes.
+  The rules of one object run one after the other, in
+  [a fixed order](/guides/nested-objects#the-order-of-the-violations), so the order of the violations does not depend
+  on how long each lookup takes.
 </Note>

@@ -4,6 +4,7 @@ import io.github.soleworks.validity.ValidationNode
 import io.github.soleworks.validity.Validity
 import io.github.soleworks.validity.Violation
 import io.github.soleworks.validity.phone.samples.Contact
+import io.github.soleworks.validity.phone.samples.docs.Courier
 import io.github.soleworks.validity.validateBlocking
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
@@ -32,6 +33,18 @@ class PhoneMessagesTest {
 
             violations shouldBe listOf(
                 Violation(path = "phone", message = "must be a valid phone number", code = "phone")
+            )
+        }
+
+        @Test
+        fun `given a courier with a landline as mobile and a short office number should report the default messages`() {
+            val courier = Courier(mobile = "+55 11 3123-4567", office = "1")
+
+            val violations = courier.validateBlocking().violations
+
+            violations shouldBe listOf(
+                Violation(path = "mobile", message = "must be a valid mobile phone number", code = "mobilePhone"),
+                Violation(path = "office", message = "must be a valid phone number", code = "phone")
             )
         }
 

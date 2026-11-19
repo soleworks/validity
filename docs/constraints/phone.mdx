@@ -47,6 +47,10 @@ in another format fails.
 - `areaCode`: the area code the number must have, such as `11`. With `null`, any area code.
 - `format`: how the number must be written, a `PhoneFormat`. With `null`, any of them.
 
+A local number alone, as `PhoneFormat.NUMBER_ONLY` writes it, does not say its area, so without an `areaCode` only its
+length is checked: some number of the country must have that length. Since a `null` format tries that form too,
+`phone()` alone passes `0000`. To check the whole number, give the `areaCode` or a `format` that includes it.
+
 <ConstraintFacts code="phone" message="must be a valid phone number" change='phone { phone = "…" }' />
 
 ### `mobilePhone`
@@ -74,6 +78,9 @@ Checks that the string is a country calling code, such as `55` or `+1`, with or 
 Checks that the string is an area code used in `countryCode`, such as `11` in Brazil.
 
 Where the area codes of a country have different lengths, any 1 to 5 digits pass.
+
+`countryCode` is optional. With `null`, an area code of any country passes, and since some countries mix lengths,
+`areaCode()` alone passes any 1 to 5 digits.
 
 <ConstraintFacts code="areaCode" message="must be a valid area code" change='phone { areaCode = "…" }' />
 

@@ -43,7 +43,7 @@ on a `String`, `positive()` on a number, `past()` on a date.
     `minAge`, `today`, `withinNext`, `weekday`
   </Card>
   <Card title="Durations" icon="timer" href="/constraints/durations">
-    `kotlin.time.Duration` ranges
+    `kotlin.time` and `java.time` durations
   </Card>
 </CardGroup>
 
@@ -95,9 +95,11 @@ on a `String`, `positive()` on a number, `past()` on a date.
     A constraint that takes an argument has a second form whose message is a function of the value and the argument:
     `minLength(3, message = { min -> "has $length characters, needs $min" })`.
   </Accordion>
-  <Accordion title="Null arguments check nothing" icon="circle-slash">
-    `max(customer.creditLimit)`, `equalTo(password)` or `postalCode(country)` with a `null` argument skip the check. The
-    missing value is reported once, by `required` on its own property, instead of breaking every rule that reads it.
+  <Accordion title="A missing argument checks nothing" icon="circle-slash">
+    An argument read from another value, as in `max(customer.creditLimit)`, `equalTo(password)` or
+    `postalCode(country)`, skips the check when it is `null`. The missing value is reported once, by `required` on its
+    own property, instead of breaking every rule that reads it. An optional filter is different: a `null`
+    `countryCode` in `phone` or `version` in `uuid` lets any country or version pass.
   </Accordion>
   <Accordion title="Placeholders in the message" icon="braces">
     Messages fill `{path}`, `{value}` and the arguments of the constraint by name: `must have at least {min}

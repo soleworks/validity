@@ -23,7 +23,7 @@ private val CONSTRAINT_FACTS_FORMAT = Regex(
     """<ConstraintFacts code="(\w+)"(?: message="([^"]*)" change='(?:(\w+) \{ )?(\w+) = "…"(?: })?')? />"""
 )
 private val MESSAGE_PROPERTY_FORMAT = Regex("""public var (\w+): String = "([^"]*)"""")
-private val MESSAGE_DEFAULT_FORMAT = Regex("""message: String = (messages|phoneMessages)\.""")
+private val MESSAGE_DEFAULT_FORMAT = Regex("""message(: String)? = (messages|phoneMessages)\.""")
 private val VARIABLE_USE_FORMAT = Regex("""\{\{(\w+)}}""")
 private val SNIPPET_IMPORT_FORMAT = Regex("""^import \w+ from "/snippets/([\w-]+\.mdx)";""", RegexOption.MULTILINE)
 private val NAVIGATION_PAGES_FORMAT = Regex(""""pages":\s*\[(.*?)]""", RegexOption.DOT_MATCHES_ALL)

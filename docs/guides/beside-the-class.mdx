@@ -58,6 +58,13 @@ data class Delivery(
 }
 ```
 
+```kotlin
+Delivery(
+    address = Address(street = " ", zipCode = "1234", country = "US"),
+    scheduledFor = LocalDate.of(2026, 10, 1)
+).validate().violations
+```
+
 | Path | Message | Code |
 |---|---|---|
 | `address.street` | must not be blank | `notBlank` |

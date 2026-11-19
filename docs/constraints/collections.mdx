@@ -7,8 +7,8 @@ icon: "list"
 import NullArguments from "/snippets/null-arguments.mdx";
 import ConstraintFacts from "/snippets/constraint-facts.mdx";
 
-The constraints of a collection as a whole. The size rules work on any `Collection`, on arrays and on `ByteArray`; the
-content rules on `List`, `Set` and arrays. To check every element, use [`each`](/guides/collections-and-maps).
+The constraints of a collection as a whole. The size rules work on any `Collection`, on `Array` and on `ByteArray`, but
+on no other array of primitives; the content rules on `List`, `Set` and `Array`. To check every element, use [`each`](/guides/collections-and-maps).
 
 <NullArguments />
 
@@ -156,4 +156,4 @@ Checks that the collection has no element twice, by `equals`.
 
 Checks that no two elements of the list have the same key, as `selector` picks it.
 
-<ConstraintFacts code="distinctBy" />
+<ConstraintFacts code="distinctBy" message="must not contain duplicates" change='distinct = "…"' />

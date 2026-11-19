@@ -47,6 +47,8 @@ data class Book(
 
 Checks that the string is a UUID in its 36-character form, such as `123e4567-e89b-12d3-a456-426614174000`, in either case.
 
+`version` is optional: with `null`, any version passes, and with a number, only the version digit is compared with it.
+
 <ConstraintFacts code="uuid" message="must be a valid UUID" change='uuid = "…"' />
 
 ### `ulid`

@@ -4,8 +4,8 @@ description: "ValidationResult holds every broken rule, and each Violation has a
 icon: "list"
 ---
 
-`validate()` returns a `ValidationResult`. It holds every violation, in the order the rules are declared, and says
-whether there is any:
+`validate()` returns a `ValidationResult`. It holds every violation, in
+[the order of the rules](/guides/nested-objects#the-order-of-the-violations), and says whether there is any:
 
 ```kotlin
 val result = user.validate()

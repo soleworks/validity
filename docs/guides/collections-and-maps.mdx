@@ -65,7 +65,8 @@ Cart(
 ## `each`
 
 `each { }` runs its block on every element, and the path of an element is the path of the collection and its index:
-`items[0]`, `coupons[2]`. It works on any `Iterable`, such as a `List` or a `Set`, and on arrays. The block is a normal
+`items[0]`, `coupons[2]`. It works on any `Iterable`, such as a `List` or a `Set`, and on arrays of objects
+(`Array<T>`), but not on arrays of primitives such as `IntArray`. The block is a normal
 block of constraints, so it can hold `valid()` for objects, or another `each` for a list of lists:
 
 ```kotlin
