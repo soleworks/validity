@@ -1,5 +1,6 @@
 package io.github.soleworks.validity.phone
 
+import io.github.soleworks.validity.Language
 import io.github.soleworks.validity.Messages
 import io.github.soleworks.validity.MessagesKey
 import io.github.soleworks.validity.ValidityDsl
@@ -24,7 +25,23 @@ public class PhoneMessages internal constructor() {
     public var areaCode: String = "must be a valid area code"
 }
 
-private val PHONE_MESSAGES = MessagesKey(::PhoneMessages)
+private val PHONE_MESSAGES = MessagesKey(
+    create = ::PhoneMessages,
+    translations = mapOf(
+        Language.ES to {
+            phone = "debe ser un número de teléfono válido"
+            mobilePhone = "debe ser un número de teléfono móvil válido"
+            countryCode = "debe ser un código telefónico de país válido"
+            areaCode = "debe ser un código de área válido"
+        },
+        Language.PT_BR to {
+            phone = "deve ser um número de telefone válido"
+            mobilePhone = "deve ser um número de celular válido"
+            countryCode = "deve ser um código telefônico de país válido"
+            areaCode = "deve ser um código de área válido"
+        }
+    )
+)
 
 internal val phoneMessages: PhoneMessages
     get() = PHONE_MESSAGES.current

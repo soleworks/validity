@@ -1,24 +1,26 @@
 package io.github.soleworks.validity
 
 import java.time.Clock
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.asContextElement
 import kotlinx.coroutines.withContext
 
 /**
- * A configuration of Validity: the messages of the violations and the clock that says what "now" is.
+ * A configuration of Validity: the language and the messages of the violations, and the clock that says what "now"
+ * is.
  *
  * Most applications set it once, at startup, with [configure]. A [Validity] made with [invoke] is a variation of that
- * configuration, for one call: pass it to [validate][io.github.soleworks.validity.validate] to validate in another
- * language or at a fixed time, without changing the configuration of everyone else.
+ * configuration, for one call: pass it to [validate][io.github.soleworks.validity.validate] to validate with other
+ * messages or at a fixed time, without changing the configuration of everyone else.
  *
  * ```kotlin
  * Validity.configure {
- *     messages { required = "é obrigatório" }
+ *     language = Language.PT_BR
  * }
  *
- * val portuguese = Validity { messages { minLength = "deve ter pelo menos {min} caracteres" } }
+ * val fixed = Validity { clock = Clock.fixed(Instant.parse("2030-01-01T00:00:00Z"), ZoneOffset.UTC) }
  *
- * customer.validate(portuguese)
+ * customer.validate(fixed)
  * ```
  */
 public class Validity private constructor(
@@ -26,6 +28,16 @@ public class Validity private constructor(
 ) {
     internal val configuration: ValidityConfiguration = ValidityConfiguration().apply {
         blocks.forEach { block -> block() }
+    }
+
+    private val languages = ConcurrentHashMap<Language, Validity>()
+
+    internal fun speaking(
+        language: Language?
+    ): Validity {
+        if (language == null || language == configuration.language) return this
+
+        return languages.computeIfAbsent(language) { Validity(blocks + { this.language = language }) }
     }
 
     internal suspend fun <T> use(

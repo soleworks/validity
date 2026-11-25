@@ -76,8 +76,8 @@ Violation(path=iban, message=is required, code=required)
   groups, no class-level annotations.
 - **`null` is decided once.** `required`, `ifPresent` and `forbidden` settle what `null` means, and every constraint
   after them works on the non-null type.
-- **Every error at once, for two audiences.** A `message` for people, configurable and translatable, and a stable
-  `code` for programs, each with the path where it happened.
+- **Every error at once, for two audiences.** A `message` for people, in English, Spanish or Portuguese and
+  configurable, and a stable `code` for programs, each with the path where it happened.
 - **Batteries included.** 221 constraints, postal codes of 72 countries, national documents of 36, and phone
   numbers in their own module.
 - **Nothing hidden.** No annotations, no code generation, no `kotlin-reflect`.
@@ -156,7 +156,9 @@ Credentials(password = "s3cr3t!!").validateBlocking().violations
 Violation(path=password, message=has 8 characters, needs at least 12, code=minLength)
 ```
 
-[Messages](https://validity-kt.dev/guides/messages) shows how to translate them all at once, with placeholders such as
+The messages come in English, Spanish and Brazilian Portuguese: `Validity.configure { language = Language.PT_BR }`
+for the whole application, or `user.validate(language = Language.ES)` for one call.
+[Messages](https://validity-kt.dev/guides/messages) shows how to change them all at once, with placeholders such as
 `{min}`.
 
 Going further:

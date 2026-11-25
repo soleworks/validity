@@ -510,6 +510,33 @@ class ValidatableTest {
         }
 
         @Test
+        fun `given a language for the call should report the quick start user in it`() {
+            val user = User(name = "A", email = "ana@", age = null)
+
+            val violations = user.validateBlocking(language = Language.ES).violations
+
+            violations shouldBe listOf(
+                Violation(path = "name", message = "debe tener al menos 2 caracteres", code = "minLength"),
+                Violation(path = "email", message = "debe ser un correo electrónico válido", code = "email")
+            )
+        }
+
+        @Test
+        fun `given the language of the Validity for the call should report the messages configured in it`() {
+            val validity = Validity {
+                language = Language.PT_BR
+                messages { email = "e-mail inválido" }
+            }
+            val user = User(name = "Ana", email = "ana@", age = null)
+
+            val violations = user.validateBlocking(validity, language = Language.PT_BR).violations
+
+            violations shouldBe listOf(
+                Violation(path = "email", message = "e-mail inválido", code = "email")
+            )
+        }
+
+        @Test
         fun `given a Validity with the messages of a country should report them inside an or`() {
             val validity = Validity { messages { brazil { cpf = "CPF inválido" } } }
             val seller = Seller(document = "123", storeCode = "ST-12345", username = "ana", password = "s3cret!!")

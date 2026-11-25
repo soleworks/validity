@@ -127,6 +127,56 @@ class ValidityTest {
         }
 
         @Test
+        fun `given the language Portuguese should report the built-in messages in Portuguese`() {
+            Validity.configure { language = Language.PT_BR }
+            val customer = Customer(name = "A")
+
+            val result = customer.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "deve ter pelo menos 2 caracteres", code = "minLength")
+            )
+        }
+
+        @Test
+        fun `given the language Spanish should report the messages of a country in Spanish`() {
+            Validity.configure { language = Language.ES }
+            val node = ValidationNode(path = "cpf", value = "123").apply { cpf() }
+
+            val violations = node.validate()
+
+            violations shouldBe listOf(
+                Violation(path = "cpf", message = "debe ser un CPF válido", code = "cpf")
+            )
+        }
+
+        @Test
+        fun `given a language and a message of its own should report the message of its own in any order`() {
+            Validity.configure {
+                messages { minLength = "nome curto demais" }
+                language = Language.PT_BR
+            }
+            val customer = Customer(name = "A")
+
+            val result = customer.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "nome curto demais", code = "minLength")
+            )
+        }
+
+        @Test
+        fun `given every built-in language should report no message left in English or with other placeholders`() {
+            val english = messagesIn(Language.EN).texts()
+
+            val result = (Language.entries - Language.EN).flatMap { language ->
+                messagesIn(language).texts().untranslated(english, language)
+            }
+
+            result shouldBe emptyList()
+        }
+
+        @Test
         fun `given a message of a country should report it`() {
             Validity.configure {
                 messages {
@@ -460,3 +510,37 @@ class ValidityTest {
         }
     }
 }
+
+private val PLACEHOLDER_FORMAT = Regex("""\{\w+}""")
+
+private fun messagesIn(
+    language: Language
+): Messages = Validity { this.language = language }.configuration.messages
+
+private fun Any.texts(
+    prefix: String = ""
+): Map<String, String> {
+    val texts = mutableMapOf<String, String>()
+    val getters = javaClass.declaredMethods.filter { method ->
+        method.parameterCount == 0 &&
+            method.name.startsWith("get")
+    }
+    getters.forEach { getter ->
+        val name = prefix + getter.name.removePrefix("get").substringBefore('$')
+        val value = getter.invoke(this)
+        if (value is String) texts[name] = value
+        if (value.javaClass.simpleName.endsWith("Messages")) texts += value.texts("$name.")
+    }
+    return texts
+}
+
+private fun Map<String, String>.untranslated(
+    english: Map<String, String>,
+    language: Language
+): List<String> = mapNotNull { (name, text) ->
+    val isEnglish = text == english[name]
+    val hasOtherPlaceholders = text.placeholders() != english[name]?.placeholders()
+    if (isEnglish || hasOtherPlaceholders) "$language $name: $text" else null
+}
+
+private fun String.placeholders(): Set<String> = PLACEHOLDER_FORMAT.findAll(this).map { it.value }.toSet()

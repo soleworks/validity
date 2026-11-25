@@ -27,12 +27,32 @@ class MessagesTest {
 
         @Test
         fun `given the module messages configured should report them`() {
-            Validity.configure { messages { module(GREETING_MESSAGES).greeting = "olá" } }
+            Validity.configure { messages { module(GREETING_MESSAGES).greeting = "oi" } }
+            val rules = validation { constraint(message = GREETING_MESSAGES.current.greeting) { false } }
+
+            val result = rules.validateBlocking()
+
+            result.violations shouldBe listOf(Violation(path = "", message = "oi", code = ""))
+        }
+
+        @Test
+        fun `given a language the module translates should report the module message in it`() {
+            Validity.configure { language = Language.PT_BR }
             val rules = validation { constraint(message = GREETING_MESSAGES.current.greeting) { false } }
 
             val result = rules.validateBlocking()
 
             result.violations shouldBe listOf(Violation(path = "", message = "olá", code = ""))
+        }
+
+        @Test
+        fun `given a language the module does not translate should report the module message in English`() {
+            Validity.configure { language = Language.ES }
+            val rules = validation { constraint(message = GREETING_MESSAGES.current.greeting) { false } }
+
+            val result = rules.validateBlocking()
+
+            result.violations shouldBe listOf(Violation(path = "", message = "hello", code = ""))
         }
 
         @Test

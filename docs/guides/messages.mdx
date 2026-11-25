@@ -1,16 +1,46 @@
 ---
 title: "Messages"
-description: "messages { } changes the default message of any constraint, for the whole application or one call, with placeholders filled in."
+description: "Built-in messages in English, Spanish and Portuguese, and messages { } to change any of them, with placeholders filled in."
 icon: "languages"
 ---
 
 Every constraint reports a message for people, in English by default, such as `must have at least 2 characters`.
 Change it in three places, from the broadest to the narrowest.
 
+## In another language
+
+The messages come in English, Spanish and Brazilian Portuguese. Pick one for the whole application with `language`:
+
+```kotlin
+Validity.configure { language = Language.PT_BR }
+
+User(name = "A", email = "ana@", age = null).validate().violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `name` | deve ter pelo menos 2 caracteres | `minLength` |
+| `email` | deve ser um e-mail válido | `email` |
+
+Or pick it for one call, such as the request of a user in another country:
+
+```kotlin
+user.validate(language = Language.ES)
+```
+
+| Language | Value |
+|---|---|
+| English, the default | `Language.EN` |
+| Spanish | `Language.ES` |
+| Portuguese, as written in Brazil | `Language.PT_BR` |
+
+The language covers every message: the general ones, those of each country and those of `validity-phone`. The codes
+do not change with it.
+
 ## For the whole application
 
-`messages { }` in the [configuration](/guides/configuration) changes the default message of a constraint everywhere.
-Each message is a property named after the constraint:
+`messages { }` in the [configuration](/guides/configuration) changes the default message of a constraint everywhere,
+in whatever language is picked. Each message is a property named after the constraint:
 
 ```kotlin
 Validity.configure {
@@ -138,14 +168,28 @@ Validity.configure { messages { module(SHOP_MESSAGES).sku = "SKU inválido" } }
 `MessagesKey.current` reads the messages of the configuration that is validating, so `Validity { }` for one call works
 for them too.
 
+To follow the [language](#in-another-language) of the configuration, give the key the messages in each language you
+write them in. A language you leave out keeps the English ones:
+
+```kotlin
+val SHOP_MESSAGES = MessagesKey(
+    create = ::ShopMessages,
+    translations = mapOf(
+        Language.ES to { sku = "debe ser un SKU como ABC-1234" },
+        Language.PT_BR to { sku = "deve ser um SKU como ABC-1234" }
+    )
+)
+```
+
 ## A template to translate
 
-Every message with its default, ready to copy and translate. Keep the placeholders in braces: they are
+Every message with its default, ready to copy and translate into a language that is not
+[built in](#in-another-language). Keep the placeholders in braces: they are
 filled in when a violation is built. The `phone { }` block needs `validity-phone` and the import
 `io.github.soleworks.validity.phone.phone`; remove it when you do not use the module.
 
 <Tip>
-  Ask your agent: "Translate this Validity messages template to Spanish, keeping the placeholders." It can read
+  Ask your agent: "Translate this Validity messages template to French, keeping the placeholders." It can read
   this page as Markdown at `/guides/messages.md`.
 </Tip>
 

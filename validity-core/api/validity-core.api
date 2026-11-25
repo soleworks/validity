@@ -53,14 +53,23 @@ public abstract interface class io/github/soleworks/validity/ContextualValidatab
 }
 
 public final class io/github/soleworks/validity/ContextualValidatableKt {
-	public static final fun validate (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun validate$default (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun validateBlocking (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;)Lio/github/soleworks/validity/ValidationResult;
-	public static synthetic fun validateBlocking$default (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;ILjava/lang/Object;)Lio/github/soleworks/validity/ValidationResult;
-	public static final fun validateOrThrow (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun validateOrThrow$default (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun validateOrThrowBlocking (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;)V
-	public static synthetic fun validateOrThrowBlocking$default (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;ILjava/lang/Object;)V
+	public static final fun validate (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun validate$default (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun validateBlocking (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;)Lio/github/soleworks/validity/ValidationResult;
+	public static synthetic fun validateBlocking$default (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;ILjava/lang/Object;)Lio/github/soleworks/validity/ValidationResult;
+	public static final fun validateOrThrow (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun validateOrThrow$default (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun validateOrThrowBlocking (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;)V
+	public static synthetic fun validateOrThrowBlocking$default (Lio/github/soleworks/validity/ContextualValidatable;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;ILjava/lang/Object;)V
+}
+
+public final class io/github/soleworks/validity/Language : java/lang/Enum {
+	public static final field EN Lio/github/soleworks/validity/Language;
+	public static final field ES Lio/github/soleworks/validity/Language;
+	public static final field PT_BR Lio/github/soleworks/validity/Language;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/soleworks/validity/Language;
+	public static fun values ()[Lio/github/soleworks/validity/Language;
 }
 
 public final class io/github/soleworks/validity/Messages {
@@ -464,7 +473,8 @@ public final class io/github/soleworks/validity/Messages {
 }
 
 public final class io/github/soleworks/validity/MessagesKey {
-	public fun <init> (Lkotlin/jvm/functions/Function0;)V
+	public fun <init> (Lkotlin/jvm/functions/Function0;Ljava/util/Map;)V
+	public synthetic fun <init> (Lkotlin/jvm/functions/Function0;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getCurrent ()Ljava/lang/Object;
 }
 
@@ -515,21 +525,21 @@ public abstract interface class io/github/soleworks/validity/Validatable {
 
 public final class io/github/soleworks/validity/ValidatableKt {
 	public static final fun validatable (Ljava/lang/Object;Lkotlin/jvm/functions/Function3;)Lio/github/soleworks/validity/Validatable;
-	public static final fun validate (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun validate$default (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun validateBlocking (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;)Lio/github/soleworks/validity/ValidationResult;
-	public static synthetic fun validateBlocking$default (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;ILjava/lang/Object;)Lio/github/soleworks/validity/ValidationResult;
-	public static final fun validateOrThrow (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun validateOrThrow$default (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun validateOrThrowBlocking (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;)V
-	public static synthetic fun validateOrThrowBlocking$default (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;ILjava/lang/Object;)V
+	public static final fun validate (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun validate$default (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun validateBlocking (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;)Lio/github/soleworks/validity/ValidationResult;
+	public static synthetic fun validateBlocking$default (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;ILjava/lang/Object;)Lio/github/soleworks/validity/ValidationResult;
+	public static final fun validateOrThrow (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun validateOrThrow$default (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun validateOrThrowBlocking (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;)V
+	public static synthetic fun validateOrThrowBlocking$default (Lio/github/soleworks/validity/Validatable;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;ILjava/lang/Object;)V
 }
 
 public final class io/github/soleworks/validity/Validation {
-	public final fun validate (Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun validate$default (Lio/github/soleworks/validity/Validation;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public final fun validateBlocking (Ljava/lang/Object;Lio/github/soleworks/validity/Validity;)Lio/github/soleworks/validity/ValidationResult;
-	public static synthetic fun validateBlocking$default (Lio/github/soleworks/validity/Validation;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;ILjava/lang/Object;)Lio/github/soleworks/validity/ValidationResult;
+	public final fun validate (Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun validate$default (Lio/github/soleworks/validity/Validation;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun validateBlocking (Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;)Lio/github/soleworks/validity/ValidationResult;
+	public static synthetic fun validateBlocking$default (Lio/github/soleworks/validity/Validation;Ljava/lang/Object;Lio/github/soleworks/validity/Validity;Lio/github/soleworks/validity/Language;ILjava/lang/Object;)Lio/github/soleworks/validity/ValidationResult;
 }
 
 public final class io/github/soleworks/validity/ValidationException : java/lang/RuntimeException {
@@ -577,8 +587,10 @@ public final class io/github/soleworks/validity/Validity$Companion {
 
 public final class io/github/soleworks/validity/ValidityConfiguration {
 	public final fun getClock ()Ljava/time/Clock;
+	public final fun getLanguage ()Lio/github/soleworks/validity/Language;
 	public final fun messages (Lkotlin/jvm/functions/Function1;)V
 	public final fun setClock (Ljava/time/Clock;)V
+	public final fun setLanguage (Lio/github/soleworks/validity/Language;)V
 }
 
 public abstract interface annotation class io/github/soleworks/validity/ValidityDsl : java/lang/annotation/Annotation {
