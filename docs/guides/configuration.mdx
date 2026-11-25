@@ -1,11 +1,11 @@
 ---
 title: "Configuration"
-description: "Validity.configure sets the messages and the clock once, at startup, and Validity { } varies them for one call."
+description: "Validity.configure sets the language, the messages and the clock once, at startup, and Validity { } varies them for one call."
 icon: "settings"
 ---
 
-A configuration of Validity has two things: the [messages](/guides/messages) of the violations, and the
-[clock](/guides/time) that says what "now" is. Every validation uses one.
+A configuration of Validity has three things: the [language and the messages](/guides/messages) of the violations,
+and the [clock](/guides/time) that says what "now" is. Every validation uses one.
 
 ## Once, at startup
 
@@ -14,9 +14,9 @@ A configuration of Validity has two things: the [messages](/guides/messages) of 
 ```kotlin
 fun main() {
     Validity.configure {
+        language = Language.PT_BR
         messages {
-            required = "é obrigatório"
-            minLength = "deve ter pelo menos {min} caracteres"
+            required = "campo obrigatório"
             brazil { cpf = "CPF inválido" }
         }
         clock = Clock.system(ZoneId.of("America/Sao_Paulo"))
@@ -26,8 +26,17 @@ fun main() {
 }
 ```
 
-`{min}` is a [placeholder](/guides/messages#placeholders), and `brazil { }` holds the
-[messages of a country](/guides/messages#messages-of-a-country).
+`language` picks the [built-in messages](/guides/messages#in-another-language), `messages { }` changes the ones you
+want worded otherwise, and `brazil { }` holds the [messages of a country](/guides/messages#messages-of-a-country).
+
+When the language comes from a setting, `Language.of` reads its tag, such as `pt-BR`:
+
+```kotlin
+Validity.configure { language = Language.of(System.getenv("APP_LANGUAGE")) }
+```
+
+A tag of a language Validity has no messages in throws an `IllegalArgumentException` that names the ones there are,
+so a wrong setting stops the application when it starts.
 
 Each call starts from the built-in defaults, so a second call undoes the first. Call it once, before the first
 validation.
@@ -38,22 +47,22 @@ validation.
 to `validate`: the default configuration does not change, so other requests keep theirs.
 
 ```kotlin
-val portuguese = Validity {
+val friendly = Validity {
     messages {
-        minLength = "deve ter pelo menos {min} caracteres"
-        email = "deve ser um e-mail válido"
+        minLength = "is too short, use at least {min} characters"
+        email = "does not look like an email address"
     }
 }
 
-User(name = "A", email = "ana@", age = null).validate(portuguese).violations
+User(name = "A", email = "ana@", age = null).validate(friendly).violations
 ```
 
 | Path | Message | Code |
 |---|---|---|
-| `name` | deve ter pelo menos 2 caracteres | `minLength` |
-| `email` | deve ser um e-mail válido | `email` |
+| `name` | is too short, use at least 2 characters | `minLength` |
+| `email` | does not look like an email address | `email` |
 
-The codes stay the same in every language, which is what lets programs ignore the messages.
+The codes stay the same whatever the messages say, which is what lets programs ignore them.
 
 Every way to run takes one: `validate(validity)`, `validateBlocking(validity)`, the `OrThrow` versions, and, for a
 [`ContextualValidatable`](/guides/context), `validate(context, validity)`. The configuration reaches the nested objects
@@ -61,13 +70,22 @@ and elements too.
 
 ## One language per request
 
-Build one `Validity` per language at startup, and pick it from the `Accept-Language` of the request:
+A server that answers each request in the language of its user passes the language to `validate`, with no
+`Validity` to build:
 
 ```kotlin
-val byLanguage = mapOf("pt" to portuguese, "es" to spanish)
+val language = when (acceptLanguage.substringBefore('-')) {
+    "es" -> Language.ES
+    "pt" -> Language.PT_BR
+    else -> Language.EN
+}
 
-order.validate(byLanguage[language] ?: Validity { })
+order.validate(language = language)
 ```
+
+The other functions that validate take it too. The messages changed with `messages { }` keep their text in every
+language. A request may name a language Validity does not have, which is why it maps the header itself instead of
+calling `Language.of`, which throws.
 
 The clock varies the same way, for a test or for the zone of a user: see
 [Fixing the clock](/guides/time#fixing-the-clock).

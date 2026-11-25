@@ -53,11 +53,13 @@ public fun <T> validatable(
  * Checks the rules of this object and returns every violation.
  *
  * @param validity the configuration to validate with, the default one unless it is given.
+ * @param language the language of the messages, the one of [validity] unless it is given.
  * @return the violations, empty when every rule holds.
  */
 public suspend fun Validatable.validate(
-    validity: Validity = Validity.default
-): ValidationResult = validation().validate(validity)
+    validity: Validity = Validity.default,
+    language: Language? = null
+): ValidationResult = validation().validate(validity.speaking(language))
 
 /**
  * Checks the rules of this object and returns every violation, blocking the thread until the rules finish.
@@ -65,21 +67,25 @@ public suspend fun Validatable.validate(
  * Use it outside a coroutine. Inside one, call [validate][io.github.soleworks.validity.validate].
  *
  * @param validity the configuration to validate with, the default one unless it is given.
+ * @param language the language of the messages, the one of [validity] unless it is given.
  * @return the violations, empty when every rule holds.
  */
 public fun Validatable.validateBlocking(
-    validity: Validity = Validity.default
-): ValidationResult = validation().validateBlocking(validity)
+    validity: Validity = Validity.default,
+    language: Language? = null
+): ValidationResult = validation().validateBlocking(validity.speaking(language))
 
 /**
  * Checks the rules of this object and throws when any is broken.
  *
  * @param validity the configuration to validate with, the default one unless it is given.
+ * @param language the language of the messages, the one of [validity] unless it is given.
  * @throws ValidationException with every violation, when a rule is broken.
  */
 public suspend fun Validatable.validateOrThrow(
-    validity: Validity = Validity.default
-): Unit = validate(validity).orThrow()
+    validity: Validity = Validity.default,
+    language: Language? = null
+): Unit = validate(validity, language).orThrow()
 
 /**
  * Checks the rules of this object and throws when any is broken, blocking the thread until the rules finish.
@@ -87,8 +93,10 @@ public suspend fun Validatable.validateOrThrow(
  * Use it outside a coroutine. Inside one, call [validateOrThrow][io.github.soleworks.validity.validateOrThrow].
  *
  * @param validity the configuration to validate with, the default one unless it is given.
+ * @param language the language of the messages, the one of [validity] unless it is given.
  * @throws ValidationException with every violation, when a rule is broken.
  */
 public fun Validatable.validateOrThrowBlocking(
-    validity: Validity = Validity.default
-): Unit = validateBlocking(validity).orThrow()
+    validity: Validity = Validity.default,
+    language: Language? = null
+): Unit = validateBlocking(validity, language).orThrow()

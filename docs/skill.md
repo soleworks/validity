@@ -73,7 +73,9 @@ import io.github.soleworks.validity.phone.*               // phone, mobilePhone 
 
 ## Messages
 
-Change defaults once with `Validity.configure { messages { minLength = "deve ter pelo menos {min} caracteres" } }`, per
+The messages are built in for `Language.EN` (the default), `Language.ES` and `Language.PT_BR`: pick one with
+`Validity.configure { language = Language.PT_BR }`, or per call with `validate(language = Language.ES)`.
+Change defaults once with `Validity.configure { messages { minLength = "nome curto" } }`, per
 call with `validate(Validity { messages { ... } })`, or per rule with `minLength(2, message = "...")`. Countries have
 blocks (`brazil { cpf = "..." }`) and the phone module has `phone { ... }`. Placeholders: `{path}`, `{value}` and the
 arguments by name (`{min}`, `{max}`, `{other}`, `{fields}`).

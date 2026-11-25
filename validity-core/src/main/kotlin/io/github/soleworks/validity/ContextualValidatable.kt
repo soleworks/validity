@@ -39,12 +39,14 @@ public interface ContextualValidatable<in C> {
  * @param C the type of the context.
  * @param context what the rules read.
  * @param validity the configuration to validate with, the default one unless it is given.
+ * @param language the language of the messages, the one of [validity] unless it is given.
  * @return the violations, empty when every rule holds.
  */
 public suspend fun <C> ContextualValidatable<C>.validate(
     context: C,
-    validity: Validity = Validity.default
-): ValidationResult = validation(context).validate(validity)
+    validity: Validity = Validity.default,
+    language: Language? = null
+): ValidationResult = validation(context).validate(validity.speaking(language))
 
 /**
  * Checks the rules of this object for [context] and returns every violation, blocking the thread until the rules
@@ -55,12 +57,14 @@ public suspend fun <C> ContextualValidatable<C>.validate(
  * @param C the type of the context.
  * @param context what the rules read.
  * @param validity the configuration to validate with, the default one unless it is given.
+ * @param language the language of the messages, the one of [validity] unless it is given.
  * @return the violations, empty when every rule holds.
  */
 public fun <C> ContextualValidatable<C>.validateBlocking(
     context: C,
-    validity: Validity = Validity.default
-): ValidationResult = validation(context).validateBlocking(validity)
+    validity: Validity = Validity.default,
+    language: Language? = null
+): ValidationResult = validation(context).validateBlocking(validity.speaking(language))
 
 /**
  * Checks the rules of this object for [context] and throws when any is broken.
@@ -68,12 +72,14 @@ public fun <C> ContextualValidatable<C>.validateBlocking(
  * @param C the type of the context.
  * @param context what the rules read.
  * @param validity the configuration to validate with, the default one unless it is given.
+ * @param language the language of the messages, the one of [validity] unless it is given.
  * @throws ValidationException with every violation, when a rule is broken.
  */
 public suspend fun <C> ContextualValidatable<C>.validateOrThrow(
     context: C,
-    validity: Validity = Validity.default
-): Unit = validate(context, validity).orThrow()
+    validity: Validity = Validity.default,
+    language: Language? = null
+): Unit = validate(context, validity, language).orThrow()
 
 /**
  * Checks the rules of this object for [context] and throws when any is broken, blocking the thread until the rules
@@ -84,9 +90,11 @@ public suspend fun <C> ContextualValidatable<C>.validateOrThrow(
  * @param C the type of the context.
  * @param context what the rules read.
  * @param validity the configuration to validate with, the default one unless it is given.
+ * @param language the language of the messages, the one of [validity] unless it is given.
  * @throws ValidationException with every violation, when a rule is broken.
  */
 public fun <C> ContextualValidatable<C>.validateOrThrowBlocking(
     context: C,
-    validity: Validity = Validity.default
-): Unit = validateBlocking(context, validity).orThrow()
+    validity: Validity = Validity.default,
+    language: Language? = null
+): Unit = validateBlocking(context, validity, language).orThrow()

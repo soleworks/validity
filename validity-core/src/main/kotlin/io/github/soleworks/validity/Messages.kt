@@ -36,10 +36,13 @@ import io.github.soleworks.validity.constraints.unitedarabemirates.UnitedArabEmi
 import io.github.soleworks.validity.constraints.unitedkingdom.UnitedKingdomMessages
 import io.github.soleworks.validity.constraints.unitedstates.UnitedStatesMessages
 import io.github.soleworks.validity.constraints.uruguay.UruguayMessages
+import io.github.soleworks.validity.languages.BRAZILIAN_PORTUGUESE
+import io.github.soleworks.validity.languages.SPANISH
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * The default messages of the constraints, one property per message.
+ * The default messages of the constraints, one property per message, in the
+ * [language][ValidityConfiguration.language] of the configuration.
  *
  * Each property is named after the constraint that uses it, which is also the code of its violation, and its text can
  * have placeholders in braces: `{min}` is replaced by the argument of the constraint, `{path}` by the path of the
@@ -57,7 +60,9 @@ import java.util.concurrent.ConcurrentHashMap
  * A message given to a constraint, as in `minLength(3, message = "too short")`, takes the place of the default.
  */
 @ValidityDsl
-public class Messages internal constructor() {
+public class Messages internal constructor(
+    private val language: Language = Language.EN
+) {
     /** Default message of `notNull` and `required`. */
     public var required: String = "is required"
 
@@ -639,6 +644,14 @@ public class Messages internal constructor() {
     internal val unitedStates: UnitedStatesMessages = UnitedStatesMessages()
     internal val uruguay: UruguayMessages = UruguayMessages()
 
+    init {
+        when (language) {
+            Language.EN -> Unit
+            Language.ES -> SPANISH(this)
+            Language.PT_BR -> BRAZILIAN_PORTUGUESE(this)
+        }
+    }
+
     /**
      * Changes the messages of the constraints of Argentina.
      *
@@ -972,10 +985,12 @@ public class Messages internal constructor() {
      *
      * @param T the class that holds the messages of the module.
      * @param key the key the module declares for its messages.
-     * @return the messages of the module in this configuration.
+     * @return the messages of the module in this configuration, in its language.
      */
     @Suppress("UNCHECKED_CAST")
     public fun <T : Any> module(
         key: MessagesKey<T>
-    ): T = modules.computeIfAbsent(key) { key.create() } as T
+    ): T = modules.computeIfAbsent(key) {
+        key.create().apply { key.translations[language]?.invoke(this) }
+    } as T
 }

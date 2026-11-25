@@ -1,5 +1,6 @@
 package io.github.soleworks.validity.phone
 
+import io.github.soleworks.validity.Language
 import io.github.soleworks.validity.Validity
 import io.github.soleworks.validity.Violation
 import io.github.soleworks.validity.phone.samples.Contact
@@ -64,6 +65,36 @@ class PhoneMessagesTest {
             violations shouldBe listOf(
                 Violation(path = "phone", message = "telefone inválido", code = "phone"),
                 Violation(path = "phone", message = "celular inválido", code = "mobilePhone")
+            )
+        }
+
+        @Test
+        fun `given the language Portuguese should report the phone messages in Portuguese`() {
+            Validity.configure { language = Language.PT_BR }
+
+            val violations = violationsOf(path = "phone", value = "1") {
+                phone()
+                mobilePhone()
+            }
+
+            violations shouldBe listOf(
+                Violation(path = "phone", message = "deve ser um número de telefone válido", code = "phone"),
+                Violation(path = "phone", message = "deve ser um número de celular válido", code = "mobilePhone")
+            )
+        }
+
+        @Test
+        fun `given the language Spanish should report the phone messages in Spanish`() {
+            Validity.configure { language = Language.ES }
+
+            val violations = violationsOf(path = "phone", value = "1") {
+                phone()
+                mobilePhone()
+            }
+
+            violations shouldBe listOf(
+                Violation(path = "phone", message = "debe ser un número de teléfono válido", code = "phone"),
+                Violation(path = "phone", message = "debe ser un número de teléfono móvil válido", code = "mobilePhone")
             )
         }
 

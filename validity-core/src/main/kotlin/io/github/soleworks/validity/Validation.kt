@@ -31,12 +31,14 @@ public class Validation<T> internal constructor(
      *
      * @param value the value to check.
      * @param validity the configuration to validate with, the default one unless it is given.
+     * @param language the language of the messages, the one of [validity] unless it is given.
      * @return the violations, empty when every rule holds.
      */
     public suspend fun validate(
         value: T,
-        validity: Validity = Validity.default
-    ): ValidationResult = of(value).validate(validity)
+        validity: Validity = Validity.default,
+        language: Language? = null
+    ): ValidationResult = of(value).validate(validity.speaking(language))
 
     /**
      * Runs every rule on [value] and returns all the violations, blocking the thread until the rules finish.
@@ -45,12 +47,14 @@ public class Validation<T> internal constructor(
      *
      * @param value the value to check.
      * @param validity the configuration to validate with, the default one unless it is given.
+     * @param language the language of the messages, the one of [validity] unless it is given.
      * @return the violations, empty when every rule holds.
      */
     public fun validateBlocking(
         value: T,
-        validity: Validity = Validity.default
-    ): ValidationResult = runBlocking { validate(value, validity) }
+        validity: Validity = Validity.default,
+        language: Language? = null
+    ): ValidationResult = runBlocking { validate(value, validity, language) }
 
     internal fun of(
         value: T

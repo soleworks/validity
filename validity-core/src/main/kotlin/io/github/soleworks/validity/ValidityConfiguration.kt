@@ -3,13 +3,24 @@ package io.github.soleworks.validity
 import java.time.Clock
 
 /**
- * What a [Validity] is made of: the messages of the violations and the clock.
+ * What a [Validity] is made of: the language and the messages of the violations, and the clock.
  *
  * It is the receiver of [Validity.configure] and of [Validity.invoke].
  */
 @ValidityDsl
 public class ValidityConfiguration internal constructor() {
-    internal val messages: Messages = Messages()
+    private val messageBlocks = mutableListOf<Messages.() -> Unit>()
+
+    /**
+     * The language of the built-in messages, [Language.EN] by default.
+     *
+     * The messages changed with [messages] keep their text in every language.
+     *
+     * ```kotlin
+     * Validity.configure { language = Language.PT_BR }
+     * ```
+     */
+    public var language: Language = Language.EN
 
     /**
      * The clock that says what "now" and "today" are, for [past][io.github.soleworks.validity.constraints.past],
@@ -18,6 +29,12 @@ public class ValidityConfiguration internal constructor() {
      * clock, in the default time zone, by default.
      */
     public var clock: Clock = Clock.systemDefaultZone()
+
+    internal val messages: Messages by lazy {
+        val blocks = messageBlocks
+
+        Messages(language).apply { blocks.forEach { block -> block() } }
+    }
 
     /**
      * Changes the messages of the violations.
@@ -31,9 +48,11 @@ public class ValidityConfiguration internal constructor() {
      * }
      * ```
      *
-     * @param block sets the messages it changes. The others keep their default.
+     * @param block sets the messages it changes. The others keep their default, in the [language].
      */
     public fun messages(
         block: Messages.() -> Unit
-    ): Unit = messages.block()
+    ) {
+        messageBlocks += block
+    }
 }
