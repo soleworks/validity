@@ -64,12 +64,17 @@ public final class io/github/soleworks/validity/ContextualValidatableKt {
 }
 
 public final class io/github/soleworks/validity/Language : java/lang/Enum {
+	public static final field Companion Lio/github/soleworks/validity/Language$Companion;
 	public static final field EN Lio/github/soleworks/validity/Language;
 	public static final field ES Lio/github/soleworks/validity/Language;
 	public static final field PT_BR Lio/github/soleworks/validity/Language;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/soleworks/validity/Language;
 	public static fun values ()[Lio/github/soleworks/validity/Language;
+}
+
+public final class io/github/soleworks/validity/Language$Companion {
+	public final fun of (Ljava/lang/String;)Lio/github/soleworks/validity/Language;
 }
 
 public final class io/github/soleworks/validity/Messages {

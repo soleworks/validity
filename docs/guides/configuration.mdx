@@ -29,6 +29,15 @@ fun main() {
 `language` picks the [built-in messages](/guides/messages#in-another-language), `messages { }` changes the ones you
 want worded otherwise, and `brazil { }` holds the [messages of a country](/guides/messages#messages-of-a-country).
 
+When the language comes from a setting, `Language.of` reads its tag, such as `pt-BR`:
+
+```kotlin
+Validity.configure { language = Language.of(System.getenv("APP_LANGUAGE")) }
+```
+
+A tag of a language Validity has no messages in throws an `IllegalArgumentException` that names the ones there are,
+so a wrong setting stops the application when it starts.
+
 Each call starts from the built-in defaults, so a second call undoes the first. Call it once, before the first
 validation.
 
@@ -75,7 +84,8 @@ order.validate(language = language)
 ```
 
 The other functions that validate take it too. The messages changed with `messages { }` keep their text in every
-language.
+language. A request may name a language Validity does not have, which is why it maps the header itself instead of
+calling `Language.of`, which throws.
 
 The clock varies the same way, for a test or for the zone of a user: see
 [Fixing the clock](/guides/time#fixing-the-clock).

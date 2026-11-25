@@ -28,11 +28,14 @@ Or pick it for one call, such as the request of a user in another country:
 user.validate(language = Language.ES)
 ```
 
-| Language | Value |
-|---|---|
-| English, the default | `Language.EN` |
-| Spanish | `Language.ES` |
-| Portuguese, as written in Brazil | `Language.PT_BR` |
+| Language | Value | Tag |
+|---|---|---|
+| English, the default | `Language.EN` | `en` |
+| Spanish | `Language.ES` | `es` |
+| Portuguese, as written in Brazil | `Language.PT_BR` | `pt-BR` |
+
+`Language.of("pt-BR")` finds a language by its tag, for a language that comes from a
+[setting](/guides/configuration#once-at-startup).
 
 The language covers every message: the general ones, those of each country and those of `validity-phone`. The codes
 do not change with it.
