@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.0](https://github.com/soleworks/validity/compare/v0.3.0...v0.4.0) (2026-11-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** the validate functions (validate, validateBlocking, validateOrThrow and validateOrThrowBlocking, on Validatable, ContextualValidatable and Validation) and the MessagesKey constructor take a new trailing parameter, so code compiled against an earlier version fails with NoSuchMethodError until it is recompiled. Source code that calls them does not change: the new parameters have defaults.
+
+### Features
+
+* **core:** translate built-in messages with Language ([#74](https://github.com/soleworks/validity/issues/74)) ([f6d05eb](https://github.com/soleworks/validity/commit/f6d05eb08d48ca26a0fe6f0cf6e1229dd4e293e0))
+
 ## [0.3.0](https://github.com/soleworks/validity/compare/v0.2.0...v0.3.0) (2026-11-19)
 
 
