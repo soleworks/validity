@@ -18,6 +18,9 @@ import io.github.soleworks.validity.samples.Invoice
 import io.github.soleworks.validity.samples.Ledger
 import io.github.soleworks.validity.samples.Order
 import io.github.soleworks.validity.samples.PaymentMethod
+import io.github.soleworks.validity.samples.docs.Checkout
+import io.github.soleworks.validity.samples.docs.Payment
+import io.github.soleworks.validity.samples.docs.cardValidation
 import io.github.soleworks.validity.samples.readme.Destination
 import io.github.soleworks.validity.samples.readme.Shipping
 import io.kotest.matchers.shouldBe
@@ -266,6 +269,71 @@ class AccessorsTest {
             result.violations shouldBe listOf(
                 Violation(path = "destination.street", message = "must not be blank", code = "notBlank")
             )
+        }
+    }
+
+    @Nested
+    @DisplayName("When ifInstanceOf is called")
+    inner class IfInstanceOf {
+        @Test
+        fun `given a valid card and a valid bank transfer should accept them`() {
+            val checkout = Checkout(
+                payment = Payment.Card(number = "4111111111111111"),
+                splits = listOf(Payment.BankTransfer(iban = "GB82WEST12345698765432"))
+            )
+
+            val result = checkout.validateBlocking()
+
+            result.isValid shouldBe true
+        }
+
+        @Test
+        fun `given a card with a wrong number should report it under the property`() {
+            val checkout = Checkout(payment = Payment.Card(number = "123"))
+
+            val result = checkout.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(path = "payment.number", message = "must be a valid credit card number", code = "creditCard")
+            )
+        }
+
+        @Test
+        fun `given a card with a wrong number among the splits should report it with its index`() {
+            val checkout = Checkout(
+                payment = Payment.Card(number = "4111111111111111"),
+                splits = listOf(Payment.BankTransfer(iban = "GB82WEST12345698765432"), Payment.Card(number = "42"))
+            )
+
+            val result = checkout.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "splits[1].number",
+                    message = "must be a valid credit card number",
+                    code = "creditCard"
+                )
+            )
+        }
+
+        @Test
+        fun `given a bank transfer where only cards have rules should skip them`() {
+            val checkout = Checkout(payment = Payment.BankTransfer(iban = "not an iban"))
+
+            val result = checkout.validateBlocking()
+
+            result.isValid shouldBe true
+        }
+
+        @Test
+        fun `given no payment should skip the rules of the subtype`() {
+            val node = ValidationNode<Payment?>(path = "payment", value = null).apply {
+                ifInstanceOf<Payment.Card> { valid(cardValidation) }
+            }
+
+            val violations = node.validate()
+
+            violations shouldBe emptyList()
         }
     }
 

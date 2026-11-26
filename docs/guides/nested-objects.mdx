@@ -76,6 +76,65 @@ optional billing address is checked only when it is there:
 For a list of objects, `each` runs `valid()` on every element, and the index joins the path:
 [`items[1].quantity`](/guides/collections-and-maps).
 
+## One subtype of a value
+
+A value can be one of several subtypes, such as a payment that is a card or a bank transfer, from a library whose
+classes cannot implement `Validatable`. `ifInstanceOf<T> { }` runs its rules only when the value is a `T`, with the
+value typed as `T`:
+
+```kotlin Payment.kt
+sealed interface Payment {
+    data class Card(
+        val number: String?
+    ) : Payment
+
+    data class BankTransfer(
+        val iban: String?
+    ) : Payment
+}
+
+val cardValidation = validation<Payment.Card> {
+    ::number required { creditCard() }
+}
+
+val bankTransferValidation = validation<Payment.BankTransfer> {
+    ::iban required { iban() }
+}
+```
+
+```kotlin Checkout.kt
+data class Checkout(
+    val payment: Payment?,
+    val splits: List<Payment> = emptyList()
+) : Validatable {
+    override fun validation() = validation {
+        ::payment required {
+            ifInstanceOf<Payment.Card> { valid(cardValidation) }
+        }
+        ::splits required {
+            each {
+                ifInstanceOf<Payment.Card> { valid(cardValidation) }
+                ifInstanceOf<Payment.BankTransfer> { valid(bankTransferValidation) }
+            }
+        }
+    }
+}
+```
+
+```kotlin
+Checkout(
+    payment = Payment.Card(number = "4111111111111111"),
+    splits = listOf(Payment.BankTransfer(iban = "GB82WEST12345698765432"), Payment.Card(number = "42"))
+).validate().violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `splits[1].number` | must be a valid credit card number | `creditCard` |
+
+A value of another type, or `null`, skips the block and reports nothing. A subtype that implements `Validatable` needs
+none of this: `valid()` already checks the rules of the object it gets.
+
 ## The order of the violations
 
 Violations come in the order the rules are declared, with one refinement: inside one property, its own constraints come
