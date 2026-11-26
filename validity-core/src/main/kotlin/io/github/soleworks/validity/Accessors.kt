@@ -163,6 +163,32 @@ public fun <V> ValidationNode<V>.valid(
 }
 
 /**
+ * Runs [block] only when the value is a [T], with the value typed as [T], at the same path.
+ *
+ * It checks one subtype of a value whose type is not yours, such as a sealed class of a library. When the value is of
+ * another type, or `null`, [block] does not run and adds no violation.
+ *
+ * ```kotlin
+ * ::payments required {
+ *     each {
+ *         ifInstanceOf<Payment.Card> { valid(cardValidation) }
+ *     }
+ * }
+ * ```
+ *
+ * @param T the subtype whose rules [block] declares.
+ * @param block the rules of a value of type [T].
+ */
+public inline fun <reified T> ValidationNode<*>.ifInstanceOf(
+    block: ValidationNode<T>.() -> Unit
+) {
+    val value = value
+
+    if (value is T)
+        add(listOf(child(path, value).apply(block)))
+}
+
+/**
  * Checks that [converter] can convert the value, and runs [block] on what it returns.
  *
  * When [converter] returns `null`, there is one violation and [block] does not run. The violations of [block] keep
