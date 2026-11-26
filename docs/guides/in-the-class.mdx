@@ -80,6 +80,50 @@ override fun validation() = validation {
 
 There are no validation groups and no class-level annotations: the condition is written where it applies.
 
+## Rules of a parent class
+
+A class that extends another keeps the rules of its parent with `include(super.validation())`, and adds its own after
+them:
+
+```kotlin User.kt
+open class User(
+    val name: String?,
+    val email: String?
+) : Validatable {
+    override fun validation() = validation {
+        ::name required { minLength(2) }
+        ::email required { email() }
+    }
+}
+```
+
+```kotlin PremiumUser.kt
+class PremiumUser(
+    name: String?,
+    email: String?,
+    val coupon: String?
+) : User(name, email) {
+    override fun validation() = validation {
+        include(super.validation())
+        ::coupon required { minLength(6) }
+    }
+}
+```
+
+```kotlin
+PremiumUser(name = "A", email = "ana@", coupon = "X").validate().violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `name` | must have at least 2 characters | `minLength` |
+| `email` | must be a valid email | `email` |
+| `coupon` | must have at least 6 characters | `minLength` |
+
+The included rules run where `include` is called, at the same level as the others: their paths are `name` and
+`email`, not nested under anything. To check a property with the rules of its own type, nested under the property,
+use [`valid()`](/guides/nested-objects) instead.
+
 ## The configuration of one call
 
 Each of the four functions takes an optional `Validity`, a [configuration](/guides/configuration#for-one-call) for

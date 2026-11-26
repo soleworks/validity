@@ -23,7 +23,7 @@ import kotlinx.coroutines.runBlocking
  * rules.
  */
 public class Validation<T> internal constructor(
-    private val block: suspend context(SelfValidation) T.() -> Unit
+    internal val block: suspend context(SelfValidation) T.() -> Unit
 ) {
     /**
      * Runs every rule on [value] and returns all the violations, in the order the rules are declared, with the

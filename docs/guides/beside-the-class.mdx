@@ -75,6 +75,53 @@ Delivery(
 | `address.zipCode` | must be a valid postal code for US | `postalCode` |
 | `scheduledFor` | must be in the future | `future` |
 
+## Including these rules in another type
+
+The rules of a type also hold for its subtypes. `include(rules)` adds them to the rules of the subtype, at the same
+level:
+
+```kotlin Person.kt
+open class Person(
+    val name: String?,
+    val email: String?
+)
+
+val personValidation = validation<Person> {
+    ::name required { minLength(2) }
+    ::email required { email() }
+}
+```
+
+```kotlin Employee.kt
+class Employee(
+    name: String?,
+    email: String?,
+    val badge: String?
+) : Person(name, email)
+
+val employeeValidation = validation<Employee> {
+    include(personValidation)
+    ::badge required {
+        length(6)
+        digits()
+    }
+}
+```
+
+```kotlin
+employeeValidation.validate(Employee(name = "A", email = "ana@", badge = "12AB")).violations
+```
+
+| Path | Message | Code |
+|---|---|---|
+| `name` | must have at least 2 characters | `minLength` |
+| `email` | must be a valid email | `email` |
+| `badge` | must have exactly 6 characters | `length` |
+| `badge` | must contain only digits | `digits` |
+
+`include` works the same way inside a `Validatable`, and with the rules of a parent class: see
+[rules of a parent class](/guides/in-the-class#rules-of-a-parent-class).
+
 ## One value, once
 
 When you have a single value and do not need to reuse the rules, `validatable(value) { }` pairs the value with its

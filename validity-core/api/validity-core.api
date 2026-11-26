@@ -520,6 +520,8 @@ public final class io/github/soleworks/validity/SelfValidationKt {
 	public static final fun constraint (Lio/github/soleworks/validity/SelfValidation;Lkotlin/reflect/KProperty0;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 	public static synthetic fun constraint$default (Lio/github/soleworks/validity/SelfValidation;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 	public static synthetic fun constraint$default (Lio/github/soleworks/validity/SelfValidation;Lkotlin/reflect/KProperty0;Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun include (Lio/github/soleworks/validity/SelfValidation;Lio/github/soleworks/validity/SelfValidation;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun include (Lio/github/soleworks/validity/SelfValidation;Ljava/lang/Object;Lio/github/soleworks/validity/Validation;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun metadata (Lio/github/soleworks/validity/SelfValidation;[Lkotlin/Pair;Lkotlin/jvm/functions/Function0;)V
 	public static final fun validation (Lkotlin/jvm/functions/Function2;)Lio/github/soleworks/validity/SelfValidation;
 }

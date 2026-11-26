@@ -19,7 +19,7 @@ import kotlinx.coroutines.runBlocking
  */
 @ValidityDsl
 public class SelfValidation internal constructor(
-    private val block: suspend SelfValidation.() -> Unit
+    internal val block: suspend SelfValidation.() -> Unit
 ) {
     internal val nodes = mutableListOf<ValidationNode<*>>()
 
@@ -152,3 +152,47 @@ public inline fun metadata(
         validation.metadata = outer
     }
 }
+
+/**
+ * Adds the rules of [rules] to this block, at the same level, as if they were written where `include` is called.
+ *
+ * It reuses the rules of a parent class: their violations keep their own paths, with no prefix, in the order the rules
+ * are declared. To check a property with the rules of its type instead, nested under the property, use
+ * [valid][io.github.soleworks.validity.valid].
+ *
+ * ```kotlin
+ * class PremiumUser(name: String?, email: String?, val coupon: String?) : User(name, email) {
+ *     override fun validation() = validation {
+ *         include(super.validation())
+ *         ::coupon required { minLength(6) }
+ *     }
+ * }
+ * ```
+ *
+ * @param rules the rules to add, usually `super.validation()`.
+ */
+context(validation: SelfValidation)
+public suspend fun include(
+    rules: SelfValidation
+): Unit = rules.block(validation)
+
+/**
+ * Adds the rules of [rules] to this block, at the same level, checking them on this value.
+ *
+ * It reuses the rules of a supertype written with [validation]: their violations keep their own paths, with no
+ * prefix, in the order the rules are declared.
+ *
+ * ```kotlin
+ * val employeeValidation = validation<Employee> {
+ *     include(personValidation)
+ *     ::badge required { length(6) }
+ * }
+ * ```
+ *
+ * @param T the type of the value, a subtype of the one [rules] checks.
+ * @param rules the rules of a supertype of the value.
+ */
+context(validation: SelfValidation)
+public suspend fun <T> T.include(
+    rules: Validation<in T>
+): Unit = rules.block(validation, this)

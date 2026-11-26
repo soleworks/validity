@@ -4,10 +4,14 @@ import io.github.soleworks.validity.constraints.minLength
 import io.github.soleworks.validity.samples.Batch
 import io.github.soleworks.validity.samples.Contact
 import io.github.soleworks.validity.samples.Directory
+import io.github.soleworks.validity.samples.Intern
 import io.github.soleworks.validity.samples.Invoice
 import io.github.soleworks.validity.samples.Operation
 import io.github.soleworks.validity.samples.Payout
 import io.github.soleworks.validity.samples.Threads
+import io.github.soleworks.validity.samples.docs.Employee
+import io.github.soleworks.validity.samples.docs.PremiumUser
+import io.github.soleworks.validity.samples.docs.employeeValidation
 import io.github.soleworks.validity.samples.readme.Destination
 import io.github.soleworks.validity.samples.validation
 import io.kotest.matchers.shouldBe
@@ -291,6 +295,86 @@ class SelfValidationTest {
                     message = "is required",
                     code = "required",
                     metadata = mapOf("severity" to "warning")
+                )
+            )
+        }
+    }
+
+    @Nested
+    @DisplayName("When include is called")
+    inner class Include {
+        @Test
+        fun `given a premium user whose rules all hold should accept it`() {
+            val user = PremiumUser(name = "Ana", email = "ana@example.com", coupon = "WELCOME")
+
+            val result = user.validateBlocking()
+
+            result.isValid shouldBe true
+        }
+
+        @Test
+        fun `given a premium user who breaks the rules of a user and their own should report them all at the root`() {
+            val user = PremiumUser(name = "A", email = "ana@", coupon = "X")
+
+            val result = user.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "must have at least 2 characters", code = "minLength"),
+                Violation(path = "email", message = "must be a valid email", code = "email"),
+                Violation(path = "coupon", message = "must have at least 6 characters", code = "minLength")
+            )
+        }
+
+        @Test
+        fun `given a premium user who keeps the rules of a user should report only their own`() {
+            val user = PremiumUser(name = "Ana", email = "ana@example.com", coupon = "X")
+
+            val result = user.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(path = "coupon", message = "must have at least 6 characters", code = "minLength")
+            )
+        }
+
+        @Test
+        fun `given an employee who breaks the rules of a person and their own should report them all at the root`() {
+            val employee = Employee(name = "A", email = "ana@", badge = "12AB")
+
+            val result = employeeValidation.validateBlocking(employee)
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "must have at least 2 characters", code = "minLength"),
+                Violation(path = "email", message = "must be a valid email", code = "email"),
+                Violation(path = "badge", message = "must have exactly 6 characters", code = "length"),
+                Violation(path = "badge", message = "must contain only digits", code = "digits")
+            )
+        }
+
+        @Test
+        fun `given an intern who breaks the rules of a person and their own should report them all at the root`() {
+            val intern = Intern(name = "A", email = "ana@example.com", school = " ")
+
+            val result = intern.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(path = "name", message = "must have at least 2 characters", code = "minLength"),
+                Violation(path = "school", message = "must not be blank", code = "notBlank")
+            )
+        }
+
+        @Test
+        fun `given included rules inside a metadata block should report them with the entries`() {
+            val user = PremiumUser(name = "A", email = "ana@example.com", coupon = "WELCOME")
+            val rules = validation { metadata("plan" to "premium") { include(user.validation()) } }
+
+            val result = rules.validateBlocking()
+
+            result.violations shouldBe listOf(
+                Violation(
+                    path = "name",
+                    message = "must have at least 2 characters",
+                    code = "minLength",
+                    metadata = mapOf("plan" to "premium")
                 )
             )
         }
