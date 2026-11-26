@@ -41,6 +41,8 @@ user.validateOrThrow()     // throws ValidationException with every violation
 - Nested objects: `::shipping required { valid() }`. Collections: `::items required { each { valid() } }`.
 - The rules of a parent class, at the same level: `include(super.validation())`. The rules of a parent type written with
   `validation<T> { }`: `include(personValidation)`.
+- One subtype of a value whose type is not yours: `::payment required { ifInstanceOf<Payment.Card> { valid(cardRules) } }`.
+  Another type, or `null`, skips the block.
 - A class that is not yours: `val rules = validation<Address> { ::street required { notBlank() } }`, then
   `rules.validate(address)` or `::address required { valid(rules) }`.
 - Rules that need caller data: implement `ContextualValidatable<C>`, `validation(context: C)`, and call
