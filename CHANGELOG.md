@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/soleworks/validity/compare/v0.4.0...v0.5.0) (2026-11-26)
+
+
+### Features
+
+* **core:** check one subtype of a value with ifInstanceOf ([#77](https://github.com/soleworks/validity/issues/77)) ([7b399a1](https://github.com/soleworks/validity/commit/7b399a1cd29fa33a1ba1ee43e1715bf0c29077a7))
+* **core:** include the rules of a type at the same level ([#76](https://github.com/soleworks/validity/issues/76)) ([f30527a](https://github.com/soleworks/validity/commit/f30527a9780da61dec7bc1f8f0096fb0a59fb8c9))
+
 ## [0.4.0](https://github.com/soleworks/validity/compare/v0.3.0...v0.4.0) (2026-11-25)
 
 
