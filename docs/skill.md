@@ -39,6 +39,8 @@ user.validateOrThrow()     // throws ValidationException with every violation
   `forbidden()` (only null is valid). Inside their block the value is non-null.
 - Conditions are plain Kotlin: `if (type == "COMPANY") ::companyName required { notBlank() }`.
 - Nested objects: `::shipping required { valid() }`. Collections: `::items required { each { valid() } }`.
+- The rules of a parent class, at the same level: `include(super.validation())`. The rules of a parent type written with
+  `validation<T> { }`: `include(personValidation)`.
 - A class that is not yours: `val rules = validation<Address> { ::street required { notBlank() } }`, then
   `rules.validate(address)` or `::address required { valid(rules) }`.
 - Rules that need caller data: implement `ContextualValidatable<C>`, `validation(context: C)`, and call
