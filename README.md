@@ -19,7 +19,7 @@ Every broken rule at once, each with a path, a message for people and a code for
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Java](https://img.shields.io/badge/Java-17%2B-E76F00?style=flat-square&logo=openjdk&logoColor=white)](https://adoptium.net)
 [![License](https://img.shields.io/badge/license-Apache%202.0-2F81F7?style=flat-square)](LICENSE)
-[![Maven Central](https://img.shields.io/static/v1?label=Maven%20Central&message=0.5.0&color=2F81F7&style=flat-square&logo=apachemaven&logoColor=white)](https://central.sonatype.com/artifact/io.github.soleworks/validity-core)
+[![Maven Central](https://img.shields.io/static/v1?label=Maven%20Central&message=0.6.0&color=2F81F7&style=flat-square&logo=apachemaven&logoColor=white)](https://central.sonatype.com/artifact/io.github.soleworks/validity-core)
 
 **[Documentation](https://validity-kt.dev)** · [Quick start](#quick-start) · [Installation](#installation) · [Why Validity](#why-validity)
 
@@ -88,16 +88,16 @@ The [documentation](https://validity-kt.dev) compares it with Konform, Valiktor,
 
 ```kotlin
 dependencies {
-    implementation("io.github.soleworks:validity-core:0.5.0")
+    implementation("io.github.soleworks:validity-core:0.6.0")
 
     // Optional: phone numbers, with Google's libphonenumber
-    implementation("io.github.soleworks:validity-phone:0.5.0")
+    implementation("io.github.soleworks:validity-phone:0.6.0")
 
     // Optional: validate the request bodies of a Ktor server
-    implementation("io.github.soleworks:validity-ktor:0.5.0")
+    implementation("io.github.soleworks:validity-ktor:0.6.0")
 
     // Optional: validate the request bodies of a Spring Boot application
-    implementation("io.github.soleworks:validity-spring:0.5.0")
+    implementation("io.github.soleworks:validity-spring:0.6.0")
 }
 ```
 
