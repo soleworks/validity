@@ -143,6 +143,7 @@
               "guides/results",
               "guides/exceptions",
               "guides/ktor",
+              "guides/spring",
               "guides/metadata"
             ]
           },

@@ -18,6 +18,7 @@ dependencies {
     kover(project(":validity-core"))
     kover(project(":validity-phone"))
     kover(project(":validity-ktor"))
+    kover(project(":validity-spring"))
 
     ktlint(libs.ktlint.cli) {
         attributes {

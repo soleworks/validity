@@ -4,6 +4,7 @@ description: "validity-ktor validates every request body a Ktor route receives, 
 icon: "server"
 ---
 
+import BadRequest from "/snippets/bad-request.mdx";
 import Dependency from "/snippets/dependency.mdx";
 
 A Ktor route that receives a body has to validate it before using it, and a route that forgets lets invalid data
@@ -54,16 +55,7 @@ fun Route.accounts(
 The route after `receive` only runs with a valid registration. A client that posts
 `{"email":"ana@","password":"123"}` gets:
 
-```json
-{
-  "title": "Bad Request",
-  "status": 400,
-  "violations": [
-    { "path": "email", "code": "email", "message": "must be a valid email" },
-    { "path": "password", "code": "minLength", "message": "must have at least 8 characters" }
-  ]
-}
-```
+<BadRequest />
 
 - The status is `400 Bad Request`, and the `violations` come in the order the rules are declared.
 - The `ContentNegotiation` of the application writes the body, in its format: kotlinx.serialization, Jackson or any

@@ -1,0 +1,4 @@
+public abstract interface class io/github/soleworks/validity/spring/OnInvalid {
+	public abstract fun respond (Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+

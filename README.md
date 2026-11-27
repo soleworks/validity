@@ -95,6 +95,9 @@ dependencies {
 
     // Optional: validate the request bodies of a Ktor server
     implementation("io.github.soleworks:validity-ktor:0.5.0")
+
+    // Optional: validate the request bodies of a Spring Boot application
+    implementation("io.github.soleworks:validity-spring:0.5.0")
 }
 ```
 
@@ -178,6 +181,7 @@ Going further:
 | `validity-core` | the DSL and every constraint but the phone ones | [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines) |
 | `validity-phone` | `phone`, `mobilePhone`, `countryCode` and `areaCode` | Google's [libphonenumber](https://github.com/google/libphonenumber) |
 | `validity-ktor` | `ValidityPlugin`, which validates the request bodies of a [Ktor](https://ktor.io) server | Ktor 3 |
+| `validity-spring` | an auto-configuration that validates the request bodies of a [Spring Boot](https://spring.io/projects/spring-boot) application, MVC or WebFlux | Spring Boot 3.5 |
 
 ## Documentation
 
