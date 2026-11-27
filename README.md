@@ -74,6 +74,8 @@ Violation(path=iban, message=is required, code=required)
   to the data it protects.
 - **Conditions are plain Kotlin.** "Required if" and "only for companies" are an `if` and a `when`. No validation
   groups, no class-level annotations.
+- **Rules can reach your systems.** A rule can call a `suspend` function, such as a database lookup, and read the
+  caller's data, such as the logged-in user.
 - **`null` is decided once.** `required`, `ifPresent` and `forbidden` settle what `null` means, and every constraint
   after them works on the non-null type.
 - **Every error at once, for two audiences.** A `message` for people, in English, Spanish or Portuguese and
