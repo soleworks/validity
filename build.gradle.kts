@@ -17,6 +17,7 @@ dependencies {
     // One coverage report for the published modules, in build/reports/kover: ./gradlew :koverXmlReport
     kover(project(":validity-core"))
     kover(project(":validity-phone"))
+    kover(project(":validity-ktor"))
 
     ktlint(libs.ktlint.cli) {
         attributes {

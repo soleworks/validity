@@ -1,0 +1,11 @@
+public final class io/github/soleworks/validity/ktor/ValidityPlugin : io/ktor/server/application/BaseApplicationPlugin {
+	public static final field INSTANCE Lio/github/soleworks/validity/ktor/ValidityPlugin;
+	public fun getKey ()Lio/ktor/util/AttributeKey;
+	public fun install (Lio/ktor/server/application/Application;Lkotlin/jvm/functions/Function1;)Lio/github/soleworks/validity/ktor/ValidityPluginConfig;
+	public synthetic fun install (Lio/ktor/util/pipeline/Pipeline;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class io/github/soleworks/validity/ktor/ValidityPluginConfig {
+	public final fun onInvalid (Lkotlin/jvm/functions/Function3;)V
+}
+

@@ -5,7 +5,7 @@ import com.lemonappdev.konsist.api.container.KoScope
 import java.io.File
 
 /** The library modules, whose sources the harness reads. */
-internal val MODULES: List<String> = listOf("validity-core", "validity-phone")
+internal val MODULES: List<String> = listOf("validity-core", "validity-phone", "validity-ktor")
 
 /** The root of the repository, which the harness build passes in. */
 internal val repository: File = File(System.getProperty("validity.root"))

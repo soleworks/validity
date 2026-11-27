@@ -92,6 +92,9 @@ dependencies {
 
     // Optional: phone numbers, with Google's libphonenumber
     implementation("io.github.soleworks:validity-phone:0.5.0")
+
+    // Optional: validate the request bodies of a Ktor server
+    implementation("io.github.soleworks:validity-ktor:0.5.0")
 }
 ```
 
@@ -174,6 +177,7 @@ Going further:
 |---|---|---|
 | `validity-core` | the DSL and every constraint but the phone ones | [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines) |
 | `validity-phone` | `phone`, `mobilePhone`, `countryCode` and `areaCode` | Google's [libphonenumber](https://github.com/google/libphonenumber) |
+| `validity-ktor` | `ValidityPlugin`, which validates the request bodies of a [Ktor](https://ktor.io) server | Ktor 3 |
 
 ## Documentation
 

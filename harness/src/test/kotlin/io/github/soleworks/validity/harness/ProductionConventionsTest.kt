@@ -25,7 +25,10 @@ private val ALLOWED_IMPORTS = listOf(
     "java.time.",
     "java.util."
 )
-private val MODULE_IMPORTS = mapOf("validity-phone" to listOf("com.google.i18n.phonenumbers."))
+private val MODULE_IMPORTS = mapOf(
+    "validity-phone" to listOf("com.google.i18n.phonenumbers."),
+    "validity-ktor" to listOf("io.ktor.", "kotlinx.serialization.")
+)
 
 class ProductionConventionsTest {
     private val constraints = production
