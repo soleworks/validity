@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0](https://github.com/soleworks/validity/compare/v0.5.0...v0.6.0) (2026-11-27)
+
+
+### Features
+
+* **ktor:** add the validity-ktor module with ValidityPlugin ([#80](https://github.com/soleworks/validity/issues/80)) ([072849d](https://github.com/soleworks/validity/commit/072849de1ad1b47711454664df77f1cd1399c55c))
+* **spring:** add the validity-spring module ([#81](https://github.com/soleworks/validity/issues/81)) ([e0c61a0](https://github.com/soleworks/validity/commit/e0c61a02627202f8c475f5e1cfe7ad0859443f50))
+
 ## [0.5.0](https://github.com/soleworks/validity/compare/v0.4.0...v0.5.0) (2026-11-26)
 
 
