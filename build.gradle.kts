@@ -80,6 +80,13 @@ tasks.register("ktlintClasspath") {
 // Codecov reads the same report in CI (codecov.yml).
 kover {
     reports {
+        filters {
+            excludes {
+                // Fields only. kotlinx.serialization also generates the code that reads them back, which never runs:
+                // validity-ktor only writes this body.
+                classes("io.github.soleworks.validity.ktor.ValidationProblem*")
+            }
+        }
         verify {
             rule {
                 minBound(99, CoverageUnit.LINE)

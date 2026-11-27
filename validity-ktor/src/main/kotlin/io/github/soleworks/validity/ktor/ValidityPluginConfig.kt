@@ -41,4 +41,13 @@ public class ValidityPluginConfig internal constructor() {
 private suspend fun respondBadRequest(
     call: ApplicationCall,
     violations: List<Violation>
-) = call.respond(HttpStatusCode.BadRequest, ValidationProblem(violations))
+) = call.respond(
+    HttpStatusCode.BadRequest,
+    ValidationProblem(
+        title = HttpStatusCode.BadRequest.description,
+        status = HttpStatusCode.BadRequest.value,
+        violations = violations.map { violation ->
+            ValidationProblem.Entry(path = violation.path, code = violation.code, message = violation.message)
+        }
+    )
+)
