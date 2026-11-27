@@ -142,6 +142,7 @@
               "guides/coroutines",
               "guides/results",
               "guides/exceptions",
+              "guides/ktor",
               "guides/metadata"
             ]
           },

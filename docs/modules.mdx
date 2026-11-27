@@ -1,18 +1,19 @@
 ---
 title: "Modules"
-description: "What validity-core and validity-phone hold, how to add them, the imports they need and how their versions move."
+description: "What validity-core, validity-phone and validity-ktor hold, how to add them, the imports they need and how their versions move."
 icon: "boxes"
 ---
 
 import Dependency from "/snippets/dependency.mdx";
 
-Validity is two modules on Maven Central, under the group `io.github.soleworks`, released together and always at the
-same version, so a project that uses both never mixes versions:
+Validity is three modules on Maven Central, under the group `io.github.soleworks`, released together and always at
+the same version, so a project that uses more than one never mixes versions:
 
 | Module | What it adds | Depends on |
 |---|---|---|
 | `validity-core` | The DSL, the ways to declare rules (`Validatable`, `ContextualValidatable`, `validation`, `validatable`) and every constraint but the phone ones | The Kotlin standard library and kotlinx.coroutines |
 | `validity-phone` | [`phone`, `mobilePhone`, `countryCode` and `areaCode`](/constraints/phone), and their messages | `validity-core` and Google's libphonenumber |
+| `validity-ktor` | [`ValidityPlugin`](/guides/ktor), which validates the request bodies of a Ktor server and answers every broken rule | `validity-core` and Ktor 3 |
 
 Most projects need only `validity-core`.
 
@@ -23,6 +24,8 @@ Most projects need only `validity-core`.
 For phone numbers, add `validity-phone` too, at the same version:
 
 <Dependency artifact="validity-phone" />
+
+For a Ktor server, [Ktor](/guides/ktor) shows how to add `validity-ktor`.
 
 ## Requirements
 
@@ -47,12 +50,14 @@ For phone numbers, add `validity-phone` too, at the same version:
 | `io.github.soleworks.validity.constraints` | core | The general constraints, `or`, `and`, `not`, `HashAlgorithm`, `TaxIdType` |
 | `io.github.soleworks.validity.constraints.<country>` | core | The constraints of one country and its messages class, such as `cpf` and `BrazilMessages` in `brazil`: one package per country of [Countries](/constraints/countries) |
 | `io.github.soleworks.validity.phone` | phone | The phone constraints, `PhoneFormat`, `PhoneMessages` and `Messages.phone` |
+| `io.github.soleworks.validity.ktor` | ktor | `ValidityPlugin` and `ValidityPluginConfig` |
 
 ```kotlin
 import io.github.soleworks.validity.*                        // Validatable, validation, required, each, ...
 import io.github.soleworks.validity.constraints.*            // email, minLength, positive, ...
 import io.github.soleworks.validity.constraints.brazil.*     // cpf, cnpj, cep, ...
 import io.github.soleworks.validity.phone.*                  // phone, mobilePhone, ... (validity-phone)
+import io.github.soleworks.validity.ktor.*                   // ValidityPlugin (validity-ktor)
 ```
 
 Your IDE adds them for you when you complete a constraint.

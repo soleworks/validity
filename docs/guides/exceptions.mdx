@@ -28,18 +28,8 @@ io.github.soleworks.validity.ValidationException: username: must have between 3 
 ## One handler for every request
 
 Because every invalid object throws the same exception with the same data, one error handler turns all of them into
-the same response. With Ktor's StatusPages, for example:
-
-```kotlin
-install(StatusPages) {
-    exception<ValidationException> { call, error ->
-        call.respond(
-            HttpStatusCode.UnprocessableEntity,
-            error.violations.map { mapOf("path" to it.path, "code" to it.code, "message" to it.message) }
-        )
-    }
-}
-```
+the same response. In a Ktor server, [`validity-ktor`](/guides/ktor) is that handler: it answers every
+`ValidationException` of a call with `400 Bad Request` and its violations, and validates the bodies the routes receive.
 
 A Spring `@ExceptionHandler(ValidationException::class)` does the same. A controller that does not suspend, such as a
 plain Spring MVC one, calls `validateOrThrowBlocking()` instead.

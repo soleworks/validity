@@ -1,0 +1,117 @@
+---
+title: "Ktor"
+description: "validity-ktor validates every request body a Ktor route receives, and answers each broken rule with 400 and its violations."
+icon: "server"
+---
+
+import Dependency from "/snippets/dependency.mdx";
+
+A Ktor route that receives a body has to validate it before using it, and a route that forgets lets invalid data
+through. With `validity-ktor`, `call.receive<T>()` validates the body itself, and one plugin answers every broken rule
+of the application the same way.
+
+<Dependency artifact="validity-ktor" />
+
+## Install the plugin
+
+Install `ValidityPlugin` next to `ContentNegotiation`:
+
+```kotlin
+install(ContentNegotiation) { json() }
+install(ValidityPlugin)
+```
+
+A body that implements [`Validatable`](/guides/in-the-class) is then validated when a route receives it:
+
+```kotlin Registration.kt
+@Serializable
+data class Registration(
+    val email: String? = null,
+    val password: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::email required { email() }
+        ::password required { minLength(8) }
+    }
+}
+```
+
+```kotlin Accounts.kt
+fun Route.accounts(
+    team: Team
+) {
+    post("/registrations") {
+        call.receive<Registration>()
+        call.respond(HttpStatusCode.Created)
+    }
+    post("/invitations") {
+        call.receive<Invitation>().validateOrThrow(team)
+        call.respond(HttpStatusCode.Created)
+    }
+}
+```
+
+The route after `receive` only runs with a valid registration. A client that posts
+`{"email":"ana@","password":"123"}` gets:
+
+```json
+{
+  "title": "Bad Request",
+  "status": 400,
+  "violations": [
+    { "path": "email", "code": "email", "message": "must be a valid email" },
+    { "path": "password", "code": "minLength", "message": "must have at least 8 characters" }
+  ]
+}
+```
+
+- The status is `400 Bad Request`, and the `violations` come in the order the rules are declared.
+- The `ContentNegotiation` of the application writes the body, in its format: kotlinx.serialization, Jackson or any
+  other converter it has. Without `ContentNegotiation`, nothing writes the body and Ktor
+  answers `406 Not Acceptable`: set [`onInvalid`](#your-own-response) to answer something else.
+- Each `message` follows [the configuration](/guides/configuration): with `language = Language.PT_BR`, the email says
+  `deve ser um e-mail válido`.
+
+## Rules that need the caller's data
+
+A [`ContextualValidatable`](/guides/context) needs data that only the route has, such as the team the invitation is
+for, so the route validates it with `validateOrThrow(context)`, as `/invitations` does above:
+
+```kotlin Invitation.kt
+@Serializable
+data class Invitation(
+    val email: String? = null
+) : ContextualValidatable<Team> {
+    override fun validation(
+        context: Team
+    ) = validation {
+        ::email required {
+            failFast {
+                email()
+                constraint("is already in the team", code = "member") { !context.has(it) }
+            }
+        }
+    }
+}
+```
+
+The plugin answers every `ValidationException` of a call, so this one gets the same `400` with its violation, `email`
+with the code `member`.
+
+## Your own response
+
+`onInvalid` replaces the response, for the bodies that `receive` validates and for every `validateOrThrow` of a route.
+It receives the call and the violations, and can call `suspend` functions:
+
+```kotlin
+install(ValidityPlugin) {
+    onInvalid { call, violations ->
+        call.respond(HttpStatusCode.UnprocessableEntity, ApiError(violations.map { it.code }))
+    }
+}
+```
+
+## Ktor versions
+
+`validity-ktor` depends on Ktor 3.0.0, the lowest version it works with, so the Ktor version of your project is the
+one your application runs. Its tests run on Ktor 3.0.0 and on the latest Ktor 3.

@@ -23,6 +23,8 @@ jobs:
           java-version: 17
       - uses: gradle/actions/setup-gradle@v6
       - run: ./gradlew build
+      # validity-ktor compiles against the lowest Ktor it supports, which the build tests; this runs its tests on the latest.
+      - run: ./gradlew :validity-ktor:test -PktorTestVersion=latest.release
       - run: ./gradlew :koverXmlReport
       - uses: codecov/codecov-action@v7
         with:
