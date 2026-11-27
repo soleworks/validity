@@ -19,9 +19,8 @@ import io.ktor.util.AttributeKey
  * `validateOrThrow` the route calls, such as the one of a
  * [ContextualValidatable][io.github.soleworks.validity.ContextualValidatable], is answered with `400 Bad Request`
  * and a body holding `title`, `status` and the `violations`, each with its `path`, `code` and `message`. The body is
- * written by the `ContentNegotiation` of the application, in its format. [ValidityPluginConfig.onInvalid] answers
- * something else, and is the answer of an application without `ContentNegotiation`, where Ktor would answer
- * `406 Not Acceptable`.
+ * written by the `ContentNegotiation` of the application, in its format; without it, Ktor answers
+ * `406 Not Acceptable`. [ValidityPluginConfig.onInvalid] answers something else.
  *
  * ```kotlin
  * install(ContentNegotiation) { json() }

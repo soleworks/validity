@@ -67,8 +67,8 @@ The route after `receive` only runs with a valid registration. A client that pos
 
 - The status is `400 Bad Request`, and the `violations` come in the order the rules are declared.
 - The `ContentNegotiation` of the application writes the body, in its format: kotlinx.serialization, Jackson or any
-  other converter it has. An application without `ContentNegotiation` answers with [`onInvalid`](#your-own-response),
-  since nothing could write the body: Ktor answers `406 Not Acceptable` instead.
+  other converter it has. Without `ContentNegotiation`, nothing writes the body and Ktor
+  answers `406 Not Acceptable`: set [`onInvalid`](#your-own-response) to answer something else.
 - Each `message` follows [the configuration](/guides/configuration): with `language = Language.PT_BR`, the email says
   `deve ser um e-mail válido`.
 
