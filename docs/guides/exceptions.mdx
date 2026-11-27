@@ -31,8 +31,8 @@ Because every invalid object throws the same exception with the same data, one e
 the same response. In a Ktor server, [`validity-ktor`](/guides/ktor) is that handler: it answers every
 `ValidationException` of a call with `400 Bad Request` and its violations, and validates the bodies the routes receive.
 
-A Spring `@ExceptionHandler(ValidationException::class)` does the same. A controller that does not suspend, such as a
-plain Spring MVC one, calls `validateOrThrowBlocking()` instead.
+In a Spring Boot application, [`validity-spring`](/guides/spring) does the same, in Spring MVC and in Spring WebFlux.
+Without it, a handler that does not suspend, such as a plain Spring MVC one, calls `validateOrThrowBlocking()` instead.
 
 ## Every way to throw
 

@@ -26,7 +26,7 @@ removed.
    also sets the version in `gradle.properties`, which the build publishes.
 3. **Merging that pull request is the release.** release-please tags the merge commit (`v0.2.0`) and creates the
    GitHub release with its changelog. The same workflow then checks that the build has that version, builds it, and
-   publishes `validity-core`, `validity-phone` and `validity-ktor`, signed, to Maven Central. The publish ends only when the Central
+   publishes `validity-core`, `validity-phone`, `validity-ktor` and `validity-spring`, signed, to Maven Central. The publish ends only when the Central
    Portal says the deployment is on Maven Central, which takes minutes, and fails when the Portal rejects it. It waits
    at most an hour, set by `SONATYPE_CLOSE_TIMEOUT_SECONDS` in `gradle.properties`. Nothing asks `repo1.maven.org`
    whether the version is there: its CDN caches the 404 of a version asked for too early, and keeps answering it after

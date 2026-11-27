@@ -6,4 +6,5 @@ rootProject.name = "validity"
 include("validity-core")
 include("validity-phone")
 include("validity-ktor")
+include("validity-spring")
 include("harness")

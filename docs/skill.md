@@ -2,7 +2,7 @@
 name: validity
 description: Write, review and translate validation rules in Kotlin with Validity (io.github.soleworks:validity-core). Use when a Kotlin project validates objects, requests or forms with Validity, or when asked to add rules, constraints, messages or tests for them.
 license: Apache-2.0
-compatibility: Kotlin 2.4 on the JVM, Java 17 or newer. Phone numbers need io.github.soleworks:validity-phone, and validating the request bodies of a Ktor server needs io.github.soleworks:validity-ktor.
+compatibility: Kotlin 2.4 on the JVM, Java 17 or newer. Phone numbers need io.github.soleworks:validity-phone, validating the request bodies of a Ktor server needs io.github.soleworks:validity-ktor, and those of a Spring Boot application need io.github.soleworks:validity-spring.
 metadata:
   author: soleworks
   docs: https://validity-kt.dev
@@ -61,6 +61,7 @@ import io.github.soleworks.validity.constraints.*         // email, minLength, p
 import io.github.soleworks.validity.constraints.brazil.*  // cpf, cnpj, cep: each country has its own package
 import io.github.soleworks.validity.phone.*               // phone, mobilePhone (validity-phone module)
 import io.github.soleworks.validity.ktor.*                // ValidityPlugin (validity-ktor module)
+import io.github.soleworks.validity.spring.*              // OnInvalid (validity-spring module)
 ```
 
 ## Mistakes that compile

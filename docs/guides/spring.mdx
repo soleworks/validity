@@ -1,0 +1,109 @@
+---
+title: "Spring Boot"
+description: "validity-spring validates every request body of a Spring Boot application, MVC or WebFlux, and answers each broken rule with 400 and its violations."
+icon: "leaf"
+---
+
+import BadRequest from "/snippets/bad-request.mdx";
+import Dependency from "/snippets/dependency.mdx";
+
+A controller that receives a body has to validate it before using it, and a controller that forgets lets invalid data
+through. With `validity-spring` on the classpath, every `@RequestBody` that implements
+[`Validatable`](/guides/in-the-class) is validated before the handler runs, in Spring MVC and in Spring WebFlux, and
+every broken rule of the application gets the same answer. There is nothing to configure and no `@Valid` to write.
+
+<Dependency artifact="validity-spring" />
+
+## Validate the request bodies
+
+Declare the rules in the class of the body:
+
+```kotlin Registration.kt
+data class Registration(
+    val email: String? = null,
+    val password: String? = null
+) : Validatable {
+    override fun validation() = validation {
+        ::email required { email() }
+        ::password required { minLength(8) }
+    }
+}
+```
+
+```kotlin Accounts.kt
+@RestController
+class Accounts(
+    private val registrations: Registrations,
+    private val team: Team
+) {
+    @PostMapping("/registrations")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun register(
+        @RequestBody registration: Registration
+    ) {
+        registrations.save(registration)
+    }
+
+    @PostMapping("/invitations")
+    @ResponseStatus(HttpStatus.CREATED)
+    suspend fun invite(
+        @RequestBody invitation: Invitation
+    ) {
+        invitation.validateOrThrow(team)
+    }
+}
+```
+
+`register` only saves a valid registration. A client that posts `{"email":"ana@","password":"123"}` gets
+`400 Bad Request`, as `application/problem+json`:
+
+<BadRequest />
+
+- The body is a Spring `ProblemDetail`, written by the message converters of the application, with a `violations`
+  property listed in the order the rules are declared. Spring Boot 3 adds its `type` and `instance` fields too.
+- In Spring MVC, the rules run on the thread of the request. In Spring WebFlux, they run in a coroutine, so a rule
+  that calls a `suspend` function never blocks a Netty thread.
+- Each `message` follows [the configuration](/guides/configuration), such as its `language`.
+
+## Rules that need the caller's data
+
+A [`ContextualValidatable`](/guides/context) needs data that only the controller has, such as the team of the
+invitation, so the handler validates it with `validateOrThrow(context)`, as `invite` does above:
+
+```kotlin Invitation.kt
+data class Invitation(
+    val email: String? = null
+) : ContextualValidatable<Team> {
+    override fun validation(
+        context: Team
+    ) = validation {
+        ::email required {
+            failFast {
+                email()
+                constraint("is already in the team", code = "member") { !context.has(it) }
+            }
+        }
+    }
+}
+```
+
+Every `ValidationException` a handler throws gets the same answer, so this one is a `400` too, with the violation
+of `email` and the code `member`.
+
+## Your own response
+
+An `OnInvalid` bean replaces the response, for the bodies validated before the handler and for every
+`validateOrThrow` of a handler. It receives the violations, returns a `ResponseEntity`, and can call `suspend`
+functions:
+
+```kotlin
+@Bean
+fun onInvalid() = OnInvalid { violations ->
+    ResponseEntity.status(422).body(ApiError(violations.map { it.code }))
+}
+```
+
+## Spring Boot versions
+
+`validity-spring` depends on Spring Boot 3.5, the lowest version it works with, so the Spring Boot version of your
+project is the one your application runs. Its tests run on Spring Boot 3.5 and on the latest Spring Boot 4.

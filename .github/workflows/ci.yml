@@ -25,6 +25,8 @@ jobs:
       - run: ./gradlew build
       # validity-ktor compiles against the lowest Ktor it supports, which the build tests; this runs its tests on the latest.
       - run: ./gradlew :validity-ktor:test -PktorTestVersion=latest.release
+      # validity-spring compiles against the lowest Spring Boot it supports, which the build tests; this runs its tests on the latest.
+      - run: ./gradlew :validity-spring:test -PspringBootTestVersion=latest.release
       - run: ./gradlew :koverXmlReport
       - uses: codecov/codecov-action@v7
         with:
